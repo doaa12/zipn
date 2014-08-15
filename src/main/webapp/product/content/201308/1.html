@@ -1,0 +1,803 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>初级健康体检套餐 </title>
+	<meta name="author" content="Sunry" />
+	<meta name="copyright" content="" />
+		<meta name="keywords" content="初级健康体检套餐" />
+		<meta name="description" content="初级健康体检套餐" />
+<link href="/resources/shop/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/resources/shop/css/product.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/resources/shop/js/jquery.js"></script>
+<script type="text/javascript" src="/resources/shop/js/jquery.tools.js"></script>
+<script type="text/javascript" src="/resources/shop/js/jquery.jqzoom.js"></script>
+<script type="text/javascript" src="/resources/shop/js/jquery.validate.js"></script>
+<script type="text/javascript" src="/resources/shop/js/common.js"></script>
+<script type="text/javascript">
+$().ready(function() {
+
+	var $historyProduct = $("#historyProduct ul");
+	var $clearHistoryProduct = $("#clearHistoryProduct");
+	var $zoom = $("#zoom");
+	var $scrollable = $("#scrollable");
+	var $thumbnail = $("#scrollable a");
+	var $specification = $("#specification dl");
+	var $specificationTitle = $("#specification div");
+	var $specificationValue = $("#specification a");
+	var $productNotifyForm = $("#productNotifyForm");
+	var $productNotify = $("#productNotify");
+	var $productNotifyEmail = $("#productNotify input");
+	var $addProductNotify = $("#addProductNotify");
+	var $quantity = $("#quantity");
+	var $increase = $("#increase");
+	var $decrease = $("#decrease");
+	var $addCart = $("#addCart");
+	var $addFavorite = $("#addFavorite");
+	var $window = $(window);
+	var $bar = $("#bar ul");
+	var $introductionTab = $("#introductionTab");
+	var $parameterTab = $("#parameterTab");
+	var $reviewTab = $("#reviewTab");
+	var $consultationTab = $("#consultationTab");
+	var $introduction = $("#introduction");
+	var $parameter = $("#parameter");
+	var $review = $("#review");
+	var $addReview = $("#addReview");
+	var $consultation = $("#consultation");
+	var $addConsultation = $("#addConsultation");
+	var barTop = $bar.offset().top;
+	var productMap = {};
+productMap[1] = { path: null, specificationValues: [ ] };	
+	// 锁定规格值
+	lockSpecificationValue();
+	
+	// 商品图片放大镜
+	$zoom.jqzoom({
+		zoomWidth: 368,
+		zoomHeight: 368,
+		title: false,
+		showPreload: false,
+		preloadImages: false
+	});
+	
+	// 商品缩略图滚动
+	$scrollable.scrollable();
+	
+	$thumbnail.hover(function() {
+		var $this = $(this);
+		if ($this.hasClass("current")) {
+			return false;
+		} else {
+			$thumbnail.removeClass("current");
+			$this.addClass("current").click();
+		}
+	});
+	
+	// 规格值选择
+	$specificationValue.click(function() {
+		var $this = $(this);
+		if ($this.hasClass("locked")) {
+			return false;
+		}
+		$this.toggleClass("selected").parent().siblings().children("a").removeClass("selected");
+		var selectedIds = new Array();
+		$specificationValue.filter(".selected").each(function(i) {
+			selectedIds[i] = $(this).attr("val");
+		});
+		var locked = true;
+		$.each(productMap, function(i, product) {
+			if (product.specificationValues.length == selectedIds.length && contains(product.specificationValues, selectedIds)) {
+				if (product.path != null) {
+					location.href = "" + product.path;
+					locked = false;
+				}
+				return false;
+			}
+		});
+		if (locked) {
+			lockSpecificationValue();
+		}
+		$specificationTitle.hide();
+		return false;
+	});
+	
+	// 锁定规格值
+	function lockSpecificationValue() {
+		var selectedIds = new Array();
+		$specificationValue.filter(".selected").each(function(i) {
+			selectedIds[i] = $(this).attr("val");
+		});
+		$specification.each(function() {
+			var $this = $(this);
+			var selectedId = $this.find("a.selected").attr("val");
+			var otherIds = $.grep(selectedIds, function(n, i) {
+				return n != selectedId;
+			});
+			$this.find("a").each(function() {
+				var $this = $(this);
+				otherIds.push($this.attr("val"));
+				var locked = true;
+				$.each(productMap, function(i, product) {
+					if (contains(product.specificationValues, otherIds)) {
+						locked = false;
+						return false;
+					}
+				});
+				if (locked) {
+					$this.addClass("locked");
+				} else {
+					$this.removeClass("locked");
+				}
+				otherIds.pop();
+			});
+		});
+	}
+	
+	// 判断是否包含
+	function contains(array, values) {
+		var contains = true;
+		for(i in values) {
+			if ($.inArray(values[i], array) < 0) {
+				contains = false;
+				break;
+			}
+		}
+		return contains;
+	}
+	
+	// 到货通知
+	$addProductNotify.click(function() {
+		if ($addProductNotify.val() == "到货通知我") {
+			$addProductNotify.val("确定登记");
+			$productNotify.show();
+			$productNotifyEmail.focus();
+			if ($.trim($productNotifyEmail.val()) == "") {
+				$.ajax({
+					url: "/product_notify/email.jhtml",
+					type: "GET",
+					dataType: "json",
+					cache: false,
+					success: function(data) {
+						$productNotifyEmail.val(data.email);
+					}
+				});
+			}
+		} else {
+			$productNotifyForm.submit();
+		}
+		return false;
+	});
+	
+	// 到货通知表单验证
+	$productNotifyForm.validate({
+		rules: {
+			email: {
+				required: true,
+				email: true
+			}
+		},
+		submitHandler: function(form) {
+			$.ajax({
+				url: "/product_notify/save.jhtml",
+				type: "POST",
+				data: {productId: 1, email: $productNotifyEmail.val()},
+				dataType: "json",
+				cache: false,
+				beforeSend: function() {
+					$addProductNotify.prop("disabled", true);
+				},
+				success: function(data) {
+					if (data.message.type == "success") {
+						$addProductNotify.val("到货通知我");
+						$productNotify.hide();
+					}
+					$.message(data.message);
+				},
+				complete: function() {
+					$addProductNotify.prop("disabled", false);
+				}
+			});
+		}
+	});
+	
+	// 购买数量
+	$quantity.keypress(function(event) {
+		var key = event.keyCode ? event.keyCode : event.which;
+		if ((key >= 48 && key <= 57) || key==8) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+	
+	// 增加购买数量
+	$increase.click(function() {
+		var quantity = $quantity.val();
+		if (/^\d*[1-9]\d*$/.test(quantity)) {
+			$quantity.val(parseInt(quantity) + 1);
+		} else {
+			$quantity.val(1);
+		}
+	});
+	
+	// 减少购买数量
+	$decrease.click(function() {
+		var quantity = $quantity.val();
+		if (/^\d*[1-9]\d*$/.test(quantity) && parseInt(quantity) > 1) {
+			$quantity.val(parseInt(quantity) - 1);
+		} else {
+			$quantity.val(1);
+		}
+	});
+	
+	// 加入购物车
+	$addCart.click(function() {
+		var quantity = $quantity.val();
+		if (/^\d*[1-9]\d*$/.test(quantity) && parseInt(quantity) > 0) {
+			$.ajax({
+				url: "/cart/add.jhtml",
+				type: "POST",
+				data: {id: 1, quantity: quantity},
+				dataType: "json",
+				cache: false,
+				success: function(message) {
+					$.message(message);
+				}
+			});
+		} else {
+			$.message("warn", "购买数量必须为正整数");
+		}
+	});
+	
+	// 添加商品收藏
+	$addFavorite.click(function() {
+		$.ajax({
+			url: "/member/favorite/add.jhtml?id=1",
+			type: "POST",
+			dataType: "json",
+			cache: false,
+			success: function(message) {
+				$.message(message);
+			}
+		});
+		return false;
+	});
+	
+	$window.scroll(function() {
+		var scrollTop = $(this).scrollTop();
+		if (scrollTop > barTop) {
+			if (window.XMLHttpRequest) {
+				$bar.css({position: "fixed", top: 0});
+			} else {
+				$bar.css({top: scrollTop});
+			}
+			var introductionTop = $introduction.size() > 0 ? $introduction.offset().top - 36 : null;
+			var parameterTop = $parameter.size() > 0 ? $parameter.offset().top - 36 : null;
+			var reviewTop = $review.size() > 0 ? $review.offset().top - 36 : null;
+			var consultationTop = $consultation.size() > 0 ? $consultation.offset().top - 36 : null;
+			if (consultationTop != null && scrollTop >= consultationTop) {
+				$bar.find("li").removeClass("current");
+				$consultationTab.addClass("current");
+			} else if (reviewTop != null && scrollTop >= reviewTop) {
+				$bar.find("li").removeClass("current");
+				$reviewTab.addClass("current");
+			} else if (parameterTop != null && scrollTop >= parameterTop) {
+				$bar.find("li").removeClass("current");
+				$parameterTab.addClass("current");
+			} else if (introductionTop != null && scrollTop >= introductionTop) {
+				$bar.find("li").removeClass("current");
+				$introductionTab.addClass("current");
+			}
+		} else {
+			$bar.find("li").removeClass("current");
+			$bar.css({position: "absolute", top: barTop});
+		}
+	});
+	
+		// 发表商品评论
+		$addReview.click(function() {
+			if ($.checkLogin()) {
+				return true;
+			} else {
+				$.redirectLogin("/review/add/1.jhtml", "必须登录后才能发表商品评论");
+				return false;
+			}
+		});
+	
+		// 发表商品咨询
+		$addConsultation.click(function() {
+			if ($.checkLogin()) {
+				return true;
+			} else {
+				$.redirectLogin("/consultation/add/1.jhtml", "必须登录后才能发表商品咨询");
+				return false;
+			}
+		});
+	
+	// 浏览记录
+	var historyProduct = getCookie("historyProduct");
+	var historyProductIds = historyProduct != null ? historyProduct.split(",") : new Array();
+	for (var i = 0; i < historyProductIds.length; i ++) {
+		if (historyProductIds[i] == "1") {
+			historyProductIds.splice(i, 1);
+			break;
+		}
+	}
+	historyProductIds.unshift("1");
+	if (historyProductIds.length > 6) {
+		historyProductIds.pop();
+	}
+	addCookie("historyProduct", historyProductIds.join(","), {path: "/"});
+	$.ajax({
+		url: "/product/history.jhtml",
+		type: "GET",
+		data: {ids: historyProductIds},
+		dataType: "json",
+		traditional: true,
+		cache: false,
+		success: function(data) {
+			$.each(data, function (index, product) {
+				var thumbnail = product.thumbnail != null ? product.thumbnail : "/upload/image/default_thumbnail.jpg";
+				$historyProduct.append('<li><img src="' + thumbnail + '" \/><a href="' + product.path + '">' + product.name + '<\/a><span>' + currency(product.price, true) + '<\/span><\/li>');
+			});
+		}
+	});
+	
+	// 清空浏览记录
+	$clearHistoryProduct.click(function() {
+		$historyProduct.empty();
+		$(this).text("暂无记录");
+		removeCookie("historyProduct", {path: "/"});
+	});
+	
+	// 点击数
+	$.ajax({
+		url: "/product/hits/1.jhtml",
+		type: "GET"
+	});
+	
+});
+</script>
+</head>
+<body>
+<script type="text/javascript">
+$().ready(function() {
+
+	var $headerLogin = $("#headerLogin");
+	var $headerRegister = $("#headerRegister");
+	var $headerUsername = $("#headerUsername");
+	var $headerLogout = $("#headerLogout");
+	var $productSearchForm = $("#productSearchForm");
+	var $keyword = $("#productSearchForm input");
+	var defaultKeyword = "商品搜索";
+	
+	var username = getCookie("username");
+	if (username != null) {
+		$headerUsername.text("您好, " + username).show();
+		$headerLogout.show();
+	} else {
+		$headerLogin.show();
+		$headerRegister.show();
+	}
+	
+	$keyword.focus(function() {
+		if ($keyword.val() == defaultKeyword) {
+			$keyword.val("");
+		}
+	});
+	
+	$keyword.blur(function() {
+		if ($keyword.val() == "") {
+			$keyword.val(defaultKeyword);
+		}
+	});
+	
+	$productSearchForm.submit(function() {
+		if ($.trim($keyword.val()) == "" || $keyword.val() == defaultKeyword) {
+			return false;
+		}
+	});
+
+});
+</script>
+<div class="container header">
+	<div class="span5">
+		<div class="logo">
+			<a href="/">
+				<img src="/upload/image/logo.gif" alt="健康管理" />
+			</a>
+		</div>
+	</div>
+	<div class="span9">
+<div class="headerAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
+</div>	</div>
+	<div class="span10 last">
+		<div class="topNav clearfix">
+			<ul>
+				<li id="headerLogin" class="headerLogin">
+					<a href="/login.jhtml">登录</a>|
+				</li>
+				<li id="headerRegister" class="headerRegister">
+					<a href="/register.jhtml">注册</a>|
+				</li>
+				<li id="headerUsername" class="headerUsername"></li>
+				<li id="headerLogout" class="headerLogout">
+					<a href="/logout.jhtml">[退出]</a>|
+				</li>
+			</ul>
+		</div>
+		<div class="cart">
+			<a href="/cart/list.jhtml">购物车</a>
+		</div>
+			<div class="phone">
+				客服热线:
+				<strong>400-8888888</strong>
+			</div>
+	</div>
+	<div class="span24">
+		<ul class="mainNav">
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="tagWrap">
+			<ul class="tag">
+			</ul>
+			<div class="hotSearch">
+					热门搜索:
+						<a href="/product/search.jhtml?keyword=%E5%81%A5%E5%BA%B7">健康</a>
+						<a href="/product/search.jhtml?keyword=%E4%BD%93%E6%A3%80">体检</a>
+			</div>
+			<div class="search">
+				<form id="productSearchForm" action="/product/search.jhtml" method="get">
+					<input name="keyword" class="keyword" value="商品搜索" maxlength="30" />
+					<button type="submit">搜索</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>	<div class="container productContent">
+		<div class="span6">
+			<div class="hotProductCategory">
+						<dl class="last">
+							<dt>
+								<a href="/product/list/1.jhtml">体检套餐</a>
+							</dt>
+						</dl>
+			</div>
+			<div class="hotProduct">
+				<div class="title">热销商品</div>
+				<ul>
+							<li class="last">
+								<a href="/product/content/201308/1.html" title="初级健康体检套餐">初级健康体检套餐</a>
+								<div>销售价: <strong>￥158.00元</strong></div>
+								<div>月销量: <em>0</em></div>
+							</li>
+				</ul>
+			</div>
+			<div id="historyProduct" class="historyProduct">
+				<div class="title">最近浏览过的</div>
+				<ul></ul>
+				<a href="javascript:;" id="clearHistoryProduct" class="clearHistoryProduct">清除历史记录</a>
+			</div>
+		</div>
+		<div class="span18 last">
+			<div class="path">
+				<ul>
+					<li>
+						<a href="/">首页</a>
+					</li>
+					<li>
+						<a href="/product/list/1.jhtml">体检套餐</a>
+					</li>
+				</ul>
+			</div>
+			<div class="productImage">
+					<a id="zoom" href="/upload/image/default_large.jpg" rel="gallery">
+						<img class="medium" src="/upload/image/default_medium.jpg" />
+					</a>
+				<a href="javascript:;" class="prev"></a>
+				<div id="scrollable" class="scrollable">
+					<div class="items">
+							<a class="current" href="javascript:;"><img src="/upload/image/default_thumbnail.jpg" /></a>
+					</div>
+				</div>
+				<a href="javascript:;" class="next"></a>
+			</div>
+			<div class="name">初级健康体检套餐</div>
+			<div class="sn">
+				<div>编号: 20130815606</div>
+			</div>
+			<div class="info">
+				<dl>
+					<dt>销售价:</dt>
+					<dd>
+						<strong>￥158.00</strong>
+							市场价:
+							<del>￥345.00</del>
+					</dd>
+				</dl>
+					<dl>
+						<dt>赠送积分:</dt>
+						<dd>
+							<span>158</span>
+						</dd>
+					</dl>
+			</div>
+				<div class="action">
+						<dl class="quantity">
+							<dt>购买数量:</dt>
+							<dd>
+								<input type="text" id="quantity" name="quantity" value="1" maxlength="4" onpaste="return false;" />
+								<div>
+									<span id="increase" class="increase">&nbsp;</span>
+									<span id="decrease" class="decrease">&nbsp;</span>
+								</div>
+							</dd>
+							<dd>
+								件
+							</dd>
+						</dl>
+					<div class="buy">
+							<input type="button" id="addCart" class="addCart" value="加入购物车" />
+						<a href="javascript:;" id="addFavorite">收藏商品</a>
+					</div>
+				</div>
+			<div id="bar" class="bar">
+				<ul>
+						<li id="introductionTab">
+							<a href="#introduction">商品介绍</a>
+						</li>
+						<li id="reviewTab">
+							<a href="#review">商品评论</a>
+						</li>
+						<li id="consultationTab">
+							<a href="#consultation">商品咨询</a>
+						</li>
+				</ul>
+			</div>
+				<div id="introduction" name="introduction" class="introduction">
+					<div class="title">
+						<strong>商品介绍</strong>
+					</div>
+					<div>
+						<h2 class="content-title" id="anchor-detail" style="margin:0px 0px 5px;padding:0px;font-size:16px;border:0px;font-family:Tahoma, Helvetica, arial, sans-serif;white-space:normal;background-color:#FFFFFF;">
+	本单详情
+</h2>
+<div class="blk detail" id="yui_3_10_3_1_1376550551730_351" style="margin:7px 0px 30px;padding:0px;width:670px;overflow:hidden;font-family:Tahoma, Helvetica, arial, sans-serif;font-size:14px;line-height:21px;white-space:normal;background-color:#FFFFFF;">
+	<p class="standard-bar" style="padding:3px 6px;color:#FFFFFF;border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-right-radius:3px;border-bottom-left-radius:3px;font-weight:bold;background-color:#37ADB1;">
+		健康第一步
+	</p>
+	<table class="deal-menu" id="yui_3_10_3_1_1376550551730_350" style="border-spacing:0px;width:669px;margin-top:5px;border:1px solid #E8E8E8;font-size:14px;color:#222222;">
+		<tbody id="yui_3_10_3_1_1376550551730_349">
+			<tr>
+				<th class="name" style="margin:0px;padding:8px 10px;background-color:#F0F0F0;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none solid solid;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					内容
+				</th>
+				<th class="price" style="margin:0px;padding:8px 10px;text-align:center;background-color:#F0F0F0;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none solid solid;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;">
+					单价
+				</th>
+				<th class="amount" style="margin:0px;padding:8px 10px;text-align:center;background-color:#F0F0F0;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none solid solid;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;">
+					数量/规格
+				</th>
+				<th class="subtotal" style="margin:0px;padding:8px 10px;text-align:right;background-color:#F0F0F0;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none solid solid;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;">
+					小计
+				</th>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					基础项目检查
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					30元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					30元
+				</td>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					血液检查
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					90元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					90元
+				</td>
+			</tr>
+			<tr id="yui_3_10_3_1_1376550551730_348">
+				<td class="name" id="yui_3_10_3_1_1376550551730_347" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					尿常规检查
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					5元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					5元
+				</td>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					心电图
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					30元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					30元
+				</td>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					彩超（常规）
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					150元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					150元
+				</td>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					胸透
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					10元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					10元
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" class="subline" style="margin:0px;padding:8px 10px;background-color:#FBFBFB;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;text-align:center;background-position:initial initial;background-repeat:initial initial;">
+					<span class="title" style="font-weight:bold;padding:0px 10px;">增加项目（限女性）</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="name" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:auto;">
+					妇检（白带常规+阴道镜检查）
+				</td>
+				<td class="price" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:center;">
+					30元
+				</td>
+				<td class="amount" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:132px;text-align:center;">
+					1次
+				</td>
+				<td class="subtotal" style="margin:0px;padding:8px 10px;border-right-width:1px;border-bottom-width:1px;border-left-width:1px;border-style:none dotted dotted;border-right-color:#E8E8E8;border-bottom-color:#E8E8E8;border-left-color:#E8E8E8;word-break:break-all;word-wrap:break-word;width:99px;text-align:right;">
+					30元
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="deal-menu-summary" style="padding:2px 10px;text-align:right;">
+		价值：<span class="inline-block worth" style="display:inline-block;zoom:1;min-width:50px;word-break:normal;word-wrap:normal;font-weight:bold;">345</span>元
+	</p>
+	<p class="deal-menu-summary" style="padding:2px 10px;text-align:right;">
+		美团价：<span class="inline-block worth price" style="display:inline-block;zoom:1;min-width:50px;word-break:normal;word-wrap:normal;font-weight:bold;color:#EA4F01;">158</span>元
+	</p>
+	<ul class="list" style="margin:10px 0px 15px;padding:0px 0px 0px 18px;">
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			基础项目检查：身高、体重、体重指数、血压、内科、外科、眼科、耳鼻咽喉科、口腔科等
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			血液检查：血常规，血型，血糖，肝功能测定，肾功能测定
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			尿常规检查：白细胞、隐血、蛋白、尿糖、比重、尿亚硝酸盐、尿酮体、尿胆原、尿胆红素、尿PH、尿肌酐、尿钙、尿微蛋白
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			心电图：12导联同步自动分析心电图
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			彩超（常规）：男（前列腺、双肾、输尿管、膀胱）、女（乳腺、子宫，附件）
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			胸透：筛查肺和器官的先天性疾病、肺部的各种炎症、急慢性支气管炎、各型肺结核、肺肿瘤等
+		</li>
+		<li style="margin:0px 0px 5px;padding:0px;list-style:disc outside;">
+			妇检（白带常规+阴道镜检查）：了解女性生殖系统有无异常，以发现可能存在的各种炎症、肿瘤等疾病
+		</li>
+	</ul>
+	<div class="deal-term" style="margin:10px 0px;padding:5px 10px 10px;border:1px solid #EFEFE5;background-color:#FFFDE8;color:#666666;background-position:initial initial;background-repeat:initial initial;">
+		<h5 style="margin:0px 0px 5px;padding:0px;font-size:16px;">
+			购买须知
+		</h5>
+		<dl style="margin:0px;padding:0px;">
+			<dt style="margin:0px;padding:0px;font-weight:bold;float:left;">
+				有效期：
+			</dt>
+			<dd style="margin:0px;padding:0px;overflow:hidden;">
+				2013.6.20 至 2013.12.20（周末、法定节假日通用）
+			</dd>
+			<dt style="margin:0px;padding:0px;font-weight:bold;float:left;">
+				使用时间：
+			</dt>
+			<dd style="margin:0px;padding:0px;overflow:hidden;">
+				08:00-10:00
+			</dd>
+			<dt style="margin:0px;padding:0px;font-weight:bold;float:left;">
+				预约提醒：
+			</dt>
+			<dd style="margin:0px;padding:0px;overflow:hidden;">
+				请至少提前24小时致电商家预约
+			</dd>
+			<dt class="deal-term__rule" style="margin:0px;padding:0px;font-weight:bold;float:none;">
+				使用规则：
+			</dt>
+			<dd style="margin:0px;padding:0px;overflow:hidden;">
+				<ul style="margin:0px 0px 0px 16px;padding:0px;">
+					<li style="margin:0px;padding:0px;list-style:square outside;">
+						凭美团券到店消费不可同时享受店内其他优惠
+					</li>
+					<li style="margin:0px;padding:0px;list-style:square outside;">
+						本单仅限女性
+					</li>
+					<li style="margin:0px;padding:0px;list-style:square outside;">
+						本单需携带身份证
+					</li>
+					<li style="margin:0px;padding:0px;list-style:square outside;">
+						本单免费建立电子档案，体检报告自取
+					</li>
+					<li style="margin:0px;padding:0px;list-style:square outside;">
+						本单免费提供营养早餐
+					</li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
+</div>
+					</div>
+				</div>
+				<div id="review" name="review" class="review">
+					<div class="title">商品评论</div>
+					<div class="content clearfix">
+							<p>
+								暂无商品评论信息 <a href="/review/add/1.jhtml" id="addReview">[发表商品评论]</a>
+							</p>
+					</div>
+				</div>
+				<div id="consultation" name="consultation" class="consultation">
+					<div class="title">商品咨询</div>
+					<div class="content">
+								<p>
+									暂无商品咨询信息 <a href="/consultation/add/1.jhtml" id="addConsultation">[发表商品咨询]</a>
+								</p>
+					</div>
+				</div>
+		</div>
+	</div>
+<div class="container footer">
+	<div class="span24">
+		<div class="footerAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/footer.jpg" width="950" height="52" alt="我们的优势" title="我们的优势" />
+</div>	</div>
+	<div class="span24">
+		<ul class="bottomNav">
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="copyright">Copyright © 2005-2013 健康管理 版权所有</div>
+	</div>
+</div></body>
+</html>

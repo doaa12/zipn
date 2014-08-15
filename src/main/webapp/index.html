@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>健康管理 - Powered By SUNRY</title>
+	<meta name="author" content="Sunry" />
+	<meta name="copyright" content="" />
+		<meta name="keywords" content="健康管理" />
+		<meta name="description" content="健康管理" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link href="/resources/shop/slider/slider.css" rel="stylesheet" type="text/css" />
+<link href="/resources/shop/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/resources/shop/css/index.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/resources/shop/js/jquery.js"></script>
+<script type="text/javascript" src="/resources/shop/js/jquery.tools.js"></script>
+<script type="text/javascript" src="/resources/shop/js/jquery.lazyload.js"></script>
+<script type="text/javascript" src="/resources/shop/slider/slider.js"></script>
+<script type="text/javascript" src="/resources/shop/js/common.js"></script>
+<script type="text/javascript">
+$().ready(function() {
+
+	var $slider = $("#slider");
+	var $newArticleTab = $("#newArticle .tab");
+	var $promotionProductTab = $("#promotionProduct .tab");
+	var $promotionProductInfo = $("#promotionProduct .info");
+	var $hotProductTab = $("#hotProduct .tab");
+	var $newProductTab = $("#newProduct .tab");
+	var $hotProductImage = $("#hotProduct img");
+	var $newProductImage = $("#newProduct img");
+	
+	$slider.nivoSlider({
+		effect: "random",
+		animSpeed: 1000,
+		pauseTime: 6000,
+		controlNav: true,
+		keyboardNav: false,
+		captionOpacity: 0.4
+	});
+	
+	$newArticleTab.tabs("#newArticle .tabContent", {
+		tabs: "li",
+		event: "mouseover",
+		initialIndex: 1
+	});
+	
+	$promotionProductTab.tabs("#promotionProduct .tabContent", {
+		tabs: "li",
+		event: "mouseover"
+	});
+	
+	$hotProductTab.tabs("#hotProduct .tabContent", {
+		tabs: "li",
+		event: "mouseover"
+	});
+	
+	$newProductTab.tabs("#newProduct .tabContent", {
+		tabs: "li",
+		event: "mouseover"
+	});
+	
+	function promotionInfo() {
+		$promotionProductInfo.each(function() {
+			var $this = $(this);
+			var beginDate = $this.attr("beginTimeStamp") != null ? new Date(parseFloat($this.attr("beginTimeStamp"))) : null;
+			var endDate = $this.attr("endTimeStamp") != null ? new Date(parseFloat($this.attr("endTimeStamp"))) : null;
+			if (beginDate == null || beginDate <= new Date()) {
+				if (endDate != null && endDate >= new Date()) {
+					var time = (endDate - new Date()) / 1000;
+					$this.html("剩余时间:<em>" + Math.floor(time / (24 * 3600)) + "<\/em> 天 <em>" + Math.floor((time % (24 * 3600)) / 3600) + "<\/em> 时 <em>" + Math.floor((time % 3600) / 60) + "<\/em> 分");
+				} else if (endDate != null && endDate < new Date()) {
+					$this.html("活动已结束");
+				} else {
+					$this.html("正在进行中...");
+				}
+			}
+		});
+	}
+	
+	promotionInfo();
+	setInterval(promotionInfo, 60 * 1000);
+	
+	$hotProductImage.lazyload({
+		threshold: 100,
+		effect: "fadeIn",
+		skip_invisible: false
+	});
+	
+	$newProductImage.lazyload({
+		threshold: 100,
+		effect: "fadeIn",
+		skip_invisible: false
+	});
+
+});
+</script>
+</head>
+<body>
+<script type="text/javascript">
+$().ready(function() {
+
+	var $headerLogin = $("#headerLogin");
+	var $headerRegister = $("#headerRegister");
+	var $headerUsername = $("#headerUsername");
+	var $headerLogout = $("#headerLogout");
+	var $productSearchForm = $("#productSearchForm");
+	var $keyword = $("#productSearchForm input");
+	var defaultKeyword = "商品搜索";
+	
+	var username = getCookie("username");
+	if (username != null) {
+		$headerUsername.text("您好, " + username).show();
+		$headerLogout.show();
+	} else {
+		$headerLogin.show();
+		$headerRegister.show();
+	}
+	
+	$keyword.focus(function() {
+		if ($keyword.val() == defaultKeyword) {
+			$keyword.val("");
+		}
+	});
+	
+	$keyword.blur(function() {
+		if ($keyword.val() == "") {
+			$keyword.val(defaultKeyword);
+		}
+	});
+	
+	$productSearchForm.submit(function() {
+		if ($.trim($keyword.val()) == "" || $keyword.val() == defaultKeyword) {
+			return false;
+		}
+	});
+
+});
+</script>
+<div class="container header">
+	<div class="span5">
+		<div class="logo">
+			<a href="/">
+				<img src="/upload/image/logo.gif" alt="健康管理" />
+			</a>
+		</div>
+	</div>
+	<div class="span9">
+<div class="headerAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
+</div>	</div>
+	<div class="span10 last">
+		<div class="topNav clearfix">
+			<ul>
+				<li id="headerLogin" class="headerLogin">
+					<a href="/login.jhtml">登录</a>|
+				</li>
+				<li id="headerRegister" class="headerRegister">
+					<a href="/register.jhtml">注册</a>|
+				</li>
+				<li id="headerUsername" class="headerUsername"></li>
+				<li id="headerLogout" class="headerLogout">
+					<a href="/logout.jhtml">[退出]</a>|
+				</li>
+			</ul>
+		</div>
+		<div class="cart">
+			<a href="/cart/list.jhtml">购物车</a>
+		</div>
+			<div class="phone">
+				客服热线:
+				<strong>400-8888888</strong>
+			</div>
+	</div>
+	<div class="span24">
+		<ul class="mainNav">
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="tagWrap">
+			<ul class="tag">
+			</ul>
+			<div class="hotSearch">
+					热门搜索:
+						<a href="/product/search.jhtml?keyword=%E5%81%A5%E5%BA%B7">健康</a>
+						<a href="/product/search.jhtml?keyword=%E4%BD%93%E6%A3%80">体检</a>
+			</div>
+			<div class="search">
+				<form id="productSearchForm" action="/product/search.jhtml" method="get">
+					<input name="keyword" class="keyword" value="商品搜索" maxlength="30" />
+					<button type="submit">搜索</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>	<div class="container index">
+		<div class="span18">
+<div id="slider" class="slider">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_1.jpg" width="770" height="290" alt="享受这一刻的舒适" title="享受这一刻的舒适" />
+				<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_2.jpg" width="770" height="290" alt="浪漫时尚季" title="浪漫时尚季" />
+				<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_3.jpg" width="770" height="290" alt="伊见清新" title="伊见清新" />
+</div>		</div>
+		<div class="span6 last">
+			<div id="newArticle" class="newArticle">
+					<ul class="tab">
+					</ul>
+			</div>
+<div class="rightAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_right.jpg" width="230" height="106" alt="春季新品" title="春季新品" />
+</div>		</div>
+		<div class="span18">
+			<div class="hotBrand clearfix">
+				<div class="title">
+					<a href="/brand/list/1.jhtml">所有品牌</a>
+					<strong>热门品牌</strong>BRAND
+				</div>
+				<ul>
+				</ul>
+			</div>
+			<div class="hotProductCategory">
+				<div class="title">
+					<a href="/product_category.jhtml">所有分类</a>
+					<strong>热门分类</strong>CATEGORY
+				</div>
+				<div class="content">
+						<table>
+								<tr class="last">
+									<th>
+										<a href="/product/list/1.jhtml">体检套餐</a>
+									</th>
+									<td>
+									</td>
+								</tr>
+						</table>
+				</div>
+			</div>
+		</div>
+		<div class="span6 last">
+			<div id="promotionProduct" class="promotionProduct">
+				<ul class="tab">
+				</ul>
+			</div>
+			<div class="newReview">
+				<div class="title">最新评论</div>
+				<ul>
+				</ul>
+			</div>
+		</div>
+		<div class="span24">
+<div class="middleAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_top.jpg" width="1000" height="120" alt="特卖会专场" title="特卖会专场" />
+</div>		</div>
+		<div class="span24">
+			<div id="hotProduct" class="hotProduct clearfix">
+					<div class="title">
+						<strong>热门商品</strong>
+						<a href="/product/list.jhtml?tagIds=1" target="_blank"></a>
+					</div>
+					<ul class="tab">
+							<li>
+								<a href="/product/list/1.jhtml?tagIds=1" target="_blank">体检套餐</a>
+							</li>
+					</ul>
+					<div class="hotProductAd">
+			<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_hot_product.jpg" width="260" height="343" alt="热门商品" title="热门商品" />
+					</div>
+						<ul class="tabContent">
+						</ul>
+			</div>
+		</div>
+		<div class="span24">
+			<div id="newProduct" class="newProduct clearfix">
+					<div class="title">
+						<strong>最新商品</strong>
+						<a href="/product/list.jhtml?tagIds=2" target="_blank"></a>
+					</div>
+					<ul class="tab">
+							<li>
+								<a href="/product/list/1.jhtml?tagIds=2" target="_blank">体检套餐</a>
+							</li>
+					</ul>
+					<div class="newProductAd">
+			<img src="http://storage.shopxx.net/demo-image/3.0/ad/index_new_product.jpg" width="260" height="343" alt="最新商品" title="最新商品" />
+					</div>
+						<ul class="tabContent">
+						</ul>
+			</div>
+		</div>
+		<div class="span24">
+			<div class="friendLink">
+				<dl>
+					<dt>合作伙伴</dt>
+					<dd class="more">
+						<a href="/friend_link.jhtml">更多</a>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+<div class="container footer">
+	<div class="span24">
+		<div class="footerAd">
+					<img src="http://storage.shopxx.net/demo-image/3.0/ad/footer.jpg" width="950" height="52" alt="我们的优势" title="我们的优势" />
+</div>	</div>
+	<div class="span24">
+		<ul class="bottomNav">
+		</ul>
+	</div>
+	<div class="span24">
+		<div class="copyright">Copyright © 2005-2013 健康管理 版权所有</div>
+	</div>
+</div></body>
+</html>
