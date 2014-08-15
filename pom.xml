@@ -351,6 +351,9 @@
 					<groupId>org.springframework</groupId>
 					<artifactId>spring</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId></groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
