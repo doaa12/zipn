@@ -352,7 +352,8 @@
 					<artifactId>spring</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId></groupId>
+					<artifactId>ehcache</artifactId>
+					<groupId>net.sf.ehcache</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
