@@ -11,9 +11,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.7</java-version>
-		<spring.version>3.2.0.RELEASE</spring.version>
 		<spring.version>3.2.2.RELEASE</spring.version>
-		<webXmlPath>${basedir}/src/main/webapp/WEB-INF</webXmlPath>
+		<hibernate.version>3.6.10.Final</hibernate.version>
+		<product.server.id>product-server</product.server.id>
+		<tomcat.product.installdir>/web</tomcat.product.installdir>
+		<tomcat.product.host>121.40.146.235</tomcat.product.host>
 	</properties>
   
 	<dependencies>
@@ -95,12 +97,17 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.6.10.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -288,6 +295,11 @@
 			<version>1.2.1</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
@@ -336,6 +348,16 @@
 			<groupId>com.octo.captcha</groupId>
 			<artifactId>jcaptcha-all</artifactId>
 			<version>1.0-RC6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>ehcache</artifactId>
+					<groupId>net.sf.ehcache</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -353,6 +375,71 @@
 	
   <build>
     <finalName>zipn</finalName>
+    <plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+				<skip>true</skip>
+			</configuration>
+		</plugin>
+		<plugin>
+			<artifactId>maven-antrun-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>compile</id>
+					<phase>compile</phase>
+					<configuration>
+						<tasks>
+							<echo message="====================== copy  product  property files ======================" />
+							<copy todir="${basedir}/target/classes/" overwrite="true">
+								<fileset dir="${basedir}/src/main/resources/product/" />
+							</copy>
+						</tasks>
+					</configuration>
+					<goals>
+						<goal>run</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>wagon-maven-plugin</artifactId>
+			<version>1.0-beta-3</version>
+			<configuration>
+				<serverId>${product.server.id}</serverId>
+				<fromDir>target</fromDir>
+				<includes>${project.artifactId}.war</includes>
+				<url>scp://${tomcat.product.host}</url>
+				<toDir>${tomcat.product.installdir}</toDir>
+			</configuration>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.maven.wagon</groupId>
+					<artifactId>wagon-ssh</artifactId>
+					<version>1.0-beta-6</version>
+				</dependency>
+			</dependencies>
+			<executions>
+				<execution>
+					<id>upload-war</id>
+					<goals>
+						<goal>upload</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
   </build>
   
 </project>
