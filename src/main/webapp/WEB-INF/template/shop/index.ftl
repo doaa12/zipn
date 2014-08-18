@@ -125,7 +125,7 @@ $().ready(function() {
 									</li>
 								[/#list]
 							</ul>
-						[/@article_list]
+						[/@article_list] 
 					[/#list]
 				[/@article_category_root_list]
 			</div>
