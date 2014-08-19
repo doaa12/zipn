@@ -50,12 +50,12 @@ public class FilePlugin extends StoragePlugin implements ServletContextAware {
 
 	@Override
 	public String getAuthor() {
-		return "bmwm";
+		return "zipn";
 	}
 
 	@Override
 	public String getSiteUrl() {
-		return "http://www.bmwm.cn";
+		return "http://www.zipn.cn";
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class AlipayDirectPlugin extends PaymentPlugin {
 
 	@Override
 	public String getSiteUrl() {
-		return "http://www.bmwm.cn";
+		return "http://www.zipn.cn";
 	}
 
 	@Override
