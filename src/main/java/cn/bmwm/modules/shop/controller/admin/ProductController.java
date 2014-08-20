@@ -157,7 +157,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		product.setProductCategory(productCategoryService.find(productCategoryId));
+		//product.setProductCategory(productCategoryService.find(productCategoryId));
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -214,7 +214,7 @@ public class ProductController extends BaseController {
 		if (product.getImage() == null && product.getThumbnail() != null) {
 			product.setImage(product.getThumbnail());
 		}
-
+		/*
 		for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
 			for (Parameter parameter : parameterGroup.getParameters()) {
 				String parameterValue = request.getParameter("parameter_" + parameter.getId());
@@ -225,7 +225,8 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-
+		 */
+		/*
 		for (Attribute attribute : product.getProductCategory().getAttributes()) {
 			String attributeValue = request.getParameter("attribute_" + attribute.getId());
 			if (StringUtils.isNotEmpty(attributeValue)) {
@@ -234,7 +235,7 @@ public class ProductController extends BaseController {
 				product.setAttributeValue(attribute, null);
 			}
 		}
-
+		 */
 		Goods goods = new Goods();
 		List<Product> products = new ArrayList<Product>();
 		if (specificationIds != null && specificationIds.length > 0) {
@@ -338,7 +339,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		product.setProductCategory(productCategoryService.find(productCategoryId));
+		//product.setProductCategory(productCategoryService.find(productCategoryId));
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -376,7 +377,7 @@ public class ProductController extends BaseController {
 		if (product.getImage() == null && product.getThumbnail() != null) {
 			product.setImage(product.getThumbnail());
 		}
-
+		/*
 		for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
 			for (Parameter parameter : parameterGroup.getParameters()) {
 				String parameterValue = request.getParameter("parameter_" + parameter.getId());
@@ -387,7 +388,8 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-
+		*/
+		/*
 		for (Attribute attribute : product.getProductCategory().getAttributes()) {
 			String attributeValue = request.getParameter("attribute_" + attribute.getId());
 			if (StringUtils.isNotEmpty(attributeValue)) {
@@ -396,7 +398,7 @@ public class ProductController extends BaseController {
 				product.setAttributeValue(attribute, null);
 			}
 		}
-
+		*/
 		Goods goods = pProduct.getGoods();
 		List<Product> products = new ArrayList<Product>();
 		if (specificationIds != null && specificationIds.length > 0) {

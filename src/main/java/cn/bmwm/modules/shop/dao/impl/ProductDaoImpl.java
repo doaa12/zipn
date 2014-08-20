@@ -28,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.springframework.stereotype.Repository;
@@ -45,16 +44,18 @@ import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Member;
-import cn.bmwm.modules.shop.entity.OrderItem;
-import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.ProductCategory;
-import cn.bmwm.modules.shop.entity.Promotion;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
-import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.entity.Order.OrderStatus;
 import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
+import cn.bmwm.modules.shop.entity.OrderItem;
+import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
+import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Sn.Type;
+import cn.bmwm.modules.shop.entity.SpecificationValue;
+import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
@@ -292,6 +293,117 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Predicate restrictions = criteriaBuilder.conjunction();
 		if (productCategory != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("productCategory"), productCategory), criteriaBuilder.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
+		}
+		if (brand != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));
+		}
+		if (promotion != null) {
+			Subquery<Product> subquery1 = criteriaQuery.subquery(Product.class);
+			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
+			subquery1.select(subqueryRoot1);
+			subquery1.where(criteriaBuilder.equal(subqueryRoot1, root), criteriaBuilder.equal(subqueryRoot1.join("promotions"), promotion));
+
+			Subquery<Product> subquery2 = criteriaQuery.subquery(Product.class);
+			Root<Product> subqueryRoot2 = subquery2.from(Product.class);
+			subquery2.select(subqueryRoot2);
+			subquery2.where(criteriaBuilder.equal(subqueryRoot2, root), criteriaBuilder.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
+
+			Subquery<Product> subquery3 = criteriaQuery.subquery(Product.class);
+			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
+			subquery3.select(subqueryRoot3);
+			subquery3.where(criteriaBuilder.equal(subqueryRoot3, root), criteriaBuilder.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
+
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
+		}
+		if (tags != null && !tags.isEmpty()) {
+			Subquery<Product> subquery = criteriaQuery.subquery(Product.class);
+			Root<Product> subqueryRoot = subquery.from(Product.class);
+			subquery.select(subqueryRoot);
+			subquery.where(criteriaBuilder.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.exists(subquery));
+		}
+		if (attributeValue != null) {
+			for (Entry<Attribute, String> entry : attributeValue.entrySet()) {
+				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + entry.getKey().getPropertyIndex();
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get(propertyName), entry.getValue()));
+			}
+		}
+		if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
+			BigDecimal temp = startPrice;
+			startPrice = endPrice;
+			endPrice = temp;
+		}
+		if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get("price"), startPrice));
+		}
+		if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get("price"), endPrice));
+		}
+		if (isMarketable != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), isMarketable));
+		}
+		if (isList != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+		}
+		if (isTop != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
+		}
+		if (isGift != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+		}
+		Path<Integer> stock = root.get("stock");
+		Path<Integer> allocatedStock = root.get("allocatedStock");
+		if (isOutOfStock != null) {
+			if (isOutOfStock) {
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, allocatedStock));
+			} else {
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, allocatedStock)));
+			}
+		}
+		if (isStockAlert != null) {
+			Setting setting = SettingUtils.get();
+			if (isStockAlert) {
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount())));
+			} else {
+				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount()))));
+			}
+		}
+		criteriaQuery.where(restrictions);
+		List<Order> orders = pageable.getOrders();
+		if (orderType == OrderType.priceAsc) {
+			orders.add(Order.asc("price"));
+			orders.add(Order.desc("createDate"));
+		} else if (orderType == OrderType.priceDesc) {
+			orders.add(Order.desc("price"));
+			orders.add(Order.desc("createDate"));
+		} else if (orderType == OrderType.salesDesc) {
+			orders.add(Order.desc("sales"));
+			orders.add(Order.desc("createDate"));
+		} else if (orderType == OrderType.scoreDesc) {
+			orders.add(Order.desc("score"));
+			orders.add(Order.desc("createDate"));
+		} else if (orderType == OrderType.dateDesc) {
+			orders.add(Order.desc("createDate"));
+		} else {
+			orders.add(Order.desc("isTop"));
+			orders.add(Order.desc("modifyDate"));
+		}
+		return super.findPage(criteriaQuery, pageable);
+	}
+	
+	//zhoupuyue
+	public Page<Product> findPage(Shop shop, ShopCategory shopCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+		Root<Product> root = criteriaQuery.from(Product.class);
+		criteriaQuery.select(root);
+		
+		Predicate restrictions = criteriaBuilder.conjunction();
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shop"), shop));
+		
+		if (shopCategory != null) {
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shopCategory"), shopCategory));
 		}
 		if (brand != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));

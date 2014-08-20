@@ -297,9 +297,16 @@ public class Product extends BaseEntity {
 
 	/** 商品属性值19 */
 	private String attributeValue19;
-
-	/** 商品分类 */
-	private ProductCategory productCategory;
+	
+	/**
+	 * 商铺分类
+	 */
+	private ShopCategory shopCategory;
+	
+	/**
+	 * 商铺
+	 */
+	private Shop shop;
 
 	/** 货品 */
 	private Goods goods;
@@ -1538,25 +1545,33 @@ public class Product extends BaseEntity {
 	}
 
 	/**
-	 * 获取商品分类
-	 * 
-	 * @return 商品分类
+	 * 获取店铺分类
+	 * @return
 	 */
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
-	public ProductCategory getProductCategory() {
-		return productCategory;
+	public ShopCategory getShopCategory() {
+		return shopCategory;
 	}
 
+	public void setShopCategory(ShopCategory shopCategory) {
+		this.shopCategory = shopCategory;
+	}
+	
 	/**
-	 * 设置商品分类
-	 * 
-	 * @param productCategory
-	 *            商品分类
+	 * 获取商品所属店铺
+	 * @return
 	 */
-	public void setProductCategory(ProductCategory productCategory) {
-		this.productCategory = productCategory;
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**
@@ -1979,7 +1994,7 @@ public class Product extends BaseEntity {
 		model.put("seoTitle", getSeoTitle());
 		model.put("seoKeywords", getSeoKeywords());
 		model.put("seoDescription", getSeoDescription());
-		model.put("productCategory", getProductCategory());
+		model.put("productCategory", getShopCategory().getParent());
 		try {
 			return FreemarkerUtils.process(staticPath, model);
 		} catch (IOException e) {
@@ -2015,8 +2030,8 @@ public class Product extends BaseEntity {
 		if (getPromotions() != null) {
 			allPromotions.addAll(getPromotions());
 		}
-		if (getProductCategory() != null && getProductCategory().getPromotions() != null) {
-			allPromotions.addAll(getProductCategory().getPromotions());
+		if (getShop() != null && getShop().getPromotions() != null) {
+			allPromotions.addAll(getShop().getPromotions());
 		}
 		if (getBrand() != null && getBrand().getPromotions() != null) {
 			allPromotions.addAll(getBrand().getPromotions());

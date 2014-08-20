@@ -21,6 +21,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -29,7 +30,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Length;
@@ -118,6 +118,16 @@ public class Promotion extends OrderEntity {
 
 	/** 赠品 */
 	private List<GiftItem> giftItems = new ArrayList<GiftItem>();
+	
+	/**
+	 * 店铺分类
+	 */
+	private ShopCategory shopCategory;
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
 
 	/**
 	 * 获取名称
@@ -551,6 +561,28 @@ public class Promotion extends OrderEntity {
 			return PATH_PREFIX + "/" + getId() + PATH_SUFFIX;
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取店铺分类
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	public ShopCategory getShopCategory() {
+		return shopCategory;
+	}
+
+	public void setShopCategory(ShopCategory shopCategory) {
+		this.shopCategory = shopCategory;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**

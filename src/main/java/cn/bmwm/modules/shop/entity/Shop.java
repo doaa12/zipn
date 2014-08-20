@@ -3,9 +3,20 @@ package cn.bmwm.modules.shop.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 商铺
@@ -48,14 +59,14 @@ public class Shop extends BaseEntity {
 	private String payAccount;
 	
 	/**
-	 * 商铺类目
-	 */
-	private ProductCategory shopCategory;
-	
-	/**
 	 * 商家
 	 */
-	private Admin owner;
+	private Admin admin;
+	
+	/**
+	 * 店铺商品分类
+	 */
+	private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
 	
 	/**
 	 * 商铺商品
@@ -66,7 +77,19 @@ public class Shop extends BaseEntity {
 	 * 收藏会员
 	 */
 	private Set<Member> favoriteMembers = new HashSet<Member>();
-
+	
+	/** 
+	 * 促销
+	 */
+	private Set<Promotion> promotions = new HashSet<Promotion>();
+	
+	/**
+	 * 获取店铺名称
+	 * @return
+	 */
+	@NotEmpty
+	@Length(max = 200)
+	@Column(nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -74,7 +97,12 @@ public class Shop extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	/**
+	 * 获取店铺描述
+	 * @return
+	 */
+	@Length(max = 500)
 	public String getDescription() {
 		return description;
 	}
@@ -82,7 +110,12 @@ public class Shop extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
+	/**
+	 * 获取店铺状态
+	 * @return
+	 */
+	@Column(nullable = false)
 	public Integer getStatus() {
 		return status;
 	}
@@ -90,7 +123,11 @@ public class Shop extends BaseEntity {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
+	
+	/**
+	 * 获取店铺公告
+	 * @return
+	 */
 	public String getNotice() {
 		return notice;
 	}
@@ -98,7 +135,12 @@ public class Shop extends BaseEntity {
 	public void setNotice(String notice) {
 		this.notice = notice;
 	}
-
+	
+	/**
+	 * 获取店铺支付账号
+	 * @return
+	 */
+	@Column(nullable = false)
 	public String getPayAccount() {
 		return payAccount;
 	}
@@ -106,23 +148,27 @@ public class Shop extends BaseEntity {
 	public void setPayAccount(String payAccount) {
 		this.payAccount = payAccount;
 	}
-
-	public ProductCategory getShopCategory() {
-		return shopCategory;
+	
+	/**
+	 * 获取店铺管理员
+	 * @return
+	 */
+	@NotNull
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "admin", nullable = false)
+	public Admin getAdmin() {
+		return admin;
 	}
 
-	public void setShopCategory(ProductCategory shopCategory) {
-		this.shopCategory = shopCategory;
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
 	}
 	
-	public Admin getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Admin owner) {
-		this.owner = owner;
-	}
-
+	/**
+	 * 获取商品
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	public Set<Product> getProducts() {
 		return products;
 	}
@@ -130,13 +176,44 @@ public class Shop extends BaseEntity {
 	public void setProducts(Set<Product> products) {
 		this.products = products;
 	}
+	
+	/**
+	 * 获取店铺分类
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	public Set<ShopCategory> getShopCategories() {
+		return shopCategories;
+	}
 
+	public void setShopCategories(Set<ShopCategory> shopCategories) {
+		this.shopCategories = shopCategories;
+	}
+	
+	/**
+	 * 获取收藏店铺的会员
+	 * @return
+	 */
+	@ManyToMany(mappedBy = "favoriteShops", fetch = FetchType.LAZY)
 	public Set<Member> getFavoriteMembers() {
 		return favoriteMembers;
 	}
 
 	public void setFavoriteMembers(Set<Member> favoriteMembers) {
 		this.favoriteMembers = favoriteMembers;
+	}
+	
+	/**
+	 * 获取店铺促销
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	public Set<Promotion> getPromotions() {
+		return promotions;
+	}
+
+	public void setPromotions(Set<Promotion> promotions) {
+		this.promotions = promotions;
 	}
 	
 }

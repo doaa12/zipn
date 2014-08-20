@@ -370,7 +370,7 @@ public class Admin extends BaseEntity {
 	 * 获取店铺
 	 * @return the shop
 	 */
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "shop", cascade = CascadeType.REMOVE)
+	@OneToOne(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	public Shop getShop() {
 		return shop;
 	}

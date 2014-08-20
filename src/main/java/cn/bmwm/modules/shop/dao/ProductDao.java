@@ -19,10 +19,12 @@ import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Tag;
-import cn.bmwm.modules.shop.entity.Product.OrderType;
 
 
 /**
@@ -183,6 +185,47 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	 */
 	Page<Product> findPage(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable);
 
+	/**
+	 * 查找商品分页
+	 * 
+	 * @param shop
+	 * 			  店铺
+	 * @param shopCategory
+	 *            商品分类
+	 * @param brand
+	 *            品牌
+	 * @param promotion
+	 *            促销
+	 * @param tags
+	 *            标签
+	 * @param attributeValue
+	 *            属性值
+	 * @param startPrice
+	 *            最低价格
+	 * @param endPrice
+	 *            最高价格
+	 * @param isMarketable
+	 *            是否上架
+	 * @param isList
+	 *            是否列出
+	 * @param isTop
+	 *            是否置顶
+	 * @param isGift
+	 *            是否为赠品
+	 * @param isOutOfStock
+	 *            是否缺货
+	 * @param isStockAlert
+	 *            是否库存警告
+	 * @param orderType
+	 *            排序类型
+	 * @param pageable
+	 *            分页信息
+	 * @return 商品分页
+	 */
+	//zhoupuyue
+	Page<Product> findPage(Shop shop, ShopCategory shopCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable);
+
+	
 	/**
 	 * 查找收藏商品分页
 	 * 

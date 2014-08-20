@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.Brand;
-import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -63,7 +61,6 @@ public class ProductCategoryController extends BaseController {
 		productCategory.setTreePath(null);
 		productCategory.setGrade(null);
 		productCategory.setChildren(null);
-		productCategory.setProducts(null);
 		productCategory.setParameterGroups(null);
 		productCategory.setAttributes(null);
 		productCategory.setPromotions(null);
@@ -132,10 +129,6 @@ public class ProductCategoryController extends BaseController {
 		Set<ProductCategory> children = productCategory.getChildren();
 		if (children != null && !children.isEmpty()) {
 			return Message.error("admin.productCategory.deleteExistChildrenNotAllowed");
-		}
-		Set<Product> products = productCategory.getProducts();
-		if (products != null && !products.isEmpty()) {
-			return Message.error("admin.productCategory.deleteExistProductNotAllowed");
 		}
 		productCategoryService.delete(id);
 		return SUCCESS_MESSAGE;

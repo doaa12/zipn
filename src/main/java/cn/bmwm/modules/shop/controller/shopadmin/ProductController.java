@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.bmwm.modules.shop.controller.admin.shop;
+package cn.bmwm.modules.shop.controller.shopadmin;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
-import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
@@ -29,6 +29,7 @@ import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductImageService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
+import cn.bmwm.modules.shop.service.ShopCategoryService;
 import cn.bmwm.modules.shop.service.SpecificationService;
 import cn.bmwm.modules.shop.service.SpecificationValueService;
 import cn.bmwm.modules.shop.service.TagService;
@@ -40,31 +41,45 @@ import cn.bmwm.modules.sys.security.Principal;
  * @date 2014-8-20
  */
 @Controller("shopProductController")
-@RequestMapping("/shop/product")
+@RequestMapping("/shopadmin/product")
 public class ProductController {
 
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
+	
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
+	
 	@Resource(name = "goodsServiceImpl")
 	private GoodsService goodsService;
+	
 	@Resource(name = "brandServiceImpl")
 	private BrandService brandService;
+	
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
+	
 	@Resource(name = "tagServiceImpl")
 	private TagService tagService;
+	
 	@Resource(name = "memberRankServiceImpl")
 	private MemberRankService memberRankService;
+	
 	@Resource(name = "productImageServiceImpl")
 	private ProductImageService productImageService;
+	
 	@Resource(name = "specificationServiceImpl")
 	private SpecificationService specificationService;
+	
 	@Resource(name = "specificationValueServiceImpl")
 	private SpecificationValueService specificationValueService;
+	
 	@Resource(name = "fileServiceImpl")
 	private FileService fileService;
+	
+	@Resource(name = "shopCategoryServiceImpl")
+	private ShopCategoryService shopCategoryService;
+	
 	
 	/**
 	 * 店铺商品列表
@@ -76,13 +91,12 @@ public class ProductController {
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
 		Shop shop = principal.getShop();
 		
-		//ProductCategory productCategory = productCategoryService.find(productCategoryId);
+		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
 		
 		Brand brand = brandService.find(brandId);
 		Promotion promotion = promotionService.find(promotionId);
 		List<Tag> tags = tagService.findList(tagId);
-		//model.addAttribute("productCategoryTree", productCategoryService.findTree());
-		model.addAttribute("shopCategories", shop.getShopCategory());
+		model.addAttribute("shopCategories", shop.getShopCategories());
 		model.addAttribute("brands", brandService.findAll());
 		model.addAttribute("promotions", promotionService.findAll());
 		model.addAttribute("tags", tagService.findList(Type.product));
@@ -96,7 +110,7 @@ public class ProductController {
 		model.addAttribute("isGift", isGift);
 		model.addAttribute("isOutOfStock", isOutOfStock);
 		model.addAttribute("isStockAlert", isStockAlert);
-		model.addAttribute("page", productService.findPage(productCategory, brand, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
+		model.addAttribute("page", productService.findPage(shop, shopCategory, brand, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
 		return "/admin/product/list";
 	}
 	

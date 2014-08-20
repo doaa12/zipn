@@ -73,9 +73,6 @@ public class ProductCategory extends OrderEntity {
 	/** 下级分类 */
 	private Set<ProductCategory> children = new HashSet<ProductCategory>();
 
-	/** 商品 */
-	private Set<Product> products = new HashSet<Product>();
-
 	/** 筛选品牌 */
 	private Set<Brand> brands = new HashSet<Brand>();
 
@@ -249,26 +246,6 @@ public class ProductCategory extends OrderEntity {
 	 */
 	public void setChildren(Set<ProductCategory> children) {
 		this.children = children;
-	}
-
-	/**
-	 * 获取商品
-	 * 
-	 * @return 商品
-	 */
-	@OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY)
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	/**
-	 * 设置商品
-	 * 
-	 * @param products
-	 *            商品
-	 */
-	public void setProducts(Set<Product> products) {
-		this.products = products;
 	}
 
 	/**

@@ -35,10 +35,12 @@ import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Tag;
-import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.StaticService;
 
@@ -119,6 +121,12 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	@Transactional(readOnly = true)
 	public Page<Product> findPage(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
 		return productDao.findPage(productCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, pageable);
+	}
+	
+	//zhoupuyue
+	@Transactional(readOnly = true)
+	public Page<Product> findPage(Shop shop, ShopCategory shopCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
+		return productDao.findPage(shop, shopCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, pageable);
 	}
 
 	@Transactional(readOnly = true)

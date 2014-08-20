@@ -16,7 +16,9 @@
 				/admin/login.jsp = authc
 				/admin/logout.jsp = logout
 				/admin/common/captcha.jhtml = anon
-
+				
+				/shopadmin/product/** = perms["shopadmin:product"]
+				
 				/admin/product/** = perms["admin:product"]
 				/admin/product_category/** = perms["admin:productCategory"]
 				/admin/parameter_group/** = perms["admin:parameterGroup"]
