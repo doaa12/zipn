@@ -22,6 +22,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import cn.bmwm.modules.shop.entity.Admin;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.AdminService;
 import cn.bmwm.modules.shop.service.CaptchaService;
 import cn.bmwm.modules.sys.model.Setting;
@@ -101,11 +102,16 @@ public class AuthenticationRealm extends AuthorizingRealm {
 				adminService.update(admin);
 				throw new IncorrectCredentialsException();
 			}
+			
 			admin.setLoginIp(ip);
 			admin.setLoginDate(new Date());
 			admin.setLoginFailureCount(0);
 			adminService.update(admin);
-			return new SimpleAuthenticationInfo(new Principal(admin.getId(), username), password, getName());
+			
+			//zhoupuyue,增加商家店铺信息
+			Shop shop = admin.getShop();
+			
+			return new SimpleAuthenticationInfo(new Principal(admin.getId(), username, shop), password, getName());
 		}
 		throw new UnknownAccountException();
 	}

@@ -16,7 +16,6 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
-import cn.bmwm.common.utils.Message;
 import cn.bmwm.common.utils.FileInfo.FileType;
+import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Goods;
@@ -36,13 +35,13 @@ import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Parameter;
 import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
-import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.FileService;
@@ -507,7 +506,7 @@ public class ProductController extends BaseController {
 		model.addAttribute("page", productService.findPage(productCategory, brand, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
 		return "/admin/product/list";
 	}
-
+	
 	/**
 	 * 删除
 	 */

@@ -8,12 +8,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -75,6 +77,11 @@ public class Admin extends BaseEntity {
 
 	/** 订单 */
 	private Set<Order> orders = new HashSet<Order>();
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
 
 	/**
 	 * 获取用户名
@@ -359,4 +366,20 @@ public class Admin extends BaseEntity {
 		}
 	}
 
+	/**
+	 * 获取店铺
+	 * @return the shop
+	 */
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "shop", cascade = CascadeType.REMOVE)
+	public Shop getShop() {
+		return shop;
+	}
+
+	/**
+	 * @param shop the shop to set
+	 */
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
+	
 }
