@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -82,6 +83,12 @@ public class Shop extends BaseEntity {
 	 * 促销
 	 */
 	private Set<Promotion> promotions = new HashSet<Promotion>();
+	
+	/**
+	 * 店铺所在城市
+	 */
+	private Area area;
+	
 	
 	/**
 	 * 获取店铺名称
@@ -214,6 +221,20 @@ public class Shop extends BaseEntity {
 
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
+	}
+	
+	/**
+	 * 获取店铺所在地区
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
 	}
 	
 }

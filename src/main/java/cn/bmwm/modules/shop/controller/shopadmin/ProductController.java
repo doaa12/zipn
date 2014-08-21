@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.controller.shopadmin;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.entity.Brand;
+import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -40,7 +42,7 @@ import cn.bmwm.modules.sys.security.Principal;
  * @author zhoupuyue
  * @date 2014-8-20
  */
-@Controller("shopProductController")
+@Controller("shopAdminProductController")
 @RequestMapping("/shopadmin/product")
 public class ProductController {
 
@@ -86,9 +88,10 @@ public class ProductController {
 	 */
 	//zhoupuyue,增加店铺商品列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String shoplist(Long shopCategoryId, Long brandId, Long promotionId, Long tagId, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, Pageable pageable, ModelMap model) {
+	public String shoplist(Long shopCategoryId, Long brandId, Long promotionId, Long tagId, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, Pageable pageable, ModelMap model, HttpSession session) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		
 		Shop shop = principal.getShop();
 		
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
@@ -111,7 +114,7 @@ public class ProductController {
 		model.addAttribute("isOutOfStock", isOutOfStock);
 		model.addAttribute("isStockAlert", isStockAlert);
 		model.addAttribute("page", productService.findPage(shop, shopCategory, brand, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
-		return "/admin/product/list";
+		return "/shopadmin/product/list";
 	}
 	
 }

@@ -124,9 +124,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Root<Product> root = criteriaQuery.from(Product.class);
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
+		/*
 		if (productCategory != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("productCategory"), productCategory), criteriaBuilder.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
 		}
+		*/
 		if (brand != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));
 		}
@@ -135,18 +137,23 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
 			subquery1.select(subqueryRoot1);
 			subquery1.where(criteriaBuilder.equal(subqueryRoot1, root), criteriaBuilder.equal(subqueryRoot1.join("promotions"), promotion));
-
+			
+			/*
 			Subquery<Product> subquery2 = criteriaQuery.subquery(Product.class);
 			Root<Product> subqueryRoot2 = subquery2.from(Product.class);
 			subquery2.select(subqueryRoot2);
 			subquery2.where(criteriaBuilder.equal(subqueryRoot2, root), criteriaBuilder.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
-
+			*/
+			
 			Subquery<Product> subquery3 = criteriaQuery.subquery(Product.class);
 			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
 			subquery3.select(subqueryRoot3);
 			subquery3.where(criteriaBuilder.equal(subqueryRoot3, root), criteriaBuilder.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
 
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
+			//restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
+		
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery3)));
+			
 		}
 		if (tags != null && !tags.isEmpty()) {
 			Subquery<Product> subquery = criteriaQuery.subquery(Product.class);

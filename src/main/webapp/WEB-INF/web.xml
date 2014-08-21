@@ -201,6 +201,11 @@
 		<filter-name>shiroFilter</filter-name>
 		<url-pattern>/admin/*</url-pattern>
 	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/shopadmin/*</url-pattern>
+	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>areaCacheFilter</filter-name>
