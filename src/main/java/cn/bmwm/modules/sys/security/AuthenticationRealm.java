@@ -110,8 +110,10 @@ public class AuthenticationRealm extends AuthorizingRealm {
 			
 			//zhoupuyue,增加商家店铺信息
 			Shop shop = admin.getShop();
+			Long shopId = shop == null ? null : shop.getId();
 			
-			return new SimpleAuthenticationInfo(new Principal(admin.getId(), username, shop), password, getName());
+			return new SimpleAuthenticationInfo(new Principal(admin.getId(), username, shopId), password, getName());
+			
 		}
 		throw new UnknownAccountException();
 	}

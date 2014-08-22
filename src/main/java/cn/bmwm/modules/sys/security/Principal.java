@@ -2,8 +2,6 @@ package cn.bmwm.modules.sys.security;
 
 import java.io.Serializable;
 
-import cn.bmwm.modules.shop.entity.Shop;
-
 /**
  * 身份信息
  * 
@@ -20,9 +18,9 @@ public class Principal implements Serializable {
 	private String username;
 	
 	/**
-	 * 商家店铺
+	 * 商家店铺ID
 	 */
-	private Shop shop;
+	private Long shopId;
 	
 	/**
 	 * @param id
@@ -30,10 +28,10 @@ public class Principal implements Serializable {
 	 * @param username
 	 *            用户名
 	 */
-	public Principal(Long id, String username, Shop shop) {
+	public Principal(Long id, String username, Long shopId) {
 		this.id = id;
 		this.username = username;
-		this.shop = shop;
+		this.shopId = shopId;
 	}
 	
 	/**
@@ -91,17 +89,17 @@ public class Principal implements Serializable {
 	}
 
 	/**
-	 * @return the shop
+	 * @return the shopId
 	 */
-	public Shop getShop() {
-		return shop;
+	public Long getShopId() {
+		return shopId;
 	}
 
 	/**
-	 * @param shop the shop to set
+	 * @param shopId the shopId to set
 	 */
-	public void setShop(Shop shop) {
-		this.shop = shop;
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
 	}
 
 }
