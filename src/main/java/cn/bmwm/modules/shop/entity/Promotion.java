@@ -104,9 +104,6 @@ public class Promotion extends OrderEntity {
 	/** 允许参加会员等级 */
 	private Set<MemberRank> memberRanks = new HashSet<MemberRank>();
 
-	/** 允许参与商品分类 */
-	private Set<ProductCategory> productCategories = new HashSet<ProductCategory>();
-
 	/** 允许参与商品 */
 	private Set<Product> products = new HashSet<Product>();
 
@@ -120,9 +117,9 @@ public class Promotion extends OrderEntity {
 	private List<GiftItem> giftItems = new ArrayList<GiftItem>();
 	
 	/**
-	 * 店铺分类
+	 * 允许参与的店铺分类
 	 */
-	private ShopCategory shopCategory;
+	private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
 	
 	/**
 	 * 店铺
@@ -431,19 +428,19 @@ public class Promotion extends OrderEntity {
 	 * @return 允许参与商品分类
 	 */
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "xx_promotion_product_category")
-	public Set<ProductCategory> getProductCategories() {
-		return productCategories;
+	@JoinTable(name = "xx_promotion_shop_category")
+	public Set<ShopCategory> getShopCategories() {
+		return shopCategories;
 	}
 
 	/**
 	 * 设置允许参与商品分类
 	 * 
 	 * @param productCategories
-	 *            允许参与商品分类
+	 *            允许参与店铺商品分类
 	 */
-	public void setProductCategories(Set<ProductCategory> productCategories) {
-		this.productCategories = productCategories;
+	public void setShopCategories(Set<ShopCategory> shopCategories) {
+		this.shopCategories = shopCategories;
 	}
 
 	/**
@@ -561,19 +558,6 @@ public class Promotion extends OrderEntity {
 			return PATH_PREFIX + "/" + getId() + PATH_SUFFIX;
 		}
 		return null;
-	}
-	
-	/**
-	 * 获取店铺分类
-	 * @return
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	public ShopCategory getShopCategory() {
-		return shopCategory;
-	}
-
-	public void setShopCategory(ShopCategory shopCategory) {
-		this.shopCategory = shopCategory;
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)

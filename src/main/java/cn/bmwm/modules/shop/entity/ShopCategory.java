@@ -3,12 +3,16 @@ package cn.bmwm.modules.shop.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -57,6 +61,16 @@ public class ShopCategory extends OrderEntity {
 	 * 促销
 	 */
 	private Set<Promotion> promotions = new HashSet<Promotion>();
+	
+	/** 
+	 * 参数组 
+	 */
+	private Set<ParameterGroup> parameterGroups = new HashSet<ParameterGroup>();
+
+	/** 
+	 * 筛选属性 
+	 */
+	private Set<Attribute> attributes = new HashSet<Attribute>();
 	
 	/**
 	 * 获取店铺分类名称
@@ -131,13 +145,68 @@ public class ShopCategory extends OrderEntity {
 	 * 获取店铺促销
 	 * @return
 	 */
-	@OneToMany(mappedBy = "shopCategory", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "shopCategories", fetch = FetchType.LAZY)
 	public Set<Promotion> getPromotions() {
 		return promotions;
 	}
 	
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
+	}
+	
+	/**
+	 * 获取参数组
+	 * 
+	 * @return 参数组
+	 */
+	@OneToMany(mappedBy = "shopCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OrderBy("order asc")
+	public Set<ParameterGroup> getParameterGroups() {
+		return parameterGroups;
+	}
+
+	/**
+	 * 设置参数组
+	 * 
+	 * @param parameterGroups
+	 *            参数组
+	 */
+	public void setParameterGroups(Set<ParameterGroup> parameterGroups) {
+		this.parameterGroups = parameterGroups;
+	}
+	
+	/**
+	 * 获取筛选属性
+	 * 
+	 * @return 筛选属性
+	 */
+	@OneToMany(mappedBy = "shopCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OrderBy("order asc")
+	public Set<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	/**
+	 * 设置筛选属性
+	 * 
+	 * @param attributes
+	 *            筛选属性
+	 */
+	public void setAttributes(Set<Attribute> attributes) {
+		this.attributes = attributes;
+	}
+	
+	/**
+	 * 删除前处理
+	 */
+	@PreRemove
+	public void preRemove() {
+		Set<Promotion> promotions = getPromotions();
+		if (promotions != null) {
+			for (Promotion promotion : promotions) {
+				promotion.getShopCategories().remove(this);
+			}
+		}
 	}
 	
 }

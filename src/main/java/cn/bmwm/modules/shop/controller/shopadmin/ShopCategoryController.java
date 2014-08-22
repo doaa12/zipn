@@ -2,7 +2,7 @@
 
 
  * */
-package cn.bmwm.modules.shop.controller.admin;
+package cn.bmwm.modules.shop.controller.shopadmin;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
+import cn.bmwm.modules.shop.service.ShopCategoryService;
 
 /**
  * Controller - 商品分类
@@ -31,12 +34,16 @@ import cn.bmwm.modules.shop.service.ProductCategoryService;
  */
 @Controller("adminProductCategoryController")
 @RequestMapping("/admin/product_category")
-public class ProductCategoryController extends BaseController {
+public class ShopCategoryController extends BaseController {
 
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
+	
 	@Resource(name = "brandServiceImpl")
 	private BrandService brandService;
+	
+	@Resource(name = "shopCategoryServiceImpl")
+	private ShopCategoryService shopCategoryService;
 
 	/**
 	 * 添加
@@ -51,25 +58,23 @@ public class ProductCategoryController extends BaseController {
 	/**
 	 * 保存
 	 */
-	/*
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(ProductCategory productCategory, Long parentId, Long[] brandIds, RedirectAttributes redirectAttributes) {
-		productCategory.setParent(productCategoryService.find(parentId));
-		productCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
-		if (!isValid(productCategory)) {
+	public String save(ShopCategory shopCategory, Long parentId, Long[] brandIds, RedirectAttributes redirectAttributes) {
+		shopCategory.setParent(productCategoryService.find(parentId));
+		//shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		if (!isValid(shopCategory)) {
 			return ERROR_VIEW;
 		}
-		productCategory.setTreePath(null);
-		productCategory.setGrade(null);
-		productCategory.setChildren(null);
-		productCategory.setParameterGroups(null);
-		productCategory.setAttributes(null);
-		productCategory.setPromotions(null);
-		productCategoryService.save(productCategory);
+		shopCategory.setTreePath(null);
+		//shopCategory.setGrade(null);
+		//shopCategory.setChildren(null);
+		shopCategory.setParameterGroups(null);
+		shopCategory.setAttributes(null);
+		shopCategory.setPromotions(null);
+		shopCategoryService.save(shopCategory);
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";
 	}
-	*/
 
 	/**
 	 * 编辑

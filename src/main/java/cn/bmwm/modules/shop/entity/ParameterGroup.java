@@ -41,8 +41,8 @@ public class ParameterGroup extends OrderEntity {
 	/** 名称 */
 	private String name;
 
-	/** 绑定分类 */
-	private ProductCategory productCategory;
+	/** 绑定店铺分类 */
+	private ShopCategory shopCategory;
 
 	/** 参数 */
 	private List<Parameter> parameters = new ArrayList<Parameter>();
@@ -78,8 +78,8 @@ public class ParameterGroup extends OrderEntity {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
-	public ProductCategory getProductCategory() {
-		return productCategory;
+	public ShopCategory getShopCategory() {
+		return shopCategory;
 	}
 
 	/**
@@ -88,8 +88,8 @@ public class ParameterGroup extends OrderEntity {
 	 * @param productCategory
 	 *            绑定分类
 	 */
-	public void setProductCategory(ProductCategory productCategory) {
-		this.productCategory = productCategory;
+	public void setShopCategory(ShopCategory shopCategory) {
+		this.shopCategory = shopCategory;
 	}
 
 	/**

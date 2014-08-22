@@ -2,11 +2,13 @@
 
 
  * */
-package cn.bmwm.modules.shop.controller.admin;
+package cn.bmwm.modules.shop.controller.shopadmin;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +20,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.FreemarkerUtils;
 import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.controller.admin.BaseController;
+import cn.bmwm.modules.shop.entity.Brand;
+import cn.bmwm.modules.shop.entity.Coupon;
+import cn.bmwm.modules.shop.entity.GiftItem;
+import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.CouponService;
 import cn.bmwm.modules.shop.service.MemberRankService;
@@ -208,7 +218,7 @@ public class PromotionController extends BaseController {
 		return "redirect:list.jhtml";
 	}
 	*/
-	
+
 	/**
 	 * 编辑
 	 */

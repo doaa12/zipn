@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +27,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.FileInfo.FileType;
 import cn.bmwm.common.utils.Message;
-import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.MemberRank;
-import cn.bmwm.modules.shop.entity.Parameter;
-import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
@@ -109,23 +105,27 @@ public class ProductController extends BaseController {
 	/**
 	 * 获取参数组
 	 */
+	/*
 	@RequestMapping(value = "/parameter_groups", method = RequestMethod.GET)
 	public @ResponseBody
 	Set<ParameterGroup> parameterGroups(Long id) {
 		ProductCategory productCategory = productCategoryService.find(id);
 		return productCategory.getParameterGroups();
 	}
-
+	*/
+	
 	/**
 	 * 获取属性
 	 */
+	/*
 	@RequestMapping(value = "/attributes", method = RequestMethod.GET)
 	public @ResponseBody
 	Set<Attribute> attributes(Long id) {
 		ProductCategory productCategory = productCategoryService.find(id);
 		return productCategory.getAttributes();
 	}
-
+	*/
+	
 	/**
 	 * 添加
 	 */

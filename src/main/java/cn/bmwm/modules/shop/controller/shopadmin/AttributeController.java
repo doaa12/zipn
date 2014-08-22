@@ -2,7 +2,7 @@
 
 
  * */
-package cn.bmwm.modules.shop.controller.admin;
+package cn.bmwm.modules.shop.controller.shopadmin;
 
 import java.util.Iterator;
 
@@ -18,10 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.entity.Attribute;
+import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.service.AttributeService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
+import cn.bmwm.modules.shop.service.ShopCategoryService;
 
 /**
  * Controller - 属性
@@ -35,8 +38,12 @@ public class AttributeController extends BaseController {
 
 	@Resource(name = "attributeServiceImpl")
 	private AttributeService attributeService;
+	
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
+	
+	@Resource(name = "shopCategoryServiceImpl")
+	private ShopCategoryService shopCategoryService;
 
 	/**
 	 * 添加
@@ -51,20 +58,19 @@ public class AttributeController extends BaseController {
 	/**
 	 * 保存
 	 */
-	/*
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(Attribute attribute, Long productCategoryId, RedirectAttributes redirectAttributes) {
+	public String save(Attribute attribute, Long shopCategoryId, RedirectAttributes redirectAttributes) {
 		for (Iterator<String> iterator = attribute.getOptions().iterator(); iterator.hasNext();) {
 			String option = iterator.next();
 			if (StringUtils.isEmpty(option)) {
 				iterator.remove();
 			}
 		}
-		attribute.setProductCategory(productCategoryService.find(productCategoryId));
+		attribute.setShopCategory(shopCategoryService.find(shopCategoryId));
 		if (!isValid(attribute, Save.class)) {
 			return ERROR_VIEW;
 		}
-		if (attribute.getProductCategory().getAttributes().size() >= Product.ATTRIBUTE_VALUE_PROPERTY_COUNT) {
+		if (attribute.getShopCategory().getAttributes().size() >= Product.ATTRIBUTE_VALUE_PROPERTY_COUNT) {
 			addFlashMessage(redirectAttributes, Message.error("admin.attribute.addCountNotAllowed", Product.ATTRIBUTE_VALUE_PROPERTY_COUNT));
 		} else {
 			attribute.setPropertyIndex(null);
@@ -73,8 +79,7 @@ public class AttributeController extends BaseController {
 		}
 		return "redirect:list.jhtml";
 	}
-	*/
-	
+
 	/**
 	 * 编辑
 	 */

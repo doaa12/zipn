@@ -43,7 +43,7 @@ public class Attribute extends OrderEntity {
 	private Integer propertyIndex;
 
 	/** 绑定分类 */
-	private ProductCategory productCategory;
+	private ShopCategory shopCategory;
 
 	/** 可选项 */
 	private List<String> options = new ArrayList<String>();
@@ -99,8 +99,8 @@ public class Attribute extends OrderEntity {
 	@NotNull(groups = Save.class)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, updatable = false)
-	public ProductCategory getProductCategory() {
-		return productCategory;
+	public ShopCategory getShopCategory() {
+		return shopCategory;
 	}
 
 	/**
@@ -109,8 +109,8 @@ public class Attribute extends OrderEntity {
 	 * @param productCategory
 	 *            绑定分类
 	 */
-	public void setProductCategory(ProductCategory productCategory) {
-		this.productCategory = productCategory;
+	public void setShopCategory(ShopCategory shopCategory) {
+		this.shopCategory = shopCategory;
 	}
 
 	/**

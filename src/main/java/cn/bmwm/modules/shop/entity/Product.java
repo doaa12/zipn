@@ -355,6 +355,11 @@ public class Product extends BaseEntity {
 
 	/** 参数值 */
 	private Map<Parameter, String> parameterValue = new HashMap<Parameter, String>();
+	
+	/**
+	 * 商品所在区域
+	 */
+	private Area area;
 
 	static {
 		try {
@@ -2071,6 +2076,22 @@ public class Product extends BaseEntity {
 	@Transient
 	public Boolean getIsOutOfStock() {
 		return getStock() != null && getAllocatedStock() != null && getAllocatedStock() >= getStock();
+	}
+	
+	/**
+	 * @return the area
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
+	public Area getArea() {
+		return area;
+	}
+
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(Area area) {
+		this.area = area;
 	}
 
 	/**

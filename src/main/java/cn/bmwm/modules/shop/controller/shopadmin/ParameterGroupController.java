@@ -2,7 +2,9 @@
 
 
  * */
-package cn.bmwm.modules.shop.controller.admin;
+package cn.bmwm.modules.shop.controller.shopadmin;
+
+import java.util.Iterator;
 
 import javax.annotation.Resource;
 
@@ -11,11 +13,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.controller.admin.BaseController;
+import cn.bmwm.modules.shop.entity.Parameter;
+import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.service.ParameterGroupService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
+import cn.bmwm.modules.shop.service.ShopCategoryService;
 
 /**
  * Controller - 参数
@@ -29,8 +36,12 @@ public class ParameterGroupController extends BaseController {
 
 	@Resource(name = "parameterGroupServiceImpl")
 	private ParameterGroupService parameterGroupService;
+	
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
+	
+	@Resource(name = "shopCategoryServiceImpl")
+	private ShopCategoryService shopCategoryService;
 
 	/**
 	 * 添加
@@ -44,9 +55,8 @@ public class ParameterGroupController extends BaseController {
 	/**
 	 * 保存
 	 */
-	/*
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(ParameterGroup parameterGroup, Long productCategoryId, RedirectAttributes redirectAttributes) {
+	public String save(ParameterGroup parameterGroup, Long shopCategoryId, RedirectAttributes redirectAttributes) {
 		for (Iterator<Parameter> iterator = parameterGroup.getParameters().iterator(); iterator.hasNext();) {
 			Parameter parameter = iterator.next();
 			if (parameter == null || parameter.getName() == null) {
@@ -55,7 +65,7 @@ public class ParameterGroupController extends BaseController {
 				parameter.setParameterGroup(parameterGroup);
 			}
 		}
-		parameterGroup.setProductCategory(productCategoryService.find(productCategoryId));
+		parameterGroup.setShopCategory(shopCategoryService.find(shopCategoryId));
 		if (!isValid(parameterGroup)) {
 			return ERROR_VIEW;
 		}
@@ -63,8 +73,7 @@ public class ParameterGroupController extends BaseController {
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";
 	}
-	*/
-	
+
 	/**
 	 * 编辑
 	 */
@@ -78,9 +87,8 @@ public class ParameterGroupController extends BaseController {
 	/**
 	 * 更新
 	 */
-	/*
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(ParameterGroup parameterGroup, Long productCategoryId, RedirectAttributes redirectAttributes) {
+	public String update(ParameterGroup parameterGroup, Long shopCategoryId, RedirectAttributes redirectAttributes) {
 		for (Iterator<Parameter> iterator = parameterGroup.getParameters().iterator(); iterator.hasNext();) {
 			Parameter parameter = iterator.next();
 			if (parameter == null || parameter.getName() == null) {
@@ -89,7 +97,7 @@ public class ParameterGroupController extends BaseController {
 				parameter.setParameterGroup(parameterGroup);
 			}
 		}
-		parameterGroup.setProductCategory(productCategoryService.find(productCategoryId));
+		parameterGroup.setShopCategory(shopCategoryService.find(shopCategoryId));
 		if (!isValid(parameterGroup)) {
 			return ERROR_VIEW;
 		}
@@ -97,7 +105,6 @@ public class ParameterGroupController extends BaseController {
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";
 	}
-	*/
 
 	/**
 	 * 列表

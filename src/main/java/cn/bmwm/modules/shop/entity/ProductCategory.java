@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -75,15 +73,6 @@ public class ProductCategory extends OrderEntity {
 
 	/** 筛选品牌 */
 	private Set<Brand> brands = new HashSet<Brand>();
-
-	/** 参数组 */
-	private Set<ParameterGroup> parameterGroups = new HashSet<ParameterGroup>();
-
-	/** 筛选属性 */
-	private Set<Attribute> attributes = new HashSet<Attribute>();
-
-	/** 促销 */
-	private Set<Promotion> promotions = new HashSet<Promotion>();
 
 	/**
 	 * 获取名称
@@ -271,68 +260,6 @@ public class ProductCategory extends OrderEntity {
 	}
 
 	/**
-	 * 获取参数组
-	 * 
-	 * @return 参数组
-	 */
-	@OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@OrderBy("order asc")
-	public Set<ParameterGroup> getParameterGroups() {
-		return parameterGroups;
-	}
-
-	/**
-	 * 设置参数组
-	 * 
-	 * @param parameterGroups
-	 *            参数组
-	 */
-	public void setParameterGroups(Set<ParameterGroup> parameterGroups) {
-		this.parameterGroups = parameterGroups;
-	}
-
-	/**
-	 * 获取筛选属性
-	 * 
-	 * @return 筛选属性
-	 */
-	@OneToMany(mappedBy = "productCategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@OrderBy("order asc")
-	public Set<Attribute> getAttributes() {
-		return attributes;
-	}
-
-	/**
-	 * 设置筛选属性
-	 * 
-	 * @param attributes
-	 *            筛选属性
-	 */
-	public void setAttributes(Set<Attribute> attributes) {
-		this.attributes = attributes;
-	}
-
-	/**
-	 * 获取促销
-	 * 
-	 * @return 促销
-	 */
-	@ManyToMany(mappedBy = "productCategories", fetch = FetchType.LAZY)
-	public Set<Promotion> getPromotions() {
-		return promotions;
-	}
-
-	/**
-	 * 设置促销
-	 * 
-	 * @param promotions
-	 *            促销
-	 */
-	public void setPromotions(Set<Promotion> promotions) {
-		this.promotions = promotions;
-	}
-
-	/**
 	 * 获取树路径
 	 * 
 	 * @return 树路径
@@ -360,19 +287,6 @@ public class ProductCategory extends OrderEntity {
 			return PATH_PREFIX + "/" + getId() + PATH_SUFFIX;
 		}
 		return null;
-	}
-
-	/**
-	 * 删除前处理
-	 */
-	@PreRemove
-	public void preRemove() {
-		Set<Promotion> promotions = getPromotions();
-		if (promotions != null) {
-			for (Promotion promotion : promotions) {
-				promotion.getProductCategories().remove(this);
-			}
-		}
 	}
 
 }

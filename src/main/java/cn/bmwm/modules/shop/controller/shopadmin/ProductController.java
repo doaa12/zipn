@@ -4,6 +4,7 @@
 package cn.bmwm.modules.shop.controller.shopadmin;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -12,11 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
+import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
+import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
@@ -142,5 +147,24 @@ public class ProductController {
 		
 	}
 	
+	/**
+	 * 获取参数组
+	 */
+	@RequestMapping(value = "/parameter_groups", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<ParameterGroup> parameterGroups(Long id) {
+		ShopCategory shopCategory = shopCategoryService.find(id);
+		return shopCategory.getParameterGroups();
+	}
+	
+	/**
+	 * 获取属性
+	 */
+	@RequestMapping(value = "/attributes", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<Attribute> attributes(Long id) {
+		ShopCategory shopCategory = shopCategoryService.find(id);
+		return shopCategory.getAttributes();
+	}
 	
 }
