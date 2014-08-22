@@ -34,8 +34,8 @@ public class AttributeDaoImpl extends BaseDaoImpl<Attribute, Long> implements At
 	@Override
 	public void persist(Attribute attribute) {
 		Assert.notNull(attribute);
-		String jpql = "select attribute.propertyIndex from Attribute attribute where attribute.productCategory = :productCategory";
-		List<Integer> propertyIndexs = entityManager.createQuery(jpql, Integer.class).setFlushMode(FlushModeType.COMMIT).setParameter("productCategory", attribute.getProductCategory()).getResultList();
+		String jpql = "select attribute.propertyIndex from Attribute attribute where attribute.shopCategory = :shopCategory";
+		List<Integer> propertyIndexs = entityManager.createQuery(jpql, Integer.class).setFlushMode(FlushModeType.COMMIT).setParameter("shopCategory", attribute.getShopCategory()).getResultList();
 		for (int i = 0; i < Product.ATTRIBUTE_VALUE_PROPERTY_COUNT; i++) {
 			if (!propertyIndexs.contains(i)) {
 				attribute.setPropertyIndex(i);
@@ -55,8 +55,8 @@ public class AttributeDaoImpl extends BaseDaoImpl<Attribute, Long> implements At
 	public void remove(Attribute attribute) {
 		if (attribute != null) {
 			String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + attribute.getPropertyIndex();
-			String jpql = "update Product product set product." + propertyName + " = null where product.productCategory = :productCategory";
-			entityManager.createQuery(jpql).setFlushMode(FlushModeType.COMMIT).setParameter("productCategory", attribute.getProductCategory()).executeUpdate();
+			String jpql = "update Product product set product." + propertyName + " = null where product.shopCategory = :shopCategory";
+			entityManager.createQuery(jpql).setFlushMode(FlushModeType.COMMIT).setParameter("shopCategory", attribute.getShopCategory()).executeUpdate();
 			super.remove(attribute);
 		}
 	}

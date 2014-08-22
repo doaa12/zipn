@@ -30,8 +30,8 @@ import cn.bmwm.modules.shop.service.ShopCategoryService;
  *
  * @version 1.0
  */
-@Controller("adminParameterGroupController")
-@RequestMapping("/admin/parameter_group")
+@Controller("shopadminParameterGroupController")
+@RequestMapping("/shopadmin/parameter_group")
 public class ParameterGroupController extends BaseController {
 
 	@Resource(name = "parameterGroupServiceImpl")

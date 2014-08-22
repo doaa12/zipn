@@ -85,6 +85,7 @@ public class ProductController extends BaseController {
 		Promotion promotion = promotionService.find(promotionId);
 		List<Tag> tags = tagService.findList(tagIds);
 		Map<Attribute, String> attributeValue = new HashMap<Attribute, String>();
+		/*
 		if (productCategory2 != null) {
 			Set<Attribute> attributes = productCategory.getAttributes();
 			for (Attribute attribute : attributes) {
@@ -94,6 +95,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
+		*/
 		Pageable pageable = new Pageable(pageNumber, pageSize);
 		model.addAttribute("orderTypes", OrderType.values());
 		model.addAttribute("productCategory", productCategory);

@@ -46,8 +46,8 @@ import cn.bmwm.modules.shop.service.PromotionService;
  *
  * @version 1.0
  */
-@Controller("adminPromotionController")
-@RequestMapping("/admin/promotion")
+@Controller("shopadminPromotionController")
+@RequestMapping("/shopadmin/promotion")
 public class PromotionController extends BaseController {
 
 	@Resource(name = "promotionServiceImpl")

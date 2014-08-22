@@ -45,7 +45,7 @@ $().ready(function() {
 	var $addSpecificationProduct = $("#addSpecificationProduct");
 	var $deleteSpecificationProduct = $("a.deleteSpecificationProduct");
 	var productImageIndex = ${(product.productImages?size)!"0"};
-	var previousShopCategoryId = "${product.ShopCategory.id}";
+	var previousShopCategoryId = "${product.shopCategory.id}";
 	
 	[@flash_message /]
 	
@@ -386,13 +386,6 @@ $().ready(function() {
 					<select id="shopCategoryId" name="shopCategoryId">
 						[#list shopCategories as shopCategory]
 							<option value="${shopCategory.id}"[#if shopCategory == product.shopCategory] selected="selected"[/#if]>
-								<#--
-								[#if productCategory.grade != 0]
-									[#list 1..productCategory.grade as i]
-										&nbsp;&nbsp;
-									[/#list]
-								[/#if]
-								-->
 								${shopCategory.name}
 							</option>
 						[/#list]

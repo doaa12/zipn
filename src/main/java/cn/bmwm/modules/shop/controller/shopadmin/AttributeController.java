@@ -32,8 +32,8 @@ import cn.bmwm.modules.shop.service.ShopCategoryService;
  *
  * @version 1.0
  */
-@Controller("adminAttributeController")
-@RequestMapping("/admin/attribute")
+@Controller("shopadminAttributeController")
+@RequestMapping("/shopadmin/attribute")
 public class AttributeController extends BaseController {
 
 	@Resource(name = "attributeServiceImpl")
