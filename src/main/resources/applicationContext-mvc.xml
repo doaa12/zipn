@@ -66,7 +66,7 @@
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
 
-	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<bean id="exceptionResolver" class="cn.bmwm.common.utils.ZipnExceptionResolver">
 		<property name="defaultErrorView" value="shop/common/error" />
 	</bean>
 

@@ -1553,7 +1553,6 @@ public class Product extends BaseEntity {
 	 * 获取店铺分类
 	 * @return
 	 */
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	public ShopCategory getShopCategory() {
@@ -1568,7 +1567,6 @@ public class Product extends BaseEntity {
 	 * 获取商品所属店铺
 	 * @return
 	 */
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	public Shop getShop() {
