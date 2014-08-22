@@ -30,7 +30,7 @@
 $().ready(function() {
 
 	var $inputForm = $("#inputForm");
-	var $productCategoryId = $("#productCategoryId");
+	var $shopCategoryId = $("#shopCategoryId");
 	var $isMemberPrice = $("#isMemberPrice");
 	var $memberPriceTr = $("#memberPriceTr");
 	var $memberPrice = $("#memberPriceTr input");
@@ -48,11 +48,11 @@ $().ready(function() {
 	
 	[@flash_message /]
 	
-	var previousProductCategoryId = getCookie("previousProductCategoryId");
-	if (previousProductCategoryId != null) {
-		$productCategoryId.val(previousProductCategoryId);
+	var previousShopCategoryId = getCookie("previousShopCategoryId");
+	if (previousShopCategoryId != null) {
+		$shopCategoryId.val(previousShopCategoryId);
 	} else {
-		previousProductCategoryId = $productCategoryId.val();
+		previousShopCategoryId = $shopCategoryId.val();
 	}
 	
 	loadParameter();
@@ -107,7 +107,7 @@ $().ready(function() {
 	});
 	
 	// 修改商品分类
-	$productCategoryId.change(function() {
+	$shopCategoryId.change(function() {
 		var hasValue = false;
 		$parameterTable.find(":input").each(function() {
 			if ($.trim($(this).val()) != "") {
@@ -131,16 +131,16 @@ $().ready(function() {
 				onOk: function() {
 					loadParameter();
 					loadAttribute();
-					previousProductCategoryId = $productCategoryId.val();
+					previousShopCategoryId = $shopCategoryId.val();
 				},
 				onCancel: function() {
-					$productCategoryId.val(previousProductCategoryId);
+					$shopCategoryId.val(previousShopCategoryId);
 				}
 			});
 		} else {
 			loadParameter();
 			loadAttribute();
-			previousProductCategoryId = $productCategoryId.val();
+			previousShopCategoryId = $shopCategoryId.val();
 		}
 	});
 	
@@ -149,7 +149,7 @@ $().ready(function() {
 		$.ajax({
 			url: "parameter_groups.jhtml",
 			type: "GET",
-			data: {id: $productCategoryId.val()},
+			data: {id: $shopCategoryId.val()},
 			dataType: "json",
 			beforeSend: function() {
 				$parameterTable.empty();
@@ -180,7 +180,7 @@ $().ready(function() {
 		$.ajax({
 			url: "attributes.jhtml",
 			type: "GET",
-			data: {id: $productCategoryId.val()},
+			data: {id: $shopCategoryId.val()},
 			dataType: "json",
 			beforeSend: function() {
 				$attributeTable.empty();
@@ -269,7 +269,7 @@ $().ready(function() {
 	// 表单验证
 	$inputForm.validate({
 		rules: {
-			productCategoryId: "required",
+			shopCategoryId: "required",
 			name: "required",
 			sn: {
 				pattern: /^[0-9a-zA-Z_-]+$/,
@@ -329,7 +329,7 @@ $().ready(function() {
 				});
 				if (!isRepeats) {
 					$specificationProductTable.find("tr:eq(1)").find("select").prop("disabled", true);
-					addCookie("previousProductCategoryId", $productCategoryId.val(), {expires: 24 * 60 * 60});
+					addCookie("previousShopCategoryId", $shopCategoryId.val(), {expires: 24 * 60 * 60});
 					form.submit();
 				}
 			}
@@ -370,15 +370,10 @@ $().ready(function() {
 					${message("Product.productCategory")}:
 				</th>
 				<td>
-					<select id="productCategoryId" name="productCategoryId">
-						[#list productCategoryTree as productCategory]
-							<option value="${productCategory.id}">
-								[#if productCategory.grade != 0]
-									[#list 1..productCategory.grade as i]
-										&nbsp;&nbsp;
-									[/#list]
-								[/#if]
-								${productCategory.name}
+					<select id="shopCategoryId" name="shopCategoryId">
+						[#list shopCategories as shopCategory]
+							<option value="${shopCategory.id}">
+								${shopCategory.name}
 							</option>
 						[/#list]
 					</select>
