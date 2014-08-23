@@ -203,6 +203,15 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		
+		Long shopId = principal.getShopId();
+		Shop shop = shopService.find(shopId);
+		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
+		
+		String city = shop.getCity();
+		
 		for (Iterator<ProductImage> iterator = product.getProductImages().iterator(); iterator.hasNext();) {
 			ProductImage productImage = iterator.next();
 			if (productImage == null || productImage.isEmpty()) {
@@ -216,7 +225,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		product.setShopCategory(shopCategoryService.find(shopCategoryId));
+		
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -307,6 +316,10 @@ public class ProductController extends BaseController {
 								product.setGoods(goods);
 								product.setSpecifications(new HashSet<Specification>());
 								product.setSpecificationValues(new HashSet<SpecificationValue>());
+								product.setCity(city);
+								product.setShop(shop);
+								product.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								product.setShopCategory(shopCategory);
 								products.add(product);
 							} else {
 								Product specificationProduct = new Product();
@@ -342,6 +355,10 @@ public class ProductController extends BaseController {
 								specificationProduct.setOrderItems(null);
 								specificationProduct.setGiftItems(null);
 								specificationProduct.setProductNotifies(null);
+								specificationProduct.setCity(city);
+								specificationProduct.setShop(shop);
+								specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								specificationProduct.setShopCategory(shopCategory);
 								products.add(specificationProduct);
 							}
 						}
@@ -390,6 +407,15 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] specificationProductIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		
+		Long shopId = principal.getShopId();
+		Shop shop = shopService.find(shopId);
+		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
+		
+		String city = shop.getCity();
+		
 		for (Iterator<ProductImage> iterator = product.getProductImages().iterator(); iterator.hasNext();) {
 			ProductImage productImage = iterator.next();
 			if (productImage == null || productImage.isEmpty()) {
@@ -403,7 +429,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		product.setShopCategory(shopCategoryService.find(shopCategoryId));
+		
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -470,9 +496,13 @@ public class ProductController extends BaseController {
 						if (i == 0) {
 							if (j == 0) {
 								BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers",
-										"specifications", "specificationValues", "promotions", "cartItems", "orderItems", "giftItems", "productNotifies" });
+										"specifications", "specificationValues", "promotions", "cartItems", "orderItems", "giftItems", "productNotifies"});
 								pProduct.setSpecifications(new HashSet<Specification>());
 								pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+								pProduct.setCity(city);
+								pProduct.setShopCategory(shopCategory);
+								pProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								pProduct.setShop(shop);
 								products.add(pProduct);
 							} else {
 								if (specificationProductIds != null && j < specificationProductIds.length) {
@@ -482,6 +512,10 @@ public class ProductController extends BaseController {
 									}
 									specificationProduct.setSpecifications(new HashSet<Specification>());
 									specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+									specificationProduct.setCity(city);
+									specificationProduct.setShop(shop);
+									specificationProduct.setShopCategory(shopCategory);
+									specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
 									products.add(specificationProduct);
 								} else {
 									Product specificationProduct = new Product();
@@ -517,6 +551,10 @@ public class ProductController extends BaseController {
 									specificationProduct.setOrderItems(null);
 									specificationProduct.setGiftItems(null);
 									specificationProduct.setProductNotifies(null);
+									specificationProduct.setCity(city);
+									specificationProduct.setShop(shop);
+									specificationProduct.setShopCategory(shopCategory);
+									specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
 									products.add(specificationProduct);
 								}
 							}

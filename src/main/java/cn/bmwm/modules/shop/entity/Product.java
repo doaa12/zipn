@@ -298,16 +298,6 @@ public class Product extends BaseEntity {
 	/** 商品属性值19 */
 	private String attributeValue19;
 	
-	/**
-	 * 商铺分类
-	 */
-	private ShopCategory shopCategory;
-	
-	/**
-	 * 商铺
-	 */
-	private Shop shop;
-
 	/** 货品 */
 	private Goods goods;
 
@@ -357,10 +347,25 @@ public class Product extends BaseEntity {
 	private Map<Parameter, String> parameterValue = new HashMap<Parameter, String>();
 	
 	/**
-	 * 商品所在区域
+	 * 商铺分类
 	 */
-	private Area area;
-
+	private ShopCategory shopCategory;
+	
+	/**
+	 * 商铺
+	 */
+	private Shop shop;
+	
+	/**
+	 * 商品所在城市
+	 */
+	private String city;
+	
+	/**
+	 * 商品分类路径
+	 */
+	private String treePath;
+	
 	static {
 		try {
 			File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
@@ -2077,19 +2082,27 @@ public class Product extends BaseEntity {
 	}
 	
 	/**
-	 * @return the area
+	 * 获取商品所在城市
+	 * @return
 	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
-	public Area getArea() {
-		return area;
+	public String getCity() {
+		return city;
 	}
 
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
 	/**
-	 * @param area the area to set
+	 * 获取商品分类路径
+	 * @return
 	 */
-	public void setArea(Area area) {
-		this.area = area;
+	public String getTreePath() {
+		return treePath;
+	}
+
+	public void setTreePath(String treePath) {
+		this.treePath = treePath;
 	}
 
 	/**

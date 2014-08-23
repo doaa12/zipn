@@ -71,10 +71,6 @@ public class Area extends OrderEntity {
 	 */
 	private Set<Shop> shops = new HashSet<Shop>();
 	
-	/**
-	 * 商品
-	 */
-	private Set<Product> products = new HashSet<Product>();
 
 	/**
 	 * 获取名称
@@ -331,21 +327,6 @@ public class Area extends OrderEntity {
 		this.shops = shops;
 	}
 	
-	/**
-	 * @return the products
-	 */
-	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	/**
-	 * @param products the products to set
-	 */
-	public void setProducts(Set<Product> products) {
-		this.products = products;
-	}
-
 	/**
 	 * 重写toString方法
 	 * 

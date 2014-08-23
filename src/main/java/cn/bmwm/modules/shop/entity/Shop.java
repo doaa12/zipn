@@ -85,9 +85,19 @@ public class Shop extends BaseEntity {
 	private Set<Promotion> promotions = new HashSet<Promotion>();
 	
 	/**
+	 * 店铺所在商品分类
+	 */
+	private ProductCategory productCategory;
+	
+	/**
 	 * 店铺所在城市
 	 */
-	private Area area;
+	private String city;
+	
+	/**
+	 * 店铺所在分类路径
+	 */
+	private String treePath;
 	
 	
 	/**
@@ -222,19 +232,42 @@ public class Shop extends BaseEntity {
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
 	}
-	
+
 	/**
-	 * 获取店铺所在地区
+	 * 获取店铺商品分类
 	 * @return
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
-	public Area getArea() {
-		return area;
+	public ProductCategory getProductCategory() {
+		return productCategory;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
+	}
+
+	/**
+	 * 获取店铺所在城市
+	 * @return
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	/**
+	 * 获取店铺商品分类路径
+	 * @return
+	 */
+	public String getTreePath() {
+		return treePath;
+	}
+
+	public void setTreePath(String treePath) {
+		this.treePath = treePath;
 	}
 	
 }
