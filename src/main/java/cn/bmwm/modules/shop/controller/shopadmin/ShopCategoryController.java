@@ -64,9 +64,7 @@ public class ShopCategoryController extends BaseController {
 	public String save(ShopCategory shopCategory, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
-		
-		Long shopId = principal.getShopId();
-		Shop shop = shopService.find(shopId);
+		Shop shop = shopService.find(principal.getShopId());
 		ProductCategory parent = shop.getProductCategory();
 		
 		shopCategory.setParent(parent);
@@ -96,8 +94,11 @@ public class ShopCategoryController extends BaseController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(Long id, ModelMap model) {
 		
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		Shop shop = shopService.find(principal.getShopId());
+		
 		ShopCategory shopCategory = shopCategoryService.find(id);
-		model.addAttribute("shopCategories", shopCategoryService.findAll());
+		model.addAttribute("shopCategories", shop.getShopCategories());
 		model.addAttribute("brands", brandService.findAll());
 		model.addAttribute("shopCategory", shopCategory);
 		
@@ -129,7 +130,9 @@ public class ShopCategoryController extends BaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(ModelMap model) {
-		model.addAttribute("shopCategories", shopCategoryService.findAll());
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		Shop shop = shopService.find(principal.getShopId());
+		model.addAttribute("shopCategories", shop.getShopCategories());
 		return "/shopadmin/shop_category/list";
 	}
 

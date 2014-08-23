@@ -151,9 +151,7 @@ public class ProductController extends BaseController {
 	public String shoplist(Long shopCategoryId, Long brandId, Long promotionId, Long tagId, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, Pageable pageable, ModelMap model) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
-		
-		Long shopId = principal.getShopId();
-		Shop shop = shopService.find(shopId);
+		Shop shop = shopService.find(principal.getShopId());
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
 		
 		Brand brand = brandService.find(brandId);
@@ -186,16 +184,16 @@ public class ProductController extends BaseController {
 	public String add(ModelMap model) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
-		
-		Long shopId = principal.getShopId();
-		Shop shop = shopService.find(shopId);
+		Shop shop = shopService.find(principal.getShopId());
 		
 		model.addAttribute("shopCategories", shop.getShopCategories());
 		model.addAttribute("brands", brandService.findAll());
 		model.addAttribute("tags", tagService.findList(Type.product));
 		model.addAttribute("memberRanks", memberRankService.findAll());
 		model.addAttribute("specifications", specificationService.findAll());
+		
 		return "/shopadmin/product/add";
+		
 	}
 	
 	/**
@@ -205,9 +203,7 @@ public class ProductController extends BaseController {
 	public String save(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
-		
-		Long shopId = principal.getShopId();
-		Shop shop = shopService.find(shopId);
+		Shop shop = shopService.find(principal.getShopId());
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
 		
 		String city = shop.getCity();
@@ -409,9 +405,7 @@ public class ProductController extends BaseController {
 	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] specificationProductIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
-		
-		Long shopId = principal.getShopId();
-		Shop shop = shopService.find(shopId);
+		Shop shop = shopService.find(principal.getShopId());
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
 		
 		String city = shop.getCity();

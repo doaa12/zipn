@@ -46,6 +46,11 @@ public class ParameterGroup extends OrderEntity {
 
 	/** 参数 */
 	private List<Parameter> parameters = new ArrayList<Parameter>();
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
 
 	/**
 	 * 获取名称
@@ -104,6 +109,19 @@ public class ParameterGroup extends OrderEntity {
 	@OrderBy("order asc")
 	public List<Parameter> getParameters() {
 		return parameters;
+	}
+
+	/**
+	 * 获取店铺
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**

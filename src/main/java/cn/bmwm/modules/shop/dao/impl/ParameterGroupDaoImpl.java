@@ -10,18 +10,23 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.persistence.FlushModeType;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import cn.bmwm.common.persistence.Page;
+import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.ParameterDao;
 import cn.bmwm.modules.shop.dao.ParameterGroupDao;
 import cn.bmwm.modules.shop.entity.Parameter;
 import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Shop;
 
 /**
  * Dao - 参数组
@@ -34,6 +39,24 @@ public class ParameterGroupDaoImpl extends BaseDaoImpl<ParameterGroup, Long> imp
 
 	@Resource(name = "parameterDaoImpl")
 	private ParameterDao parameterDao;
+	
+	/**
+	 * 查找店铺参数组分页
+	 * @param shop
+	 * @param pageable
+	 * @return
+	 */
+	public Page<ParameterGroup> findPage(Shop shop, Pageable pageable){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ParameterGroup> criteriaQuery = criteriaBuilder.createQuery(ParameterGroup.class);
+		Root<ParameterGroup> root = criteriaQuery.from(ParameterGroup.class);
+		criteriaQuery.select(root);
+		Predicate restrictions = criteriaBuilder.conjunction();
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shop"), shop));
+		criteriaQuery.where(restrictions);
+		criteriaQuery.orderBy(criteriaBuilder.asc(root.get("order")));
+		return super.findPage(criteriaQuery, pageable);
+	}
 
 	/**
 	 * 处理商品参数并更新
@@ -47,7 +70,7 @@ public class ParameterGroupDaoImpl extends BaseDaoImpl<ParameterGroup, Long> imp
 		Assert.notNull(parameterGroup);
 
 		Set<Parameter> excludes = new HashSet<Parameter>();
-		CollectionUtils.select(parameterGroup.getParameters(), new Predicate() {
+		CollectionUtils.select(parameterGroup.getParameters(), new org.apache.commons.collections.Predicate() {
 			public boolean evaluate(Object object) {
 				Parameter parameter = (Parameter) object;
 				return parameter != null && parameter.getId() != null;
