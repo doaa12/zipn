@@ -42,6 +42,15 @@ public class ShopCategory extends OrderEntity {
 	 */
 	private String treePath;
 	
+	/** 页面标题 */
+	private String seoTitle;
+
+	/** 页面关键词 */
+	private String seoKeywords;
+
+	/** 页面描述 */
+	private String seoDescription;
+	
 	/**
 	 * 商铺
 	 */
@@ -98,6 +107,30 @@ public class ShopCategory extends OrderEntity {
 
 	public void setTreePath(String treePath) {
 		this.treePath = treePath;
+	}
+	
+	public String getSeoTitle() {
+		return seoTitle;
+	}
+
+	public void setSeoTitle(String seoTitle) {
+		this.seoTitle = seoTitle;
+	}
+
+	public String getSeoKeywords() {
+		return seoKeywords;
+	}
+
+	public void setSeoKeywords(String seoKeywords) {
+		this.seoKeywords = seoKeywords;
+	}
+
+	public String getSeoDescription() {
+		return seoDescription;
+	}
+
+	public void setSeoDescription(String seoDescription) {
+		this.seoDescription = seoDescription;
 	}
 
 	/**
