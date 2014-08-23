@@ -85,10 +85,13 @@ $().ready(function() {
 				<td>
 					<span class="fieldSet">
 						<label>
-							<input type="checkbox" name="authorities" value="shopadmin:product" />${message("shopadmin.role.product")}
+							<input type="checkbox" name="authorities" value="shopadmin:product"[#if role.authorities?seq_contains("shopadmin:product")] checked="checked"[/#if] />${message("shopadmin.role.product")}
 						</label>
 						<label>
-							<input type="checkbox" name="authorities" value="shopadmin:shopCategory" />${message("shopadmin.role.shopCategory")}
+							<input type="checkbox" name="authorities" value="shopadmin:shopCategory"[#if role.authorities?seq_contains("shopadmin:shopCategory")] checked="checked"[/#if] />${message("shopadmin.role.shopCategory")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:parameterGroup"[#if role.authorities?seq_contains("shopadmin:parameterGroup")] checked="checked"[/#if] />${message("shopadmin.role.parameterGroup")}
 						</label>
 					</span>
 				</td>

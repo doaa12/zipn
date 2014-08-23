@@ -87,15 +87,10 @@ $().ready(function() {
 					${message("ParameterGroup.productCategory")}:
 				</th>
 				<td colspan="3">
-					<select name="productCategoryId" >
-						[#list productCategoryTree as productCategory]
-							<option value="${productCategory.id}">
-								[#if productCategory.grade != 0]
-									[#list 1..productCategory.grade as i]
-										&nbsp;&nbsp;
-									[/#list]
-								[/#if]
-								${productCategory.name}
+					<select name="shopCategoryId" >
+						[#list shopCategories as shopCategory]
+							<option value="${shopCategory.id}">
+								${shopCategory.name}
 							</option>
 						[/#list]
 					</select>
