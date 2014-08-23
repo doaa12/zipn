@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -15,7 +16,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -82,6 +82,12 @@ public class ShopCategory extends OrderEntity {
 	private Set<Attribute> attributes = new HashSet<Attribute>();
 	
 	/**
+	 * 品牌
+	 */
+	private Set<Brand> brands = new HashSet<Brand>();
+	
+	
+	/**
 	 * 获取店铺分类名称
 	 * @return
 	 */
@@ -137,7 +143,6 @@ public class ShopCategory extends OrderEntity {
 	 * 获取店铺
 	 * @return
 	 */
-	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	public Shop getShop() {
@@ -229,6 +234,20 @@ public class ShopCategory extends OrderEntity {
 		this.attributes = attributes;
 	}
 	
+	/**
+	 * 获取店铺商品分类品牌
+	 * @return
+	 */
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "xx_shop_category_brand")
+	public Set<Brand> getBrands() {
+		return brands;
+	}
+
+	public void setBrands(Set<Brand> brands) {
+		this.brands = brands;
+	}
+
 	/**
 	 * 删除前处理
 	 */

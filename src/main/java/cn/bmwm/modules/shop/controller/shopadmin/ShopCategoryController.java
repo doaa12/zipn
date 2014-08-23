@@ -4,6 +4,9 @@
  * */
 package cn.bmwm.modules.shop.controller.shopadmin;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
@@ -16,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.controller.admin.BaseController;
+import cn.bmwm.modules.shop.entity.Brand;
+import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
@@ -48,7 +53,6 @@ public class ShopCategoryController extends BaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(ModelMap model) {
-		//model.addAttribute("shop", productCategoryService.findTree());
 		model.addAttribute("brands", brandService.findAll());
 		return "/shopadmin/shop_category/add";
 	}
@@ -66,17 +70,20 @@ public class ShopCategoryController extends BaseController {
 		ProductCategory parent = shop.getProductCategory();
 		
 		shopCategory.setParent(parent);
-		//shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		shopCategory.setShop(shop);
+		shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		
 		if (!isValid(shopCategory)) {
 			return ERROR_VIEW;
 		}
+		
 		shopCategory.setTreePath(parent.getTreePath() + parent.getId() + ",");
-		//shopCategory.setGrade(null);
-		//shopCategory.setChildren(null);
 		shopCategory.setParameterGroups(null);
 		shopCategory.setAttributes(null);
 		shopCategory.setPromotions(null);
+		
 		shopCategoryService.save(shopCategory);
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
 		return "redirect:list.jhtml";
@@ -88,11 +95,14 @@ public class ShopCategoryController extends BaseController {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(Long id, ModelMap model) {
+		
 		ShopCategory shopCategory = shopCategoryService.find(id);
 		model.addAttribute("shopCategories", shopCategoryService.findAll());
 		model.addAttribute("brands", brandService.findAll());
 		model.addAttribute("shopCategory", shopCategory);
+		
 		return "/shopadmin/shop_category/edit";
+		
 	}
 
 	/**
@@ -101,25 +111,13 @@ public class ShopCategoryController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(ShopCategory shopCategory, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		
-		//shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
 		
 		if (!isValid(shopCategory)) {
 			return ERROR_VIEW;
 		}
-		/*
-		if (productCategory.getParent() != null) {
-			ProductCategory parent = productCategory.getParent();
-			if (parent.equals(productCategory)) {
-				return ERROR_VIEW;
-			}
-			List<ProductCategory> children = productCategoryService.findChildren(parent);
-			if (children != null && children.contains(parent)) {
-				return ERROR_VIEW;
-			}
-		}
-		*/
 		
-		shopCategoryService.update(shopCategory, "treePath", "grade", "children", "products", "parameterGroups", "attributes", "promotions");
+		shopCategoryService.update(shopCategory, "treePath", "shop", "parent", "products", "parameterGroups", "attributes", "promotions");
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
 		return "redirect:list.jhtml";
@@ -147,12 +145,12 @@ public class ShopCategoryController extends BaseController {
 		if (shopCategory == null) {
 			return ERROR_MESSAGE;
 		}
-		/*
-		Set<ProductCategory> children = productCategory.getChildren();
-		if (children != null && !children.isEmpty()) {
-			return Message.error("admin.productCategory.deleteExistChildrenNotAllowed");
+		
+		Set<Product> products = shopCategory.getProducts();
+		if (products != null && !products.isEmpty()) {
+			return Message.error("shopadmin.shopCategory.deleteExistProductNotAllowed");
 		}
-		*/
+
 		shopCategoryService.delete(id);
 		
 		return SUCCESS_MESSAGE;

@@ -66,11 +66,6 @@ public class Area extends OrderEntity {
 	/** 发货点 */
 	private Set<DeliveryCenter> deliveryCenters = new HashSet<DeliveryCenter>();
 	
-	/**
-	 * 店铺
-	 */
-	private Set<Shop> shops = new HashSet<Shop>();
-	
 
 	/**
 	 * 获取名称
@@ -312,19 +307,6 @@ public class Area extends OrderEntity {
 				deliveryCenter.setArea(null);
 			}
 		}
-	}
-	
-	/**
-	 * 获取区域店铺
-	 * @return
-	 */
-	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
-	public Set<Shop> getShops() {
-		return shops;
-	}
-
-	public void setShops(Set<Shop> shops) {
-		this.shops = shops;
 	}
 	
 	/**

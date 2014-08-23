@@ -77,6 +77,11 @@ public class Brand extends OrderEntity {
 
 	/** 促销 */
 	private Set<Promotion> promotions = new HashSet<Promotion>();
+	
+	/**
+	 * 店铺分类
+	 */
+	private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
 
 	/**
 	 * 获取名称
@@ -220,6 +225,19 @@ public class Brand extends OrderEntity {
 	 */
 	public void setProductCategories(Set<ProductCategory> productCategories) {
 		this.productCategories = productCategories;
+	}
+	
+	/**
+	 * 获取店铺商品分类
+	 * @return
+	 */
+	@ManyToMany(mappedBy = "brands", fetch = FetchType.LAZY)
+	public Set<ShopCategory> getShopCategories() {
+		return shopCategories;
+	}
+
+	public void setShopCategories(Set<ShopCategory> shopCategories) {
+		this.shopCategories = shopCategories;
 	}
 
 	/**

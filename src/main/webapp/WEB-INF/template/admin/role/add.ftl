@@ -79,15 +79,27 @@ $().ready(function() {
 			</tr>
 			<tr class="authorities">
 				<th>
+					<a href="javascript:;" class="selectAll" title="${message("admin.role.selectAll")}">${message("shopadmin.role.shop")}</a>
+				</th>
+				<td>
+					<span class="fieldSet">
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:product" />${message("shopadmin.role.product")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:shopCategory" />${message("shopadmin.role.shopCategory")}
+						</label>
+					</span>
+				</td>
+			</tr>
+			<tr class="authorities">
+				<th>
 					<a href="javascript:;" class="selectAll" title="${message("admin.role.selectAll")}">${message("admin.role.productGroup")}</a>
 				</th>
 				<td>
 					<span class="fieldSet">
 						<label>
 							<input type="checkbox" name="authorities" value="admin:product" />${message("admin.role.product")}
-						</label>
-						<label>
-							<input type="checkbox" name="authorities" value="shopadmin:product" />${message("shopadmin.role.product")}
 						</label>
 						<label>
 							<input type="checkbox" name="authorities" value="admin:productCategory" />${message("admin.role.productCategory")}

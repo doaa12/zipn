@@ -80,15 +80,27 @@ $().ready(function() {
 			</tr>
 			<tr class="authorities">
 				<th>
+					<a href="javascript:;" class="selectAll" title="${message("admin.role.selectAll")}">${message("shopadmin.role.shop")}</a>
+				</th>
+				<td>
+					<span class="fieldSet">
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:product" />${message("shopadmin.role.product")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:shopCategory" />${message("shopadmin.role.shopCategory")}
+						</label>
+					</span>
+				</td>
+			</tr>
+			<tr class="authorities">
+				<th>
 					<a href="javascript:;" class="selectAll" title="${message("admin.role.selectAll")}">${message("admin.role.productGroup")}</a>
 				</th>
 				<td>
 					<span class="fieldSet">
 						<label>
 							<input type="checkbox" name="authorities" value="admin:product"[#if role.authorities?seq_contains("admin:product")] checked="checked"[/#if] />${message("admin.role.product")}
-						</label>
-						<label>
-							<input type="checkbox" name="authorities" value="shopadmin:product"[#if role.authorities?seq_contains("shopadmin:product")] checked="checked"[/#if] />${message("shopadmin.role.product")}
 						</label>
 						<label>
 							<input type="checkbox" name="authorities" value="admin:productCategory"[#if role.authorities?seq_contains("admin:productCategory")] checked="checked"[/#if] />${message("admin.role.productCategory")}

@@ -71,7 +71,7 @@ $().ready(function() {
 		[#list shopCategories as shopCategory]
 			<tr>
 				<td>
-					<span style="margin-left: ${productCategory.grade * 20}px;color: #000000;">
+					<span style="margin-left: 10px;color: #000000;">
 						${shopCategory.name}
 					</span>
 				</td>
