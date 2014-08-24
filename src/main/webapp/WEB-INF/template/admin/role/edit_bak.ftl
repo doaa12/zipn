@@ -115,6 +115,15 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:productCategory"[#if role.authorities?seq_contains("admin:productCategory")] checked="checked"[/#if] />${message("admin.role.productCategory")}
 						</label>
 						<label>
+							<input type="checkbox" name="authorities" value="admin:parameterGroup"[#if role.authorities?seq_contains("admin:parameterGroup")] checked="checked"[/#if] />${message("admin.role.parameterGroup")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:attribute"[#if role.authorities?seq_contains("admin:attribute")] checked="checked"[/#if] />${message("admin.role.attribute")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:specification"[#if role.authorities?seq_contains("admin:specification")] checked="checked"[/#if] />${message("admin.role.specification")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="admin:brand"[#if role.authorities?seq_contains("admin:brand")] checked="checked"[/#if] />${message("admin.role.brand")}
 						</label>
 						<label>

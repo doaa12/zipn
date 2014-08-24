@@ -18,6 +18,10 @@
 				/admin/common/captcha.jhtml = anon
 				
 				/shopadmin/product/** = perms["shopadmin:product"]
+				/shopadmin/attribute/** = perms["shopadmin:attribute"]
+				/shopadmin/parameter_group/** = perms["shopadmin:parameterGroup"]
+				/shopadmin/shop_category/** = perms["shopadmin:shopCategory"]
+				/shopadmin/specification/** = perms["shopadmin:specification"]
 				
 				/admin/product/** = perms["admin:product"]
 				/admin/product_category/** = perms["admin:productCategory"]

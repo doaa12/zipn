@@ -114,6 +114,15 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:productCategory" />${message("admin.role.productCategory")}
 						</label>
 						<label>
+							<input type="checkbox" name="authorities" value="admin:parameterGroup" />${message("admin.role.parameterGroup")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:attribute" />${message("admin.role.attribute")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:specification" />${message("admin.role.specification")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="admin:brand" />${message("admin.role.brand")}
 						</label>
 						<label>
