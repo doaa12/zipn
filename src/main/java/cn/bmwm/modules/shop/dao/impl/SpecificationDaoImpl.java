@@ -18,5 +18,5 @@ import cn.bmwm.modules.shop.entity.Specification;
  */
 @Repository("specificationDaoImpl")
 public class SpecificationDaoImpl extends BaseDaoImpl<Specification, Long> implements SpecificationDao {
-
+	
 }

@@ -13,6 +13,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.entity.Shop;
 
 
 /**
@@ -66,6 +67,15 @@ public interface BaseDao<T, ID extends Serializable> {
 	 * @return 实体对象分页
 	 */
 	Page<T> findPage(Pageable pageable);
+	
+	/**
+	 * 查找实体对象分页
+	 * 
+	 * @param pageable
+	 *            分页信息
+	 * @return 实体对象分页
+	 */
+	Page<T> findPage(Shop shop, Pageable pageable);
 
 	/**
 	 * 查询实体对象数量

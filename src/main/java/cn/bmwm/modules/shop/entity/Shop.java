@@ -95,6 +95,11 @@ public class Shop extends BaseEntity {
 	private Set<Attribute> attributes = new HashSet<Attribute>();
 	
 	/**
+	 * 规格
+	 */
+	private Set<Specification> specifications = new HashSet<Specification>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -267,6 +272,19 @@ public class Shop extends BaseEntity {
 
 	public void setAttributes(Set<Attribute> attributes) {
 		this.attributes = attributes;
+	}
+	
+	/**
+	 * 商品规格
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	public Set<Specification> getSpecifications() {
+		return specifications;
+	}
+
+	public void setSpecifications(Set<Specification> specifications) {
+		this.specifications = specifications;
 	}
 
 	/**

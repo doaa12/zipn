@@ -7,20 +7,13 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.util.List;
 
 import javax.persistence.FlushModeType;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import cn.bmwm.common.persistence.Page;
-import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.AttributeDao;
 import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Shop;
 
 /**
  * Dao - 属性
@@ -31,24 +24,6 @@ import cn.bmwm.modules.shop.entity.Shop;
 @Repository("attributeDaoImpl")
 public class AttributeDaoImpl extends BaseDaoImpl<Attribute, Long> implements AttributeDao {
 	
-	/**
-	 * 查找店铺分类属性
-	 * @param shop
-	 * @param pageable
-	 * @return
-	 */
-	public Page<Attribute> findPage(Shop shop, Pageable pageable){
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Attribute> criteriaQuery = criteriaBuilder.createQuery(Attribute.class);
-		Root<Attribute> root = criteriaQuery.from(Attribute.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.in(root.get("shop")).value(shop));
-		criteriaQuery.where(restrictions);
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get("order")));
-		return super.findPage(criteriaQuery, pageable);
-	}
-
 	/**
 	 * 设置propertyIndex并保存
 	 * 

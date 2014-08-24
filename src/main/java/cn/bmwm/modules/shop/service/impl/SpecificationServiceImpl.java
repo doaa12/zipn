@@ -6,7 +6,6 @@ package cn.bmwm.modules.shop.service.impl;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.stereotype.Service;
 
 import cn.bmwm.modules.shop.dao.SpecificationDao;

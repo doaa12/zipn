@@ -96,6 +96,9 @@ $().ready(function() {
 						<label>
 							<input type="checkbox" name="authorities" value="shopadmin:attribute"[#if role.authorities?seq_contains("shopadmin:attribute")] checked="checked"[/#if] />${message("admin.role.attribute")}
 						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:specification"[#if role.authorities?seq_contains("shopadmin:specification")] checked="checked"[/#if] />${message("admin.role.specification")}
+						</label>
 					</span>
 				</td>
 			</tr>

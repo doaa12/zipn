@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -24,7 +25,9 @@ import cn.bmwm.common.utils.DateEditor;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.common.utils.SpringUtils;
 import cn.bmwm.modules.shop.entity.Log;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.sys.model.Setting;
+import cn.bmwm.modules.sys.security.Principal;
 import cn.bmwm.modules.sys.template.directive.FlashMessageDirective;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 

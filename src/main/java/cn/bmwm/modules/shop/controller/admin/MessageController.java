@@ -181,7 +181,7 @@ public class MessageController extends BaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Pageable pageable, Model model) {
-		model.addAttribute("page", messageService.findPage(null, pageable));
+		//model.addAttribute("page", messageService.findPage(null, pageable));
 		return "/admin/message/list";
 	}
 

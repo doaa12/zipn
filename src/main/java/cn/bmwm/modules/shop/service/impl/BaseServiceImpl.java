@@ -26,6 +26,7 @@ import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.BaseDao;
 import cn.bmwm.modules.shop.entity.BaseEntity;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.BaseService;
 
 /**
@@ -84,6 +85,11 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 	@Transactional(readOnly = true)
 	public Page<T> findPage(Pageable pageable) {
 		return baseDao.findPage(pageable);
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<T> findPage(Shop shop, Pageable pageable) {
+		return baseDao.findPage(shop, pageable);
 	}
 
 	@Transactional(readOnly = true)

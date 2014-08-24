@@ -7,10 +7,13 @@ package cn.bmwm.modules.shop.service;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.entity.Shop;
 
 
 /**
@@ -82,6 +85,9 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @return 实体对象分页
 	 */
 	Page<T> findPage(Pageable pageable);
+	
+	@Transactional(readOnly = true)
+	public Page<T> findPage(Shop shop, Pageable pageable);
 
 	/**
 	 * 查询实体对象总数

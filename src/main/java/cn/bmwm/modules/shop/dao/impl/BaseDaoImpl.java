@@ -25,18 +25,18 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 import cn.bmwm.common.persistence.Filter;
+import cn.bmwm.common.persistence.Filter.Operator;
 import cn.bmwm.common.persistence.Order;
+import cn.bmwm.common.persistence.Order.Direction;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
-import cn.bmwm.common.persistence.Filter.Operator;
-import cn.bmwm.common.persistence.Order.Direction;
 import cn.bmwm.modules.shop.dao.BaseDao;
 import cn.bmwm.modules.shop.entity.OrderEntity;
+import cn.bmwm.modules.shop.entity.Shop;
 
 /**
  * Dao - 基类
@@ -91,6 +91,17 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
 		criteriaQuery.select(criteriaQuery.from(entityClass));
+		return findPage(criteriaQuery, pageable);
+	}
+	
+	public Page<T> findPage(Shop shop, Pageable pageable){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
+		Root<T> root = criteriaQuery.from(entityClass);
+		criteriaQuery.select(root);
+		Predicate restrictions = criteriaBuilder.conjunction();
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shop"), shop));
+		criteriaQuery.where(restrictions);
 		return findPage(criteriaQuery, pageable);
 	}
 

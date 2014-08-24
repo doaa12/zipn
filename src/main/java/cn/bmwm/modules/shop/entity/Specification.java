@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
@@ -60,6 +61,11 @@ public class Specification extends OrderEntity {
 
 	/** 规格值 */
 	private List<SpecificationValue> specificationValues = new ArrayList<SpecificationValue>();
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
 
 	/** 商品 */
 	private Set<Product> products = new HashSet<Product>();
@@ -169,5 +175,20 @@ public class Specification extends OrderEntity {
 	public void setProducts(Set<Product> products) {
 		this.products = products;
 	}
+	
+	/**
+	 * 获取店铺
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
+	}
+	
+	
 
 }

@@ -13,5 +13,5 @@ import cn.bmwm.modules.shop.entity.Specification;
  * @version 1.0
  */
 public interface SpecificationDao extends BaseDao<Specification, Long> {
-
+	
 }
