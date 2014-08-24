@@ -90,6 +90,11 @@ public class Shop extends BaseEntity {
 	private Set<ParameterGroup> parameterGroups = new HashSet<ParameterGroup>();
 	
 	/**
+	 * 店铺属性
+	 */
+	private Set<Attribute> attributes = new HashSet<Attribute>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -249,6 +254,19 @@ public class Shop extends BaseEntity {
 
 	public void setParameterGroups(Set<ParameterGroup> parameterGroups) {
 		this.parameterGroups = parameterGroups;
+	}
+	
+	/**
+	 * 获取店铺属性
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	public Set<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Set<Attribute> attributes) {
+		this.attributes = attributes;
 	}
 
 	/**

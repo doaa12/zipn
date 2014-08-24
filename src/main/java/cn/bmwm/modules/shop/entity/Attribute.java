@@ -44,7 +44,12 @@ public class Attribute extends OrderEntity {
 
 	/** 绑定分类 */
 	private ShopCategory shopCategory;
-
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
+	
 	/** 可选项 */
 	private List<String> options = new ArrayList<String>();
 
@@ -111,6 +116,19 @@ public class Attribute extends OrderEntity {
 	 */
 	public void setShopCategory(ShopCategory shopCategory) {
 		this.shopCategory = shopCategory;
+	}
+	
+	/**
+	 * 获取店铺
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**

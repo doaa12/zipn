@@ -92,6 +92,9 @@ $().ready(function() {
 						<label>
 							<input type="checkbox" name="authorities" value="shopadmin:parameterGroup" />${message("admin.role.parameterGroup")}
 						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:attribute" />${message("admin.role.attribute")}
+						</label>
 					</span>
 				</td>
 			</tr>

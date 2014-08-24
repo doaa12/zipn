@@ -9,6 +9,7 @@ import java.util.Iterator;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,11 @@ import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.AttributeService;
-import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ShopCategoryService;
+import cn.bmwm.modules.shop.service.ShopService;
+import cn.bmwm.modules.sys.security.Principal;
 
 /**
  * Controller - 属性
@@ -39,20 +42,22 @@ public class AttributeController extends BaseController {
 	@Resource(name = "attributeServiceImpl")
 	private AttributeService attributeService;
 	
-	@Resource(name = "productCategoryServiceImpl")
-	private ProductCategoryService productCategoryService;
-	
 	@Resource(name = "shopCategoryServiceImpl")
 	private ShopCategoryService shopCategoryService;
+	
+	@Resource(name = "shopServiceImpl")
+	private ShopService shopService;
 
 	/**
 	 * 添加
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(ModelMap model) {
-		model.addAttribute("productCategoryTree", productCategoryService.findTree());
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		Shop shop = shopService.find(principal.getShopId());
+		model.addAttribute("shopCategories", shop.getShopCategories());
 		model.addAttribute("attributeValuePropertyCount", Product.ATTRIBUTE_VALUE_PROPERTY_COUNT);
-		return "/admin/attribute/add";
+		return "/shopadmin/attribute/add";
 	}
 
 	/**
@@ -60,16 +65,24 @@ public class AttributeController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Attribute attribute, Long shopCategoryId, RedirectAttributes redirectAttributes) {
+		
 		for (Iterator<String> iterator = attribute.getOptions().iterator(); iterator.hasNext();) {
 			String option = iterator.next();
 			if (StringUtils.isEmpty(option)) {
 				iterator.remove();
 			}
 		}
+		
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		Shop shop = shopService.find(principal.getShopId());
+		
 		attribute.setShopCategory(shopCategoryService.find(shopCategoryId));
+		attribute.setShop(shop);
+		
 		if (!isValid(attribute, Save.class)) {
 			return ERROR_VIEW;
 		}
+		
 		if (attribute.getShopCategory().getAttributes().size() >= Product.ATTRIBUTE_VALUE_PROPERTY_COUNT) {
 			addFlashMessage(redirectAttributes, Message.error("admin.attribute.addCountNotAllowed", Product.ATTRIBUTE_VALUE_PROPERTY_COUNT));
 		} else {
@@ -77,7 +90,9 @@ public class AttributeController extends BaseController {
 			attributeService.save(attribute);
 			addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		}
+		
 		return "redirect:list.jhtml";
+		
 	}
 
 	/**
@@ -85,10 +100,9 @@ public class AttributeController extends BaseController {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(Long id, ModelMap model) {
-		model.addAttribute("productCategoryTree", productCategoryService.findTree());
 		model.addAttribute("attributeValuePropertyCount", Product.ATTRIBUTE_VALUE_PROPERTY_COUNT);
 		model.addAttribute("attribute", attributeService.find(id));
-		return "/admin/attribute/edit";
+		return "/shopadmin/attribute/edit";
 	}
 
 	/**
@@ -96,18 +110,24 @@ public class AttributeController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Attribute attribute, RedirectAttributes redirectAttributes) {
+		
 		for (Iterator<String> iterator = attribute.getOptions().iterator(); iterator.hasNext();) {
 			String option = iterator.next();
 			if (StringUtils.isEmpty(option)) {
 				iterator.remove();
 			}
 		}
+		
 		if (!isValid(attribute)) {
 			return ERROR_VIEW;
 		}
-		attributeService.update(attribute, "propertyIndex", "productCategory");
+		
+		attributeService.update(attribute, "propertyIndex", "shopCategory");
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
+		
 	}
 
 	/**
@@ -115,8 +135,10 @@ public class AttributeController extends BaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Pageable pageable, ModelMap model) {
-		model.addAttribute("page", attributeService.findPage(pageable));
-		return "/admin/attribute/list";
+		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
+		Shop shop = shopService.find(principal.getShopId());
+		model.addAttribute("page", attributeService.findPage(shop, pageable));
+		return "/shopadmin/attribute/list";
 	}
 
 	/**
