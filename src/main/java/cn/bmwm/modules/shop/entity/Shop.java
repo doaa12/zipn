@@ -105,9 +105,29 @@ public class Shop extends BaseEntity {
 	private ProductCategory productCategory;
 	
 	/**
+	 * 是否置顶
+	 */
+	private Boolean isTop;
+	
+	/** 
+	 * 是否列出 
+	 */
+	private Boolean isList;
+	
+	/**
 	 * 店铺所在城市
 	 */
 	private String city;
+	
+	/**
+	 * 店铺地址
+	 */
+	private String address;
+	
+	/**
+	 * 店铺图片
+	 */
+	private String imagePath;
 	
 	/**
 	 * 店铺所在分类路径
@@ -299,6 +319,42 @@ public class Shop extends BaseEntity {
 	public void setProductCategory(ProductCategory productCategory) {
 		this.productCategory = productCategory;
 	}
+	
+	/**
+	 * 获取是否置顶
+	 * @return
+	 */
+	public Boolean getIsTop() {
+		return isTop;
+	}
+
+	public void setIsTop(Boolean isTop) {
+		this.isTop = isTop;
+	}
+	
+	/**
+	 * 获取是否列出
+	 * @return
+	 */
+	public Boolean getIsList() {
+		return isList;
+	}
+
+	public void setIsList(Boolean isList) {
+		this.isList = isList;
+	}
+
+	/**
+	 * 获取店铺图片
+	 * @return
+	 */
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 	/**
 	 * 获取店铺所在城市
@@ -312,6 +368,18 @@ public class Shop extends BaseEntity {
 		this.city = city;
 	}
 	
+	/**
+	 * 获取店铺地址
+	 * @return
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	/**
 	 * 获取店铺商品分类路径
 	 * @return
