@@ -211,7 +211,7 @@ public class Member extends BaseEntity {
 	/**
 	 * 收藏店铺
 	 */
-	private Set<Shop> favoriteShops = new HashSet<Shop>();
+	private Set<ShopFavorite> shopFavorites = new HashSet<ShopFavorite>();
 
 	/** 到货通知 */
 	private Set<ProductNotify> productNotifies = new HashSet<ProductNotify>();
@@ -1071,15 +1071,13 @@ public class Member extends BaseEntity {
 	 * 获取收藏店铺
 	 * @return
 	 */
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "xx_member_favorite_shop")
-	@OrderBy("createDate desc")
-	public Set<Shop> getFavoriteShops() {
-		return favoriteShops;
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	public Set<ShopFavorite> getShopFavorites() {
+		return shopFavorites;
 	}
 
-	public void setFavoriteShops(Set<Shop> favoriteShops) {
-		this.favoriteShops = favoriteShops;
+	public void setShopFavorites(Set<ShopFavorite> shopFavorites) {
+		this.shopFavorites = shopFavorites;
 	}
 
 	/**

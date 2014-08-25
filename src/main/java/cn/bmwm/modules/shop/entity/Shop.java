@@ -10,7 +10,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -80,7 +79,7 @@ public class Shop extends BaseEntity {
 	/**
 	 * 收藏会员
 	 */
-	private Set<Member> favoriteMembers = new HashSet<Member>();
+	private Set<ShopFavorite> shopFavorite = new HashSet<ShopFavorite>();
 	
 	/** 
 	 * 促销
@@ -250,18 +249,18 @@ public class Shop extends BaseEntity {
 	}
 	
 	/**
-	 * 获取收藏店铺的会员
+	 * 获取收藏会员
 	 * @return
 	 */
-	@ManyToMany(mappedBy = "favoriteShops", fetch = FetchType.LAZY)
-	public Set<Member> getFavoriteMembers() {
-		return favoriteMembers;
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	public Set<ShopFavorite> getShopFavorite() {
+		return shopFavorite;
 	}
 
-	public void setFavoriteMembers(Set<Member> favoriteMembers) {
-		this.favoriteMembers = favoriteMembers;
+	public void setShopFavorite(Set<ShopFavorite> shopFavorite) {
+		this.shopFavorite = shopFavorite;
 	}
-	
+
 	/**
 	 * 获取店铺促销
 	 * @return

@@ -69,7 +69,7 @@ public class ProductCategory extends OrderEntity {
 	private ProductCategory parent;
 
 	/** 下级分类 */
-	private Set<ProductCategory> children = new HashSet<ProductCategory>();
+	private List<ProductCategory> children = new ArrayList<ProductCategory>();
 	
 	/**
 	 * 店铺
@@ -228,7 +228,7 @@ public class ProductCategory extends OrderEntity {
 	 */
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 	@OrderBy("order asc")
-	public Set<ProductCategory> getChildren() {
+	public List<ProductCategory> getChildren() {
 		return children;
 	}
 
@@ -238,7 +238,7 @@ public class ProductCategory extends OrderEntity {
 	 * @param children
 	 *            下级分类
 	 */
-	public void setChildren(Set<ProductCategory> children) {
+	public void setChildren(List<ProductCategory> children) {
 		this.children = children;
 	}
 

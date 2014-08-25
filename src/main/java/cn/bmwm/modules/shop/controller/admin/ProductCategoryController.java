@@ -128,7 +128,7 @@ public class ProductCategoryController extends BaseController {
 		if (productCategory == null) {
 			return ERROR_MESSAGE;
 		}
-		Set<ProductCategory> children = productCategory.getChildren();
+		List<ProductCategory> children = productCategory.getChildren();
 		if (children != null && !children.isEmpty()) {
 			return Message.error("admin.productCategory.deleteExistChildrenNotAllowed");
 		}

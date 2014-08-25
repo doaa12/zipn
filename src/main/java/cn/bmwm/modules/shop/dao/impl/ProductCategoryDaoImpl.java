@@ -6,11 +6,12 @@ package cn.bmwm.modules.shop.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.FlushModeType;
 import javax.persistence.TypedQuery;
-
 
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -62,6 +63,16 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 			query.setMaxResults(count);
 		}
 		return sort(query.getResultList(), productCategory);
+	}
+	
+	/**
+	 * 获取分层分类树
+	 * @return
+	 */
+	public List<ProductCategory> getHierarchicalTree() {
+		String jpql = "select productCategory from ProductCategory productCategory order by productCategory.order asc";
+		TypedQuery<ProductCategory> query = entityManager.createQuery(jpql, ProductCategory.class).setFlushMode(FlushModeType.COMMIT);
+		return this.hierarchicalSort(query.getResultList(), null);
 	}
 
 	/**
@@ -135,6 +146,30 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 					result.add(productCategory);
 					result.addAll(sort(productCategories, productCategory));
 				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 商品分类分层排序
+	 * 
+	 * @param productCategories
+	 *            商品分类
+	 * @param parent
+	 *            上级商品分类
+	 * @return 商品分类
+	 */
+	private List<ProductCategory> hierarchicalSort(List<ProductCategory> productCategories,  ProductCategory parent) {
+		List<ProductCategory> result = new ArrayList<ProductCategory>();
+		if (productCategories != null) {
+			for (ProductCategory productCategory : productCategories) {
+				if (productCategory.getParent() == null && parent == null) {
+					result.add(productCategory);
+				}else if(productCategory.getParent() != null && productCategory.getParent().equals(parent)){
+					parent.getChildren().add(productCategory);
+				}
+				hierarchicalSort(productCategories, productCategory);
 			}
 		}
 		return result;
