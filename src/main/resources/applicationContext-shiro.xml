@@ -29,6 +29,7 @@
 				/admin/attribute/** = perms["admin:attribute"]
 				/admin/specification/** = perms["admin:specification"]
 				/admin/brand/** = perms["admin:brand"]
+				/admin/shop/** = perms["admin:shop"]
 				/admin/product_notify/** = perms["admin:productNotify"]
 
 				/admin/order/** = perms["admin:order"]
