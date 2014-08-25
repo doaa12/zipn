@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -100,6 +103,11 @@ public class Shop extends BaseEntity {
 	private Set<Specification> specifications = new HashSet<Specification>();
 	
 	/**
+	 * 店铺图片
+	 */
+	private Set<ShopImage> shopImages = new HashSet<ShopImage>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -125,9 +133,9 @@ public class Shop extends BaseEntity {
 	private String address;
 	
 	/**
-	 * 店铺图片
+	 * 店铺列表展示图片
 	 */
-	private String imagePath;
+	private String image;
 	
 	/**
 	 * 店铺所在分类路径
@@ -306,6 +314,23 @@ public class Shop extends BaseEntity {
 	public void setSpecifications(Set<Specification> specifications) {
 		this.specifications = specifications;
 	}
+	
+	/**
+	 * @return the shopImages
+	 */
+	@Valid
+	@ElementCollection
+	@CollectionTable(name = "xx_shop_shop_image")
+	public Set<ShopImage> getShopImages() {
+		return shopImages;
+	}
+
+	/**
+	 * @param shopImages the shopImages to set
+	 */
+	public void setShopImages(Set<ShopImage> shopImages) {
+		this.shopImages = shopImages;
+	}
 
 	/**
 	 * 获取店铺商品分类
@@ -345,15 +370,17 @@ public class Shop extends BaseEntity {
 	}
 
 	/**
-	 * 获取店铺图片
-	 * @return
+	 * @return the image
 	 */
-	public String getImagePath() {
-		return imagePath;
+	public String getImage() {
+		return image;
 	}
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	/**

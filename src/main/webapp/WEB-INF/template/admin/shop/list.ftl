@@ -214,25 +214,19 @@ $().ready(function() {
 					<input type="checkbox" id="selectAll" />
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="sn">${message("Product.sn")}</a>
-				</th>
-				<th>
 					<a href="javascript:;" class="sort" name="name">${message("Product.name")}</a>
 				</th>
 				<th>
 					<a href="javascript:;" class="sort" name="productCategory">${message("Product.productCategory")}</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="price">${message("Product.price")}</a>
+					<a href="javascript:;" class="sort" name="city">${message("Shop.city")}</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="cost">${message("Product.cost")}</a>
+					<a href="javascript:;" class="sort" name="isList">${message("Shop.isList")}</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="stock">${message("Product.stock")}</a>
-				</th>
-				<th>
-					<a href="javascript:;" class="sort" name="isMarketable">${message("Product.isMarketable")}</a>
+					<a href="javascript:;" class="sort" name="isTop">${message("Shop.isTop")}</a>
 				</th>
 				<th>
 					<a href="javascript:;" class="sort" name="createDate">${message("admin.common.createDate")}</a>
@@ -241,55 +235,37 @@ $().ready(function() {
 					<span>${message("admin.common.handle")}</span>
 				</th>
 			</tr>
-			[#list page.content as product]
+			[#list page.content as shop]
 				<tr>
 					<td>
-						<input type="checkbox" name="ids" value="${product.id}" />
+						<input type="checkbox" name="ids" value="${shop.id}" />
 					</td>
 					<td>
-						${product.sn}
-					</td>
-					<td>
-						<span title="${product.fullName}">
-							${abbreviate(product.fullName, 50, "...")}
-							[#if product.isGift]
-								<span class="gray">[${message("admin.product.gifts")}]</span>
-							[/#if]
+						<span title="${shop.name}">
+							${abbreviate(shop.name, 50, "...")}
 						</span>
-						[#list product.validPromotions as promotion]
-							<span class="promotion">${promotion.name}</span>
-						[/#list]
 					</td>
 					<td>
-						${product.productCategory.name}
+						${shop.productCategory.name}
 					</td>
 					<td>
-						${currency(product.price)}
+						${shop.city}
 					</td>
 					<td>
-						${currency(product.cost)}
+						<span class="${shop.isList?string("true", "false")}Icon">&nbsp;</span>
 					</td>
 					<td>
-						[#if product.stock??]
-							[#if product.allocatedStock == 0]
-								<span[#if product.isOutOfStock] class="red"[/#if]>${product.stock}</span>
-							[#else]
-								<span[#if product.isOutOfStock] class="red"[/#if] title="${message("Product.allocatedStock")}: ${product.allocatedStock}">${product.stock}</span>
-							[/#if]
-						[/#if]
-					</td>
-					<td>
-						<span class="${product.isMarketable?string("true", "false")}Icon">&nbsp;</span>
+						<span class="${shop.isTop?string("true", "false")}Icon">&nbsp;</span>
 					</td>
 					<td>
 						<span title="${product.createDate?string("yyyy-MM-dd HH:mm:ss")}">${product.createDate}</span>
 					</td>
 					<td>
-						<a href="edit.jhtml?id=${product.id}">[${message("admin.common.edit")}]</a>
-						[#if product.isMarketable]
-							<a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}]</a>
+						<a href="edit.jhtml?id=${shop.id}">[${message("admin.common.edit")}]</a>
+						[#if shop.isList]
+							<a href="${base}${shop.path}" target="_blank">[${message("admin.common.view")}]</a>
 						[#else]
-							[${message("admin.product.notMarketable")}]
+							[${message("Shop.notList")}]
 						[/#if]
 					</td>
 				</tr>
