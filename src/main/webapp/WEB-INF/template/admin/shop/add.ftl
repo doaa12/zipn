@@ -14,49 +14,36 @@
 $().ready(function() {
 
 	var $inputForm = $("#inputForm");
-	var $attributeTable = $("#attributeTable");
-	var $addOption = $("#addOption");
-	var $deleteOption = $("a.deleteOption");
+	var $provinceId = $("#provinceId");
+	var cityId = $("#cityId")
 	
-	[@flash_message /]
-	
-	// 增加可选项
-	$addOption.live("click", function() {
-		var $this = $(this);
-		[@compress single_line = true]
-			var trHtml = 
-			'<tr class="optionTr">
-				<td>
-					&nbsp;
-				<\/td>
-				<td>
-					<input type="text" name="options" class="text" maxlength="200" \/>
-				<\/td>
-				<td>
-					<a href="javascript:;" class="deleteOption">[${message("admin.common.delete")}]<\/a>
-				<\/td>
-			<\/tr>';
-		[/@compress]
-		$attributeTable.append(trHtml);
-	});
-	
-	// 删除可选项
-	$deleteOption.live("click", function() {
-		var $this = $(this);
-		if ($attributeTable.find("tr.optionTr").size() <= 1) {
-			$.message("warn", "${message("admin.attribute.deleteAllOptionNotAllowed")}");
-		} else {
-			$this.closest("tr").remove();
-		}
+	// 修改店铺省份
+	$provinceId.change(function(){
+		$.ajax({
+			url: "cities.jhtml",
+			type: "GET",
+			data: {id: $provinceId.val()},
+			dataType: "json",
+			beforeSend: function() {
+				$cityId.empty();
+			},
+			success: function(data) {
+				var trHtml = '<option value="0">请选择...</option>';
+				$.each(data, function(i, city) {
+					trHtml += '<option value="' + city.id + '">' + city.name + '</option>' ;
+				});
+				$cityId.append(trHtml);
+			}
+		});
 	});
 	
 	// 表单验证
 	$inputForm.validate({
 		rules: {
-			shopCategoryId: "required",
+			productCategoryId: "required",
 			name: "required",
-			order: "digits",
-			options: "required"
+			adminId: "required",
+			provinceId: "required"
 		}
 	});
 
@@ -68,16 +55,21 @@ $().ready(function() {
 		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.add")}
 	</div>
 	<form id="inputForm" action="save.jhtml" method="post">
-		<table id="attributeTable" class="input">
+		<table id="shopTable" class="input">
 			<tr>
 				<th>
-					${message("Attribute.productCategory")}:
+					<span class="requiredField">*</span>${message("Shop.productCategory")}:
 				</th>
-				<td colspan="2">
-					<select name="shopCategoryId">
-						[#list shopCategories as shopCategory]
-							<option value="${shopCategory.id}">
-								${shopCategory.name}
+				<td>
+					<select id="productCategoryId" name="productCategoryId">
+						[#list productCategoryTree as productCategory]
+							<option value="${productCategory.id}">
+								[#if productCategory.grade != 0]
+									[#list 1..productCategory.grade as i]
+										&nbsp;&nbsp;
+									[/#list]
+								[/#if]
+								${productCategory.name}
 							</option>
 						[/#list]
 					</select>
@@ -85,48 +77,62 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					<span class="requiredField">*</span>${message("Attribute.name")}:
+					<span class="requiredField">*</span>${message("Shop.name")}:
 				</th>
-				<td colspan="2">
-					<input type="text" name="name" class="text" maxlength="200" />
+				<td>
+					<input type="text" id="name" name="name" class="text" maxlength="200" />
 				</td>
 			</tr>
 			<tr>
 				<th>
-					${message("admin.common.order")}:
+					<span class="requiredField">*</span>${message("Shop.city")}:
 				</th>
-				<td colspan="2">
-					<input type="text" name="order" class="text" maxlength="9" />
+				<td>
+					<select id="provinceId" name="provinceId">
+						[#list provinces as province]
+							<option value="${province.id}">
+								${province.name}
+							</option>
+						[/#list]
+					</select>
+					<select id="cityId" name="cityId">
+						<option value="0">请选择...</option>
+						[#list cities as city]
+							<option value="${city.id}">
+								${city.name}
+							</option>
+						[/#list]
+					</select>
 				</td>
 			</tr>
 			<tr>
-				<td>&nbsp;
-					
-				</td>
-				<td colspan="2">
-					<a href="javascript:;" id="addOption" class="button">${message("admin.attribute.addOption")}</a>
+				<th>
+					${message("admin.common.setting")}:
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="isList" value="true"/>${message("Shop.isList")}
+						<input type="hidden" name="_isList" value="false" />
+					</label>
+					<label>
+						<input type="checkbox" name="isTop" value="true"/>${message("Shop.isTop")}
+						<input type="hidden" name="_isTop" value="false" />
+					</label>
 				</td>
 			</tr>
-			<tr class="title">
-				<td>&nbsp;
-					
-				</td>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.admin")}:
+				</th>
 				<td>
-					${message("Attribute.options")}
-				</td>
-				<td>
-					${message("admin.common.delete")}
-				</td>
-			</tr>
-			<tr class="optionTr">
-				<td>&nbsp;
-					
-				</td>
-				<td>
-					<input type="text" name="options" class="text" maxlength="200" />
-				</td>
-				<td>
-					<a href="javascript:;" class="deleteOption">[${message("admin.common.delete")}]</a>
+					<select id="adminId" name="adminId">
+						<option value="0">请选择...</option>
+						[#list admins as admin]
+							<option value="${admin.id}">
+								${admin.username}
+							</option>
+						[/#list]
+					</select>
 				</td>
 			</tr>
 		</table>

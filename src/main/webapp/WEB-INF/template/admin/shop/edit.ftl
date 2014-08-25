@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>${message("admin.attribute.edit")} </title>
+<title>${message("admin.attribute.add")} </title>
 <meta name="author" content="Sunry" />
 <meta name="copyright" content="" />
 <link href="${base}/resources/admin/css/common.css" rel="stylesheet" type="text/css" />
@@ -13,50 +13,11 @@
 <script type="text/javascript">
 $().ready(function() {
 
-	var $inputForm = $("#inputForm");
-	var $attributeTable = $("#attributeTable");
-	var $addOption = $("#addOption");
-	var $deleteOption = $("a.deleteOption");
-	
-	[@flash_message /]
-	
-	// 增加可选项
-	$addOption.live("click", function() {
-		var $this = $(this);
-		[@compress single_line = true]
-			var trHtml = 
-			'<tr class="optionTr">
-				<td>
-					&nbsp;
-				<\/td>
-				<td>
-					<input type="text" name="options" class="text" maxlength="200" \/>
-				<\/td>
-				<td>
-					<a href="javascript:;" class="deleteOption">[${message("admin.common.delete")}]<\/a>
-				<\/td>
-			<\/tr>';
-		[/@compress]
-		$attributeTable.append(trHtml);
-	});
-	
-	// 删除可选项
-	$deleteOption.live("click", function() {
-		var $this = $(this);
-		if ($attributeTable.find("tr.optionTr").size() <= 1) {
-			$.message("warn", "${message("admin.attribute.deleteAllOptionNotAllowed")}");
-		} else {
-			$this.closest("tr").remove();
-		}
-	});
-	
 	// 表单验证
 	$inputForm.validate({
 		rules: {
-			productCategoryId: "required",
-			name: "required",
-			order: "digits",
-			options: "required"
+			shopId: "required",
+			adminId: "required"
 		}
 	});
 
@@ -65,72 +26,68 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.edit")}
+		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.add")}
 	</div>
 	<form id="inputForm" action="update.jhtml" method="post">
-		<input type="hidden" name="id" value="${attribute.id}" />
-		<table id="attributeTable" class="input">
+		<table id="shopTable" class="input">
 			<tr>
 				<th>
-					${message("Attribute.productCategory")}:
+					<span class="requiredField">*</span>${message("Shop.productCategory")}:
 				</th>
-				<td colspan="2">
-					${attribute.productCategory.name}
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>${message("Attribute.name")}:
-				</th>
-				<td colspan="2">
-					<input type="text" name="name" class="text" value="${attribute.name}" maxlength="200" />
+				<td>
+					<p>${shop.productCategory.name}</p>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					${message("admin.common.order")}:
+					<span class="requiredField">*</span>${message("Shop.name")}:
 				</th>
-				<td colspan="2">
-					<input type="text" name="order" class="text" value="${attribute.order}" maxlength="9" />
+				<td>
+					<p>${shop.name}</p>
 				</td>
 			</tr>
 			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.city")}:
+				</th>
 				<td>
-					&nbsp;
-				</td>
-				<td colspan="2">
-					<a href="javascript:;" id="addOption" class="button">${message("admin.attribute.addOption")}</a>
+					<p>${shop.city}</p>
 				</td>
 			</tr>
-			<tr class="title">
+			<tr>
+				<th>
+					${message("admin.common.setting")}:
+				</th>
 				<td>
-					&nbsp;
-				</td>
-				<td>
-					${message("Attribute.options")}
-				</td>
-				<td>
-					${message("admin.common.delete")}
+					<label>
+						<input type="checkbox" name="isList" value="true"/ [#if shop.isList] checked="checked"[/#if]>${message("Shop.isList")}
+						<input type="hidden" name="_isList" value="false" />
+					</label>
+					<label>
+						<input type="checkbox" name="isTop" value="true" [#if shop.isTop] checked="checked"[/#if]/>${message("Shop.isTop")}
+						<input type="hidden" name="_isTop" value="false" />
+					</label>
 				</td>
 			</tr>
-			[#list attribute.options as option]
-				<tr class="optionTr">
-					<td>
-						&nbsp;
-					</td>
-					<td>
-						<input type="text" name="options" class="text" value="${option}" maxlength="200" />
-					</td>
-					<td>
-						<a href="javascript:;" class="deleteOption">[${message("admin.common.delete")}]</a>
-					</td>
-				</tr>
-			[/#list]
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.admin")}:
+				</th>
+				<td>
+					<select id="adminId" name="adminId">
+						[#list admins as admin]
+							<option value="${admin.id}"[#if shop.admin == admin] selected="selected"[/#if]>
+								${admin.username}
+							</option>
+						[/#list]
+					</select>
+				</td>
+			</tr>
 		</table>
 		<table class="input">
 			<tr>
-				<th>
-					&nbsp;
+				<th>&nbsp;
+					
 				</th>
 				<td>
 					<input type="submit" class="button" value="${message("admin.common.submit")}" />

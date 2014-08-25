@@ -200,7 +200,6 @@ public class Shop extends BaseEntity {
 	 * 获取店铺支付账号
 	 * @return
 	 */
-	@Column(nullable = false)
 	public String getPayAccount() {
 		return payAccount;
 	}
@@ -337,6 +336,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false)
 	public ProductCategory getProductCategory() {
 		return productCategory;
 	}
@@ -387,6 +387,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺所在城市
 	 * @return
 	 */
+	@NotEmpty
 	public String getCity() {
 		return city;
 	}
