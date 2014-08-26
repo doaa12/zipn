@@ -164,10 +164,11 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 			for (ProductCategory productCategory : productCategories) {
 				if (productCategory.getParent() == null && parent == null) {
 					result.add(productCategory);
+					hierarchicalSort(productCategories, productCategory);
 				}else if(productCategory.getParent() != null && productCategory.getParent().equals(parent)){
 					parent.getChildren().add(productCategory);
+					hierarchicalSort(productCategories, productCategory);
 				}
-				hierarchicalSort(productCategories, productCategory);
 			}
 		}
 		return result;

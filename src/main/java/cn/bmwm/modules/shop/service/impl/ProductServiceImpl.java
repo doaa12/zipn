@@ -114,6 +114,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * 查找推荐商品
 	 * @return
 	 */
+	@Cacheable(value = "product", key = "#city + #category.id + 'findRecommendList'")
 	public List<Product> findRecommendList(String city, ProductCategory category){
 		return productDao.findRecommendList(city, category);
 	}
@@ -122,6 +123,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * 查找热销商品
 	 * @return
 	 */
+	@Cacheable(value = "product", key = "#city + #category.id + 'findHotList'")
 	public List<Product> findHotList(String city, ProductCategory category){
 		return productDao.findHotList(city, category);
 	}

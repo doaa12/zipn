@@ -21,6 +21,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 商铺
  * @author zby
@@ -146,6 +148,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺名称
 	 * @return
 	 */
+	@JsonProperty
 	@NotEmpty
 	@Length(max = 200)
 	@Column(nullable = false)
@@ -161,6 +164,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺描述
 	 * @return
 	 */
+	@JsonProperty
 	@Length(max = 500)
 	public String getDescription() {
 		return description;
@@ -174,6 +178,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺状态
 	 * @return
 	 */
+	@JsonProperty
 	@Column(nullable = false)
 	public Integer getStatus() {
 		return status;
@@ -187,6 +192,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺公告
 	 * @return
 	 */
+	@JsonProperty
 	public String getNotice() {
 		return notice;
 	}
@@ -371,6 +377,7 @@ public class Shop extends BaseEntity {
 	/**
 	 * @return the image
 	 */
+	@JsonProperty
 	public String getImage() {
 		return image;
 	}
@@ -386,6 +393,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺所在城市
 	 * @return
 	 */
+	@JsonProperty
 	@NotEmpty
 	public String getCity() {
 		return city;
@@ -399,6 +407,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺地址
 	 * @return
 	 */
+	@JsonProperty
 	public String getAddress() {
 		return address;
 	}

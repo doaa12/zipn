@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.bmwm.modules.shop.controller.shop.BaseController;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
+import cn.bmwm.modules.shop.service.ShopFavoriteService;
 
 
 /**
@@ -34,9 +37,14 @@ public class IndexController extends BaseController {
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
 	
+	@Resource(name = "shopFavoriteServiceImpl")
+	private ShopFavoriteService shopFavoriteService;
+	
+	@Resource(name = "memberServiceImpl")
+	private MemberService memberService;
 	
 	/**
-	 * App 首页请求
+	 * App 首页
 	 * @return
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -45,13 +53,11 @@ public class IndexController extends BaseController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
-		List<ProductCategory> productCategories = productCategoryService.findHierarchicalTree();
+		List<ProductCategory> categories = productCategoryService.findHierarchicalTree();
 		
-		result.put("categories", productCategories);
+		List<Map<String,Object>> products = new LinkedList<Map<String,Object>>();
 		
-		List<Map<String,Object>> productList = new LinkedList<Map<String,Object>>();
-		
-		for(ProductCategory category : productCategories) {
+		for(ProductCategory category : categories) {
 			
 			List<Product> list = productService.findRecommendList(city, category);
 			
@@ -59,14 +65,21 @@ public class IndexController extends BaseController {
 				list = productService.findHotList(city, category);
 			}
 			
-			Map<String,Object> products = new HashMap<String,Object>();
-			products.put("category", category);
-			products.put("products", list);
-			productList.add(products);
+			Map<String,Object> map = new HashMap<String,Object>();
+			
+			map.put("categoryId", category.getId());
+			map.put("categoryName", category.getName());
+			map.put("products", list);
+			
+			products.add(map);
 			
 		}
 		
-		result.put("products", productList);
+		List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
+		
+		result.put("categories", categories);
+		result.put("shops", shopList);
+		result.put("products", products);
 		
 		return result;
 		

@@ -77,6 +77,7 @@ public class ProductCategoryServiceImpl extends BaseServiceImpl<ProductCategory,
 	 * @return
 	 */
 	@Transactional(readOnly = true)
+	@Cacheable("productCategory")
 	public List<ProductCategory> findHierarchicalTree(){
 		return productCategoryDao.findHierarchicalTree();
 	}
