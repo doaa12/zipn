@@ -314,7 +314,7 @@ public class ProductController extends BaseController {
 								product.setSpecificationValues(new HashSet<SpecificationValue>());
 								product.setCity(city);
 								product.setShop(shop);
-								product.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								product.setTreePath(shopCategory.getTreePath());
 								product.setShopCategory(shopCategory);
 								products.add(product);
 							} else {
@@ -353,7 +353,7 @@ public class ProductController extends BaseController {
 								specificationProduct.setProductNotifies(null);
 								specificationProduct.setCity(city);
 								specificationProduct.setShop(shop);
-								specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								specificationProduct.setTreePath(shopCategory.getTreePath());
 								specificationProduct.setShopCategory(shopCategory);
 								products.add(specificationProduct);
 							}
@@ -495,7 +495,7 @@ public class ProductController extends BaseController {
 								pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
 								pProduct.setCity(city);
 								pProduct.setShopCategory(shopCategory);
-								pProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+								pProduct.setTreePath(shopCategory.getTreePath());
 								pProduct.setShop(shop);
 								products.add(pProduct);
 							} else {
@@ -509,7 +509,7 @@ public class ProductController extends BaseController {
 									specificationProduct.setCity(city);
 									specificationProduct.setShop(shop);
 									specificationProduct.setShopCategory(shopCategory);
-									specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+									specificationProduct.setTreePath(shopCategory.getTreePath());
 									products.add(specificationProduct);
 								} else {
 									Product specificationProduct = new Product();
@@ -548,7 +548,7 @@ public class ProductController extends BaseController {
 									specificationProduct.setCity(city);
 									specificationProduct.setShop(shop);
 									specificationProduct.setShopCategory(shopCategory);
-									specificationProduct.setTreePath(shopCategory.getTreePath() + shopCategory.getId() + ",");
+									specificationProduct.setTreePath(shopCategory.getTreePath());
 									products.add(specificationProduct);
 								}
 							}

@@ -6,9 +6,7 @@ package cn.bmwm.modules.shop.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.FlushModeType;
 import javax.persistence.TypedQuery;
@@ -66,10 +64,10 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 	}
 	
 	/**
-	 * 获取分层分类树
+	 * 获取商品分层分类树
 	 * @return
 	 */
-	public List<ProductCategory> getHierarchicalTree() {
+	public List<ProductCategory> findHierarchicalTree() {
 		String jpql = "select productCategory from ProductCategory productCategory order by productCategory.order asc";
 		TypedQuery<ProductCategory> query = entityManager.createQuery(jpql, ProductCategory.class).setFlushMode(FlushModeType.COMMIT);
 		return this.hierarchicalSort(query.getResultList(), null);

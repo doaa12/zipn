@@ -176,6 +176,18 @@ public interface ProductService extends BaseService<Product, Long> {
 	List<Product> findList(ProductCategory productCategory, Date beginDate, Date endDate, Integer first, Integer count);
 
 	/**
+	 * 查找推荐商品
+	 * @return
+	 */
+	List<Product> findRecommendList(String city, ProductCategory category);
+	
+	/**
+	 * 查找热销商品
+	 * @return
+	 */
+	List<Product> findHotList(String city, ProductCategory category);
+	
+	/**
 	 * 查找商品销售信息
 	 * 
 	 * @param beginDate

@@ -83,6 +83,12 @@ public interface ProductCategoryService extends BaseService<ProductCategory, Lon
 	 * @return 商品分类树
 	 */
 	List<ProductCategory> findTree();
+	
+	/**
+	 * 获取商品分层分类树
+	 * @return
+	 */
+	List<ProductCategory> findHierarchicalTree();
 
 	/**
 	 * 查找下级商品分类

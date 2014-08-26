@@ -71,6 +71,15 @@ public class ProductCategoryServiceImpl extends BaseServiceImpl<ProductCategory,
 	public List<ProductCategory> findTree() {
 		return productCategoryDao.findChildren(null, null);
 	}
+	
+	/**
+	 * 获取商品分层分类树
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<ProductCategory> findHierarchicalTree(){
+		return productCategoryDao.findHierarchicalTree();
+	}
 
 	@Transactional(readOnly = true)
 	public List<ProductCategory> findChildren(ProductCategory productCategory) {

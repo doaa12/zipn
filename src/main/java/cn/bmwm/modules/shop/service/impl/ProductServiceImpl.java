@@ -58,8 +58,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 	@Resource(name = "ehCacheManager")
 	private CacheManager cacheManager;
+	
 	@Resource(name = "productDaoImpl")
 	private ProductDao productDao;
+	
 	@Resource(name = "staticServiceImpl")
 	private StaticService staticService;
 
@@ -106,6 +108,22 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders,
 			String cacheRegion) {
 		return productDao.findList(productCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, count, filters, orders);
+	}
+	
+	/**
+	 * 查找推荐商品
+	 * @return
+	 */
+	public List<Product> findRecommendList(String city, ProductCategory category){
+		return productDao.findRecommendList(city, category);
+	}
+	
+	/**
+	 * 查找热销商品
+	 * @return
+	 */
+	public List<Product> findHotList(String city, ProductCategory category){
+		return productDao.findHotList(city, category);
 	}
 
 	@Transactional(readOnly = true)

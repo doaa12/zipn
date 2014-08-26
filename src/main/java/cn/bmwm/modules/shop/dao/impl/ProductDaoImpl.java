@@ -95,6 +95,61 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			return null;
 		}
 	}
+	
+	/**
+	 * 查找推荐商品
+	 * @return
+	 */
+	public List<Product> findRecommendList(String city, ProductCategory category) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+		Root<Product> root = criteriaQuery.from(Product.class);
+		criteriaQuery.select(root);
+		
+		Predicate restrictions = criteriaBuilder.conjunction();
+		
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), true));
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
+		
+		if(category != null){
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+		}
+		
+		criteriaQuery.where(restrictions);
+		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createDate")));
+		
+		return super.findList(criteriaQuery, 0, 10, null, null);
+		
+	}
+	
+	/**
+	 * 查找热销商品
+	 * @return
+	 */
+	public List<Product> findHotList(String city, ProductCategory category) {
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+		Root<Product> root = criteriaQuery.from(Product.class);
+		criteriaQuery.select(root);
+		
+		Predicate restrictions = criteriaBuilder.conjunction();
+		
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
+		
+		if(category != null){
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+		}
+		
+		criteriaQuery.where(restrictions);
+		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("sales")));
+		
+		return super.findList(criteriaQuery, 0, 10, null, null);
+		
+	}
 
 	public List<Product> search(String keyword, Boolean isGift, Integer count) {
 		if (StringUtils.isEmpty(keyword)) {

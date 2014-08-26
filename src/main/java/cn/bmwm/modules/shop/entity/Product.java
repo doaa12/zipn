@@ -501,6 +501,7 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 市场价
 	 */
+	@JsonProperty
 	@Field(store = Store.YES, index = Index.NO)
 	@Min(0)
 	@Digits(integer = 12, fraction = 3)
@@ -762,6 +763,7 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 介绍
 	 */
+	@JsonProperty
 	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	@Lob
 	public String getIntroduction() {
@@ -890,6 +892,7 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 评分
 	 */
+	@JsonProperty
 	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	@NumericField
 	@Column(nullable = false, precision = 12, scale = 6)
@@ -1989,7 +1992,6 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 访问路径
 	 */
-	@JsonProperty
 	@Transient
 	public String getPath() {
 		Map<String, Object> model = new HashMap<String, Object>();

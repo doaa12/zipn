@@ -268,5 +268,17 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	 * @return 是否已购买该商品
 	 */
 	boolean isPurchased(Member member, Product product);
+	
+	/**
+	 * 查找推荐商品
+	 * @return
+	 */
+	List<Product> findRecommendList(String city, ProductCategory category);
+	
+	/**
+	 * 查找热销商品
+	 * @return
+	 */
+	List<Product> findHotList(String city, ProductCategory category);
 
 }

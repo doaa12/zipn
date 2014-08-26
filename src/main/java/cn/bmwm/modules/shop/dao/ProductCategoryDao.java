@@ -47,5 +47,11 @@ public interface ProductCategoryDao extends BaseDao<ProductCategory, Long> {
 	 * @return 下级商品分类
 	 */
 	List<ProductCategory> findChildren(ProductCategory productCategory, Integer count);
+	
+	/**
+	 * 获取商品分层分类树
+	 * @return
+	 */
+	List<ProductCategory> findHierarchicalTree();
 
 }

@@ -75,7 +75,7 @@ public class ShopCategoryController extends BaseController {
 			return ERROR_VIEW;
 		}
 		
-		shopCategory.setTreePath(parent.getTreePath() + parent.getId() + ",");
+		shopCategory.setTreePath(parent.getTreePath() + parent.getId() + ProductCategory.TREE_PATH_SEPARATOR);
 		shopCategory.setParameterGroups(null);
 		shopCategory.setAttributes(null);
 		shopCategory.setPromotions(null);
