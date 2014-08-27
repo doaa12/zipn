@@ -2020,7 +2020,6 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 缩略图
 	 */
-	@JsonProperty
 	@Transient
 	public String getThumbnail() {
 		if (getProductImages() != null && !getProductImages().isEmpty()) {

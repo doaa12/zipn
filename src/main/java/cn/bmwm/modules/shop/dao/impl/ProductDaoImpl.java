@@ -110,6 +110,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Predicate restrictions = criteriaBuilder.conjunction();
 		
 		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), false));
 		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), true));
 		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
 		
@@ -138,6 +139,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Predicate restrictions = criteriaBuilder.conjunction();
 		
 		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
+		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), false));
 		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
 		
 		if(category != null){

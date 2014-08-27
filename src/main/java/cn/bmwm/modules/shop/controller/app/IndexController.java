@@ -69,7 +69,7 @@ public class IndexController extends BaseController {
 			
 			map.put("categoryId", category.getId());
 			map.put("categoryName", category.getName());
-			map.put("products", list);
+			map.put("productList", list);
 			
 			products.add(map);
 			

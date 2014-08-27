@@ -74,6 +74,11 @@ public class ProductCategory extends OrderEntity {
 	private List<ProductCategory> children = new ArrayList<ProductCategory>();
 	
 	/**
+	 * 下级分类,一次性设置好,避免Hibernate重新从数据库加载
+	 */
+	private List<ProductCategory> childrenForJSONList = new ArrayList<ProductCategory>();
+	
+	/**
 	 * 店铺
 	 */
 	private Set<Shop> shops = new HashSet<Shop>();
@@ -230,7 +235,6 @@ public class ProductCategory extends OrderEntity {
 	 * 
 	 * @return 下级分类
 	 */
-	@JsonProperty
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 	@OrderBy("order asc")
 	public List<ProductCategory> getChildren() {
@@ -245,6 +249,22 @@ public class ProductCategory extends OrderEntity {
 	 */
 	public void setChildren(List<ProductCategory> children) {
 		this.children = children;
+	}
+	
+	/**
+	 * @return the childrenForJSONList
+	 */
+	@JsonProperty("children")
+	@Transient
+	public List<ProductCategory> getChildrenForJSONList() {
+		return childrenForJSONList;
+	}
+
+	/**
+	 * @param childrenForJSONList the childrenForJSONList to set
+	 */
+	public void setChildrenForJSONList(List<ProductCategory> childrenForJSONList) {
+		this.childrenForJSONList = childrenForJSONList;
 	}
 
 	/**

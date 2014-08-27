@@ -70,7 +70,7 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 	public List<ProductCategory> findHierarchicalTree() {
 		String jpql = "select productCategory from ProductCategory productCategory order by productCategory.order asc";
 		TypedQuery<ProductCategory> query = entityManager.createQuery(jpql, ProductCategory.class).setFlushMode(FlushModeType.COMMIT);
-		return this.hierarchicalSort(query.getResultList(), null);
+		return hierarchicalSort(query.getResultList(), null);
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 					result.add(productCategory);
 					hierarchicalSort(productCategories, productCategory);
 				}else if(productCategory.getParent() != null && productCategory.getParent().equals(parent)){
-					parent.getChildren().add(productCategory);
+					parent.getChildrenForJSONList().add(productCategory);
 					hierarchicalSort(productCategories, productCategory);
 				}
 			}

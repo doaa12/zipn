@@ -392,54 +392,65 @@
 				<skip>true</skip>
 			</configuration>
 		</plugin>
-		<plugin>
-			<artifactId>maven-antrun-plugin</artifactId>
-			<executions>
-				<execution>
-					<id>compile</id>
-					<phase>compile</phase>
-					<configuration>
-						<tasks>
-							<echo message="====================== copy  product  property files ======================" />
-							<copy todir="${basedir}/target/classes/" overwrite="true">
-								<fileset dir="${basedir}/src/main/resources/product/" />
-							</copy>
-						</tasks>
-					</configuration>
-					<goals>
-						<goal>run</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>wagon-maven-plugin</artifactId>
-			<version>1.0-beta-3</version>
-			<configuration>
-				<serverId>${product.server.id}</serverId>
-				<fromDir>target</fromDir>
-				<includes>${project.artifactId}.war</includes>
-				<url>scp://${tomcat.product.host}</url>
-				<toDir>${tomcat.product.installdir}</toDir>
-			</configuration>
-			<dependencies>
-				<dependency>
-					<groupId>org.apache.maven.wagon</groupId>
-					<artifactId>wagon-ssh</artifactId>
-					<version>1.0-beta-6</version>
-				</dependency>
-			</dependencies>
-			<executions>
-				<execution>
-					<id>upload-war</id>
-					<goals>
-						<goal>upload</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
 	</plugins>
   </build>
+  
+  <profiles>
+		<profile>
+			<id>product</id>
+			<build>
+				<plugins>
+					<!-- 生产环境配置文件[mvn clean package -Pproduct] -->
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>compile</id>
+								<phase>compile</phase>
+								<configuration>
+									<tasks>
+										<echo message="====================== copy  product  property files ======================" />
+										<copy todir="${basedir}/target/classes/" overwrite="true">
+											<fileset dir="${basedir}/src/main/resources/product/" />
+										</copy>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0-beta-3</version>
+						<configuration>
+							<serverId>${product.server.id}</serverId>
+							<fromDir>target</fromDir>
+							<includes>${project.artifactId}.war</includes>
+							<url>scp://${tomcat.product.host}</url>
+							<toDir>${tomcat.product.installdir}</toDir>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.maven.wagon</groupId>
+								<artifactId>wagon-ssh</artifactId>
+								<version>1.0-beta-6</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>upload-war</id>
+								<goals>
+									<goal>upload</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
   
 </project>
