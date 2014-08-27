@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import cn.bmwm.common.persistence.Page;
@@ -33,7 +34,18 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	}
 	
 	/**
-	 * 查找店铺分页
+	 * 查找推荐店铺
+	 * @param category
+	 * @param city
+	 * @return
+	 */
+	@Cacheable(value = "shop", key = "#city + #category.id + 'findRecommendList'")
+	public List<Shop> findRecommendList(String city, ProductCategory category) {
+		return shopDao.findRecommendList(city, category);
+	}
+	
+	/**
+	 * 后台管理查找店铺分页
 	 * @param productCategory
 	 * @param city
 	 * @param pageable

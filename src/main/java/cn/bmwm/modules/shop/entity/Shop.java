@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -137,6 +138,16 @@ public class Shop extends BaseEntity {
 	 * 店铺列表展示图片
 	 */
 	private String image;
+	
+	/**
+	 * 总评分数
+	 */
+	private Long totalScore;
+	
+	/**
+	 * 评分次数
+	 */
+	private Long scoreTimes;
 	
 	/**
 	 * 店铺所在分类路径
@@ -415,6 +426,41 @@ public class Shop extends BaseEntity {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	/**
+	 * 总评分数
+	 * @return
+	 */
+	public Long getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(Long totalScore) {
+		this.totalScore = totalScore;
+	}
+
+	/**
+	 * 评分次数
+	 * @return
+	 */
+	public Long getScoreTimes() {
+		return scoreTimes;
+	}
+
+	public void setScoreTimes(Long scoreTimes) {
+		this.scoreTimes = scoreTimes;
+	}
+	
+	/**
+	 * 平均评分
+	 * @return
+	 */
+	@Transient
+	public double getAvgScore() {
+		if(scoreTimes == 0) return 5;
+		double avg = totalScore / (scoreTimes * 1.0);
+		return Math.round(avg * 10) / 10.0;
+	}
 
 	/**
 	 * 获取店铺商品分类路径
@@ -426,6 +472,14 @@ public class Shop extends BaseEntity {
 
 	public void setTreePath(String treePath) {
 		this.treePath = treePath;
+	}
+	
+	public static void main(String[] args) {
+		long total = 10;
+		long times = 3;
+		double d = total / (times * 1.0);
+		d = Math.round(d * 10) / 10.0;
+		System.out.println(d);
 	}
 	
 }

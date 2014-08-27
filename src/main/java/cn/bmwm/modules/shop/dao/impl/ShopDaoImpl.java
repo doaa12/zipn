@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.util.List;
 
 import javax.persistence.FlushModeType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -59,6 +60,18 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		
 		return super.findPage(criteriaQuery, pageable);
 		
+	}
+	
+	/**
+	 * 查找推荐店铺
+	 * @param category
+	 * @param city
+	 * @return
+	 */
+	public List<Shop> findRecommendList(String city, ProductCategory category) {
+		String jpql = " select shop from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.isTop = true and shop.city like :city order by shop.totalScore / shop.scoreTimes desc ";
+		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%").setMaxResults(10).getResultList();
 	}
 	
 	/**
