@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,41 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("sales")));
 		
 		return super.findList(criteriaQuery, 0, 10, null, null);
+		
+	}
+	
+	/**
+	 * 商品列表
+	 * @param city : 城市
+	 * @param category : 分类
+	 * @param page : 页码
+	 * @param size : 每页记录数
+	 * @return
+	 */
+	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
+		
+		String jpql = " select count(*) from  Product product where product.treePath like :treePath and product.city like :city ";
+		TypedQuery<Long> countQuery = entityManager.createQuery(jpql, Long.class);
+		countQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		long total = countQuery.getSingleResult();
+		
+		jpql = " select product from Product product where product.treePath like :treePath and product.city like :city order by product.sales desc ";
+		TypedQuery<Product> listQuery = entityManager.createQuery(jpql, Product.class);
+		listQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		
+		int start = (page - 1) * size;
+		listQuery.setFirstResult(start);
+		listQuery.setMaxResults(size);
+		
+		List<Product> list = listQuery.getResultList();
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("page", page);
+		result.put("size", size);
+		result.put("total", total);
+		result.put("products", list);
+		
+		return result;
 		
 	}
 

@@ -43,14 +43,14 @@ public class ProductListController {
 	@ResponseBody
 	public Map<String,Object> list(Long catId, String city, Integer page, Integer size) {
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
 		ProductCategory category = productCategoryService.find(catId);
 		
 		List<ProductCategory> categories = productCategoryService.findHierarchicalTree();
 		
 		//顶级分类,显示下级分类商品
 		if(category.getGrade() == 0) {
+			
+			Map<String,Object> result = new HashMap<String,Object>();
 			
 			List<ProductCategory> children = category.getChildren();
 			
@@ -66,23 +66,31 @@ public class ProductListController {
 				
 				Map<String,Object> map = new HashMap<String,Object>();
 				
-				map.put("categoryId", category.getId());
-				map.put("categoryName", category.getName());
+				map.put("categoryId", cat.getId());
+				map.put("categoryName", cat.getName());
 				map.put("productList", list);
 				
 				products.add(map);
 				
 			}
+			
+			result.put("products", products);
+			result.put("catetories", categories);
+			
+			return result;
 		
 		//显示商品列表
 		}else{
 			
-			List<Product> list = productService.findHotList(city, category);
+			if(page == null) page = 1;
+			if(size == null) size = 10;
 			
+			Map<String,Object> result = productService.findList(city, category, page, size);
+			result.put("categories", categories);
+			
+			return result;
 			
 		}
-		
-		return result;
 		
 	}
 	

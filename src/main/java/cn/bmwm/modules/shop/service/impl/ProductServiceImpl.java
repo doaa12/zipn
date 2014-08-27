@@ -70,17 +70,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 		super.setBaseDao(productDao);
 	}
 
-	@Transactional(readOnly = true)
 	public boolean snExists(String sn) {
 		return productDao.snExists(sn);
 	}
 
-	@Transactional(readOnly = true)
 	public Product findBySn(String sn) {
 		return productDao.findBySn(sn);
 	}
 
-	@Transactional(readOnly = true)
 	public boolean snUnique(String previousSn, String currentSn) {
 		if (StringUtils.equalsIgnoreCase(previousSn, currentSn)) {
 			return true;
@@ -93,18 +90,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 		}
 	}
 
-	@Transactional(readOnly = true)
 	public List<Product> search(String keyword, Boolean isGift, Integer count) {
 		return productDao.search(keyword, isGift, count);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders) {
 		return productDao.findList(productCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, count, filters, orders);
 	}
 
-	@Transactional(readOnly = true)
-	@Cacheable("product")
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders,
 			String cacheRegion) {
 		return productDao.findList(productCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, count, filters, orders);
@@ -127,13 +120,24 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	public List<Product> findHotList(String city, ProductCategory category){
 		return productDao.findHotList(city, category);
 	}
+	
+	/**
+	 * 商品列表
+	 * @param city : 城市
+	 * @param category : 分类
+	 * @param page : 页码
+	 * @param size : 每页记录数
+	 * @return
+	 */
+	@Cacheable(value = "product", key = "#city + #category.id + #page + #size + 'findList'")
+	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
+		return productDao.findList(city, category, page, size);
+	}
 
-	@Transactional(readOnly = true)
 	public List<Product> findList(ProductCategory productCategory, Date beginDate, Date endDate, Integer first, Integer count) {
 		return productDao.findList(productCategory, beginDate, endDate, first, count);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Object[]> findSalesList(Date beginDate, Date endDate, Integer count) {
 		return productDao.findSalesList(beginDate, endDate, count);
 	}
@@ -144,22 +148,18 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	}
 	
 	//zhoupuyue
-	@Transactional(readOnly = true)
 	public Page<Product> findPage(Shop shop, ShopCategory shopCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
 		return productDao.findPage(shop, shopCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, pageable);
 	}
 
-	@Transactional(readOnly = true)
 	public Page<Product> findPage(Member member, Pageable pageable) {
 		return productDao.findPage(member, pageable);
 	}
 
-	@Transactional(readOnly = true)
 	public Long count(Member favoriteMember, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert) {
 		return productDao.count(favoriteMember, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert);
 	}
 
-	@Transactional(readOnly = true)
 	public boolean isPurchased(Member member, Product product) {
 		return productDao.isPurchased(member, product);
 	}

@@ -280,5 +280,15 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	 * @return
 	 */
 	List<Product> findHotList(String city, ProductCategory category);
+	
+	/**
+	 * 商品列表
+	 * @param city : 城市
+	 * @param category : 分类
+	 * @param page : 页码
+	 * @param size : 每页记录数
+	 * @return
+	 */
+	Map<String,Object> findList(String city, ProductCategory category, int page, int size);
 
 }
