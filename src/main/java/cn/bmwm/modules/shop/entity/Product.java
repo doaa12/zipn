@@ -740,7 +740,6 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 是否为赠品
 	 */
-	@JsonProperty
 	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	@NotNull
 	@Column(nullable = false)

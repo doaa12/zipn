@@ -1,1 +1,1 @@
-mvn clean package wagon:upload 
+mvn clean package wagon:upload -Pproduct
