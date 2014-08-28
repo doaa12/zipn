@@ -147,7 +147,7 @@ if (applicationContext != null) {
 <body>
 	<%if (applicationContext != null) {%>
 		<div class="login">
-			<form id="loginForm" action="login.jsp" method="post">
+			<form id="loginForm" action="/admin/login.jsp" method="post">
 				<input type="hidden" id="enPassword" name="enPassword" />
 				<%if (ArrayUtils.contains(setting.getCaptchaTypes(), CaptchaType.adminLogin)) {%>
 					<input type="hidden" name="captchaId" value="<%=captchaId%>" />

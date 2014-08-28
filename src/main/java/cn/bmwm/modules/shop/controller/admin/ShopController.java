@@ -104,8 +104,8 @@ public class ShopController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(Long shopId, ModelMap model) {
-		Shop shop = shopService.find(shopId);
+	public String edit(Long id, ModelMap model) {
+		Shop shop = shopService.find(id);
 		model.addAttribute("shop", shop);
 		model.addAttribute("admins", adminService.findAll());
 		return "/admin/shop/edit";

@@ -29,6 +29,7 @@ $().ready(function() {
 		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.add")}
 	</div>
 	<form id="inputForm" action="update.jhtml" method="post">
+		<input type="hidden" name="shopId" value="${shop.id}">
 		<table id="shopTable" class="input">
 			<tr>
 				<th>

@@ -258,7 +258,7 @@ $().ready(function() {
 						<span class="${shop.isTop?string("true", "false")}Icon">&nbsp;</span>
 					</td>
 					<td>
-						<span title="${product.createDate?string("yyyy-MM-dd HH:mm:ss")}">${product.createDate}</span>
+						<span title="${shop.createDate?string("yyyy-MM-dd HH:mm:ss")}">${shop.createDate}</span>
 					</td>
 					<td>
 						<a href="edit.jhtml?id=${shop.id}">[${message("admin.common.edit")}]</a>
