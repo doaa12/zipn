@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -36,6 +37,7 @@ public class ProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
 	public Map<String,Object> list(Long catId, String city, Integer page, Integer size) {
 		
 		ProductCategory category = productCategoryService.find(catId);
