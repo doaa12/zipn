@@ -23,13 +23,12 @@ import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopService;
 
 /**
- * App - 商品列表
  * @author zhoupuyue
- * @date 2014-8-27
+ * @date 2014-8-28
  */
-@Controller("appProductListController")
-@RequestMapping(value = "/app")
-public class ProductListController {
+@Controller("appCategoryController")
+@RequestMapping(value = "/app/cat")
+public class CategoryController {
 
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
@@ -41,7 +40,12 @@ public class ProductListController {
 	private ShopService shopService;
 	
 	/**
-	 * 商品列表
+	 * 分类
+	 * @param catId : 分类ID
+	 * @param city : 城市
+	 * @param type : 1:商品列表,2:店铺列表,默认是商品列表
+	 * @param page : 页码
+	 * @param size : 每页显示记录数量
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -50,7 +54,7 @@ public class ProductListController {
 		
 		ProductCategory category = productCategoryService.find(catId);
 		
-		//顶级分类,显示下级分类商品
+		//顶级分类,显示下级分类推荐商品和推荐店铺
 		if(category.getGrade() == 0) {
 			
 			Map<String,Object> result = new HashMap<String,Object>();
@@ -96,7 +100,7 @@ public class ProductListController {
 			
 			return result;
 		
-		//显示商品列表
+		//二级以下分类,显示商品列表或者店铺列表
 		}else{
 			
 			if(page == null) page = 1;

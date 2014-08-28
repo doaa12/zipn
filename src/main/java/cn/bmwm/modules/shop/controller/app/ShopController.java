@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * App - 商品
+ * App - 店铺
  * @author zhoupuyue
- * @date 2014-8-27
+ * @date 2014-8-28
  */
-@Controller("appProductController")
-@RequestMapping(value = "/app/product")
-public class ProductController {
-
+@Controller("appShopController")
+@RequestMapping(value = "/app/shop")
+public class ShopController {
+	
 	/**
-	 * 商品列表
+	 * 店铺列表
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
