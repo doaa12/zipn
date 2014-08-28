@@ -45,8 +45,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopPaymentController")
-@RequestMapping("/payment")
+//@Controller("shopPaymentController")
+//@RequestMapping("/payment")
 public class PaymentController extends BaseController {
 
 	@Resource(name = "orderServiceImpl")

@@ -28,8 +28,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopMemberPasswordController")
-@RequestMapping("/member/password")
+//@Controller("shopMemberPasswordController")
+//@RequestMapping("/member/password")
 public class PasswordController extends BaseController {
 
 	@Resource(name = "memberServiceImpl")

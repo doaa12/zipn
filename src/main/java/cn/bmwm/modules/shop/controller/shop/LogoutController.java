@@ -22,7 +22,7 @@ import cn.bmwm.modules.shop.entity.Member;
  *
  * @version 1.0
  */
-@Controller("shopLogoutController")
+//@Controller("shopLogoutController")
 public class LogoutController extends BaseController {
 
 	/**

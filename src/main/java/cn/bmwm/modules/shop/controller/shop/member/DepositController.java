@@ -32,8 +32,8 @@ import cn.bmwm.modules.sys.plugin.PaymentPlugin;
  *
  * @version 1.0
  */
-@Controller("shopMemberDepositController")
-@RequestMapping("/member/deposit")
+//@Controller("shopMemberDepositController")
+//@RequestMapping("/member/deposit")
 public class DepositController extends BaseController {
 
 	/** 每页记录数 */

@@ -41,8 +41,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopMemberProfileController")
-@RequestMapping("/member/profile")
+//@Controller("shopMemberProfileController")
+//@RequestMapping("/member/profile")
 public class ProfileController extends BaseController {
 
 	@Resource(name = "memberServiceImpl")

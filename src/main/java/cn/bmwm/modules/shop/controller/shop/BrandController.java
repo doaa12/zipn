@@ -24,8 +24,8 @@ import cn.bmwm.modules.shop.service.BrandService;
  *
  * @version 1.0
  */
-@Controller("shopBrandController")
-@RequestMapping("/brand")
+//@Controller("shopBrandController")
+//@RequestMapping("/brand")
 public class BrandController extends BaseController {
 
 	/** 每页记录数 */

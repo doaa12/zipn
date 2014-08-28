@@ -24,8 +24,8 @@ import cn.bmwm.modules.shop.service.ReviewService;
  *
  * @version 1.0
  */
-@Controller("shopMemberReviewController")
-@RequestMapping("/member/review")
+//@Controller("shopMemberReviewController")
+//@RequestMapping("/member/review")
 public class ReviewController extends BaseController {
 
 	/** 每页记录数 */

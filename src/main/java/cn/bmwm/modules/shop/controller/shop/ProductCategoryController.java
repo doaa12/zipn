@@ -20,8 +20,8 @@ import cn.bmwm.modules.shop.service.ProductCategoryService;
  *
  * @version 1.0
  */
-@Controller("shopProductCategoryController")
-@RequestMapping("/product_category")
+//@Controller("shopProductCategoryController")
+//@RequestMapping("/product_category")
 public class ProductCategoryController extends BaseController {
 
 	@Resource(name = "productCategoryServiceImpl")

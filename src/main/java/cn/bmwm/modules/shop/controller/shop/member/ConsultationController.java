@@ -24,8 +24,8 @@ import cn.bmwm.modules.shop.service.MemberService;
  *
  * @version 1.0
  */
-@Controller("shopMemberConsultationController")
-@RequestMapping("/member/consultation")
+//@Controller("shopMemberConsultationController")
+//@RequestMapping("/member/consultation")
 public class ConsultationController extends BaseController {
 
 	/** 每页记录数 */

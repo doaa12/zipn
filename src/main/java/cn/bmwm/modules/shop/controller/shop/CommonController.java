@@ -39,8 +39,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopCommonController")
-@RequestMapping("/common")
+//@Controller("shopCommonController")
+//@RequestMapping("/common")
 public class CommonController {
 
 	@Resource(name = "rsaServiceImpl")

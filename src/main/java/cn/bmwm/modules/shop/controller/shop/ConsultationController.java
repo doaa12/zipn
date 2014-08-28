@@ -38,8 +38,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopConsultationController")
-@RequestMapping("/consultation")
+//@Controller("shopConsultationController")
+//@RequestMapping("/consultation")
 public class ConsultationController extends BaseController {
 
 	/** 每页记录数 */

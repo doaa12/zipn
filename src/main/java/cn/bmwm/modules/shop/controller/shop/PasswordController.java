@@ -37,8 +37,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopPasswordController")
-@RequestMapping("/password")
+//@Controller("shopPasswordController")
+//@RequestMapping("/password")
 public class PasswordController extends BaseController {
 
 	@Resource(name = "captchaServiceImpl")

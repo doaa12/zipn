@@ -27,8 +27,8 @@ import cn.bmwm.modules.shop.service.ProductService;
  *
  * @version 1.0
  */
-@Controller("shopMemberFavoriteController")
-@RequestMapping("/member/favorite")
+//@Controller("shopMemberFavoriteController")
+//@RequestMapping("/member/favorite")
 public class FavoriteController extends BaseController {
 
 	/** 每页记录数 */

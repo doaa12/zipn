@@ -30,8 +30,8 @@ import cn.bmwm.modules.shop.service.MessageService;
  *
  * @version 1.0
  */
-@Controller("shopMemberMessageController")
-@RequestMapping("/member/message")
+//@Controller("shopMemberMessageController")
+//@RequestMapping("/member/message")
 public class MessageController extends BaseController {
 
 	/** 每页记录数 */

@@ -29,8 +29,8 @@ import cn.bmwm.modules.shop.service.ReceiverService;
  *
  * @version 1.0
  */
-@Controller("shopMemberReceiverController")
-@RequestMapping("/member/receiver")
+//@Controller("shopMemberReceiverController")
+//@RequestMapping("/member/receiver")
 public class ReceiverController extends BaseController {
 
 	/** 每页记录数 */

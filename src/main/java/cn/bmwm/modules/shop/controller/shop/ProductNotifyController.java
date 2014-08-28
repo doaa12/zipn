@@ -29,8 +29,8 @@ import cn.bmwm.modules.shop.service.ProductService;
  *
  * @version 1.0
  */
-@Controller("shopProductNotifyController")
-@RequestMapping("/product_notify")
+//@Controller("shopProductNotifyController")
+//@RequestMapping("/product_notify")
 public class ProductNotifyController extends BaseController {
 
 	@Resource(name = "productNotifyServiceImpl")

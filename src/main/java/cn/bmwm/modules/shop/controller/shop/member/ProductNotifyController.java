@@ -27,8 +27,8 @@ import cn.bmwm.modules.shop.service.ProductNotifyService;
  *
  * @version 1.0
  */
-@Controller("shopMemberProductNotifyController")
-@RequestMapping("/member/product_notify")
+//@Controller("shopMemberProductNotifyController")
+//@RequestMapping("/member/product_notify")
 public class ProductNotifyController extends BaseController {
 
 	/** 每页记录数 */

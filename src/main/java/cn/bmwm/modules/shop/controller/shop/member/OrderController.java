@@ -55,8 +55,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopMemberOrderController")
-@RequestMapping("/member/order")
+//@Controller("shopMemberOrderController")
+//@RequestMapping("/member/order")
 public class OrderController extends BaseController {
 
 	/** 每页记录数 */

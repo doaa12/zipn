@@ -39,8 +39,8 @@ import cn.bmwm.modules.shop.service.ProductService;
  *
  * @version 1.0
  */
-@Controller("shopCartController")
-@RequestMapping("/cart")
+//@Controller("shopCartController")
+//@RequestMapping("/cart")
 public class CartController extends BaseController {
 
 	@Resource(name = "memberServiceImpl")

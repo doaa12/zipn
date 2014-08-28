@@ -58,8 +58,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopRegisterController")
-@RequestMapping("/register")
+//@Controller("shopRegisterController")
+//@RequestMapping("/register")
 public class RegisterController extends BaseController {
 
 	@Resource(name = "captchaServiceImpl")

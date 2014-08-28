@@ -38,8 +38,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopReviewController")
-@RequestMapping("/review")
+//@Controller("shopReviewController")
+//@RequestMapping("/review")
 public class ReviewController extends BaseController {
 
 	/** 每页记录数 */

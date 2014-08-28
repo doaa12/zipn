@@ -28,8 +28,8 @@ import cn.bmwm.modules.shop.service.MemberService;
  *
  * @version 1.0
  */
-@Controller("shopMemberCouponCodeController")
-@RequestMapping("/member/coupon_code")
+//@Controller("shopMemberCouponCodeController")
+//@RequestMapping("/member/coupon_code")
 public class CouponCodeController extends BaseController {
 
 	/** 每页记录数 */

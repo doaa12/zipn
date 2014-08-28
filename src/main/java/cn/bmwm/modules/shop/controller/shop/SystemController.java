@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  * @version 1.0
  */
-@Controller("shopSystemController")
-@RequestMapping("/system")
+//@Controller("shopSystemController")
+//@RequestMapping("/system")
 public class SystemController {
 
 	/**

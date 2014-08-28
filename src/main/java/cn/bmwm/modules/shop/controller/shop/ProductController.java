@@ -43,8 +43,8 @@ import cn.bmwm.modules.shop.service.TagService;
  * 
  * @version 1.0
  */
-@Controller("shopProductController")
-@RequestMapping("/product")
+//@Controller("shopProductController")
+//@RequestMapping("/product")
 public class ProductController extends BaseController {
 
 	@Resource(name = "productServiceImpl")

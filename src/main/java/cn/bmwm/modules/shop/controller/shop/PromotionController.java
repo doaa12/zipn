@@ -23,8 +23,8 @@ import cn.bmwm.modules.shop.service.PromotionService;
  *
  * @version 1.0
  */
-@Controller("shopPromotionController")
-@RequestMapping("/promotion")
+//@Controller("shopPromotionController")
+//@RequestMapping("/promotion")
 public class PromotionController extends BaseController {
 
 	@Resource(name = "promotionServiceImpl")

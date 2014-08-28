@@ -29,8 +29,8 @@ import cn.bmwm.modules.shop.service.ReviewService;
  *
  * @version 1.0
  */
-@Controller("shopMemberController")
-@RequestMapping("/member")
+//@Controller("shopMemberController")
+//@RequestMapping("/member")
 public class MemberController extends BaseController {
 
 	/** 最新订单数 */

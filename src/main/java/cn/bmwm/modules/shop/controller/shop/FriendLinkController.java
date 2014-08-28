@@ -21,8 +21,8 @@ import cn.bmwm.modules.shop.service.FriendLinkService;
  *
  * @version 1.0
  */
-@Controller("shopFriendLinkController")
-@RequestMapping("/friend_link")
+//@Controller("shopFriendLinkController")
+//@RequestMapping("/friend_link")
 public class FriendLinkController extends BaseController {
 
 	@Resource(name = "friendLinkServiceImpl")

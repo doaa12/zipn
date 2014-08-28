@@ -48,8 +48,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Controller("shopLoginController")
-@RequestMapping("/login")
+//@Controller("shopLoginController")
+//@RequestMapping("/login")
 public class LoginController extends BaseController {
 
 	@Resource(name = "captchaServiceImpl")

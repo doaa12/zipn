@@ -28,8 +28,8 @@ import cn.bmwm.modules.shop.service.SearchService;
  *
  * @version 1.0
  */
-@Controller("shopArticleController")
-@RequestMapping("/article")
+//@Controller("shopArticleController")
+//@RequestMapping("/article")
 public class ArticleController extends BaseController {
 
 	/** 每页记录数 */
