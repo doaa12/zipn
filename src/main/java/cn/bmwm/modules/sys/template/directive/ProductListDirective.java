@@ -46,7 +46,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("productListDirective")
+//@Component("productListDirective")
 public class ProductListDirective extends BaseDirective {
 
 	/** "商品分类ID"参数名称 */

@@ -30,7 +30,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("promotionListDirective")
+//@Component("promotionListDirective")
 public class PromotionListDirective extends BaseDirective {
 
 	/** "是否已开始"参数名称 */

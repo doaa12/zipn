@@ -35,7 +35,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("articleListDirective")
+//@Component("articleListDirective")
 public class ArticleListDirective extends BaseDirective {
 
 	/** "文章分类ID"参数名称 */

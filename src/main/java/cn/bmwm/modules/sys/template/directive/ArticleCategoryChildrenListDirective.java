@@ -29,7 +29,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("articleCategoryChildrenListDirective")
+//@Component("articleCategoryChildrenListDirective")
 public class ArticleCategoryChildrenListDirective extends BaseDirective {
 
 	/** "文章分类ID"参数名称 */

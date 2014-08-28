@@ -36,7 +36,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("reviewListDirective")
+//@Component("reviewListDirective")
 public class ReviewListDirective extends BaseDirective {
 
 	/** "会员ID"参数名称 */

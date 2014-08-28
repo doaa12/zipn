@@ -27,7 +27,7 @@ import cn.bmwm.modules.shop.service.FriendLinkService;
  *
  * @version 1.0
  */
-@Service("friendLinkServiceImpl")
+//@Service("friendLinkServiceImpl")
 public class FriendLinkServiceImpl extends BaseServiceImpl<FriendLink, Long> implements FriendLinkService {
 
 	@Resource(name = "friendLinkDaoImpl")

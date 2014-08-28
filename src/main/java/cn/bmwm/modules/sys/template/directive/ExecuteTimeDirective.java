@@ -25,7 +25,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("executeTimeDirective")
+//@Component("executeTimeDirective")
 public class ExecuteTimeDirective extends BaseDirective {
 
 	/** 变量名称 */

@@ -28,7 +28,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-@Component("seoDirective")
+//@Component("seoDirective")
 public class SeoDirective extends BaseDirective {
 
 	/** "类型"参数名称 */
