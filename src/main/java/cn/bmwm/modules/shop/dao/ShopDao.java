@@ -4,6 +4,7 @@
 package cn.bmwm.modules.shop.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
@@ -25,6 +26,16 @@ public interface ShopDao extends BaseDao<Shop,Long> {
 	 * @return
 	 */
 	Page<Shop> findPage(ProductCategory productCategory, String city, Boolean isTop, Boolean isList, Pageable pageable);
+	
+	/**
+	 * 查找店铺列表
+	 * @param city : 城市
+	 * @param category : 分类
+	 * @param page : 页码
+	 * @param size : 每页记录数
+	 * @return
+	 */
+	Map<String,Object> findList(String city, ProductCategory category, int page, int size);
 	
 	/**
 	 * 查找推荐店铺

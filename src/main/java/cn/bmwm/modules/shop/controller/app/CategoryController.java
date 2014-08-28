@@ -23,11 +23,12 @@ import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopService;
 
 /**
+ * 商品分类
  * @author zhoupuyue
  * @date 2014-8-28
  */
 @Controller("appCategoryController")
-@RequestMapping(value = "/app/cat")
+@RequestMapping(value = "/app")
 public class CategoryController {
 
 	@Resource(name = "productCategoryServiceImpl")
@@ -40,7 +41,9 @@ public class CategoryController {
 	private ShopService shopService;
 	
 	/**
-	 * 分类
+	 * 区分一级分类和二级以下分类
+	 * 一级分类下,按子分类返回该分类下的的推荐店铺和推荐商品
+	 * 二级以下分类,返回该分类下的商品列表
 	 * @param catId : 分类ID
 	 * @param city : 城市
 	 * @param type : 1:商品列表,2:店铺列表,默认是商品列表
@@ -100,7 +103,7 @@ public class CategoryController {
 			
 			return result;
 		
-		//二级以下分类,显示商品列表或者店铺列表
+		//二级以下分类,显示商品列表
 		}else{
 			
 			if(page == null) page = 1;

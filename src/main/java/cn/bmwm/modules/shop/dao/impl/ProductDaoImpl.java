@@ -169,7 +169,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		countQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
 		long total = countQuery.getSingleResult();
 		
-		jpql = " select product from Product product where product.treePath like :treePath and product.city like :city order by product.sales desc ";
+		jpql = " select product from Product product where product.treePath like :treePath and product.city like :city order by product.isTop desc,product.sales desc ";
 		TypedQuery<Product> listQuery = entityManager.createQuery(jpql, Product.class);
 		listQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
 		

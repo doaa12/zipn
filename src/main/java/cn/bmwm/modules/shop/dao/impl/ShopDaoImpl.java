@@ -3,7 +3,9 @@
  */
 package cn.bmwm.modules.shop.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.FlushModeType;
 import javax.persistence.TypedQuery;
@@ -28,7 +30,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 
 	/**
-	 * 查找店铺分页
+	 * 后台管理,查找店铺分页
 	 * @param productCategory
 	 * @param city
 	 * @param pageable
@@ -59,6 +61,41 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("isTop")));
 		
 		return super.findPage(criteriaQuery, pageable);
+		
+	}
+	
+	/**
+	 * 查找店铺列表
+	 * @param city : 城市
+	 * @param category : 分类
+	 * @param page : 页码
+	 * @param size : 每页记录数
+	 * @return
+	 */
+	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
+		
+		String jpql = " select count(*) from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.city like :city ";
+		TypedQuery<Long> countQuery = entityManager.createQuery(jpql, Long.class);
+		countQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		long total = countQuery.getSingleResult();
+		
+		jpql = " select shop from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.city like :city order by shop.isTop desc, shop.totalScore / shop.scoreTimes desc ";
+		TypedQuery<Shop> listQuery = entityManager.createQuery(jpql, Shop.class);
+		listQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		
+		int start = (page - 1) * size;
+		listQuery.setFirstResult(start);
+		listQuery.setMaxResults(size);
+		
+		List<Shop> list = listQuery.getResultList();
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("page", page);
+		result.put("size", size);
+		result.put("total", total);
+		result.put("shops", list);
+		
+		return result;
 		
 	}
 	

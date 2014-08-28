@@ -48,7 +48,10 @@ public class IndexController extends BaseController {
 	private MemberService memberService;
 	
 	/**
-	 * App 首页
+	 * App - 首页
+	 * 根据不同城市,查找该城市顶级分类下的置顶店铺和置顶商品,以及所有商品分类
+	 * 商品查找:首先根据管理员设置查找,如果管理员没有设置置顶商品,再根据销量查找,最多返回10个商品
+	 * 店铺查找:根据管理员设置查找,如果管理员没有设置置顶店铺,忽略该分类
 	 * @return
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
