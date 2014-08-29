@@ -113,10 +113,12 @@
 				<entry key="message" value-ref="messageMethod" />
 				<entry key="abbreviate" value-ref="abbreviateMethod" />
 				<entry key="currency" value-ref="currencyMethod" />
-				<entry key="execute_time" value-ref="executeTimeDirective" />
 				<entry key="flash_message" value-ref="flashMessageDirective" />
-				<entry key="current_member" value-ref="currentMemberDirective" />
 				<entry key="pagination" value-ref="paginationDirective" />
+				
+				<!--  
+				<entry key="execute_time" value-ref="executeTimeDirective" />
+				<entry key="current_member" value-ref="currentMemberDirective" />
 				<entry key="seo" value-ref="seoDirective" />
 				<entry key="ad_position" value-ref="adPositionDirective" />
 				<entry key="member_attribute_list" value-ref="memberAttributeListDirective" />
@@ -135,6 +137,8 @@
 				<entry key="review_list" value-ref="reviewListDirective" />
 				<entry key="consultation_list" value-ref="consultationListDirective" />
 				<entry key="promotion_list" value-ref="promotionListDirective" />
+				-->
+				
 			</map>
 		</property>
 	</bean>

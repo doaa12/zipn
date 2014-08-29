@@ -1,5 +1,6 @@
 package cn.bmwm.modules.shop.controller.app;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.Item;
+import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.shop.BaseController;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
@@ -62,9 +65,9 @@ public class IndexController extends BaseController {
 		
 		List<ProductCategory> categories = productCategoryService.findHierarchicalTree();
 		
-		List<Map<String,Object>> products = new LinkedList<Map<String,Object>>();
+		List<ItemCategory> products = new ArrayList<ItemCategory>();
 		
-		List<Map<String,Object>> shops = new LinkedList<Map<String,Object>>();
+		List<ItemCategory> shops = new ArrayList<ItemCategory>();
 		
 		for(ProductCategory category : categories) {
 			
@@ -74,35 +77,96 @@ public class IndexController extends BaseController {
 				productList = productService.findHotList(city, category);
 			}
 			
-			Map<String,Object> productMap = new HashMap<String,Object>();
-			
-			productMap.put("categoryId", category.getId());
-			productMap.put("categoryName", category.getName());
-			productMap.put("productList", productList);
-			
-			products.add(productMap);
+			ItemCategory productItemCategory = this.getProductItemCategory(category, productList);
 			
 			List<Shop> shopList = shopService.findRecommendList(city, category);
 			
-			if(shopList == null || shopList.size() == 0) continue;
+			ItemCategory shopItemCategory = this.getShopItemCategory(category, shopList);
 			
-			Map<String,Object> shopMap = new HashMap<String,Object>();
-			shopMap.put("categoryId", category.getId());
-			shopMap.put("categoryName", category.getName());
-			shopMap.put("shopList", shopList);
+			if(productItemCategory != null) products.add(productItemCategory);
 			
-			shops.add(shopMap);
+			if(shopItemCategory != null) shops.add(shopItemCategory);
 			
 		}
+		
+		List<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
+		
+		if(shops.size() > 0) itemCategoryList.addAll(shops);
+		
+		if(products.size() > 0) itemCategoryList.addAll(products);
 		
 		//TODO:收藏店铺动态，待定，需要登录后才可以显示
 		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
 		
-		result.put("categories", categories);
-		result.put("shops", shops);
-		result.put("products", products);
+		result.put("flag", 1);
+		result.put("version", 1);
+		result.put("data", itemCategoryList);
 		
 		return result;
+		
+	}
+	
+	/**
+	 * 获取首页置顶商品
+	 * @param category
+	 * @param list
+	 * @return
+	 */
+	public ItemCategory getProductItemCategory(ProductCategory category, List<Product> list) {
+		
+		if(list == null || list.size() == 0) return null;
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		for(Product product : list) {
+			Item item = new Item();
+			item.setCode(product.getId());
+			item.setTitle(product.getName());
+			item.setType(2);
+			item.setImageurl(product.getImage());
+			itemList.add(item);
+		}
+		
+		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setCode(category.getId());
+		itemCategory.setShowmore(1);
+		itemCategory.setShowtype(3);
+		itemCategory.setTitle(category.getName());
+		itemCategory.setDataList(itemList);
+		
+		return itemCategory;
+		
+	}
+	
+	/**
+	 * 获取首页置顶店铺
+	 * @param category
+	 * @param list
+	 * @return
+	 */
+	public ItemCategory getShopItemCategory(ProductCategory category, List<Shop> list) {
+		
+		if(list == null || list.size() == 0) return null;
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		for(Shop shop : list) {
+			Item item = new Item();
+			item.setCode(shop.getId());
+			item.setTitle(shop.getName());
+			item.setType(1);
+			item.setImageurl(shop.getImage());
+			itemList.add(item);
+		}
+		
+		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setCode(category.getId());
+		itemCategory.setShowmore(1);
+		itemCategory.setShowtype(3);
+		itemCategory.setTitle(category.getName());
+		itemCategory.setDataList(itemList);
+		
+		return itemCategory;
 		
 	}
 	
