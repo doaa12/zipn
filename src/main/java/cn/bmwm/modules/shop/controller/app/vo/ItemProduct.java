@@ -15,12 +15,12 @@ public class ItemProduct {
 	/**
 	 * 商品名称
 	 */
-	private String name;
+	private String name = "";
 	
 	/**
 	 * 商品图片
 	 */
-	private String imageurl;
+	private String imageurl = "";
 	
 	/**
 	 * 商品价格
@@ -35,12 +35,12 @@ public class ItemProduct {
 	/**
 	 * 商品属性1
 	 */
-	private String attribute1;
+	private String attribute1 = "";
 	
 	/**
 	 * 商品属性2
 	 */
-	private String attribute2;
+	private String attribute2 = "";
 
 	public Long getId() {
 		return id;
@@ -55,7 +55,9 @@ public class ItemProduct {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if(name != null) {
+			this.name = name;
+		}
 	}
 
 	public String getImageurl() {
@@ -63,7 +65,9 @@ public class ItemProduct {
 	}
 
 	public void setImageurl(String imageurl) {
-		this.imageurl = imageurl;
+		if(imageurl != null) {
+			this.imageurl = imageurl;
+		}
 	}
 
 	public double getPrice() {
@@ -87,7 +91,9 @@ public class ItemProduct {
 	}
 
 	public void setAttribute1(String attribute1) {
-		this.attribute1 = attribute1;
+		if(attribute1 != null) {
+			this.attribute1 = attribute1;
+		}
 	}
 
 	public String getAttribute2() {
@@ -95,7 +101,9 @@ public class ItemProduct {
 	}
 
 	public void setAttribute2(String attribute2) {
-		this.attribute2 = attribute2;
+		if(attribute2 != null) {
+			this.attribute2 = attribute2;
+		}
 	}
 	
 }
