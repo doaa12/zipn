@@ -3,8 +3,6 @@
  */
 package cn.bmwm.modules.shop.controller.app;
 
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
+import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
@@ -38,14 +38,14 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city, Integer page, Integer size) {
+	public ItemPage<Product> list(Long catId, String city, Integer page, Integer size) {
 		
 		ProductCategory category = productCategoryService.find(catId);
 		
 		if(page == null) page = 1;
 		if(size == null) size = 10;
 		
-		Map<String,Object> result = productService.findList(city, category, page, size);
+		ItemPage<Product> result = productService.findList(city, category, page, size);
 		
 		return result;
 		

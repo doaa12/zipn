@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
-import cn.bmwm.modules.shop.controller.shop.BaseController;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -33,7 +31,7 @@ import cn.bmwm.modules.shop.service.ShopService;
  */
 @Controller("appIndexController")
 @RequestMapping(value = "/app")
-public class IndexController extends BaseController {
+public class IndexController extends AppBaseController {
 	
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
@@ -63,11 +61,11 @@ public class IndexController extends BaseController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
-		List<ProductCategory> categories = productCategoryService.findHierarchicalTree();
+		List<ProductCategory> categories = productCategoryService.findRoots();
 		
-		List<ItemCategory> products = new ArrayList<ItemCategory>();
+		List<ItemCategory> products = new LinkedList<ItemCategory>();
 		
-		List<ItemCategory> shops = new ArrayList<ItemCategory>();
+		List<ItemCategory> shops = new LinkedList<ItemCategory>();
 		
 		for(ProductCategory category : categories) {
 			
@@ -101,72 +99,9 @@ public class IndexController extends BaseController {
 		result.put("flag", 1);
 		result.put("version", 1);
 		result.put("data", itemCategoryList);
+		result.put("categories", categories);
 		
 		return result;
-		
-	}
-	
-	/**
-	 * 获取首页置顶商品
-	 * @param category
-	 * @param list
-	 * @return
-	 */
-	public ItemCategory getProductItemCategory(ProductCategory category, List<Product> list) {
-		
-		if(list == null || list.size() == 0) return null;
-		
-		List<Item> itemList = new ArrayList<Item>();
-		
-		for(Product product : list) {
-			Item item = new Item();
-			item.setCode(product.getId());
-			item.setTitle(product.getName());
-			item.setType(2);
-			item.setImageurl(product.getImage());
-			itemList.add(item);
-		}
-		
-		ItemCategory itemCategory = new ItemCategory();
-		itemCategory.setCode(category.getId());
-		itemCategory.setShowmore(1);
-		itemCategory.setShowtype(3);
-		itemCategory.setTitle(category.getName());
-		itemCategory.setDataList(itemList);
-		
-		return itemCategory;
-		
-	}
-	
-	/**
-	 * 获取首页置顶店铺
-	 * @param category
-	 * @param list
-	 * @return
-	 */
-	public ItemCategory getShopItemCategory(ProductCategory category, List<Shop> list) {
-		
-		if(list == null || list.size() == 0) return null;
-		
-		List<Item> itemList = new ArrayList<Item>();
-		
-		for(Shop shop : list) {
-			Item item = new Item();
-			item.setCode(shop.getId());
-			item.setTitle(shop.getName());
-			item.setType(1);
-			item.setImageurl(shop.getImage());
-			itemList.add(item);
-		}
-		
-		ItemCategory itemCategory = new ItemCategory();
-		itemCategory.setCode(category.getId());
-		itemCategory.setShowmore(1);
-		itemCategory.setShowtype(3);
-		itemCategory.setTitle(category.getName());
-		itemCategory.setDataList(itemList);
-		
-		return itemCategory;
 		
 	}
 	

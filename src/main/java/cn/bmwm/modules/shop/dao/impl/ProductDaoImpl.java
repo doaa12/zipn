@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.GoodsDao;
 import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.SnDao;
@@ -162,7 +162,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
+	public ItemPage<Product> findList(String city, ProductCategory category, int page, int size) {
 		
 		String jpql = " select count(*) from  Product product where product.treePath like :treePath and product.city like :city ";
 		TypedQuery<Long> countQuery = entityManager.createQuery(jpql, Long.class);
@@ -179,11 +179,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		
 		List<Product> list = listQuery.getResultList();
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("page", page);
-		result.put("size", size);
-		result.put("total", total);
-		result.put("products", list);
+		ItemPage<Product> result = new ItemPage<Product>();
+		result.setPage(page);
+		result.setTotal(total);
+		result.setSize(size);
+		result.setList(list);
 		
 		return result;
 		

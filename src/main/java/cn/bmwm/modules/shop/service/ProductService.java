@@ -13,6 +13,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.entity.Attribute;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Member;
@@ -195,7 +196,7 @@ public interface ProductService extends BaseService<Product, Long> {
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	Map<String,Object> findList(String city, ProductCategory category, int page, int size);
+	ItemPage<Product> findList(String city, ProductCategory category, int page, int size);
 	
 	/**
 	 * 查找商品销售信息
