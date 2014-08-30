@@ -1,5 +1,6 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,8 +8,10 @@ import java.util.List;
  * @author zby
  * 2014-8-30 上午11:41:24
  */
-public class ItemPage<T> {
+public class ItemPage<T> implements Serializable {
 	
+	private static final long serialVersionUID = -6872481405850426548L;
+
 	/**
 	 * 页码
 	 */

@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.dao.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -160,28 +161,53 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
+	 * @param order : 排序方式，1：促销，2：新品，3：销量，4：推荐
 	 * @return
 	 */
-	public ItemPage<Product> findList(String city, ProductCategory category, int page, int size) {
+	public ItemPage<Product> findList(String city, ProductCategory category, Integer page, Integer size, Integer order) {
 		
-		String jpql = " select count(*) from  Product product where product.treePath like :treePath and product.city like :city ";
-		TypedQuery<Long> countQuery = entityManager.createQuery(jpql, Long.class);
-		countQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
-		long total = countQuery.getSingleResult();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
 		
-		jpql = " select product from Product product where product.treePath like :treePath and product.city like :city order by product.isTop desc,product.sales desc ";
-		TypedQuery<Product> listQuery = entityManager.createQuery(jpql, Product.class);
-		listQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		Predicate restrictions = cb.conjunction();
+		
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		
 		int start = (page - 1) * size;
-		listQuery.setFirstResult(start);
-		listQuery.setMaxResults(size);
 		
-		List<Product> list = listQuery.getResultList();
+		cq.where(restrictions);
+		
+		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
+		
+		if(order == 1) {
+			orderList.add(cb.desc(cb.size(root.<Collection<Promotion>>get("promotions"))));
+			orderList.add(cb.desc(root.get("createDate")));
+		}else if(order == 2) {
+			orderList.add(cb.desc(root.get("createDate")));
+		}else if(order == 3) {
+			orderList.add(cb.desc(root.get("sales")));
+			orderList.add(cb.desc(root.get("createDate")));
+		}else if(order == 4) {
+			orderList.add(cb.desc(root.get("isTop")));
+			orderList.add(cb.desc(root.get("createDate")));
+		}
+		
+		cq.orderBy(orderList);
+		
+		TypedQuery<Product> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
+		query.setFirstResult(start);
+		query.setMaxResults(size);
+		
+		List<Product> list = query.getResultList();
 		
 		ItemPage<Product> result = new ItemPage<Product>();
+		
 		result.setPage(page);
-		result.setTotal(total);
 		result.setSize(size);
 		result.setList(list);
 		

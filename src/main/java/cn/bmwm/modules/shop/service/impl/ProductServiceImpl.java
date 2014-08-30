@@ -128,11 +128,12 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
+	 * @param order : 排序方式
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#city + #category.id + #page + #size + 'findList'")
-	public ItemPage<Product> findList(String city, ProductCategory category, int page, int size) {
-		return productDao.findList(city, category, page, size);
+	@Cacheable(value = "product", key = "#city + #category.id + #page + #size + #order + 'findProductList'")
+	public ItemPage<Product> findProductList(String city, ProductCategory category, Integer page, Integer size, Integer order) {
+		return productDao.findList(city, category, page, size, order);
 	}
 
 	public List<Product> findList(ProductCategory productCategory, Date beginDate, Date endDate, Integer first, Integer count) {

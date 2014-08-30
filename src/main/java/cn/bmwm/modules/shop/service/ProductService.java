@@ -194,9 +194,10 @@ public interface ProductService extends BaseService<Product, Long> {
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
+	 * @param order : 排序方式
 	 * @return
 	 */
-	ItemPage<Product> findList(String city, ProductCategory category, int page, int size);
+	ItemPage<Product> findProductList(String city, ProductCategory category, Integer page, Integer size, Integer order);
 	
 	/**
 	 * 查找商品销售信息

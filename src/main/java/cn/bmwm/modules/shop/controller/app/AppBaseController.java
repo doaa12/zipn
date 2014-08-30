@@ -82,36 +82,6 @@ public class AppBaseController extends BaseController {
 		
 	}
 	
-	/**
-	 * 获取商品列表
-	 * @param category
-	 * @param list
-	 * @return
-	 */
-	protected ItemCategory getCategoryProductList(ProductCategory category, List<Product> list) {
-		
-		if(list == null || list.size() == 0) return null;
-		
-		List<Item> itemList = new ArrayList<Item>();
-		
-		for(Product product : list) {
-			Item item = new Item();
-			item.setCode(product.getId());
-			item.setTitle(product.getName());
-			item.setType(3);
-			item.setImageurl(product.getImage());
-			itemList.add(item);
-		}
-		
-		ItemCategory itemCategory = new ItemCategory();
-		itemCategory.setCode(category.getId());
-		itemCategory.setShowmore(0);
-		itemCategory.setShowtype(3);
-		itemCategory.setTitle(category.getName());
-		itemCategory.setDataList(itemList);
-		
-		return itemCategory;
-		
-	}
+	
 	
 }
