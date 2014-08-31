@@ -145,6 +145,16 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	public ItemPage<Product> findProductList(String city, ProductCategory category, Integer page, Integer size, Integer order) {
 		return productDao.findList(city, category, page, size, order);
 	}
+	
+	/**
+	 * 查询店铺商品数量
+	 * @param shop
+	 * @return
+	 */
+	@Cacheable(value = "product", key = "#shop.id + 'findShopProductCount'")
+	public Long findShopProductCount(Shop shop) {
+		return productDao.findShopProductCount(shop);
+	}
 
 	public List<Product> findList(ProductCategory productCategory, Date beginDate, Date endDate, Integer first, Integer count) {
 		return productDao.findList(productCategory, beginDate, endDate, first, count);

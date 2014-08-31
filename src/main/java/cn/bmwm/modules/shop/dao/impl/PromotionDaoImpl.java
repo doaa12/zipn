@@ -7,11 +7,12 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.FlushModeType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.dao.PromotionDao;
 import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
 
 /**
  * Dao - 促销
@@ -51,6 +53,18 @@ public class PromotionDaoImpl extends BaseDaoImpl<Promotion, Long> implements Pr
 		}
 		criteriaQuery.where(restrictions);
 		return super.findList(criteriaQuery, null, count, filters, orders);
+	}
+	
+	/**
+	 * 查询店铺促销商品数量
+	 * @param shop
+	 * @return
+	 */
+	public Long findShopPromotionCount(Shop shop) {
+		String jpql = "select count(*) from Promotion promotion where promotion.beginDate <= :date and promotion.endDate >= :date and promotion.shop = :shop ";
+		Date date = new Date();
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("date", date).setParameter("shop", shop).getSingleResult();
 	}
 
 }

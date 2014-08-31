@@ -224,6 +224,17 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		return result;
 		
 	}
+	
+	/**
+	 * 查询店铺商品数量
+	 * @param shop
+	 * @return
+	 */
+	public Long findShopProductCount(Shop shop) {
+		String jpql = " select count(*) from Product product where product.shop = :shop and product.isList = true and product.isGift = false ";
+		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).getSingleResult();
+	}
 
 	public List<Product> search(String keyword, Boolean isGift, Integer count) {
 		if (StringUtils.isEmpty(keyword)) {

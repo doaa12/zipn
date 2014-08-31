@@ -9,6 +9,7 @@ import java.util.List;
 import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
 
 
 /**
@@ -54,5 +55,12 @@ public interface PromotionService extends BaseService<Promotion, Long> {
 	 * @return 促销(缓存)
 	 */
 	List<Promotion> findList(Boolean hasBegun, Boolean hasEnded, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion);
+	
+	/**
+	 * 查询店铺促销商品数量
+	 * @param shop
+	 * @return
+	 */
+	Long findShopPromotionCount(Shop shop);
 
 }

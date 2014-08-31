@@ -44,12 +44,12 @@ public class ShopDetail implements Serializable {
 	/**
 	 * 店铺商品数量
 	 */
-	private Integer allProduct;
+	private Long allProduct;
 	
 	/**
-	 * 促销商品
+	 * 促销促销商品数量
 	 */
-	private Integer saleProduct;
+	private Long saleProduct;
 	
 	/**
 	 * 店铺状态，1:空闲，2：忙碌，3：火爆
@@ -142,20 +142,20 @@ public class ShopDetail implements Serializable {
 	public void setCollectFlag(Integer collectFlag) {
 		this.collectFlag = collectFlag;
 	}
-
-	public Integer getAllProduct() {
+	
+	public Long getAllProduct() {
 		return allProduct;
 	}
 
-	public void setAllProduct(Integer allProduct) {
+	public void setAllProduct(Long allProduct) {
 		this.allProduct = allProduct;
 	}
-	
-	public Integer getSaleProduct() {
+
+	public Long getSaleProduct() {
 		return saleProduct;
 	}
 
-	public void setSaleProduct(Integer saleProduct) {
+	public void setSaleProduct(Long saleProduct) {
 		this.saleProduct = saleProduct;
 	}
 

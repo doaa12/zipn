@@ -18,6 +18,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.dao.PromotionDao;
 import cn.bmwm.modules.shop.entity.Promotion;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.PromotionService;
 
 /**
@@ -37,12 +38,20 @@ public class PromotionServiceImpl extends BaseServiceImpl<Promotion, Long> imple
 		super.setBaseDao(promotionDao);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Promotion> findList(Boolean hasBegun, Boolean hasEnded, Integer count, List<Filter> filters, List<Order> orders) {
 		return promotionDao.findList(hasBegun, hasEnded, count, filters, orders);
 	}
+	
+	/**
+	 * 查询店铺促销商品数量
+	 * @param shop
+	 * @return
+	 */
+	@Cacheable(value = "promotion", key = "#shop.id + 'findShopPromotionCount'")
+	public Long findShopPromotionCount(Shop shop) {
+		return promotionDao.findShopPromotionCount(shop);
+	}
 
-	@Transactional(readOnly = true)
 	@Cacheable("promotion")
 	public List<Promotion> findList(Boolean hasBegun, Boolean hasEnded, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion) {
 		return promotionDao.findList(hasBegun, hasEnded, count, filters, orders);

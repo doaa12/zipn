@@ -207,6 +207,13 @@ public interface ProductService extends BaseService<Product, Long> {
 	ItemPage<Product> findProductList(String city, ProductCategory category, Integer page, Integer size, Integer order);
 	
 	/**
+	 * 查询店铺商品数量
+	 * @param shop
+	 * @return
+	 */
+	Long findShopProductCount(Shop shop);
+	
+	/**
 	 * 查找商品销售信息
 	 * 
 	 * @param beginDate

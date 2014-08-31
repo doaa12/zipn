@@ -299,5 +299,12 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	 * @return
 	 */
 	ItemPage<Product> findList(String city, ProductCategory category, Integer page, Integer size, Integer order);
+	
+	/**
+	 * 查询店铺商品数量
+	 * @param shop
+	 * @return
+	 */
+	Long findShopProductCount(Shop shop);
 
 }

@@ -2,6 +2,7 @@ package cn.bmwm.modules.shop.service.impl;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import cn.bmwm.modules.shop.dao.ShopReviewDao;
@@ -30,6 +31,7 @@ public class ShopReviewServiceImpl extends BaseServiceImpl<ShopReview,Long> impl
 	 * @param shop
 	 * @return
 	 */
+	@Cacheable(value = "shopReview", key = "#shop.id + 'findLatestReview'")
 	public ShopReview findLatestReview(Shop shop) {
 		return shopReviewDao.findLatestReview(shop);
 	}

@@ -24,6 +24,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopReview;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
+import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.ShopReviewService;
 import cn.bmwm.modules.shop.service.ShopService;
 
@@ -47,6 +48,9 @@ public class ShopController extends AppBaseController {
 	
 	@Resource(name = "shopReviewServiceImpl")
 	private ShopReviewService shopReviewService;
+	
+	@Resource(name = "promotionServiceImpl")
+	private PromotionService promotionService;
 	
 	/**
 	 * 店铺列表
@@ -145,8 +149,8 @@ public class ShopController extends AppBaseController {
 		detail.setHeaderImageurl(shop.getLogo());
 		detail.setScore(shop.getAvgScore());
 		detail.setCollectFlag(0);
-		detail.setAllProduct(shop.getProducts().size());
-		detail.setSaleProduct(10);
+		detail.setAllProduct(productService.findShopProductCount(shop));
+		detail.setSaleProduct(promotionService.findShopPromotionCount(shop));
 		detail.setSaleStatus(shop.getStatus());
 		detail.setDesc(shop.getDescription());
 		detail.setType(shop.getShopType());
