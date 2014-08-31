@@ -45,6 +45,7 @@ public class AppBaseController extends BaseController {
 		itemCategory.setShowtype(3);
 		itemCategory.setTitle(category.getName());
 		itemCategory.setDataList(itemList);
+		itemCategory.setMoretype(2);
 		
 		return itemCategory;
 		
@@ -77,6 +78,7 @@ public class AppBaseController extends BaseController {
 		itemCategory.setShowtype(3);
 		itemCategory.setTitle(category.getName());
 		itemCategory.setDataList(itemList);
+		itemCategory.setMoretype(1);
 		
 		return itemCategory;
 		

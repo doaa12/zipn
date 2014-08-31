@@ -114,6 +114,16 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	}
 	
 	/**
+	 * 查找店铺推荐商品
+	 * @param shop ： 店铺
+	 * @return
+	 */
+	@Cacheable(value = "product", key = "#shop.id + 'findShopRecommendList'")
+	public List<Product> findShopRecommendList(Shop shop) {
+		return productDao.findShopRecommendList(shop);
+	}
+	
+	/**
 	 * 查找热销商品
 	 * @return
 	 */

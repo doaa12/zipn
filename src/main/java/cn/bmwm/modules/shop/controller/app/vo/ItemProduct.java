@@ -1,7 +1,7 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
 /**
- * 商品VO类
+ * 商品列表VO类
  * @author zby
  * 2014-8-30 下午4:55:31
  */

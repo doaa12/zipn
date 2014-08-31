@@ -4,9 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,7 +14,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -105,14 +102,19 @@ public class Shop extends BaseEntity {
 	private Set<Specification> specifications = new HashSet<Specification>();
 	
 	/**
-	 * 店铺图片
+	 * 店铺评论
 	 */
-	private Set<ShopImage> shopImages = new HashSet<ShopImage>();
+	private Set<ShopReview> reviews = new HashSet<ShopReview>();
 	
 	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
+	
+	/**
+	 * 店铺所在区域
+	 */
+	private Area area;
 	
 	/**
 	 * 是否置顶
@@ -135,9 +137,14 @@ public class Shop extends BaseEntity {
 	private String address;
 	
 	/**
-	 * 店铺列表展示图片
+	 * 店铺图片
 	 */
 	private String image;
+	
+	/**
+	 * 店铺Logo
+	 */
+	private String logo;
 	
 	/**
 	 * 总评分数
@@ -154,6 +161,25 @@ public class Shop extends BaseEntity {
 	 */
 	private String treePath;
 	
+	/**
+	 * 店铺类型，比如餐厅
+	 */
+	private String shopType;
+	
+	/**
+	 * 平均价格
+	 */
+	private Integer avgPrice;
+	
+	/**
+	 * 店铺经度
+	 */
+	private Integer longitude;
+	
+	/**
+	 * 店铺纬度
+	 */
+	private Integer latitude;
 	
 	/**
 	 * 获取店铺名称
@@ -331,20 +357,16 @@ public class Shop extends BaseEntity {
 	}
 	
 	/**
-	 * @return the shopImages
+	 * 店铺评论
+	 * @return
 	 */
-	@Valid
-	@ElementCollection
-	@CollectionTable(name = "xx_shop_shop_image")
-	public Set<ShopImage> getShopImages() {
-		return shopImages;
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	public Set<ShopReview> getReviews() {
+		return reviews;
 	}
 
-	/**
-	 * @param shopImages the shopImages to set
-	 */
-	public void setShopImages(Set<ShopImage> shopImages) {
-		this.shopImages = shopImages;
+	public void setReviews(Set<ShopReview> reviews) {
+		this.reviews = reviews;
 	}
 
 	/**
@@ -361,6 +383,19 @@ public class Shop extends BaseEntity {
 		this.productCategory = productCategory;
 	}
 	
+	/**
+	 * 店铺所在区域
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
 	/**
 	 * 获取是否置顶
 	 * @return
@@ -398,6 +433,14 @@ public class Shop extends BaseEntity {
 	 */
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	/**
@@ -444,6 +487,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	public Long getScoreTimes() {
+		if(scoreTimes == null) return 0L;
 		return scoreTimes;
 	}
 
@@ -456,10 +500,9 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@Transient
-	public double getAvgScore() {
-		if(scoreTimes == 0) return 5;
-		double avg = totalScore / (scoreTimes * 1.0);
-		return Math.round(avg * 10) / 10.0;
+	public int getAvgScore() {
+		if(scoreTimes == null || scoreTimes == 0) return 5;
+		return (int)(totalScore / scoreTimes);
 	}
 
 	/**
@@ -474,6 +517,42 @@ public class Shop extends BaseEntity {
 		this.treePath = treePath;
 	}
 	
+	public String getShopType() {
+		return shopType;
+	}
+
+	public void setShopType(String shopType) {
+		this.shopType = shopType;
+	}
+
+	/**
+	 * 平均价格
+	 * @return
+	 */
+	public Integer getAvgPrice() {
+		return avgPrice;
+	}
+
+	public void setAvgPrice(Integer avgPrice) {
+		this.avgPrice = avgPrice;
+	}
+	
+	public Integer getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Integer longitude) {
+		this.longitude = longitude;
+	}
+
+	public Integer getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Integer latitude) {
+		this.latitude = latitude;
+	}
+
 	public static void main(String[] args) {
 		long total = 10;
 		long times = 3;

@@ -4,7 +4,6 @@
 package cn.bmwm.modules.shop.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.ShopDao;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -51,11 +51,13 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
+	 * @param x : 纬度
+	 * @param y : 经度
 	 * @return
 	 */
-	@Cacheable(value = "shop", key = "#city + #category.id + #page + #size + 'findList'")
-	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
-		return shopDao.findList(city, category, page, size);
+	@Cacheable(value = "shop", key = "#city + #category.id + #page + #size + #order + #x + #y + 'findList'")
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
+		return shopDao.findList(city, category, page, size, order, x, y);
 	}
 	
 	/**

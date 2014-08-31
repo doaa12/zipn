@@ -31,6 +31,7 @@ public class ItemPage<T> implements Serializable {
 	 * 结果列表
 	 */
 	private List<T> list;
+	
 
 	public Integer getPage() {
 		return page;

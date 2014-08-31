@@ -4,10 +4,10 @@
 package cn.bmwm.modules.shop.service;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 
@@ -35,7 +35,7 @@ public interface ShopService extends BaseService<Shop,Long>{
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	Map<String,Object> findList(String city, ProductCategory category, int page, int size);
+	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y);
 	
 	/**
 	 * 查找推荐店铺

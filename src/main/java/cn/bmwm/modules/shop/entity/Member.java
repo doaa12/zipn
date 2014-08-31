@@ -199,8 +199,13 @@ public class Member extends BaseEntity {
 	/** 收货地址 */
 	private Set<Receiver> receivers = new HashSet<Receiver>();
 
-	/** 评论 */
+	/** 商品评论 */
 	private Set<Review> reviews = new HashSet<Review>();
+	
+	/**
+	 * 店铺评论
+	 */
+	private Set<ShopReview> shopReviews = new HashSet<ShopReview>();
 
 	/** 咨询 */
 	private Set<Consultation> consultations = new HashSet<Consultation>();
@@ -1032,6 +1037,20 @@ public class Member extends BaseEntity {
 	 */
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
+	}
+	
+	/**
+	 * 店铺评论
+	 * @return
+	 */
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OrderBy("createDate desc")
+	public Set<ShopReview> getShopReviews() {
+		return shopReviews;
+	}
+
+	public void setShopReviews(Set<ShopReview> shopReviews) {
+		this.shopReviews = shopReviews;
 	}
 
 	/**

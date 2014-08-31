@@ -1,32 +1,44 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.io.Serializable;
+
 /**
- * 显示项VO
+ * 店铺活动
  * @author zby
- * 2014-8-29 下午9:08:22
+ * 2014-8-31 上午8:59:36
  */
-public class Item {
+public class ShopActivity implements Serializable {
+
+	private static final long serialVersionUID = 488636177555967556L;
 	
 	/**
-	 * 标识ID
+	 * 活动标识
 	 */
 	private Long code;
 	
 	/**
-	 * 类型，1：商铺，2：商品，3：商品列表，4：商铺列表
+	 * 活动类型
 	 */
 	private Integer type;
 	
 	/**
-	 * 标题文字
+	 * 活动标题
 	 */
 	private String title;
 	
 	/**
-	 * 图片URL
+	 * 活动图片
 	 */
 	private String imageurl;
+
 	
+	public Long getCode() {
+		return code;
+	}
+
+	public void setCode(Long code) {
+		this.code = code;
+	}
 
 	public Integer getType() {
 		return type;
@@ -34,14 +46,6 @@ public class Item {
 
 	public void setType(Integer type) {
 		this.type = type;
-	}
-
-	public Long getCode() {
-		return code;
-	}
-
-	public void setCode(Long code) {
-		this.code = code;
 	}
 
 	public String getTitle() {
@@ -59,6 +63,5 @@ public class Item {
 	public void setImageurl(String imageurl) {
 		this.imageurl = imageurl;
 	}
-	
 	
 }

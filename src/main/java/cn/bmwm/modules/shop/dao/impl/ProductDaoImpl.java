@@ -6,7 +6,6 @@ package cn.bmwm.modules.shop.dao.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -128,6 +127,17 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	}
 	
 	/**
+	 * 查找店铺推荐商品
+	 * @param shop ： 店铺
+	 * @return
+	 */
+	public List<Product> findShopRecommendList(Shop shop) {
+		String jpql = " select product from Product product where product.shop = :shop and product.isMarketable = true and product.isGift = false and product.isTop = true ";
+		TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).setFirstResult(0).setMaxResults(10).getResultList();
+	}
+	
+	/**
 	 * 查找热销商品
 	 * @return
 	 */
@@ -178,17 +188,16 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
 		restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		
-		int start = (page - 1) * size;
-		
 		cq.where(restrictions);
 		
 		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
 		
 		if(order == 1) {
-			orderList.add(cb.desc(cb.size(root.<Collection<Promotion>>get("promotions"))));
-			orderList.add(cb.desc(root.get("createDate")));
+			orderList.add(cb.desc(root.get("isPromotion")));
+			orderList.add(cb.desc(root.get("sales")));
 		}else if(order == 2) {
 			orderList.add(cb.desc(root.get("createDate")));
+			orderList.add(cb.desc(root.get("sales")));
 		}else if(order == 3) {
 			orderList.add(cb.desc(root.get("sales")));
 			orderList.add(cb.desc(root.get("createDate")));
@@ -199,6 +208,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		
 		cq.orderBy(orderList);
 		
+		int start = (page - 1) * size;
 		TypedQuery<Product> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
 		query.setFirstResult(start);
 		query.setMaxResults(size);

@@ -183,6 +183,13 @@ public interface ProductService extends BaseService<Product, Long> {
 	List<Product> findRecommendList(String city, ProductCategory category);
 	
 	/**
+	 * 查找店铺推荐商品
+	 * @param shop ： 店铺
+	 * @return
+	 */
+	List<Product> findShopRecommendList(Shop shop);
+	
+	/**
 	 * 查找热销商品
 	 * @return
 	 */

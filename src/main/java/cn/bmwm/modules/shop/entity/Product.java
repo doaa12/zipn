@@ -347,6 +347,11 @@ public class Product extends BaseEntity {
 	private Map<Parameter, String> parameterValue = new HashMap<Parameter, String>();
 	
 	/**
+	 * 是否促销
+	 */
+	private Boolean isPromotion;
+	
+	/**
 	 * 商铺分类
 	 */
 	private ShopCategory shopCategory;
@@ -1913,6 +1918,18 @@ public class Product extends BaseEntity {
 	 */
 	public void setParameterValue(Map<Parameter, String> parameterValue) {
 		this.parameterValue = parameterValue;
+	}
+	
+	/**
+	 * 是否促销
+	 * @return
+	 */
+	public Boolean getIsPromotion() {
+		return isPromotion;
+	}
+
+	public void setIsPromotion(Boolean isPromotion) {
+		this.isPromotion = isPromotion;
 	}
 
 	/**

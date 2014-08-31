@@ -3,9 +3,8 @@
  */
 package cn.bmwm.modules.shop.dao.impl;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.FlushModeType;
 import javax.persistence.TypedQuery;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.ShopDao;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -70,32 +70,58 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
+	 * @param order : 排序，1：推荐，2：人气，3：距离，4：价格
+	 * @param x : 纬度
+	 * @param y : 经度
 	 * @return
 	 */
-	public Map<String,Object> findList(String city, ProductCategory category, int page, int size) {
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
 		
-		String jpql = " select count(*) from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.city like :city ";
-		TypedQuery<Long> countQuery = entityManager.createQuery(jpql, Long.class);
-		countQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
-		long total = countQuery.getSingleResult();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Shop> cq = cb.createQuery(Shop.class);
+		Root<Shop> root = cq.from(Shop.class);
+		cq.select(root);
 		
-		jpql = " select shop from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.city like :city order by shop.isTop desc, shop.totalScore / shop.scoreTimes desc ";
-		TypedQuery<Shop> listQuery = entityManager.createQuery(jpql, Shop.class);
-		listQuery.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%");
+		Predicate restrictions = cb.conjunction();
+		
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+		
+		cq.where(restrictions);
+		
+		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
+		
+		if(order == 1) {
+			orderList.add(cb.desc(root.get("isTop")));
+			orderList.add(cb.desc(root.get("createDate")));
+		}else if(order == 2) {
+			orderList.add(cb.desc(root.get("scoreTimes")));
+			orderList.add(cb.asc(root.get("createDate")));
+		}else if(order == 3) {
+			orderList.add(cb.desc(root.get("createDate")));
+		}else if(order == 4) {
+			orderList.add(cb.asc(root.get("avgPrice")));
+			orderList.add(cb.desc(root.get("createDate")));
+		}
+		
+		cq.orderBy(orderList);
 		
 		int start = (page - 1) * size;
-		listQuery.setFirstResult(start);
-		listQuery.setMaxResults(size);
+		TypedQuery<Shop> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
+		query.setFirstResult(start);
+		query.setMaxResults(size);
 		
-		List<Shop> list = listQuery.getResultList();
+		List<Shop> list = query.getResultList();
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("page", page);
-		result.put("size", size);
-		result.put("total", total);
-		result.put("shops", list);
+		ItemPage<Shop> itemPage = new ItemPage<Shop>();
 		
-		return result;
+		itemPage.setPage(page);
+		itemPage.setSize(size);
+		itemPage.setList(list);
+		
+		
+		return itemPage;
 		
 	}
 	
@@ -108,7 +134,7 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	public List<Shop> findRecommendList(String city, ProductCategory category) {
 		String jpql = " select shop from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.isTop = true and shop.city like :city order by shop.totalScore / shop.scoreTimes desc ";
 		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
-		return query.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%").setMaxResults(10).getResultList();
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%").setFirstResult(0).setMaxResults(10).getResultList();
 	}
 	
 	/**

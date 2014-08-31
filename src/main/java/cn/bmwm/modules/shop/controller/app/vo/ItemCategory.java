@@ -20,6 +20,11 @@ public class ItemCategory {
 	private String title;
 	
 	/**
+	 * 更多类型，1：店铺，2：商品
+	 */
+	private Integer moretype;
+	
+	/**
 	 * 是否显示更多
 	 */
 	private Integer showmore;
@@ -56,6 +61,14 @@ public class ItemCategory {
 
 	public void setShowmore(Integer showmore) {
 		this.showmore = showmore;
+	}
+	
+	public Integer getMoretype() {
+		return moretype;
+	}
+
+	public void setMoretype(Integer moretype) {
+		this.moretype = moretype;
 	}
 
 	public Integer getShowtype() {
