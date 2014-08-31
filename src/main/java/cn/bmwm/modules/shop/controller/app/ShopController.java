@@ -21,10 +21,12 @@ import cn.bmwm.modules.shop.controller.app.vo.ShopDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.ShopReview;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
+import cn.bmwm.modules.shop.service.ShopCategoryService;
 import cn.bmwm.modules.shop.service.ShopReviewService;
 import cn.bmwm.modules.shop.service.ShopService;
 
@@ -43,6 +45,9 @@ public class ShopController extends AppBaseController {
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
 	
+	@Resource(name = "shopCategoryServiceImpl")
+	private ShopCategoryService shopCategoryService;
+	
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
 	
@@ -52,6 +57,7 @@ public class ShopController extends AppBaseController {
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
 	
+
 	/**
 	 * 店铺列表
 	 * 首页和一级分类下的商铺推荐,点击更多,显示该分类下的店铺列表
@@ -93,6 +99,38 @@ public class ShopController extends AppBaseController {
 		result.put("flag", 1);
 		result.put("version", 1);
 		result.put("data", getShopDetail(shop));
+		result.put("categories", shopCategoryService.findAllShopCategories(shop));
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 店铺内商品列表
+	 * @param shopId：店铺ID
+	 * @param type：列表类型，1：所有商品，2：促销商品，3：店铺分类
+	 * @param catId：店铺分类
+	 * @param page：页码
+	 * @param size：每页显示商品数量
+	 * @return
+	 */
+	@RequestMapping(value = "/productlist", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size) {
+		
+		if(page == null) page = 1;
+		if(size == null) size = 10;
+		if(type == null) type = 1;
+		
+		Shop shop = shopService.find(shopId);
+		ShopCategory category = shopCategoryService.find(catId);
+		
+		ItemPage<Product> itemPage = productService.findShopProductList(shop, type, category, page, size);
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("flag", 1);
+		result.put("version", 1);
+		result.put("data", getProductItems(itemPage.getList()));
 		
 		return result;
 		

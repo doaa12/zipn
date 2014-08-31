@@ -3,6 +3,9 @@
  */
 package cn.bmwm.modules.shop.dao;
 
+import java.util.List;
+
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 
 /**
@@ -12,4 +15,10 @@ import cn.bmwm.modules.shop.entity.ShopCategory;
  */
 public interface ShopCategoryDao extends BaseDao<ShopCategory,Long> {
 
+	/**
+	 * 获取店铺所有分类
+	 * @return
+	 */
+	List<ShopCategory> findAllShopCategories(Shop shop);
+	
 }

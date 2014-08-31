@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 商铺商品分类
  * @author zby
@@ -91,6 +93,7 @@ public class ShopCategory extends OrderEntity {
 	 * 获取店铺分类名称
 	 * @return
 	 */
+	@JsonProperty
 	@NotEmpty
 	@Length(max = 200)
 	@Column(nullable = false)

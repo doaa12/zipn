@@ -3,9 +3,7 @@
  */
 package cn.bmwm.modules.shop.controller.app;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
-import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -29,7 +26,7 @@ import cn.bmwm.modules.shop.service.ProductService;
  */
 @Controller("appProductController")
 @RequestMapping(value = "/app/product")
-public class ProductController {
+public class ProductController extends AppBaseController {
 	
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
@@ -66,38 +63,6 @@ public class ProductController {
 		result.put("data", getProductItems(itemPage.getList()));
 		
 		return result;
-		
-	}
-	
-	/**
-	 * 获取商品列表
-	 * @param productList
-	 * @return
-	 */
-	public List<ItemProduct> getProductItems(List<Product> productList) {
-		
-		List<ItemProduct> list = new ArrayList<ItemProduct>();
-		
-		if(productList == null || productList.size() == 0){
-			return list;
-		}
-
-		for(Product product : productList) {
-			
-			ItemProduct item = new ItemProduct();
-			item.setId(product.getId());
-			item.setName(product.getName());
-			item.setPrice(product.getPrice().doubleValue());
-			item.setImageurl(product.getImage());
-			item.setEvaluateCount(product.getScoreCount());
-			item.setAttribute1(product.getAttributeValue0());
-			item.setAttribute2(product.getAttributeValue1());
-			
-			list.add(item);
-			
-		}
-		
-		return list;
 		
 	}
 	

@@ -226,6 +226,55 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	}
 	
 	/**
+	 * 店铺商品列表
+	 * @param shopId：店铺ID
+	 * @param type：列表类型，1：所有商品，2：促销商品，3：店铺分类
+	 * @param catId：店铺分类
+	 * @param page：页码
+	 * @param size：每页显示商品数量
+	 * @return
+	 */
+	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size) {
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		
+		Predicate restrictions = cb.conjunction();
+		
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
+		restrictions = cb.and(restrictions, cb.equal(root.get("shop"), shop));
+		
+		if(type == 2) {
+			restrictions = cb.and(restrictions, cb.equal(root.get("isPromotion"), true));
+		}else if(type == 3) {
+			restrictions = cb.and(restrictions, cb.equal(root.get("shopCategory"), category));
+		}
+		
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("sales")));
+		
+		int start = (page - 1) * size;
+		TypedQuery<Product> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
+		
+		query.setFirstResult(start);
+		query.setMaxResults(size);
+		
+		List<Product> list = query.getResultList();
+		
+		ItemPage<Product> result = new ItemPage<Product>();
+		
+		result.setPage(page);
+		result.setSize(size);
+		result.setList(list);
+		
+		return result;
+		
+	}
+	
+	/**
 	 * 查询店铺商品数量
 	 * @param shop
 	 * @return

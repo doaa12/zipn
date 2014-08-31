@@ -6,6 +6,7 @@ import java.util.List;
 import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
+import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -84,6 +85,36 @@ public class AppBaseController extends BaseController {
 		
 	}
 	
-	
+	/**
+	 * 获取商品列表
+	 * @param productList
+	 * @return
+	 */
+	public List<ItemProduct> getProductItems(List<Product> productList) {
+		
+		List<ItemProduct> list = new ArrayList<ItemProduct>();
+		
+		if(productList == null || productList.size() == 0){
+			return list;
+		}
+
+		for(Product product : productList) {
+			
+			ItemProduct item = new ItemProduct();
+			item.setId(product.getId());
+			item.setName(product.getName());
+			item.setPrice(product.getPrice().doubleValue());
+			item.setImageurl(product.getImage());
+			item.setEvaluateCount(product.getScoreCount());
+			item.setAttribute1(product.getAttributeValue0());
+			item.setAttribute2(product.getAttributeValue1());
+			
+			list.add(item);
+			
+		}
+		
+		return list;
+		
+	}
 	
 }
