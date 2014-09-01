@@ -40,7 +40,7 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @param city
 	 * @return
 	 */
-	@Cacheable(value = "shop", key = "#city + #category.id + 'findRecommendList'")
+	@Cacheable(value = "shop", key = "'city' + #city + 'category' + #category + 'findRecommendList'")
 	public List<Shop> findRecommendList(String city, ProductCategory category) {
 		return shopDao.findRecommendList(city, category);
 	}
@@ -55,7 +55,7 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @param y : 经度
 	 * @return
 	 */
-	@Cacheable(value = "shop", key = "#city + #category.id + #page + #size + #order + #x + #y + 'findList'")
+	@Cacheable(value = "shop", key = "'city' + #city + 'category' + #category + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findList'")
 	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
 		return shopDao.findList(city, category, page, size, order, x, y);
 	}

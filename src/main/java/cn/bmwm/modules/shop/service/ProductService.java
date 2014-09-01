@@ -220,9 +220,11 @@ public interface ProductService extends BaseService<Product, Long> {
 	 * @param catId：店铺分类
 	 * @param page：页码
 	 * @param size：每页显示商品数量
-	 * @return
+	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
+	 * @param x：纬度
+	 * @param y：经度
 	 */
-	ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size);
+	ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Integer x, Integer y);
 	
 	/**
 	 * 查找商品销售信息
