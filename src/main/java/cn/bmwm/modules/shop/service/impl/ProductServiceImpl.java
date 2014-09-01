@@ -108,7 +108,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * 查找推荐商品
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#city + #category.id + 'findRecommendList'")
+	@Cacheable(value = "product", key = "'city' + #city + 'category' + #category.id + 'findRecommendList'")
 	public List<Product> findRecommendList(String city, ProductCategory category){
 		return productDao.findRecommendList(city, category);
 	}
@@ -118,7 +118,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param shop ： 店铺
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#shop.id + 'findShopRecommendList'")
+	@Cacheable(value = "product", key = "'shop' + #shop.id + 'findShopRecommendList'")
 	public List<Product> findShopRecommendList(Shop shop) {
 		return productDao.findShopRecommendList(shop);
 	}
@@ -127,7 +127,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * 查找热销商品
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#city + #category.id + 'findHotList'")
+	@Cacheable(value = "product", key = "'city' + #city + 'category' + #category.id + 'findHotList'")
 	public List<Product> findHotList(String city, ProductCategory category){
 		return productDao.findHotList(city, category);
 	}
@@ -141,7 +141,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param order : 排序方式
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#city + #category.id + #page + #size + #order + 'findProductList'")
+	@Cacheable(value = "product", key = "'city' + #city + 'category' + #category.id + 'page' + #page + 'size' + #size + 'order' + #order + 'findProductList'")
 	public ItemPage<Product> findProductList(String city, ProductCategory category, Integer page, Integer size, Integer order) {
 		return productDao.findList(city, category, page, size, order);
 	}
@@ -151,7 +151,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param shop
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#shop.id + 'findShopProductCount'")
+	@Cacheable(value = "product", key = "'shop' + #shop.id + 'findShopProductCount'")
 	public Long findShopProductCount(Shop shop) {
 		return productDao.findShopProductCount(shop);
 	}
@@ -165,7 +165,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param size：每页显示商品数量
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#shop.id + #type + #category.identity + #page + #size + 'findShopProductList'")
+	@Cacheable(value = "product", key = "'shop' + #shop.id + 'type' + #type + 'category' + #category.identity + 'page' + #page + 'size' + #size + 'findShopProductList'")
 	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size){
 		return productDao.findShopProductList(shop, type, category, page, size);
 	}
