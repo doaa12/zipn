@@ -165,7 +165,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param size：每页显示商品数量
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "#shop.id + #type + #category.id + #page + #size + 'findShopProductList'")
+	@Cacheable(value = "product", key = "#shop.id + #type + #category.identity + #page + #size + 'findShopProductList'")
 	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size){
 		return productDao.findShopProductList(shop, type, category, page, size);
 	}

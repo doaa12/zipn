@@ -29,6 +29,7 @@ import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.ShopCategoryService;
 import cn.bmwm.modules.shop.service.ShopReviewService;
 import cn.bmwm.modules.shop.service.ShopService;
+import cn.bmwm.modules.sys.exception.BusinessException;
 
 /**
  * App - 店铺
@@ -118,12 +119,25 @@ public class ShopController extends AppBaseController {
 	@ResponseBody
 	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size) {
 		
+		if(type == 3 && catId == null) {
+			throw new BusinessException(" Parameter 'catId' can not be null !");
+		}
+		
 		if(page == null) page = 1;
 		if(size == null) size = 10;
 		if(type == null) type = 1;
 		
 		Shop shop = shopService.find(shopId);
-		ShopCategory category = shopCategoryService.find(catId);
+		
+		ShopCategory category = null;
+		
+		if(catId != null){
+			category = shopCategoryService.find(catId);
+		}
+		
+		if(category == null){
+			category = new ShopCategory();
+		}
 		
 		ItemPage<Product> itemPage = productService.findShopProductList(shop, type, category, page, size);
 		

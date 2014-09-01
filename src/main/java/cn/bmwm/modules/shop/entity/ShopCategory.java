@@ -16,6 +16,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -262,6 +263,15 @@ public class ShopCategory extends OrderEntity {
 				promotion.getShopCategories().remove(this);
 			}
 		}
+	}
+	
+	/**
+	 * 缓存标识
+	 * @return
+	 */
+	@Transient
+	public Long getIdentity() {
+		return this.getId() == null ? 0L : this.getId();
 	}
 	
 }
