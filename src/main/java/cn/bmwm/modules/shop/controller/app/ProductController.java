@@ -18,6 +18,7 @@ import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
+import cn.bmwm.modules.sys.exception.BusinessException;
 
 /**
  * App - 商品
@@ -48,7 +49,19 @@ public class ProductController extends AppBaseController {
 	@ResponseBody
 	public Map<String,Object> list(Long catId, String city, Integer page, Integer size, Integer order) {
 		
+		if(catId == null) {
+			throw new BusinessException(" Parameter 'catId' can not be null ! ");
+		}
+		
+		if(city == null || city.trim().equals("")) {
+			throw new BusinessException(" Parameter 'city' can not be empty ! ");
+		}
+		
 		ProductCategory category = productCategoryService.find(catId);
+		
+		if(category == null) {
+			throw new BusinessException(" Invalid Parameter 'catId' ! ");
+		}
 		
 		if(page == null) page = 1;
 		if(size == null) size = 10;
@@ -61,6 +74,34 @@ public class ProductController extends AppBaseController {
 		result.put("flag", 1);
 		result.put("version", 1);
 		result.put("data", getProductItems(itemPage.getList()));
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 商品详情页
+	 * @return
+	 */
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> index(Long id) {
+		
+		if(id == null) {
+			throw new BusinessException(" Parameter 'id' can not be null ! ");
+		}
+		
+		Product product = productService.find(id);
+		
+		if(product == null) {
+			throw new BusinessException(" Invalid Parameter 'id' ");
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("flag", 1);
+		result.put("version", 1);
+		result.put("data", product);
 		
 		return result;
 		

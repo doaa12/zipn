@@ -22,6 +22,7 @@ import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopFavoriteService;
 import cn.bmwm.modules.shop.service.ShopService;
+import cn.bmwm.modules.sys.exception.BusinessException;
 
 
 /**
@@ -53,11 +54,17 @@ public class IndexController extends AppBaseController {
 	 * 根据不同城市,查找该城市顶级分类下的置顶店铺和置顶商品,以及所有商品分类
 	 * 商品查找:首先根据管理员设置查找,如果管理员没有设置置顶商品,再根据销量查找,最多返回10个商品
 	 * 店铺查找:根据管理员设置查找,如果管理员没有设置置顶店铺,忽略该分类
+	 * 收藏店铺动态，以及收藏店铺发布新品
+	 * 广告位
 	 * @return
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> index(String city) {
+		
+		if(city == null || city.trim().equals("")) {
+			throw new BusinessException(" Parameter 'city' can not be empty ! ");
+		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		

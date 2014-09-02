@@ -23,6 +23,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopService;
+import cn.bmwm.modules.sys.exception.BusinessException;
 
 /**
  * 商品分类
@@ -53,10 +54,18 @@ public class CategoryController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city, Integer page, Integer size) {
+	public Map<String,Object> list(Long catId, String city) {
+		
+		if(city == null || city.trim().equals("")) {
+			throw new BusinessException(" Parameter 'city' can not be empty ! ");
+		}
 		
 		ProductCategory category = productCategoryService.find(catId);
-			
+		
+		if(category == null) {
+			throw new BusinessException(" Invalid Parameter 'catId' ! ");
+		}
+		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		List<ProductCategory> children = category.getChildren();

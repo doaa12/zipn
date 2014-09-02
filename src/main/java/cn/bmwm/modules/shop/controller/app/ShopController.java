@@ -62,14 +62,26 @@ public class ShopController extends AppBaseController {
 	/**
 	 * 店铺列表
 	 * 首页和一级分类下的商铺推荐,点击更多,显示该分类下的店铺列表
-	 * @param order : 排序，1：推荐，2：人气，3：附件，4：价格
+	 * @param order : 排序，1：推荐，2：人气，3：附近，4：价格
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> list(Long catId, String city, Integer order, Integer page, Integer size, Integer x, Integer y) {
 		
+		if(catId == null) {
+			throw new BusinessException(" Parameter 'catId' can not be null ! ");
+		}
+		
+		if(city == null || city.trim().equals("")) {
+			throw new BusinessException(" Parameter 'city' can not be empty ! ");
+		}
+		
 		ProductCategory category = productCategoryService.find(catId);
+		
+		if(category == null) {
+			throw new BusinessException(" Invalid Parameter 'catId' ! ");
+		}
 		
 		if(page == null) page = 1;
 		if(size == null) size = 10;
@@ -94,7 +106,15 @@ public class ShopController extends AppBaseController {
 	@ResponseBody
 	public Map<String,Object> index(Long id) {
 		
+		if(id == null) {
+			throw new BusinessException(" Parameter 'id' can not be null ! ");
+		}
+		
 		Shop shop = shopService.find(id);
+		
+		if(shop == null) {
+			throw new BusinessException(" Invalid Parameter 'id' ");
+		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("flag", 1);
