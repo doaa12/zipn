@@ -42,8 +42,15 @@ $().ready(function() {
 		rules: {
 			productCategoryId: "required",
 			name: "required",
-			adminId: "required",
+			adminId: {
+				min: 1
+			},
 			provinceId: "required"
+		},
+		messages: {
+			adminId: {
+				min: "${message("admin.shop.validate.admin.select")}"
+			}
 		}
 	});
 
