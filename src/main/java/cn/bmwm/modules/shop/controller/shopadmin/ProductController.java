@@ -261,7 +261,8 @@ public class ProductController extends BaseController {
 		product.setOrderItems(null);
 		product.setGiftItems(null);
 		product.setProductNotifies(null);
-
+		product.setShopCategory(shopCategory);
+		
 		for (MemberRank memberRank : memberRankService.findAll()) {
 			String price = request.getParameter("memberPrice_" + memberRank.getId());
 			if (StringUtils.isNotEmpty(price) && new BigDecimal(price).compareTo(new BigDecimal(0)) >= 0) {
@@ -366,6 +367,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		} else {
+			product.setShop(shop);
 			product.setGoods(goods);
 			product.setSpecifications(null);
 			product.setSpecificationValues(null);
@@ -426,6 +428,8 @@ public class ProductController extends BaseController {
 		
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+		product.setShopCategory(shopCategory);
+		
 		if (!isValid(product)) {
 			return ERROR_VIEW;
 		}
@@ -562,6 +566,7 @@ public class ProductController extends BaseController {
 			}
 		} else {
 			product.setSpecifications(null);
+			product.setShop(shop);
 			product.setSpecificationValues(null);
 			BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers", "promotions", "cartItems",
 					"orderItems", "giftItems", "productNotifies" });

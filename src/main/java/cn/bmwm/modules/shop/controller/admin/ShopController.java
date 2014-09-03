@@ -78,7 +78,7 @@ public class ShopController extends BaseController {
 		shop.setProductCategory(productCategory);
 		shop.setTreePath(productCategory.getTreePath() + productCategory.getId() + ",");
 		
-		if(cityId != null){
+		if(cityId != null && cityId != 0){
 			Area city = areaService.find(cityId);
 			shop.setCity(city.getFullName());
 		}else{
@@ -88,6 +88,7 @@ public class ShopController extends BaseController {
 		
 		Admin admin = adminService.find(adminId);
 		shop.setAdmin(admin);
+		shop.setStatus(1);
 		
 		if (!isValid(shop)) {
 			return ERROR_VIEW;
@@ -107,7 +108,7 @@ public class ShopController extends BaseController {
 	public String edit(Long id, ModelMap model) {
 		Shop shop = shopService.find(id);
 		model.addAttribute("shop", shop);
-		model.addAttribute("admins", adminService.findAll());
+		model.addAttribute("admins", adminService.findAll()); 
 		return "/admin/shop/edit";
 	}
 	
@@ -122,11 +123,20 @@ public class ShopController extends BaseController {
 		
 		Shop shop = shopService.find(shopId);
 		shop.setAdmin(admin);
+		
 		//TODO:是否需要将所有店铺商品更新为下架?
+		
+		if(isList == null) {
+			isList = false;
+		}
+		if(isTop == null) {
+			isTop = false;
+		}
+		
 		shop.setIsList(isList);
 		shop.setIsTop(isTop);
 		
-		shopService.update(shop, "productCategory", "name", "city", "address", "payAccount");
+		shopService.update(shop);
 		
 		return "redirect:list.jhtml";
 		

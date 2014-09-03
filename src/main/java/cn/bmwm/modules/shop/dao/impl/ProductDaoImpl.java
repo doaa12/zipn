@@ -232,9 +232,12 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @param catId：店铺分类
 	 * @param page：页码
 	 * @param size：每页显示商品数量
+	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
+	 * @param x：纬度
+	 * @param y：经度
 	 * @return
 	 */
-	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size) {
+	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
 		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -254,11 +257,27 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		}
 		
 		cq.where(restrictions);
-		cq.orderBy(cb.desc(root.get("sales")));
 		
-		int start = (page - 1) * size;
+		List<javax.persistence.criteria.Order> orderList = new ArrayList<javax.persistence.criteria.Order>();
+		
+		if(order == 1) {
+			orderList.add(cb.desc(root.get("isTop")));
+			orderList.add(cb.desc(root.get("sales")));
+		}else if(order == 2) {
+			orderList.add(cb.desc(root.get("sales")));
+			orderList.add(cb.asc(root.get("createDate")));
+		}else if(order == 3) {
+			orderList.add(cb.asc(root.get("createDate")));
+		}else if(order == 4) {
+			orderList.add(cb.asc(root.get("price")));
+			orderList.add(cb.asc(root.get("createDate")));
+		}
+		
+		cq.orderBy(orderList);
+		
 		TypedQuery<Product> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
 		
+		int start = (page - 1) * size;
 		query.setFirstResult(start);
 		query.setMaxResults(size);
 		

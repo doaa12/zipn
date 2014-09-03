@@ -113,6 +113,10 @@ public class ShopController extends AppBaseController {
 		Shop shop = shopService.find(id);
 		
 		if(shop == null) {
+			throw new BusinessException(" Invalid parameter 'id' ! ");
+		}
+		
+		if(shop == null) {
 			throw new BusinessException(" Invalid Parameter 'id' ");
 		}
 		
@@ -133,11 +137,14 @@ public class ShopController extends AppBaseController {
 	 * @param catId：店铺分类
 	 * @param page：页码
 	 * @param size：每页显示商品数量
+	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
+	 * @param x：纬度
+	 * @param y：经度
 	 * @return
 	 */
 	@RequestMapping(value = "/productlist", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size) {
+	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size, Integer order, Integer x, Integer y) {
 		
 		if(type == 3 && catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null !");
@@ -146,8 +153,17 @@ public class ShopController extends AppBaseController {
 		if(page == null) page = 1;
 		if(size == null) size = 10;
 		if(type == null) type = 1;
+		if(order == null) order = 2;
+		
+		if(order == 3 && (x == null || y == null)){
+			throw new BusinessException(" Parameter 'x' and 'y' can not be null ! ");
+		}
 		
 		Shop shop = shopService.find(shopId);
+		
+		if(shop == null) {
+			throw new BusinessException(" Invalid parameter 'shopId' ! ");
+		}
 		
 		ShopCategory category = null;
 		
@@ -155,11 +171,11 @@ public class ShopController extends AppBaseController {
 			category = shopCategoryService.find(catId);
 		}
 		
-		if(category == null){
-			category = new ShopCategory();
+		if(type == 3 && category == null) {
+			throw new BusinessException(" Invalid parameter 'catId' ! ");
 		}
 		
-		ItemPage<Product> itemPage = productService.findShopProductList(shop, type, category, page, size);
+		ItemPage<Product> itemPage = productService.findShopProductList(shop, type, category, page, size, order, x, y);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("flag", 1);

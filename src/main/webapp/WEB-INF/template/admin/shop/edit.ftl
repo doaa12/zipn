@@ -17,7 +17,9 @@ $().ready(function() {
 	$inputForm.validate({
 		rules: {
 			shopId: "required",
-			adminId: "required"
+			adminId: {
+				min: 1
+			}
 		}
 	});
 
