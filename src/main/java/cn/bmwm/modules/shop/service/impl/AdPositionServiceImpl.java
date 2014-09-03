@@ -22,7 +22,7 @@ import cn.bmwm.modules.shop.service.AdPositionService;
  *
  * @version 1.0
  */
-//@Service("adPositionServiceImpl")
+@Service("adPositionServiceImpl")
 public class AdPositionServiceImpl extends BaseServiceImpl<AdPosition, Long> implements AdPositionService {
 
 	@Resource(name = "adPositionDaoImpl")

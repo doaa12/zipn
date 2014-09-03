@@ -64,5 +64,11 @@ public interface AdminService extends BaseService<Admin, Long> {
 	 * @return 当前登录用户名,若不存在则返回null
 	 */
 	String getCurrentUsername();
+	
+	/**
+	 * 查找没有分配店铺的管理员
+	 * @return
+	 */
+	List<Admin> findFreeAdmins();
 
 }

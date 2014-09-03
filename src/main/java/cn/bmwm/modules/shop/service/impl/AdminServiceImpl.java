@@ -93,6 +93,14 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin, Long> implements Ad
 		}
 		return null;
 	}
+	
+	/**
+	 * 查找没有分配店铺的管理员
+	 * @return
+	 */
+	public List<Admin> findFreeAdmins() {
+		return adminDao.findFreeAdmins();
+	}
 
 	@Override
 	@Transactional
@@ -135,5 +143,5 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin, Long> implements Ad
 	public void delete(Admin admin) {
 		super.delete(admin);
 	}
-
+	
 }

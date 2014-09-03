@@ -4,6 +4,8 @@
  * */
 package cn.bmwm.modules.shop.dao;
 
+import java.util.List;
+
 import cn.bmwm.modules.shop.entity.Admin;
 
 /**
@@ -31,5 +33,11 @@ public interface AdminDao extends BaseDao<Admin, Long> {
 	 * @return 管理员，若不存在则返回null
 	 */
 	Admin findByUsername(String username);
+	
+	/**
+	 * 查找没有分配店铺的管理员
+	 * @return
+	 */
+	List<Admin> findFreeAdmins();
 
 }

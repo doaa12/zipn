@@ -31,7 +31,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("adPositionDirective")
+@Component("adPositionDirective")
 public class AdPositionDirective extends BaseDirective {
 
 	/** 变量名称 */

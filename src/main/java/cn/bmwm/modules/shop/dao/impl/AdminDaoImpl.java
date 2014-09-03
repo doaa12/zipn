@@ -4,9 +4,10 @@
  * */
 package cn.bmwm.modules.shop.dao.impl;
 
+import java.util.List;
+
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
-
 
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,15 @@ public class AdminDaoImpl extends BaseDaoImpl<Admin, Long> implements AdminDao {
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * 查找没有分配店铺的管理员
+	 * @return
+	 */
+	public List<Admin> findFreeAdmins() {
+		String jpql = " select admin from Admin admin left outer join admin.shop shop join admin.roles role where shop.id is null and admin.isEnabled = true and admin.isLocked = false and role.isSystem = false ";
+		return entityManager.createQuery(jpql, Admin.class).setFlushMode(FlushModeType.COMMIT).getResultList();
 	}
 
 }

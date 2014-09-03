@@ -63,7 +63,7 @@ public class ShopController extends BaseController {
 	public String add(ModelMap model) {
 		model.addAttribute("productCategoryTree", productCategoryService.findTree());
 		model.addAttribute("provinces", areaService.findRoots());
-		model.addAttribute("admins", adminService.findAll());
+		model.addAttribute("admins", adminService.findFreeAdmins());
 		return "/admin/shop/add";
 	}
 	
@@ -108,7 +108,7 @@ public class ShopController extends BaseController {
 	public String edit(Long id, ModelMap model) {
 		Shop shop = shopService.find(id);
 		model.addAttribute("shop", shop);
-		model.addAttribute("admins", adminService.findAll()); 
+		model.addAttribute("admins", adminService.findFreeAdmins()); 
 		return "/admin/shop/edit";
 	}
 	
