@@ -5,9 +5,10 @@
 package cn.bmwm.modules.shop.controller.admin;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
-
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -108,6 +109,27 @@ public class AreaController extends BaseController {
 	Message delete(Long id) {
 		areaService.delete(id);
 		return SUCCESS_MESSAGE;
+	}
+	
+	/**
+	 * 获取下级区域
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/children", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<Area> children(Long id) {
+		
+		Area parent = areaService.find(id);
+		Set<Area> children = new HashSet<Area>();
+		
+		if(parent != null) {
+			children = parent.getChildren();
+		}
+		
+		return children;
+		
+		
 	}
 
 }

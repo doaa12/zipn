@@ -26,301 +26,6 @@
 		_width: 200px;
 	}
 </style>
-<script type="text/javascript">
-$().ready(function() {
-
-	var $inputForm = $("#inputForm");
-	var $productCategoryId = $("#productCategoryId");
-	var $isMemberPrice = $("#isMemberPrice");
-	var $memberPriceTr = $("#memberPriceTr");
-	var $memberPrice = $("#memberPriceTr input");
-	var $browserButton = $("#browserButton");
-	var $productImageTable = $("#productImageTable");
-	var $addProductImage = $("#addProductImage");
-	var $deleteProductImage = $("a.deleteProductImage");
-	var $parameterTable = $("#parameterTable");
-	var $attributeTable = $("#attributeTable");
-	var $specificationIds = $("#specificationSelect :checkbox");
-	var $specificationProductTable = $("#specificationProductTable");
-	var $addSpecificationProduct = $("#addSpecificationProduct");
-	var $deleteSpecificationProduct = $("a.deleteSpecificationProduct");
-	var productImageIndex = ${(product.productImages?size)!"0"};
-	var previousProductCategoryId = "${product.productCategory.id}";
-	
-	[@flash_message /]
-	
-	$browserButton.browser();
-	
-	// 会员价
-	$isMemberPrice.click(function() {
-		if ($(this).prop("checked")) {
-			$memberPriceTr.show();
-			$memberPrice.prop("disabled", false);
-		} else {
-			$memberPriceTr.hide();
-			$memberPrice.prop("disabled", true);
-		}
-	});
-	
-	// 增加商品图片
-	$addProductImage.click(function() {
-		[@compress single_line = true]
-			var trHtml = 
-			'<tr>
-				<td>
-					<input type="file" name="productImages[' + productImageIndex + '].file" class="productImageFile" \/>
-				<\/td>
-				<td>
-					<input type="text" name="productImages[' + productImageIndex + '].title" class="text" maxlength="200" \/>
-				<\/td>
-				<td>
-					<input type="text" name="productImages[' + productImageIndex + '].order" class="text productImageOrder" maxlength="9" style="width: 50px;" \/>
-				<\/td>
-				<td>
-					<a href="javascript:;" class="deleteProductImage">[${message("admin.common.delete")}]<\/a>
-				<\/td>
-			<\/tr>';
-		[/@compress]
-		$productImageTable.append(trHtml);
-		productImageIndex ++;
-	});
-	
-	// 删除商品图片
-	$deleteProductImage.live("click", function() {
-		var $this = $(this);
-		$.dialog({
-			type: "warn",
-			content: "${message("admin.dialog.deleteConfirm")}",
-			onOk: function() {
-				$this.closest("tr").remove();
-			}
-		});
-	});
-	
-	// 修改商品分类
-	$productCategoryId.change(function() {
-		var hasValue = false;
-		$parameterTable.add($attributeTable).find(":input").each(function() {
-			if ($.trim($(this).val()) != "") {
-				hasValue = true;
-				return false;
-			}
-		});
-		if (hasValue) {
-			$.dialog({
-				type: "warn",
-				content: "${message("admin.product.productCategoryChangeConfirm")}",
-				width: 450,
-				onOk: function() {
-					loadParameter();
-					loadAttribute();
-					previousProductCategoryId = $productCategoryId.val();
-				},
-				onCancel: function() {
-					$productCategoryId.val(previousProductCategoryId);
-				}
-			});
-		} else {
-			loadParameter();
-			loadAttribute();
-			previousProductCategoryId = $productCategoryId.val();
-		}
-	});
-	
-	// 加载参数
-	function loadParameter() {
-		$.ajax({
-			url: "parameter_groups.jhtml",
-			type: "GET",
-			data: {id: $productCategoryId.val()},
-			dataType: "json",
-			beforeSend: function() {
-				$parameterTable.empty();
-			},
-			success: function(data) {
-				var trHtml = "";
-				$.each(data, function(i, parameterGroup) {
-					trHtml += '<tr><td style="text-align: right;"><strong>' + parameterGroup.name + ':<\/strong><\/td><td>&nbsp;<\/td><\/tr>';
-					$.each(parameterGroup.parameters, function(i, parameter) {
-						[@compress single_line = true]
-							trHtml += 
-							'<tr>
-								<th>' + parameter.name + ': <\/th>
-								<td>
-									<input type="text" name="parameter_' + parameter.id + '" class="text" maxlength="200" \/>
-								<\/td>
-							<\/tr>';
-						[/@compress]
-					});
-				});
-				$parameterTable.append(trHtml);
-			}
-		});
-	}
-	
-	// 加载属性
-	function loadAttribute() {
-		$.ajax({
-			url: "attributes.jhtml",
-			type: "GET",
-			data: {id: $productCategoryId.val()},
-			dataType: "json",
-			beforeSend: function() {
-				$attributeTable.empty();
-			},
-			success: function(data) {
-				var trHtml = "";
-				$.each(data, function(i, attribute) {
-					var optionHtml = '<option value="">${message("admin.common.choose")}<\/option>';
-					$.each(attribute.options, function(j, option) {
-						optionHtml += '<option value="' + option + '">' + option + '<\/option>';
-					});
-					[@compress single_line = true]
-						trHtml += 
-						'<tr>
-							<th>' + attribute.name + ': <\/th>
-							<td>
-								<select name="attribute_' + attribute.id + '">
-									' + optionHtml + '
-								<\/select>
-							<\/td>
-						<\/tr>';
-					[/@compress]
-				});
-				$attributeTable.append(trHtml);
-			}
-		});
-	}
-	
-	// 修改商品规格
-	$specificationIds.click(function() {
-		if ($specificationIds.filter(":checked").size() == 0) {
-			$specificationProductTable.find("tr:gt(1)").remove();
-		}
-		var $this = $(this);
-		if ($this.prop("checked")) {
-			$specificationProductTable.find("td.specification_" + $this.val()).show().find("select").prop("disabled", false);
-		} else {
-			$specificationProductTable.find("td.specification_" + $this.val()).hide().find("select").prop("disabled", true);
-		}
-	});
-	
-	// 增加规格商品
-	$addSpecificationProduct.click(function() {
-		if ($specificationIds.filter(":checked").size() == 0) {
-			$.message("warn", "${message("admin.product.specificationRequired")}");
-			return false;
-		}
-		if ($specificationProductTable.find("tr:gt(1)").size() == 0) {
-			$tr = $specificationProductTable.find("tr:eq(1)").clone().show().appendTo($specificationProductTable);
-			$tr.find("td:first").text("${message("admin.product.currentSpecification")}");
-			$tr.find("td:last").text("-");
-		} else {
-			$specificationProductTable.find("tr:eq(1)").clone().show().appendTo($specificationProductTable);
-		}
-	});
-	
-	// 删除规格商品
-	$deleteSpecificationProduct.live("click", function() {
-		var $this = $(this);
-		$.dialog({
-			type: "warn",
-			content: "${message("admin.dialog.deleteConfirm")}",
-			onOk: function() {
-				$this.closest("tr").remove();
-			}
-		});
-	});
-	
-	$.validator.addClassRules({
-		memberPrice: {
-			min: 0,
-			decimal: {
-				integer: 12,
-				fraction: ${setting.priceScale}
-			}
-		},
-		productImageFile: {
-			required: true,
-			extension: "${setting.uploadImageExtension}"
-		},
-		productImageOrder: {
-			digits: true
-		}
-	});
-	
-	// 表单验证
-	$inputForm.validate({
-		rules: {
-			productCategoryId: "required",
-			name: "required",
-			sn: {
-				pattern: /^[0-9a-zA-Z_-]+$/,
-				remote: {
-					url: "check_sn.jhtml?previousSn=${product.sn}",
-					cache: false
-				}
-			},
-			price: {
-				required: true,
-				min: 0,
-				decimal: {
-					integer: 12,
-					fraction: ${setting.priceScale}
-				}
-			},
-			cost: {
-				min: 0,
-				decimal: {
-					integer: 12,
-					fraction: ${setting.priceScale}
-				}
-			},
-			marketPrice: {
-				min: 0,
-				decimal: {
-					integer: 12,
-					fraction: ${setting.priceScale}
-				}
-			},
-			weight: "digits",
-			stock: "digits",
-			point: "digits"
-		},
-		messages: {
-			sn: {
-				pattern: "${message("admin.validate.illegal")}",
-				remote: "${message("admin.validate.exist")}"
-			}
-		},
-		submitHandler: function(form) {
-			if ($specificationIds.filter(":checked").size() > 0 && $specificationProductTable.find("tr:gt(1)").size() == 0) {
-				$.message("warn", "${message("admin.product.specificationProductRequired")}");
-				return false;
-			} else {
-				var isRepeats = false;
-				var parameters = new Array();
-				$specificationProductTable.find("tr:gt(1)").each(function() {
-					var parameter = $(this).find("select").serialize();
-					if ($.inArray(parameter, parameters) >= 0) {
-						$.message("warn", "${message("admin.product.specificationValueRepeat")}");
-						isRepeats = true;
-						return false;
-					} else {
-						parameters.push(parameter);
-					}
-				});
-				if (!isRepeats) {
-					$specificationProductTable.find("tr:eq(1)").find("select").prop("disabled", true);
-					addCookie("previousProductCategoryId", $productCategoryId.val(), {expires: 24 * 60 * 60});
-					form.submit();
-				}
-			}
-		}
-	});
-	
-});
-</script>
 </head>
 <body>
 	<div class="path">
@@ -383,18 +88,7 @@ $().ready(function() {
 					${message("Product.productCategory")}:
 				</th>
 				<td>
-					<select id="productCategoryId" name="productCategoryId">
-						[#list productCategoryTree as productCategory]
-							<option value="${productCategory.id}"[#if productCategory == product.productCategory] selected="selected"[/#if]>
-								[#if productCategory.grade != 0]
-									[#list 1..productCategory.grade as i]
-										&nbsp;&nbsp;
-									[/#list]
-								[/#if]
-								${productCategory.name}
-							</option>
-						[/#list]
-					</select>
+					${product.shop.productCategory.name}
 				</td>
 			</tr>
 			<tr>
@@ -402,7 +96,7 @@ $().ready(function() {
 					<span class="requiredField">*</span>${message("Product.name")}:
 				</th>
 				<td>
-					<input type="text" name="name" class="text" value="${product.name}" maxlength="200" />
+					<input type="text" name="name" class="text" value="${product.name}" maxlength="200" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -410,7 +104,7 @@ $().ready(function() {
 					${message("Product.sn")}:
 				</th>
 				<td>
-					<input type="text" name="sn" class="text" value="${product.sn}" maxlength="100" title="${message("admin.product.snTitle")}" />
+					<input type="text" name="sn" class="text" value="${product.sn}" maxlength="100" title="${message("admin.product.snTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -418,7 +112,7 @@ $().ready(function() {
 					<span class="requiredField">*</span>${message("Product.price")}:
 				</th>
 				<td>
-					<input type="text" name="price" class="text" value="${product.price}" maxlength="16" />
+					<input type="text" name="price" class="text" value="${product.price}" maxlength="16" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -427,7 +121,7 @@ $().ready(function() {
 				</th>
 				<td>
 					<label>
-						<input type="checkbox" id="isMemberPrice" name="isMemberPrice" value="true"[#if product.memberPrice?has_content] checked="checked"[/#if] />${message("admin.product.isMemberPrice")}
+						<input type="checkbox" id="isMemberPrice" name="isMemberPrice" value="true"[#if product.memberPrice?has_content] checked="checked"[/#if] disabled="disabled"/>${message("admin.product.isMemberPrice")}
 					</label>
 				</td>
 			</tr>
@@ -437,7 +131,7 @@ $().ready(function() {
 				</th>
 				<td>
 					[#list memberRanks as memberRank]
-						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" value="${product.memberPrice.get(memberRank)}" maxlength="16" style="width: 60px; margin-right: 6px;"[#if !product.memberPrice?has_content] disabled="disabled"[/#if] />
+						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" value="${product.memberPrice.get(memberRank)}" maxlength="16" style="width: 60px; margin-right: 6px;"[#if !product.memberPrice?has_content] disabled="disabled"[/#if] readonly/>
 					[/#list]
 				</td>
 			</tr>
@@ -446,7 +140,7 @@ $().ready(function() {
 					${message("Product.cost")}:
 				</th>
 				<td>
-					<input type="text" name="cost" class="text" value="${product.cost}" maxlength="16" title="${message("admin.product.costTitle")}" />
+					<input type="text" name="cost" class="text" value="${product.cost}" maxlength="16" title="${message("admin.product.costTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -454,7 +148,7 @@ $().ready(function() {
 					${message("Product.marketPrice")}:
 				</th>
 				<td>
-					<input type="text" name="marketPrice" class="text" value="${product.marketPrice}" maxlength="16" title="${message("admin.product.marketPriceTitle")}" />
+					<input type="text" name="marketPrice" class="text" value="${product.marketPrice}" maxlength="16" title="${message("admin.product.marketPriceTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -476,7 +170,7 @@ $().ready(function() {
 					${message("Product.unit")}:
 				</th>
 				<td>
-					<input type="text" name="unit" class="text" maxlength="200" value="${product.unit}" />
+					<input type="text" name="unit" class="text" maxlength="200" value="${product.unit}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -484,7 +178,7 @@ $().ready(function() {
 					${message("Product.weight")}:
 				</th>
 				<td>
-					<input type="text" name="weight" class="text" value="${product.weight}" maxlength="9" title="${message("admin.product.weightTitle")}" />
+					<input type="text" name="weight" class="text" value="${product.weight}" maxlength="9" title="${message("admin.product.weightTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -492,7 +186,7 @@ $().ready(function() {
 					${message("Product.stock")}:
 				</th>
 				<td>
-					<input type="text" name="stock" class="text" value="${product.stock}" maxlength="9" title="${message("admin.product.stockTitle")}" />
+					<input type="text" name="stock" class="text" value="${product.stock}" maxlength="9" title="${message("admin.product.stockTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -500,7 +194,7 @@ $().ready(function() {
 					${message("Product.stockMemo")}:
 				</th>
 				<td>
-					<input type="text" name="stockMemo" class="text" value="${product.stockMemo}" maxlength="200" />
+					<input type="text" name="stockMemo" class="text" value="${product.stockMemo}" maxlength="200" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -508,7 +202,7 @@ $().ready(function() {
 					${message("Product.point")}:
 				</th>
 				<td>
-					<input type="text" name="point" class="text" value="${product.point}" maxlength="9" title="${message("admin.product.pointTitle")}" />
+					<input type="text" name="point" class="text" value="${product.point}" maxlength="9" title="${message("admin.product.pointTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -516,14 +210,9 @@ $().ready(function() {
 					${message("Product.brand")}:
 				</th>
 				<td>
-					<select name="brandId">
-						<option value="">${message("admin.common.choose")}</option>
-						[#list brands as brand]
-							<option value="${brand.id}"[#if brand == product.brand] selected="selected"[/#if]>
-								${brand.name}
-							</option>
-						[/#list]
-					</select>
+					[#if product.brand??]
+						${product.brand.name}
+					[/#if]
 				</td>
 			</tr>
 			<tr>
@@ -533,7 +222,7 @@ $().ready(function() {
 				<td>
 					[#list tags as tag]
 						<label>
-							<input type="checkbox" name="tagIds" value="${tag.id}"[#if product.tags?seq_contains(tag)] checked="checked"[/#if] />${tag.name}
+							<input type="checkbox" name="tagIds" value="${tag.id}"[#if product.tags?seq_contains(tag)] checked="checked"[/#if] disabled="disabled"/>${tag.name}
 						</label>
 					[/#list]
 				</td>
@@ -544,11 +233,11 @@ $().ready(function() {
 				</th>
 				<td>
 					<label>
-						<input type="checkbox" name="isMarketable" value="true"[#if product.isMarketable] checked="checked"[/#if] />${message("Product.isMarketable")}
+						<input type="checkbox" name="isMarketable" value="true"[#if product.isMarketable] checked="checked"[/#if] disabled="disabled" />${message("Product.isMarketable")}
 						<input type="hidden" name="_isMarketable" value="false" />
 					</label>
 					<label>
-						<input type="checkbox" name="isList" value="true"[#if product.isList] checked="checked"[/#if] />${message("Product.isList")}
+						<input type="checkbox" name="isList" value="true"[#if product.isList] checked="checked"[/#if] disabled="disabled"/>${message("Product.isList")}
 						<input type="hidden" name="_isList" value="false" />
 					</label>
 					<label>
@@ -556,7 +245,7 @@ $().ready(function() {
 						<input type="hidden" name="_isTop" value="false" />
 					</label>
 					<label>
-						<input type="checkbox" name="isGift" value="true"[#if product.isGift] checked="checked"[/#if] />${message("Product.isGift")}
+						<input type="checkbox" name="isGift" value="true"[#if product.isGift] checked="checked"[/#if] disabled="disabled"/>${message("Product.isGift")}
 						<input type="hidden" name="_isGift" value="false" />
 					</label>
 				</td>
@@ -566,7 +255,7 @@ $().ready(function() {
 					${message("Product.memo")}:
 				</th>
 				<td>
-					<input type="text" name="memo" class="text" value="${product.memo}" maxlength="200" />
+					<input type="text" name="memo" class="text" value="${product.memo}" maxlength="200" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -574,7 +263,7 @@ $().ready(function() {
 					${message("Product.keyword")}:
 				</th>
 				<td>
-					<input type="text" name="keyword" class="text" value="${product.keyword}" maxlength="200" title="${message("admin.product.keywordTitle")}" />
+					<input type="text" name="keyword" class="text" value="${product.keyword}" maxlength="200" title="${message("admin.product.keywordTitle")}" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -582,7 +271,7 @@ $().ready(function() {
 					${message("Product.seoTitle")}:
 				</th>
 				<td>
-					<input type="text" name="seoTitle" class="text" value="${product.seoTitle}" maxlength="200" />
+					<input type="text" name="seoTitle" class="text" value="${product.seoTitle}" maxlength="200" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -590,7 +279,7 @@ $().ready(function() {
 					${message("Product.seoKeywords")}:
 				</th>
 				<td>
-					<input type="text" name="seoKeywords" class="text" value="${product.seoKeywords}" maxlength="200" />
+					<input type="text" name="seoKeywords" class="text" value="${product.seoKeywords}" maxlength="200" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -598,14 +287,14 @@ $().ready(function() {
 					${message("Product.seoDescription")}:
 				</th>
 				<td>
-					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" />
+					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" readonly/>
 				</td>
 			</tr>
 		</table>
 		<table class="input tabContent">
 			<tr>
 				<td>
-					<textarea id="editor" name="introduction" class="editor" style="width: 100%;">${product.introduction?html}</textarea>
+					${product.introduction}
 				</td>
 			</tr>
 		</table>
@@ -652,7 +341,7 @@ $().ready(function() {
 			[/#list]
 		</table>
 		<table id="parameterTable" class="input tabContent">
-			[#list product.productCategory.parameterGroups as parameterGroup]
+			[#list product.shopCategory.parameterGroups as parameterGroup]
 				<tr>
 					<td style="text-align: right; padding-right: 10px;">
 						<strong>${parameterGroup.name}:</strong>
@@ -665,18 +354,18 @@ $().ready(function() {
 					<tr>
 						<th>${parameter.name}:</th>
 						<td>
-							<input type="text" name="parameter_${parameter.id}" class="text" value="${product.parameterValue.get(parameter)}" maxlength="200" />
+							<input type="text" name="parameter_${parameter.id}" class="text" value="${product.parameterValue.get(parameter)}" maxlength="200" readonly/>
 						</td>
 					</tr>
 				[/#list]
 			[/#list]
 		</table>
 		<table id="attributeTable" class="input tabContent">
-			[#list product.productCategory.attributes as attribute]
+			[#list product.shopCategory.attributes as attribute]
 				<tr>
 					<th>${attribute.name}:</th>
 					<td>
-						<select name="attribute_${attribute.id}">
+						<select name="attribute_${attribute.id}" disabled="disabled">
 							<option value="">${message("admin.common.choose")}</option>
 							[#list attribute.options as option]
 								<option value="${option}"[#if option == product.getAttributeValue(attribute)] selected="selected"[/#if]>${option}</option>
@@ -699,7 +388,7 @@ $().ready(function() {
 							[#list specifications as specification]
 								<li>
 									<label>
-										<input type="checkbox" name="specificationIds" value="${specification.id}"[#if product.specifications?seq_contains(specification)] checked="checked"[/#if] />${specification.name}
+										<input type="checkbox" name="specificationIds" value="${specification.id}"[#if product.specifications?seq_contains(specification)] checked="checked"[/#if] disabled="disabled"/>${specification.name}
 										[#if specification.memo??]
 											<span class="gray">[${specification.memo}]</span>
 										[/#if]
@@ -740,7 +429,7 @@ $().ready(function() {
 							</td>
 							[#list specifications as specification]
 								<td class="specification_${specification.id}[#if !product.specifications?seq_contains(specification)] hidden[/#if]">
-									<select name="specification_${specification.id}"[#if !product.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+									<select name="specification_${specification.id}" disabled="disabled">
 										[#list specification.specificationValues as specificationValue]
 											<option value="${specificationValue.id}">${specificationValue.name}</option>
 										[/#list]
@@ -759,7 +448,7 @@ $().ready(function() {
 								</td>
 								[#list specifications as specification]
 									<td class="specification_${specification.id}[#if !product.specifications?seq_contains(specification)] hidden[/#if]">
-										<select name="specification_${specification.id}"[#if !product.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+										<select name="specification_${specification.id}" disabled="disabled">
 											[#list specification.specificationValues as specificationValue]
 												<option value="${specificationValue.id}"[#if product.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
 											[/#list]
@@ -779,7 +468,7 @@ $().ready(function() {
 								</td>
 								[#list specifications as specification]
 									<td class="specification_${specification.id}[#if !specificationProduct.specifications?seq_contains(specification)] hidden[/#if]">
-										<select name="specification_${specification.id}"[#if !specificationProduct.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+										<select name="specification_${specification.id}" disabled="disabled">
 											[#list specification.specificationValues as specificationValue]
 												<option value="${specificationValue.id}"[#if specificationProduct.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
 											[/#list]

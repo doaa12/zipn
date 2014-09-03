@@ -507,7 +507,8 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
 		if (productCategory != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("productCategory"), productCategory), criteriaBuilder.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
+			Join<Product,Shop> join = root.join("shop");
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(join.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		}
 		if (brand != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));

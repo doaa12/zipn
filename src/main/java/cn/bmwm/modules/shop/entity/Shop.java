@@ -132,6 +132,11 @@ public class Shop extends BaseEntity {
 	private String city;
 	
 	/**
+	 * 店铺所在区域
+	 */
+	private String region;
+	
+	/**
 	 * 店铺地址
 	 */
 	private String address;
@@ -441,6 +446,18 @@ public class Shop extends BaseEntity {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+	
+	/**
+	 * 获取店铺所在区域
+	 * @return
+	 */
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 	/**

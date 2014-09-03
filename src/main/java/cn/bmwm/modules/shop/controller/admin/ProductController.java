@@ -312,7 +312,6 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(Long id, ModelMap model) {
-		model.addAttribute("productCategoryTree", productCategoryService.findTree());
 		model.addAttribute("brands", brandService.findAll());
 		model.addAttribute("tags", tagService.findList(Type.product));
 		model.addAttribute("memberRanks", memberRankService.findAll());

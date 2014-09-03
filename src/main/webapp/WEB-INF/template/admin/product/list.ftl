@@ -172,9 +172,6 @@ $().ready(function() {
 		<input type="hidden" id="isOutOfStock" name="isOutOfStock" value="[#if isOutOfStock??]${isOutOfStock?string("true", "false")}[/#if]" />
 		<input type="hidden" id="isStockAlert" name="isStockAlert" value="[#if isStockAlert??]${isStockAlert?string("true", "false")}[/#if]" />
 		<div class="bar">
-			<a href="add.jhtml" class="iconButton">
-				<span class="addIcon">&nbsp;</span>${message("admin.common.add")}
-			</a>
 			<div class="buttonWrap">
 				<a href="javascript:;" id="deleteButton" class="iconButton disabled">
 					<span class="deleteIcon">&nbsp;</span>${message("admin.common.delete")}
@@ -321,7 +318,7 @@ $().ready(function() {
 						[/#list]
 					</td>
 					<td>
-						${product.productCategory.name}
+						${product.shop.productCategory.name}
 					</td>
 					<td>
 						${currency(product.price)}

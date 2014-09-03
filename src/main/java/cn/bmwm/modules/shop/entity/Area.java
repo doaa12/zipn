@@ -23,6 +23,8 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Entity - 地区
  * 
@@ -77,6 +79,7 @@ public class Area extends OrderEntity {
 	 * 
 	 * @return 名称
 	 */
+	@JsonProperty
 	@NotEmpty
 	@Length(max = 100)
 	@Column(nullable = false, length = 100)

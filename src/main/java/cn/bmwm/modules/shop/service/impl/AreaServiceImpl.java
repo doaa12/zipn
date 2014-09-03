@@ -43,7 +43,7 @@ public class AreaServiceImpl extends BaseServiceImpl<Area, Long> implements Area
 	public List<Area> findRoots(Integer count) {
 		return areaDao.findRoots(count);
 	}
-
+	
 	@Override
 	@Transactional
 	@CacheEvict(value = "area", allEntries = true)

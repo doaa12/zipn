@@ -32,5 +32,5 @@ public interface AreaService extends BaseService<Area, Long> {
 	 * @return 顶级地区
 	 */
 	List<Area> findRoots(Integer count);
-
+	
 }

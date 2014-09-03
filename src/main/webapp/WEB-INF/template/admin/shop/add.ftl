@@ -15,12 +15,13 @@ $().ready(function() {
 
 	var $inputForm = $("#inputForm");
 	var $provinceId = $("#provinceId");
-	var cityId = $("#cityId")
+	var $cityId = $("#cityId");
+	var $areaId = $("#areaId");
 	
-	// 修改店铺省份
+	//修改店铺省份
 	$provinceId.change(function(){
 		$.ajax({
-			url: "cities.jhtml",
+			url: "/admin/area/children.jhtml",
 			type: "GET",
 			data: {id: $provinceId.val()},
 			dataType: "json",
@@ -33,6 +34,30 @@ $().ready(function() {
 					trHtml += '<option value="' + city.id + '">' + city.name + '</option>' ;
 				});
 				$cityId.append(trHtml);
+			}
+		});
+	});
+	
+	//修改店铺城市
+	$cityId.change(function(){
+		$.ajax({
+			url: "/admin/area/children.jhtml",
+			type: "GET",
+			data: {id: $cityId.val()},
+			dataType: "json",
+			success: function(data) {
+				if(!data || data.length == 0){
+					$areaId.empty();
+					$areaId.css('display', 'none');
+					return;
+				}
+				var html = '<option value="0">请选择...</option>';
+				$.each(data, function(i, area) {
+					html += '<option value="' + area.id + '">' + area.name + '</option>' ;
+				});
+				$areaId.empty();
+				$areaId.append(html);
+				$areaId.css('display', 'block');
 			}
 		});
 	});
@@ -96,6 +121,7 @@ $().ready(function() {
 				</th>
 				<td>
 					<select id="provinceId" name="provinceId">
+						<option value="0">请选择...</option>
 						[#list provinces as province]
 							<option value="${province.id}">
 								${province.name}
@@ -109,6 +135,8 @@ $().ready(function() {
 								${city.name}
 							</option>
 						[/#list]
+					</select>
+					<select id="areaId" name="areaId" style="display:none;">
 					</select>
 				</td>
 			</tr>

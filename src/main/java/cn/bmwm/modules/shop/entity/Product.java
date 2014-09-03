@@ -367,6 +367,11 @@ public class Product extends BaseEntity {
 	private String city;
 	
 	/**
+	 * 商品所在城市区域
+	 */
+	private String region;
+	
+	/**
 	 * 商品分类路径
 	 */
 	private String treePath;
@@ -2110,6 +2115,18 @@ public class Product extends BaseEntity {
 		this.city = city;
 	}
 	
+	/**
+	 * 获取所在城市区域
+	 * @return
+	 */
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
 	/**
 	 * 获取商品分类路径
 	 * @return
