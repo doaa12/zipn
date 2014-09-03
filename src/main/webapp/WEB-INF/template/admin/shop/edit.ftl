@@ -78,8 +78,9 @@ $().ready(function() {
 				</th>
 				<td>
 					<select id="adminId" name="adminId">
+						<option value="${shop.admin.id}" selected="selected">${shop.admin.username}</option>
 						[#list admins as admin]
-							<option value="${admin.id}"[#if shop.admin == admin] selected="selected"[/#if]>
+							<option value="${admin.id}">
 								${admin.username}
 							</option>
 						[/#list]
