@@ -48,28 +48,24 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 		super.setBaseDao(reviewDao);
 	}
 
-	@Transactional(readOnly = true)
+	@Cacheable("review")
 	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
 		return reviewDao.findList(member, product, type, isShow, count, filters, orders);
 	}
 
-	@Transactional(readOnly = true)
-	@Cacheable("review")
 	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion) {
 		return reviewDao.findList(member, product, type, isShow, count, filters, orders);
 	}
 
-	@Transactional(readOnly = true)
 	public Page<Review> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {
 		return reviewDao.findPage(member, product, type, isShow, pageable);
 	}
-
-	@Transactional(readOnly = true)
+	
+	@Cacheable(value = "review", key = "'member' + #member + 'product' + #product + 'type' + #type + 'isShow' + #isShow + 'count'")
 	public Long count(Member member, Product product, Type type, Boolean isShow) {
 		return reviewDao.count(member, product, type, isShow);
 	}
 
-	@Transactional(readOnly = true)
 	public boolean isReviewed(Member member, Product product) {
 		return reviewDao.isReviewed(member, product);
 	}

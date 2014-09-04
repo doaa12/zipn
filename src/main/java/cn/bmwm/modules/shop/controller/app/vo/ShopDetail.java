@@ -3,7 +3,7 @@ package cn.bmwm.modules.shop.controller.app.vo;
 import java.io.Serializable;
 
 /**
- * 店铺详情
+ * 店铺主页
  * @author zby
  * 2014-8-31 上午8:55:27
  */

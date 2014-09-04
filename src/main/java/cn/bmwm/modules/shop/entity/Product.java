@@ -959,6 +959,16 @@ public class Product extends BaseEntity {
 	public void setScoreCount(Long scoreCount) {
 		this.scoreCount = scoreCount;
 	}
+	
+	/**
+	 * 获取平均评分
+	 * @return
+	 */
+	@Transient
+	public Long getAvgScore() {
+		if(scoreCount == 0) return 5L;
+		return totalScore / scoreCount;
+	}
 
 	/**
 	 * 获取点击数
