@@ -19,7 +19,7 @@ public class Evaluate implements Serializable {
 	/**
 	 * 评价人用户名
 	 */
-	private String name;
+	private String name = "";
 	
 	/**
 	 * 评分
@@ -29,7 +29,7 @@ public class Evaluate implements Serializable {
 	/**
 	 * 评价内容
 	 */
-	private String desc;
+	private String desc = "";
 
 	public Long getId() {
 		return id;
@@ -44,7 +44,9 @@ public class Evaluate implements Serializable {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if(name != null) {
+			this.name = name;
+		}
 	}
 
 	public Integer getScore() {
@@ -60,7 +62,9 @@ public class Evaluate implements Serializable {
 	}
 
 	public void setDesc(String desc) {
-		this.desc = desc;
+		if(desc != null) {
+			this.desc = desc;
+		}
 	}
 	
 }

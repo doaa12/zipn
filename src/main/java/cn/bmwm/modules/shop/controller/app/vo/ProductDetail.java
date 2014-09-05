@@ -20,7 +20,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品标题
 	 */
-	private String title;
+	private String title = "";
 	
 	/**
 	 * 商品价格
@@ -30,12 +30,12 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 价格类型
 	 */
-	private String priceType;
+	private String priceType = "";
 	
 	/**
 	 * 商品图片
 	 */
-	private String imageurl;
+	private String imageurl = "";
 	
 	/**
 	 * 评价次数
@@ -50,12 +50,12 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品图文详情
 	 */
-	private String descurl;
+	private String descurl = "";
 	
 	/**
 	 * 商品介绍
 	 */
-	private String desc;
+	private String desc = "";
 	
 	/**
 	 * 店铺ID
@@ -65,12 +65,12 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 店铺名称
 	 */
-	private String storeName;
+	private String storeName = "";
 	
 	/**
 	 * 店铺图片
 	 */
-	private String storeImageUrl;
+	private String storeImageUrl = "";
 	
 	/**
 	 * 商品评价
@@ -90,7 +90,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		if(title != null){
+			this.title = title;
+		}
 	}
 
 	public Double getPrice() {
@@ -106,7 +108,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setPriceType(String priceType) {
-		this.priceType = priceType;
+		if(priceType != null) {
+			this.priceType = priceType;
+		}
 	}
 
 	public String getImageurl() {
@@ -114,7 +118,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setImageurl(String imageurl) {
-		this.imageurl = imageurl;
+		if(imageurl != null) {
+			this.imageurl = imageurl;
+		}
 	}
 
 	public Long getEvaluateNumber() {
@@ -138,7 +144,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setDescurl(String descurl) {
-		this.descurl = descurl;
+		if(descurl != null) {
+			this.descurl = descurl;
+		}
 	}
 
 	public String getDesc() {
@@ -146,7 +154,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setDesc(String desc) {
-		this.desc = desc;
+		if(desc != null) {
+			this.desc = desc;
+		}
 	}
 
 	public Long getStoreId() {
@@ -162,7 +172,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setStoreName(String storeName) {
-		this.storeName = storeName;
+		if(storeName != null) {
+			this.storeName = storeName;
+		}
 	}
 
 	public String getStoreImageUrl() {
@@ -170,7 +182,9 @@ public class ProductDetail implements Serializable {
 	}
 
 	public void setStoreImageUrl(String storeImageUrl) {
-		this.storeImageUrl = storeImageUrl;
+		if(storeImageUrl != null) {
+			this.storeImageUrl = storeImageUrl;
+		}
 	}
 
 	public List<Evaluate> getEvaluate() {
