@@ -341,6 +341,11 @@ $().ready(function() {
 					</td>
 					<td>
 						<a href="edit.jhtml?id=${product.id}">[${message("admin.common.edit")}]</a>
+						[#if product.isMarketable]
+							<a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}]</a>
+						[#else]
+							[${message("admin.product.notMarketable")}]
+						[/#if]
 					</td>
 				</tr>
 			[/#list]

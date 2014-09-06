@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zipn> 
 	<setting name="siteName" value="健康管理"/>
-	<setting name="siteUrl" value="http://www.zipn.cn"/>
-	<setting name="fileUrl" value="http://www.zipn.cn/files"/>
+	<setting name="siteUrl" value="http://121.40.146.235"/>
+	<setting name="fileUrl" value="http://121.40.146.235/files"/>
 	<setting name="fileBasePath" value="/web/files"/>
 	<setting name="logo" value="/upload/image/logo.gif"/>
 	<setting name="hotSearch" value="健康,体检"/>  

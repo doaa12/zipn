@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.springframework.cache.annotation.CacheEvict;
@@ -54,11 +53,13 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 
 		super.save(goods);
 		goodsDao.flush();
+		/*
 		if (goods.getProducts() != null) {
 			for (Product product : goods.getProducts()) {
 				staticService.build(product);
 			}
 		}
+		*/
 	}
 
 	@Override
@@ -75,17 +76,25 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 			}
 		}, excludes);
 		List<Product> products = productDao.findList(goods, excludes);
+		
+		/*
 		for (Product product : products) {
 			staticService.delete(product);
 		}
+		*/
+		
 		Goods pGoods = super.update(goods);
 		goodsDao.flush();
+		
+		/*
 		if (pGoods.getProducts() != null) {
 			for (Product product : pGoods.getProducts()) {
 				staticService.build(product);
 			}
 		}
+		*/
 		return pGoods;
+		
 	}
 
 	@Override

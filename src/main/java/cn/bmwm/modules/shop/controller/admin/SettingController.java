@@ -174,14 +174,14 @@ public class SettingController extends BaseController {
 					outputStream = new FileOutputStream(resource.getFile());
 					properties.setProperty("template.update_delay", "0");
 					properties.setProperty("message.cache_seconds", "0");
-					properties.store(outputStream, "SHOP++ PROPERTIES");
+					properties.store(outputStream, "zipn PROPERTIES");
 				}
 			} else {
 				if (templateUpdateDelay.equals("0") || messageCacheSeconds.equals("0")) {
 					outputStream = new FileOutputStream(resource.getFile());
 					properties.setProperty("template.update_delay", "3600");
 					properties.setProperty("message.cache_seconds", "3600");
-					properties.store(outputStream, "SHOP++ PROPERTIES");
+					properties.store(outputStream, "zipn PROPERTIES");
 				}
 			}
 		} catch (Exception e) {

@@ -83,23 +83,28 @@ public class ProductImageServiceImpl implements ProductImageService, ServletCont
 							String tempPath = System.getProperty("java.io.tmpdir");
 							File watermarkFile = new File(servletContext.getRealPath(setting.getWatermarkImage()));
 							File largeTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+							File watermarkLargeTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
 							File mediumTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+							File watermarkMediumTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
 							File thumbnailTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+							
 							try {
 								ImageUtils.zoom(tempFile, largeTempFile, setting.getLargeProductImageWidth(), setting.getLargeProductImageHeight());
-								ImageUtils.addWatermark(largeTempFile, largeTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
+								ImageUtils.addWatermark(largeTempFile, watermarkLargeTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
 								ImageUtils.zoom(tempFile, mediumTempFile, setting.getMediumProductImageWidth(), setting.getMediumProductImageHeight());
-								ImageUtils.addWatermark(mediumTempFile, mediumTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
+								ImageUtils.addWatermark(mediumTempFile, watermarkMediumTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
 								ImageUtils.zoom(tempFile, thumbnailTempFile, setting.getThumbnailProductImageWidth(), setting.getThumbnailProductImageHeight());
 								storagePlugin.upload(sourcePath, tempFile, contentType);
-								storagePlugin.upload(largePath, largeTempFile, DEST_CONTENT_TYPE);
-								storagePlugin.upload(mediumPath, mediumTempFile, DEST_CONTENT_TYPE);
+								storagePlugin.upload(largePath, watermarkLargeTempFile, DEST_CONTENT_TYPE);
+								storagePlugin.upload(mediumPath, watermarkMediumTempFile, DEST_CONTENT_TYPE);
 								storagePlugin.upload(thumbnailPath, thumbnailTempFile, DEST_CONTENT_TYPE);
 							} finally {
 								FileUtils.deleteQuietly(tempFile);
 								FileUtils.deleteQuietly(largeTempFile);
 								FileUtils.deleteQuietly(mediumTempFile);
 								FileUtils.deleteQuietly(thumbnailTempFile);
+								FileUtils.deleteQuietly(watermarkLargeTempFile);
+								FileUtils.deleteQuietly(watermarkMediumTempFile);
 							}
 							break;
 						}

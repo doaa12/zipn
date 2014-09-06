@@ -273,7 +273,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 		super.save(product);
 		productDao.flush();
-		staticService.build(product);
+		//staticService.build(product);
 	}
 
 	@Override
@@ -284,7 +284,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 		Product pProduct = super.update(product);
 		productDao.flush();
-		staticService.build(pProduct);
+		//staticService.build(pProduct);
 		return pProduct;
 	}
 

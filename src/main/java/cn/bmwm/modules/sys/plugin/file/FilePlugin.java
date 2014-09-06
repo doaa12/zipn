@@ -75,7 +75,7 @@ public class FilePlugin extends StoragePlugin implements ServletContextAware {
 
 	@Override
 	public void upload(String path, File file, String contentType) {
-		File destFile = new File(servletContext.getRealPath(path));
+		File destFile = new File(path);
 		try {
 			FileUtils.moveFile(file, destFile);
 		} catch (IOException e) {

@@ -380,7 +380,7 @@ public class Product extends BaseEntity {
 		try {
 			File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
 			org.dom4j.Document document = new SAXReader().read(shopxxXmlFile);
-			org.dom4j.Element element = (org.dom4j.Element) document.selectSingleNode("/shopxx/template[@id='productContent']");
+			org.dom4j.Element element = (org.dom4j.Element) document.selectSingleNode("/zipn/template[@id='productContent']");
 			staticPath = element.attributeValue("staticPath");
 		} catch (Exception e) {
 			e.printStackTrace();
