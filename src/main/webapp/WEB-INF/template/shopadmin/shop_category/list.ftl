@@ -79,7 +79,6 @@ $().ready(function() {
 					${shopCategory.order}
 				</td>
 				<td>
-					<a href="${base}${shopCategory.path}" target="_blank">[${message("admin.common.view")}]</a>
 					<a href="edit.jhtml?id=${shopCategory.id}">[${message("admin.common.edit")}]</a>
 					<a href="javascript:;" class="delete" val="${shopCategory.id}">[${message("admin.common.delete")}]</a>
 				</td>

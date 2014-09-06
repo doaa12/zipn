@@ -6,7 +6,6 @@ package cn.bmwm.modules.shop.controller.admin;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -51,7 +50,6 @@ public class ProductCategoryController extends BaseController {
 	/**
 	 * 保存
 	 */
-	/*
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(ProductCategory productCategory, Long parentId, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		productCategory.setParent(productCategoryService.find(parentId));
@@ -62,14 +60,13 @@ public class ProductCategoryController extends BaseController {
 		productCategory.setTreePath(null);
 		productCategory.setGrade(null);
 		productCategory.setChildren(null);
-		productCategory.setParameterGroups(null);
-		productCategory.setAttributes(null);
-		productCategory.setPromotions(null);
+		//productCategory.setParameterGroups(null);
+		//productCategory.setAttributes(null);
+		//productCategory.setPromotions(null);
 		productCategoryService.save(productCategory);
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";
 	}
-	*/
 
 	/**
 	 * 编辑

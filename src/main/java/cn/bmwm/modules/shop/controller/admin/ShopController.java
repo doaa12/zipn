@@ -1,8 +1,5 @@
 package cn.bmwm.modules.shop.controller.admin;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -80,19 +77,24 @@ public class ShopController extends BaseController {
 		ProductCategory productCategory = productCategoryService.find(productCategoryId);
 		shop.setProductCategory(productCategory);
 		shop.setTreePath(productCategory.getTreePath() + productCategory.getId() + ",");
+		shop.setShopType(productCategory.getName());
+		shop.setPayAccount("");
 		
 		if(areaId != null && areaId != 0) {
 			Area area = areaService.find(areaId);
 			shop.setCity(area.getFullName());
 			shop.setRegion(area.getName());
+			shop.setArea(area);
 		}else if(cityId != null && cityId != 0){
 			Area city = areaService.find(cityId);
 			shop.setCity(city.getFullName());
 			shop.setRegion(city.getName());
+			shop.setArea(city);
 		}else{
 			Area province = areaService.find(provinceId);
 			shop.setCity(province.getFullName());
 			shop.setRegion(province.getName());
+			shop.setArea(province);
 		}
 		
 		Admin admin = adminService.find(adminId);

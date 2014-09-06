@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -140,11 +141,6 @@ public class Shop extends BaseEntity {
 	 * 店铺地址
 	 */
 	private String address;
-	
-	/**
-	 * 店铺所在区域
-	 */
-	private String shopArea;
 	
 	/**
 	 * 店铺图片
@@ -293,6 +289,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OrderBy("order asc")
 	public Set<ShopCategory> getShopCategories() {
 		return shopCategories;
 	}
@@ -492,14 +489,6 @@ public class Shop extends BaseEntity {
 		this.address = address;
 	}
 	
-	public String getShopArea() {
-		return shopArea;
-	}
-
-	public void setShopArea(String shopArea) {
-		this.shopArea = shopArea;
-	}
-
 	/**
 	 * 总评分数
 	 * @return

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import cn.bmwm.modules.shop.dao.ProductCategoryDao;
-import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 
 /**
@@ -112,6 +111,7 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 	@Override
 	public void remove(ProductCategory productCategory) {
 		if (productCategory != null) {
+			/*
 			StringBuffer jpql = new StringBuffer("update Product product set ");
 			for (int i = 0; i < Product.ATTRIBUTE_VALUE_PROPERTY_COUNT; i++) {
 				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + i;
@@ -123,6 +123,7 @@ public class ProductCategoryDaoImpl extends BaseDaoImpl<ProductCategory, Long> i
 			}
 			jpql.append(" where product.productCategory = :productCategory");
 			entityManager.createQuery(jpql.toString()).setFlushMode(FlushModeType.COMMIT).setParameter("productCategory", productCategory).executeUpdate();
+			*/
 			super.remove(productCategory);
 		}
 	}

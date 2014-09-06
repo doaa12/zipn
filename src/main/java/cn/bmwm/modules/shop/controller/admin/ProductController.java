@@ -499,7 +499,10 @@ public class ProductController extends BaseController {
 		Set<Product> products = goods.getProducts();
 		
 		for(Product p : products) {
-			p.setIsTop(isTop);
+			if(p.getIsList()){
+				p.setIsTop(isTop);
+				break;
+			}
 		}
 		
 		goodsService.update(goods);

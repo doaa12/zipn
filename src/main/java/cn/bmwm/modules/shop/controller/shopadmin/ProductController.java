@@ -222,6 +222,7 @@ public class ProductController extends BaseController {
 			}
 		}
 		
+		product.setIsTop(false);
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -261,6 +262,11 @@ public class ProductController extends BaseController {
 		product.setOrderItems(null);
 		product.setGiftItems(null);
 		product.setProductNotifies(null);
+		
+		product.setCity(city);
+		product.setRegion(shop.getRegion());
+		product.setShop(shop);
+		product.setTreePath(shopCategory.getTreePath());
 		product.setShopCategory(shopCategory);
 		
 		for (MemberRank memberRank : memberRankService.findAll()) {
@@ -314,9 +320,11 @@ public class ProductController extends BaseController {
 								product.setSpecifications(new HashSet<Specification>());
 								product.setSpecificationValues(new HashSet<SpecificationValue>());
 								product.setCity(city);
+								product.setRegion(shop.getRegion());
 								product.setShop(shop);
 								product.setTreePath(shopCategory.getTreePath());
 								product.setShopCategory(shopCategory);
+								product.setIsTop(false);
 								products.add(product);
 							} else {
 								Product specificationProduct = new Product();
@@ -353,9 +361,11 @@ public class ProductController extends BaseController {
 								specificationProduct.setGiftItems(null);
 								specificationProduct.setProductNotifies(null);
 								specificationProduct.setCity(city);
+								specificationProduct.setRegion(shop.getRegion());
 								specificationProduct.setShop(shop);
 								specificationProduct.setTreePath(shopCategory.getTreePath());
 								specificationProduct.setShopCategory(shopCategory);
+								specificationProduct.setIsTop(false);
 								products.add(specificationProduct);
 							}
 						}
@@ -498,6 +508,7 @@ public class ProductController extends BaseController {
 								pProduct.setSpecifications(new HashSet<Specification>());
 								pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
 								pProduct.setCity(city);
+								pProduct.setRegion(shop.getRegion());
 								pProduct.setShopCategory(shopCategory);
 								pProduct.setTreePath(shopCategory.getTreePath());
 								pProduct.setShop(shop);
@@ -511,6 +522,7 @@ public class ProductController extends BaseController {
 									specificationProduct.setSpecifications(new HashSet<Specification>());
 									specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
 									specificationProduct.setCity(city);
+									specificationProduct.setRegion(shop.getRegion());
 									specificationProduct.setShop(shop);
 									specificationProduct.setShopCategory(shopCategory);
 									specificationProduct.setTreePath(shopCategory.getTreePath());
@@ -549,7 +561,9 @@ public class ProductController extends BaseController {
 									specificationProduct.setOrderItems(null);
 									specificationProduct.setGiftItems(null);
 									specificationProduct.setProductNotifies(null);
+									specificationProduct.setIsTop(false);
 									specificationProduct.setCity(city);
+									specificationProduct.setRegion(shop.getRegion());
 									specificationProduct.setShop(shop);
 									specificationProduct.setShopCategory(shopCategory);
 									specificationProduct.setTreePath(shopCategory.getTreePath());
@@ -567,6 +581,8 @@ public class ProductController extends BaseController {
 		} else {
 			product.setSpecifications(null);
 			product.setShop(shop);
+			product.setCity(shop.getCity());
+			product.setRegion(shop.getRegion());
 			product.setSpecificationValues(null);
 			BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers", "promotions", "cartItems",
 					"orderItems", "giftItems", "productNotifies" });
