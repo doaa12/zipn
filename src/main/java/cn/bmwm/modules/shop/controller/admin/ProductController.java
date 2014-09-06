@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -323,6 +324,7 @@ public class ProductController extends BaseController {
 	/**
 	 * 更新
 	 */
+	/*
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Product product, Long productCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] specificationProductIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		for (Iterator<ProductImage> iterator = product.getProductImages().iterator(); iterator.hasNext();) {
@@ -376,7 +378,7 @@ public class ProductController extends BaseController {
 		if (product.getImage() == null && product.getThumbnail() != null) {
 			product.setImage(product.getThumbnail());
 		}
-		/*
+		
 		for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
 			for (Parameter parameter : parameterGroup.getParameters()) {
 				String parameterValue = request.getParameter("parameter_" + parameter.getId());
@@ -387,8 +389,8 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		*/
-		/*
+		
+		
 		for (Attribute attribute : product.getProductCategory().getAttributes()) {
 			String attributeValue = request.getParameter("attribute_" + attribute.getId());
 			if (StringUtils.isNotEmpty(attributeValue)) {
@@ -397,7 +399,7 @@ public class ProductController extends BaseController {
 				product.setAttributeValue(attribute, null);
 			}
 		}
-		*/
+		
 		Goods goods = pProduct.getGoods();
 		List<Product> products = new ArrayList<Product>();
 		if (specificationIds != null && specificationIds.length > 0) {
@@ -479,6 +481,31 @@ public class ProductController extends BaseController {
 		goodsService.update(goods);
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";
+	}
+	*/
+	
+	/**
+	 * 更新
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(Long id, Boolean isTop) {
+		
+		if(isTop == null) {
+			isTop = false;
+		}
+		
+		Product product = productService.find(id);
+		Goods goods = product.getGoods();
+		Set<Product> products = goods.getProducts();
+		
+		for(Product p : products) {
+			p.setIsTop(isTop);
+		}
+		
+		goodsService.update(goods);
+		
+		return "redirect:list.jhtml";
+		
 	}
 
 	/**

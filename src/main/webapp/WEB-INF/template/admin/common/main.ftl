@@ -61,7 +61,7 @@ $().ready(function() {
 			<th>
 				<div id="nav" class="nav">
 					<ul>
-						[#list ["admin:product", "admin:productCategory", "admin:brand", "admin:shop", "admin:productNotify", "shopadmin:product", "shopadmin:shopCategory", "shopadmin:parameterGroup", "shopadmin:attribute", "shopadmin:specification"] as permission]
+						[#list ["admin:product", "admin:productCategory", "admin:brand", "admin:shop", "shopadmin:product", "shopadmin:shopCategory", "shopadmin:parameterGroup", "shopadmin:attribute", "shopadmin:specification"] as permission]
 							[@shiro.hasPermission name = permission]
 								<li>
 									<a href="#product">${message("admin.main.productNav")}</a>
@@ -155,11 +155,6 @@ $().ready(function() {
 					[@shiro.hasPermission name="admin:shop"]
 						<dd>
 							<a href="../shop/list.jhtml" target="iframe">${message("admin.role.shop")}</a>
-						</dd>
-					[/@shiro.hasPermission]
-					[@shiro.hasPermission name="admin:productNotify"]
-						<dd>
-							<a href="../product_notify/list.jhtml" target="iframe">${message("admin.main.productNotify")}</a>
 						</dd>
 					[/@shiro.hasPermission]
 					[@shiro.hasPermission name="shopadmin:product"]

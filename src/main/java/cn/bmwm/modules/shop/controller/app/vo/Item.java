@@ -27,6 +27,16 @@ public class Item {
 	 */
 	private String imageurl;
 	
+	/**
+	 * 商品价格
+	 */
+	private double price;
+	
+	/**
+	 * 店铺所在区域
+	 */
+	private String area;
+	
 
 	public Integer getType() {
 		return type;
@@ -59,6 +69,21 @@ public class Item {
 	public void setImageurl(String imageurl) {
 		this.imageurl = imageurl;
 	}
-	
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
 	
 }

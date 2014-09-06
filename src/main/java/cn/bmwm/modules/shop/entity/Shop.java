@@ -142,6 +142,11 @@ public class Shop extends BaseEntity {
 	private String address;
 	
 	/**
+	 * 店铺所在区域
+	 */
+	private String shopArea;
+	
+	/**
 	 * 店铺图片
 	 */
 	private String image;
@@ -487,6 +492,14 @@ public class Shop extends BaseEntity {
 		this.address = address;
 	}
 	
+	public String getShopArea() {
+		return shopArea;
+	}
+
+	public void setShopArea(String shopArea) {
+		this.shopArea = shopArea;
+	}
+
 	/**
 	 * 总评分数
 	 * @return

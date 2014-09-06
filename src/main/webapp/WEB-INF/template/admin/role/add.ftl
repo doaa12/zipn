@@ -119,9 +119,6 @@ $().ready(function() {
 						<label>
 							<input type="checkbox" name="authorities" value="admin:shop" />${message("admin.role.shop")}
 						</label>
-						<label>
-							<input type="checkbox" name="authorities" value="admin:productNotify" />${message("admin.role.productNotify")}
-						</label>
 					</span>
 				</td>
 			</tr>

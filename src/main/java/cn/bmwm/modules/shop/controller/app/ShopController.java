@@ -58,6 +58,39 @@ public class ShopController extends AppBaseController {
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
 	
+	
+	/**
+	 * 店铺主页
+	 * @return
+	 */
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> index(Long id) {
+		
+		if(id == null) {
+			throw new BusinessException(" Parameter 'id' can not be null ! ");
+		}
+		
+		Shop shop = shopService.find(id);
+		
+		if(shop == null) {
+			throw new BusinessException(" Invalid parameter 'id' ! ");
+		}
+		
+		if(shop == null) {
+			throw new BusinessException(" Invalid Parameter 'id' ");
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("flag", 1);
+		result.put("version", 1);
+		result.put("data", getShopDetail(shop));
+		result.put("categories", shopCategoryService.findAllShopCategories(shop));
+		
+		return result;
+		
+	}
+	
 
 	/**
 	 * 店铺列表
@@ -93,38 +126,6 @@ public class ShopController extends AppBaseController {
 		result.put("flag", 1);
 		result.put("version", 1);
 		result.put("data", getShopItems(itemPage.getList()));
-		
-		return result;
-		
-	}
-	
-	/**
-	 * 店铺主页
-	 * @return
-	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String,Object> index(Long id) {
-		
-		if(id == null) {
-			throw new BusinessException(" Parameter 'id' can not be null ! ");
-		}
-		
-		Shop shop = shopService.find(id);
-		
-		if(shop == null) {
-			throw new BusinessException(" Invalid parameter 'id' ! ");
-		}
-		
-		if(shop == null) {
-			throw new BusinessException(" Invalid Parameter 'id' ");
-		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getShopDetail(shop));
-		result.put("categories", shopCategoryService.findAllShopCategories(shop));
 		
 		return result;
 		

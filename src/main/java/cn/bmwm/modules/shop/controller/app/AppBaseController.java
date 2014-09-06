@@ -37,6 +37,7 @@ public class AppBaseController extends BaseController {
 			item.setTitle(product.getName());
 			item.setType(2);
 			item.setImageurl(product.getImage());
+			item.setPrice(product.getPrice().doubleValue());
 			itemList.add(item);
 		}
 		
@@ -70,6 +71,7 @@ public class AppBaseController extends BaseController {
 			item.setTitle(shop.getName());
 			item.setType(1);
 			item.setImageurl(shop.getImage());
+			item.setArea(shop.getShopArea());
 			itemList.add(item);
 		}
 		

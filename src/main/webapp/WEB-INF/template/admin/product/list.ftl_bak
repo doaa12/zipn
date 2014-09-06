@@ -173,6 +173,9 @@ $().ready(function() {
 		<input type="hidden" id="isStockAlert" name="isStockAlert" value="[#if isStockAlert??]${isStockAlert?string("true", "false")}[/#if]" />
 		<div class="bar">
 			<div class="buttonWrap">
+				<a href="javascript:;" id="deleteButton" class="iconButton disabled">
+					<span class="deleteIcon">&nbsp;</span>${message("admin.common.delete")}
+				</a>
 				<a href="javascript:;" id="refreshButton" class="iconButton">
 					<span class="refreshIcon">&nbsp;</span>${message("admin.common.refresh")}
 				</a>
