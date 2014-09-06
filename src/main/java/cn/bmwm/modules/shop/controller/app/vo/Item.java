@@ -35,7 +35,7 @@ public class Item {
 	/**
 	 * 店铺所在区域
 	 */
-	private String area;
+	private String area = "";
 	
 
 	public Integer getType() {
