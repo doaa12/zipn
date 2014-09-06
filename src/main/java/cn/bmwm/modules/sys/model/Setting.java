@@ -159,7 +159,17 @@ public class Setting implements Serializable {
 
 	/** 网站网址 */
 	private String siteUrl;
-
+	
+	/**
+	 * 文件网址
+	 */
+	private String fileUrl;
+	
+	/**
+	 * 文件父路径
+	 */
+	private String fileBasePath;
+	
 	/** logo */
 	private String logo;
 
@@ -425,6 +435,22 @@ public class Setting implements Serializable {
 	 */
 	public void setSiteUrl(String siteUrl) {
 		this.siteUrl = StringUtils.removeEnd(siteUrl, "/");
+	}
+	
+	public String getFileUrl() {
+		return fileUrl;
+	}
+
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
+
+	public String getFileBasePath() {
+		return fileBasePath;
+	}
+
+	public void setFileBasePath(String fileBasePath) {
+		this.fileBasePath = fileBasePath;
 	}
 
 	/**

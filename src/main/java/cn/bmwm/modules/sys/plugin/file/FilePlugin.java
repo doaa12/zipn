@@ -86,9 +86,9 @@ public class FilePlugin extends StoragePlugin implements ServletContextAware {
 	@Override
 	public String getUrl(String path) {
 		Setting setting = SettingUtils.get();
-		return setting.getSiteUrl() + path;
+		return setting.getFileUrl() + path.substring(setting.getFileBasePath().length());
 	}
-
+	
 	@Override
 	public List<FileInfo> browser(String path) {
 		Setting setting = SettingUtils.get();

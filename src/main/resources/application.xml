@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<shopxx> 
-	<setting name="siteName" value="健康管理"/>  
-	<setting name="siteUrl" value="http://localhost:8080"/>  
-	<setting name="logo" value="/upload/image/logo.gif"/>  
+<zipn> 
+	<setting name="siteName" value="健康管理"/>
+	<setting name="siteUrl" value="http://www.zipn.cn"/>
+	<setting name="fileUrl" value="http://www.zipn.cn/files"/>
+	<setting name="fileBasePath" value="/web/files"/>
+	<setting name="logo" value="/upload/image/logo.gif"/>
 	<setting name="hotSearch" value="健康,体检"/>  
 	<setting name="address" value="盐城市希望大道南路"/>  
 	<setting name="phone" value="400-8888888"/>  
@@ -47,10 +49,10 @@
 	<setting name="uploadFlashExtension" value="swf,flv"/>  
 	<setting name="uploadMediaExtension" value="swf,flv,mp3,wav,avi,rm,rmvb"/>  
 	<setting name="uploadFileExtension" value="zip,rar,7z,doc,docx,xls,xlsx,ppt,pptx"/>  
-	<setting name="imageUploadPath" value="/upload/image/${.now?string('yyyyMM')}/"/>  
-	<setting name="flashUploadPath" value="/upload/flash/${.now?string('yyyyMM')}/"/>  
-	<setting name="mediaUploadPath" value="/upload/media/${.now?string('yyyyMM')}/"/>  
-	<setting name="fileUploadPath" value="/upload/file/${.now?string('yyyyMM')}/"/>  
+	<setting name="imageUploadPath" value="/web/files/images/${.now?string('yyyyMM')}/"/>  
+	<setting name="flashUploadPath" value="/web/files/flash/${.now?string('yyyyMM')}/"/>  
+	<setting name="mediaUploadPath" value="/web/files/media/${.now?string('yyyyMM')}/"/>  
+	<setting name="fileUploadPath" value="/web/files/file/${.now?string('yyyyMM')}/"/>  
 	<setting name="smtpFromMail" value="test@bmwm.cn"/>  
 	<setting name="smtpHost" value="smtp.bmwm.cn"/>  
 	<setting name="smtpPort" value="25"/>  
@@ -101,4 +103,4 @@
 	<template id="orderPrint" type="print" name="订单打印" templatePath="/admin/print/order.ftl"/>  
 	<template id="productPrint" type="print" name="购物单打印" templatePath="/admin/print/product.ftl"/>  
 	<template id="shippingPrint" type="print" name="配送单打印" templatePath="/admin/print/shipping.ftl"/> 
-</shopxx>
+</zipn>

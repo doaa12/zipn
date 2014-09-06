@@ -129,7 +129,7 @@ public final class SettingUtils {
 			try {
 				File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
 				Document document = new SAXReader().read(shopxxXmlFile);
-				List<Element> elements = document.selectNodes("/shopxx/setting");
+				List<Element> elements = document.selectNodes("/zipn/setting");
 				for (Element element : elements) {
 					String name = element.attributeValue("name");
 					String value = element.attributeValue("value");
@@ -159,7 +159,7 @@ public final class SettingUtils {
 		try {
 			File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
 			Document document = new SAXReader().read(shopxxXmlFile);
-			List<Element> elements = document.selectNodes("/shopxx/setting");
+			List<Element> elements = document.selectNodes("/zipn/setting");
 			for (Element element : elements) {
 				try {
 					String name = element.attributeValue("name");
