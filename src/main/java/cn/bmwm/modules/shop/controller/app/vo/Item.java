@@ -83,7 +83,9 @@ public class Item {
 	}
 
 	public void setArea(String area) {
-		this.area = area;
+		if(area != null) {
+			this.area = area;
+		}
 	}
 	
 }
