@@ -531,10 +531,6 @@ $().ready(function() {
 						<input type="hidden" name="_isList" value="false" />
 					</label>
 					<label>
-						<input type="checkbox" name="isTop" value="true" />${message("Product.isTop")}
-						<input type="hidden" name="_isTop" value="false" />
-					</label>
-					<label>
 						<input type="checkbox" name="isGift" value="true" />${message("Product.isGift")}
 						<input type="hidden" name="_isGift" value="false" />
 					</label>
