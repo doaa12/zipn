@@ -27,7 +27,7 @@ import cn.bmwm.modules.shop.service.NavigationService;
  *
  * @version 1.0
  */
-//@Service("navigationServiceImpl")
+@Service("navigationServiceImpl")
 public class NavigationServiceImpl extends BaseServiceImpl<Navigation, Long> implements NavigationService {
 
 	@Resource(name = "navigationDaoImpl")

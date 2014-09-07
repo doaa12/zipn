@@ -29,7 +29,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("tagListDirective")
+@Component("tagListDirective")
 public class TagListDirective extends BaseDirective {
 
 	/** 变量名称 */

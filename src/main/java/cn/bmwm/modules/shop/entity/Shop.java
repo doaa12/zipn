@@ -1,10 +1,14 @@
 package cn.bmwm.modules.shop.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -15,6 +19,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -108,6 +113,11 @@ public class Shop extends BaseEntity {
 	private Set<ShopReview> reviews = new HashSet<ShopReview>();
 	
 	/**
+	 * 店铺图片
+	 */
+	private List<ShopImage> shopImages = new ArrayList<ShopImage>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -143,12 +153,12 @@ public class Shop extends BaseEntity {
 	private String address;
 	
 	/**
-	 * 店铺图片
+	 * 店铺列表图片URL
 	 */
 	private String image;
 	
 	/**
-	 * 店铺Logo
+	 * 店铺Logo图片URL
 	 */
 	private String logo;
 	
@@ -428,18 +438,18 @@ public class Shop extends BaseEntity {
 	}
 
 	/**
-	 * @return the image
+	 * 获取店铺图片
+	 * @return
 	 */
-	@JsonProperty
-	public String getImage() {
-		return image;
+	@Valid
+	@ElementCollection
+	@CollectionTable(name = "xx_shop_shop_image")
+	public List<ShopImage> getShopImages() {
+		return shopImages;
 	}
 
-	/**
-	 * @param image the image to set
-	 */
-	public void setImage(String image) {
-		this.image = image;
+	public void setShopImages(List<ShopImage> shopImages) {
+		this.shopImages = shopImages;
 	}
 
 	public String getLogo() {
@@ -489,6 +499,18 @@ public class Shop extends BaseEntity {
 		this.address = address;
 	}
 	
+	/**
+	 * 获取店铺列表图片
+	 * @return
+	 */
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	/**
 	 * 总评分数
 	 * @return

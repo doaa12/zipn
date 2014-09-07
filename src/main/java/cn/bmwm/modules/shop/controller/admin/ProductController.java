@@ -45,7 +45,7 @@ import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.GoodsService;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
-import cn.bmwm.modules.shop.service.ProductImageService;
+import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.SpecificationService;
@@ -78,8 +78,8 @@ public class ProductController extends BaseController {
 	private TagService tagService;
 	@Resource(name = "memberRankServiceImpl")
 	private MemberRankService memberRankService;
-	@Resource(name = "productImageServiceImpl")
-	private ProductImageService productImageService;
+	@Resource(name = "imageServiceImpl")
+	private ImageService imageService;
 	@Resource(name = "specificationServiceImpl")
 	private SpecificationService specificationService;
 	@Resource(name = "specificationValueServiceImpl")
@@ -209,7 +209,7 @@ public class ProductController extends BaseController {
 		}
 
 		for (ProductImage productImage : product.getProductImages()) {
-			productImageService.build(productImage);
+			imageService.build(productImage);
 		}
 		Collections.sort(product.getProductImages());
 		if (product.getImage() == null && product.getThumbnail() != null) {

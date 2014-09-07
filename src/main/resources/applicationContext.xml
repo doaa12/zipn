@@ -116,13 +116,13 @@
 				<entry key="flash_message" value-ref="flashMessageDirective" />
 				<entry key="pagination" value-ref="paginationDirective" />
 				<entry key="ad_position" value-ref="adPositionDirective" />
+				<entry key="navigation_list" value-ref="navigationListDirective" />
 				
 				<!--
 				<entry key="execute_time" value-ref="executeTimeDirective" />
 				<entry key="current_member" value-ref="currentMemberDirective" />
 				<entry key="seo" value-ref="seoDirective" />
 				<entry key="member_attribute_list" value-ref="memberAttributeListDirective" />
-				<entry key="navigation_list" value-ref="navigationListDirective" />
 				<entry key="tag_list" value-ref="tagListDirective" />
 				<entry key="friend_link_list" value-ref="friendLinkListDirective" />
 				<entry key="brand_list" value-ref="brandListDirective" />

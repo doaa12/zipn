@@ -7,10 +7,10 @@
 	<cache name="setting" maxElementsInMemory="100" eternal="true" overflowToDisk="true" />
 	<cache name="logConfig" maxElementsInMemory="100" eternal="true" overflowToDisk="true" />
 	<cache name="template" maxElementsInMemory="100" eternal="true" overflowToDisk="true" />
+	<cache name="navigation" maxElementsInMemory="500" timeToIdleSeconds="3600" timeToLiveSeconds="86400" eternal="false" overflowToDisk="true" />
 	<!--  
 	<cache name="articleHits" maxElementsInMemory="500" eternal="true" overflowToDisk="true" />
 	<cache name="productHits" maxElementsInMemory="500" eternal="true" overflowToDisk="true" />
-	<cache name="navigation" maxElementsInMemory="500" timeToIdleSeconds="3600" timeToLiveSeconds="86400" eternal="false" overflowToDisk="true" />
 	<cache name="friendLink" maxElementsInMemory="500" timeToIdleSeconds="3600" timeToLiveSeconds="86400" eternal="false" overflowToDisk="true" />
 	<cache name="article" maxElementsInMemory="500" timeToIdleSeconds="3600" timeToLiveSeconds="86400" eternal="false" overflowToDisk="true" />
 	<cache name="articleCategory" maxElementsInMemory="500" timeToIdleSeconds="3600" timeToLiveSeconds="86400" eternal="false" overflowToDisk="true" />

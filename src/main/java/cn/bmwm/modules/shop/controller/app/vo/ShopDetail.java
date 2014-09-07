@@ -1,6 +1,8 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 店铺主页
@@ -24,7 +26,7 @@ public class ShopDetail implements Serializable {
 	/**
 	 * 店铺大图片
 	 */
-	private String imageurl = "";
+	private List<String> shopImages = new ArrayList<String>();
 	
 	/**
 	 * 店铺头像图片
@@ -107,14 +109,12 @@ public class ShopDetail implements Serializable {
 		this.title = title;
 	}
 
-	public String getImageurl() {
-		return imageurl;
+	public List<String> getShopImages() {
+		return shopImages;
 	}
 
-	public void setImageurl(String imageurl) {
-		if(imageurl != null) {
-			this.imageurl = imageurl;
-		}
+	public void setShopImages(List<String> shopImages) {
+		this.shopImages = shopImages;
 	}
 
 	public String getHeaderImageurl() {

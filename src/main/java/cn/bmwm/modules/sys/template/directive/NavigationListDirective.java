@@ -29,7 +29,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("navigationListDirective")
+@Component("navigationListDirective")
 public class NavigationListDirective extends BaseDirective {
 
 	/** 变量名称 */

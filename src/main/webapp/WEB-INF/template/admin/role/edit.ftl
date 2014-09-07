@@ -85,6 +85,9 @@ $().ready(function() {
 				<td>
 					<span class="fieldSet">
 						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:shopsetting"[#if role.authorities?seq_contains("shopadmin:shopsetting")] checked="checked"[/#if] />${message("shopadmin.main.shopsetting")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="shopadmin:product"[#if role.authorities?seq_contains("shopadmin:product")] checked="checked"[/#if] />${message("shopadmin.role.product")}
 						</label>
 						<label>

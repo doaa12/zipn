@@ -5,14 +5,15 @@
 package cn.bmwm.modules.shop.service;
 
 import cn.bmwm.modules.shop.entity.ProductImage;
+import cn.bmwm.modules.shop.entity.ShopImage;
 
 /**
- * Service - 商品图片
+ * Service - 图片
  * 
  *
  * @version 1.0
  */
-public interface ProductImageService {
+public interface ImageService {
 
 	/**
 	 * 生成商品图片
@@ -21,5 +22,11 @@ public interface ProductImageService {
 	 *            商品图片
 	 */
 	void build(ProductImage productImage);
+	
+	/**
+	 * 店铺图片
+	 * @param shopImage
+	 */
+	void build(ShopImage shopImage);
 
 }

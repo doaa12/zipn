@@ -22,6 +22,7 @@ import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
+import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.entity.ShopReview;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
@@ -75,10 +76,6 @@ public class ShopController extends AppBaseController {
 		
 		if(shop == null) {
 			throw new BusinessException(" Invalid parameter 'id' ! ");
-		}
-		
-		if(shop == null) {
-			throw new BusinessException(" Invalid Parameter 'id' ");
 		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -234,7 +231,6 @@ public class ShopController extends AppBaseController {
 		
 		detail.setCode(shop.getId());
 		detail.setTitle(shop.getName());
-		detail.setImageurl(shop.getImage());
 		detail.setHeaderImageurl(shop.getLogo());
 		detail.setScore(shop.getAvgScore());
 		detail.setCollectFlag(0);
@@ -245,6 +241,17 @@ public class ShopController extends AppBaseController {
 		detail.setType(shop.getShopType());
 		detail.setAddress(shop.getAddress());
 		detail.setNotice(shop.getNotice());
+		
+		List<ShopImage> shopImages = shop.getShopImages();
+		List<String> imageList = new ArrayList<String>();
+		
+		if(shopImages != null && shopImages.size() > 0) {
+			for(ShopImage image : shopImages) {
+				imageList.add(image.getMedium());
+			}
+		}
+		
+		detail.setShopImages(imageList);
 		
 		ShopReview shopReview = shopReviewService.findLatestReview(shop);
 		detail.setEvaluate(shopReview == null ? "" : shopReview.getContent());

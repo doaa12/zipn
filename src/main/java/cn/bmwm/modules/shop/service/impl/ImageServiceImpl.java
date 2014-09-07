@@ -14,7 +14,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.task.TaskExecutor;
@@ -25,7 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.bmwm.common.utils.FreemarkerUtils;
 import cn.bmwm.common.utils.ImageUtils;
 import cn.bmwm.modules.shop.entity.ProductImage;
-import cn.bmwm.modules.shop.service.ProductImageService;
+import cn.bmwm.modules.shop.entity.ShopImage;
+import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.plugin.StoragePlugin;
 import cn.bmwm.modules.sys.utils.SettingUtils;
@@ -36,8 +36,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  *
  * @version 1.0
  */
-@Service("productImageServiceImpl")
-public class ProductImageServiceImpl implements ProductImageService, ServletContextAware {
+@Service("imageServiceImpl")
+public class ImageServiceImpl implements ImageService, ServletContextAware {
 
 	/** 目标扩展名 */
 	private static final String DEST_EXTENSION = "jpg";
@@ -143,6 +143,41 @@ public class ProductImageServiceImpl implements ProductImageService, ServletCont
 						productImage.setLarge(storagePlugin.getUrl(largePath));
 						productImage.setMedium(storagePlugin.getUrl(mediumPath));
 						productImage.setThumbnail(storagePlugin.getUrl(thumbnailPath));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void build(ShopImage shopImage) {
+		MultipartFile multipartFile = shopImage.getFile();
+		if (multipartFile != null && !multipartFile.isEmpty()) {
+			try {
+				Setting setting = SettingUtils.get();
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("uuid", UUID.randomUUID().toString());
+				String uploadPath = FreemarkerUtils.process(setting.getImageUploadPath(), model);
+				String uuid = UUID.randomUUID().toString();
+				String sourcePath = uploadPath + uuid + "-source." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+				String largePath = uploadPath + uuid + "-large." + DEST_EXTENSION;
+				String mediumPath = uploadPath + uuid + "-medium." + DEST_EXTENSION;
+				String thumbnailPath = uploadPath + uuid + "-thumbnail." + DEST_EXTENSION;
+
+				Collections.sort(storagePlugins);
+				for (StoragePlugin storagePlugin : storagePlugins) {
+					if (storagePlugin.getIsEnabled()) {
+						File tempFile = new File(System.getProperty("java.io.tmpdir") + "/upload_" + UUID.randomUUID() + ".tmp");
+						if (!tempFile.getParentFile().exists()) {
+							tempFile.getParentFile().mkdirs();
+						}
+						multipartFile.transferTo(tempFile);
+						addTask(sourcePath, largePath, mediumPath, thumbnailPath, tempFile, multipartFile.getContentType());
+						shopImage.setSource(storagePlugin.getUrl(sourcePath));
+						shopImage.setLarge(storagePlugin.getUrl(largePath));
+						shopImage.setMedium(storagePlugin.getUrl(mediumPath));
+						shopImage.setThumbnail(storagePlugin.getUrl(thumbnailPath));
 					}
 				}
 			} catch (Exception e) {

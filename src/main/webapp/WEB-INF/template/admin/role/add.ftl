@@ -84,6 +84,9 @@ $().ready(function() {
 				<td>
 					<span class="fieldSet">
 						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:shopsetting" />${message("shopadmin.main.shopsetting")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="shopadmin:product" />${message("shopadmin.role.product")}
 						</label>
 						<label>
