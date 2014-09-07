@@ -164,11 +164,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param page：页码
 	 * @param size：每页显示商品数量
 	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
-	 * @param x：纬度
-	 * @param y：经度
+	 * @param x：经度
+	 * @param y：纬度
 	 */
 	@Cacheable(value = "product", key = "'shop' + #shop.id + 'type' + #type + 'category' + #category + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findShopProductList'")
-	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Integer x, Integer y){
+	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Double x, Double y){
 		return productDao.findShopProductList(shop, type, category, page, size, order, x, y);
 	}
 

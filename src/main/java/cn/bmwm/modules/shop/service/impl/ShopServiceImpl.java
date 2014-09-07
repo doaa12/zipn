@@ -51,12 +51,12 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
-	 * @param x : 纬度
-	 * @param y : 经度
+	 * @param x : 经度
+	 * @param y : 纬度
 	 * @return
 	 */
 	@Cacheable(value = "shop", key = "'city' + #city + 'category' + #category + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findList'")
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y) {
 		return shopDao.findList(city, category, page, size, order, x, y);
 	}
 	

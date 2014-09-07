@@ -93,11 +93,13 @@ public class ShopController extends AppBaseController {
 	 * 店铺列表
 	 * 首页和一级分类下的商铺推荐,点击更多,显示该分类下的店铺列表
 	 * @param order : 排序，1：推荐，2：人气，3：附近，4：价格
+	 * @param x : 经度
+	 * @param y : 纬度
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city, Integer order, Integer page, Integer size, Integer x, Integer y) {
+	public Map<String,Object> list(Long catId, String city, Integer order, Integer page, Integer size, Double x, Double y) {
 		
 		if(catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null ! ");
@@ -136,13 +138,13 @@ public class ShopController extends AppBaseController {
 	 * @param page：页码
 	 * @param size：每页显示商品数量
 	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
-	 * @param x：纬度
-	 * @param y：经度
+	 * @param x：经度
+	 * @param y：纬度
 	 * @return
 	 */
 	@RequestMapping(value = "/productlist", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size, Integer order, Integer x, Integer y) {
+	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size, Integer order, Double x, Double y) {
 		
 		if(type == 3 && catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null !");

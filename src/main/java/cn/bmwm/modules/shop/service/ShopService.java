@@ -35,7 +35,7 @@ public interface ShopService extends BaseService<Shop,Long>{
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y);
+	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y);
 	
 	/**
 	 * 查找推荐店铺

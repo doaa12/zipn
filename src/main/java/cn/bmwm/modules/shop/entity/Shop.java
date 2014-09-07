@@ -198,6 +198,16 @@ public class Shop extends BaseEntity {
 	private Integer latitude;
 	
 	/**
+	 * 店铺经度
+	 */
+	private Double x;
+	
+	/**
+	 * 店铺纬度
+	 */
+	private Double y;
+	
+	/**
 	 * 获取店铺名称
 	 * @return
 	 */
@@ -593,13 +603,21 @@ public class Shop extends BaseEntity {
 	public void setLatitude(Integer latitude) {
 		this.latitude = latitude;
 	}
+	
+	public Double getX() {
+		return x;
+	}
 
-	public static void main(String[] args) {
-		long total = 10;
-		long times = 3;
-		double d = total / (times * 1.0);
-		d = Math.round(d * 10) / 10.0;
-		System.out.println(d);
+	public void setX(Double x) {
+		this.x = x;
+	}
+
+	public Double getY() {
+		return y;
+	}
+
+	public void setY(Double y) {
+		this.y = y;
 	}
 	
 }

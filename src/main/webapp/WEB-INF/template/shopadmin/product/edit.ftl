@@ -596,7 +596,7 @@ $().ready(function() {
 		<table class="input tabContent">
 			<tr>
 				<td>
-					<textarea id="editor" name="introduction" class="editor" style="width: 100%;">${product.introduction?html}</textarea>
+					<textarea id="editor" name="introduction" class="editor" style="width:100%;">${product.introduction?html}</textarea>
 				</td>
 			</tr>
 		</table>

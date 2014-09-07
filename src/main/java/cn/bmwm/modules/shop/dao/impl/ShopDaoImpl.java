@@ -71,11 +71,11 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	 * @param page : 页码
 	 * @param size : 每页记录数
 	 * @param order : 排序，1：推荐，2：人气，3：距离，4：价格
-	 * @param x : 纬度
-	 * @param y : 经度
+	 * @param x : 经度
+	 * @param y : 纬度
 	 * @return
 	 */
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y) {
 		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Shop> cq = cb.createQuery(Shop.class);

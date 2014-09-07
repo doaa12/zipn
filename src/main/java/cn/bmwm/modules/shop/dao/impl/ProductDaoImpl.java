@@ -233,11 +233,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @param page：页码
 	 * @param size：每页显示商品数量
 	 * @param order：排序方式，1：推荐，2：人气，3：距离，4：价格
-	 * @param x：纬度
-	 * @param y：经度
+	 * @param x：经度
+	 * @param y：纬度
 	 * @return
 	 */
-	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Integer x, Integer y) {
+	public ItemPage<Product> findShopProductList(Shop shop, Integer type, ShopCategory category, Integer page, Integer size, Integer order, Double x, Double y) {
 		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
