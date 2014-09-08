@@ -394,6 +394,16 @@ public class Setting implements Serializable {
 
 	/** CNZZ统计密码 */
 	private String cnzzPassword;
+	
+	/**
+	 * 百度地图云服务密匙
+	 */
+	private String lbsAk;
+	
+	/**
+	 * 百度地图云服务地址
+	 */
+	private String lbsURL;
 
 	/**
 	 * 获取网站名称
@@ -2099,6 +2109,22 @@ public class Setting implements Serializable {
 	 */
 	public String[] getUploadFileExtensions() {
 		return StringUtils.split(uploadFileExtension, SEPARATOR);
+	}
+	
+	public String getLbsAk() {
+		return lbsAk;
+	}
+
+	public void setLbsAk(String lbsAk) {
+		this.lbsAk = lbsAk;
+	}
+
+	public String getLbsURL() {
+		return lbsURL;
+	}
+
+	public void setLbsURL(String lbsURL) {
+		this.lbsURL = lbsURL;
 	}
 
 	/**

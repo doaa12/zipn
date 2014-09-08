@@ -78,7 +78,11 @@
 	<setting name="kuaidi100Key" value=""/>  
 	<setting name="isCnzzEnabled" value="false"/>  
 	<setting name="cnzzSiteId" value=""/>  
-	<setting name="cnzzPassword" value=""/>  
+	<setting name="cnzzPassword" value=""/>
+	<setting name="lbsAk" value="hUOPaUZIwH7GxmR2KvyMGA06"/>
+	<![CDATA[
+	<setting name="lbsURL" value="http://api.map.baidu.com/geocoder/v2/?address={address}&nbsp;output=json&nbsp;ak={ak}"/>
+	]]>
 	<logConfig operation="系统设置" urlPattern="/admin/setting/update.jhtml"/>  
 	<logConfig operation="添加管理员" urlPattern="/admin/admin/save.jhtml"/>  
 	<logConfig operation="编辑管理员" urlPattern="/admin/admin/update.jhtml"/>  
