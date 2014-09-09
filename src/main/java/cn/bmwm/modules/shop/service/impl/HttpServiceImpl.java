@@ -1,7 +1,6 @@
 package cn.bmwm.modules.shop.service.impl;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,22 +33,27 @@ public class HttpServiceImpl implements HttpService {
 	 * @return
 	 */
 	@Override
-	public Map<String,Object> executeGet(String url) {
+	public JSONObject executeGet(String url) {
 		
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(url);
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		
 		try {
+			
 			String result = httpClient.execute(httpGet, responseHandler);
 			JSONObject obj = JSONObject.parseObject(result);
+			
 			return obj;
+			
 		} catch (ClientProtocolException e) {
 			log.error("HTTP请求协议错误！", e);
 			throw new SystemException("HTTP请求协议错误！", e);
 		} catch (IOException e) {
 			log.error("IO异常！", e);
 			throw new SystemException("IO异常！", e);
+		} finally {
+			httpClient.getConnectionManager().shutdown();
 		}
 		
 	}

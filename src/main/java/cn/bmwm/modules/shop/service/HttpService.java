@@ -1,6 +1,6 @@
 package cn.bmwm.modules.shop.service;
 
-import java.util.Map;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Service -- HTTP
@@ -14,6 +14,6 @@ public interface HttpService {
 	 * @param url
 	 * @return
 	 */
-	Map<String,Object> executeGet(String url);
+	JSONObject executeGet(String url);
 	
 }
