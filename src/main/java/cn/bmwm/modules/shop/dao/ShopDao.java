@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import cn.bmwm.common.persistence.Page;
@@ -35,7 +36,7 @@ public interface ShopDao extends BaseDao<Shop,Long> {
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y);
+	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y);
 	
 	/**
 	 * 查找推荐店铺

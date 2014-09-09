@@ -262,6 +262,11 @@ $().ready(function() {
 					</td>
 					<td>
 						<a href="edit.jhtml?id=${shop.id}">[${message("admin.common.edit")}]</a>
+						[#if shop.isList]
+							<a href="${base}${shop.path}" target="_blank">[${message("admin.common.view")}]</a>
+						[#else]
+							[${message("Shop.notList")}]
+						[/#if]
 					</td>
 				</tr>
 			[/#list]

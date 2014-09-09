@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -59,7 +60,7 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @return
 	 */
 	@Cacheable(value = "shop", key = "'city' + #city + 'category' + #category + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findList'")
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y) {
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
 		return shopDao.findList(city, category, page, size, order, x, y);
 	}
 	

@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.persistence.FlushModeType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -75,7 +77,7 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	 * @param y : 纬度
 	 * @return
 	 */
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, Double x, Double y) {
+	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
 		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Shop> cq = cb.createQuery(Shop.class);
@@ -99,7 +101,11 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 			orderList.add(cb.desc(root.get("scoreTimes")));
 			orderList.add(cb.asc(root.get("createDate")));
 		}else if(order == 3) {
-			orderList.add(cb.desc(root.get("createDate")));
+			Expression<BigDecimal> longitude = root.get("longitude");
+			Expression<BigDecimal> latitude = root.get("latitude");
+			Expression<BigDecimal> longitudeDiff = cb.diff(longitude, x);
+			Expression<BigDecimal> latitudeDiff = cb.diff(latitude, y);
+			orderList.add(cb.asc(cb.sum(cb.prod(longitudeDiff, longitudeDiff), cb.prod(latitudeDiff, latitudeDiff))));
 		}else if(order == 4) {
 			orderList.add(cb.asc(root.get("avgPrice")));
 			orderList.add(cb.desc(root.get("createDate")));

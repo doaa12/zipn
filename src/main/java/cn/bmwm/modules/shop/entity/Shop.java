@@ -1,5 +1,6 @@
 package cn.bmwm.modules.shop.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -190,12 +191,12 @@ public class Shop extends BaseEntity {
 	/**
 	 * 店铺经度
 	 */
-	private Double longitude;
+	private BigDecimal longitude;
 	
 	/**
 	 * 店铺纬度
 	 */
-	private Double latitude;
+	private BigDecimal latitude;
 	
 	/**
 	 * 获取店铺名称
@@ -218,7 +219,6 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
-	@NotEmpty
 	@Length(max = 500)
 	public String getDescription() {
 		return description;
@@ -259,7 +259,6 @@ public class Shop extends BaseEntity {
 	 * 获取店铺支付账号
 	 * @return
 	 */
-	@NotEmpty
 	public String getPayAccount() {
 		return payAccount;
 	}
@@ -493,7 +492,6 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
-	@NotEmpty
 	public String getAddress() {
 		return address;
 	}
@@ -506,7 +504,6 @@ public class Shop extends BaseEntity {
 	 * 获取店铺列表图片
 	 * @return
 	 */
-	@NotEmpty
 	public String getImage() {
 		return image;
 	}
@@ -582,19 +579,21 @@ public class Shop extends BaseEntity {
 		this.avgPrice = avgPrice;
 	}
 	
-	public Double getLongitude() {
+	@Column(nullable = false, precision = 21, scale = 15)
+	public BigDecimal getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Double longitude) {
+	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
 
-	public Double getLatitude() {
+	@Column(nullable = false, precision = 21, scale = 15)
+	public BigDecimal getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Double latitude) {
+	public void setLatitude(BigDecimal latitude) {
 		this.latitude = latitude;
 	}
 	

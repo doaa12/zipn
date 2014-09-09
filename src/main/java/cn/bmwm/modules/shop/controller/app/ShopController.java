@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.controller.app;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,7 +120,18 @@ public class ShopController extends AppBaseController {
 		if(size == null) size = 10;
 		if(order == null) order = 1;
 		
-		ItemPage<Shop> itemPage = shopService.findList(city, category, page, size, order, x, y);
+		BigDecimal decimalx = null;
+		BigDecimal decimaly = null;
+		
+		if(x != null) {
+			decimalx = new BigDecimal(x);
+		}
+		
+		if(y != null) {
+			decimaly = new BigDecimal(y);
+		}
+		
+		ItemPage<Shop> itemPage = shopService.findList(city, category, page, size, order, decimalx, decimaly);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("flag", 1);

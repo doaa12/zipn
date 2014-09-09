@@ -1,5 +1,6 @@
 package cn.bmwm.modules.shop.controller.shopadmin;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -62,14 +63,7 @@ public class ShopController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Shop shop, RedirectAttributes redirectAttributes) {
 		
-		if(!isValid(shop)) {
-			return ERROR_VIEW;
-		}
-		
-		double[] coordinate = lbsService.getCoordinate(shop.getAddress());
-		
-		shop.setLatitude(coordinate[0]);
-		shop.setLongitude(coordinate[1]);
+		BigDecimal[] coordinate = lbsService.getCoordinate(shop.getAddress());
 		
 		for (Iterator<ShopImage> iterator = shop.getShopImages().iterator(); iterator.hasNext();) {
 			ShopImage shopImage = iterator.next();
@@ -100,6 +94,8 @@ public class ShopController extends BaseController {
 		pshop.setLogo(shop.getLogo());
 		pshop.setStatus(shop.getStatus());
 		pshop.setShopImages(shop.getShopImages());
+		pshop.setLatitude(coordinate[0]);
+		pshop.setLongitude(coordinate[1]);
 		
 		shopService.update(pshop);
 		

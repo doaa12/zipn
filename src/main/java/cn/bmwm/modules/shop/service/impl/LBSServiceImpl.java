@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service.impl;
 
+import java.math.BigDecimal;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +31,11 @@ public class LBSServiceImpl implements LBSService {
 	 * @param address
 	 */
 	@Override
-	public double[] getCoordinate(String address) {
+	public BigDecimal[] getCoordinate(String address) {
+		
+		if(address == null || address.trim().equals("")) {
+			throw new BusinessException("请输入店铺地址！");
+		}
 		
 		Setting setting = SettingUtils.get();
 		
@@ -59,14 +65,14 @@ public class LBSServiceImpl implements LBSService {
 			throw new BusinessException("无法定位店铺地址，请检查地址是否正确或者提供更精确的地址！");
 		}
 		
-		Double x = location.getDouble("lng");
-		Double y = location.getDouble("lat");
+		BigDecimal x = location.getBigDecimal("lng");
+		BigDecimal y = location.getBigDecimal("lat");
 		
 		if(x == null || y == null) {
 			throw new BusinessException("无法定位店铺地址，请检查地址是否正确或者提供更精确的地址！");
 		}
 		
-		return new double[]{y, x};
+		return new BigDecimal[]{y, x};
 		
 	}
 

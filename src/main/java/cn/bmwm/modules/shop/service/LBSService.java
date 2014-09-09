@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service;
 
+import java.math.BigDecimal;
+
 /**
  * Service -- 定位服务
  * @author zby
@@ -12,6 +14,6 @@ public interface LBSService {
 	 * @return
 	 * @param address
 	 */
-	public double[] getCoordinate(String address);
+	public BigDecimal[] getCoordinate(String address);
 	
 }
