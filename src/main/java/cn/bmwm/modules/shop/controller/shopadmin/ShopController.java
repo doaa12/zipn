@@ -18,6 +18,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.ImageService;
+import cn.bmwm.modules.shop.service.LBSService;
 import cn.bmwm.modules.shop.service.ShopService;
 import cn.bmwm.modules.sys.security.Principal;
 
@@ -39,6 +40,9 @@ public class ShopController extends BaseController {
 	@Resource(name = "imageServiceImpl")
 	private ImageService imageService;
 	
+	@Resource(name = "lbsServiceImpl")
+	private LBSService lbsService;
+	
 	/**
 	 * 店铺设置
 	 * @return
@@ -57,6 +61,15 @@ public class ShopController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Shop shop, RedirectAttributes redirectAttributes) {
+		
+		if(!isValid(shop)) {
+			return ERROR_VIEW;
+		}
+		
+		double[] coordinate = lbsService.getCoordinate(shop.getAddress());
+		
+		shop.setLatitude(coordinate[0]);
+		shop.setLongitude(coordinate[1]);
 		
 		for (Iterator<ShopImage> iterator = shop.getShopImages().iterator(); iterator.hasNext();) {
 			ShopImage shopImage = iterator.next();

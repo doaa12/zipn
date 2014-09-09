@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import cn.bmwm.modules.sys.exception.BusinessException;
+import cn.bmwm.modules.sys.exception.SystemException;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -44,7 +45,7 @@ public class ZipnExceptionResolver extends SimpleMappingExceptionResolver {
 			map.put("version", 1);
 			map.put("flag", 0);
 			
-			if(ex instanceof BusinessException) {
+			if(ex instanceof BusinessException || ex instanceof SystemException) {
 				map.put("message", ex.getMessage());
 			}else{
 				map.put("message", " Server Error ! ");

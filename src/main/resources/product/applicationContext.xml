@@ -115,6 +115,8 @@
 				<entry key="currency" value-ref="currencyMethod" />
 				<entry key="flash_message" value-ref="flashMessageDirective" />
 				<entry key="pagination" value-ref="paginationDirective" />
+				<entry key="ad_position" value-ref="adPositionDirective" />
+				<entry key="navigation_list" value-ref="navigationListDirective" />
 				
 				<!--  
 				<entry key="execute_time" value-ref="executeTimeDirective" />

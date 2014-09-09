@@ -190,22 +190,12 @@ public class Shop extends BaseEntity {
 	/**
 	 * 店铺经度
 	 */
-	private Integer longitude;
+	private Double longitude;
 	
 	/**
 	 * 店铺纬度
 	 */
-	private Integer latitude;
-	
-	/**
-	 * 店铺经度
-	 */
-	private Double x;
-	
-	/**
-	 * 店铺纬度
-	 */
-	private Double y;
+	private Double latitude;
 	
 	/**
 	 * 获取店铺名称
@@ -228,6 +218,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@NotEmpty
 	@Length(max = 500)
 	public String getDescription() {
 		return description;
@@ -268,6 +259,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺支付账号
 	 * @return
 	 */
+	@NotEmpty
 	public String getPayAccount() {
 		return payAccount;
 	}
@@ -461,7 +453,7 @@ public class Shop extends BaseEntity {
 	public void setShopImages(List<ShopImage> shopImages) {
 		this.shopImages = shopImages;
 	}
-
+	
 	public String getLogo() {
 		return logo;
 	}
@@ -501,6 +493,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@NotEmpty
 	public String getAddress() {
 		return address;
 	}
@@ -513,6 +506,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺列表图片
 	 * @return
 	 */
+	@NotEmpty
 	public String getImage() {
 		return image;
 	}
@@ -588,36 +582,20 @@ public class Shop extends BaseEntity {
 		this.avgPrice = avgPrice;
 	}
 	
-	public Integer getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Integer longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public Integer getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Integer latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
-	}
-	
-	public Double getX() {
-		return x;
-	}
-
-	public void setX(Double x) {
-		this.x = x;
-	}
-
-	public Double getY() {
-		return y;
-	}
-
-	public void setY(Double y) {
-		this.y = y;
 	}
 	
 }

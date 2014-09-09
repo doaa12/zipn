@@ -84,7 +84,7 @@ public class CategoryController extends AppBaseController {
 			
 			ItemCategory productItemCategory = this.getProductItemCategory(cat, list);
 			
-			List<Shop> shopList = shopService.findRecommendList(city, category);
+			List<Shop> shopList = shopService.findRecommendList(city, cat);
 			
 			if(shopList == null || shopList.size() == 0) continue;
 			

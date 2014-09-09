@@ -7,8 +7,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
@@ -77,6 +80,26 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 */
 	public List<String> findAllCities() {
 		return shopDao.findAllCities();
+	}
+	
+	@Override
+	@Transactional
+	@CacheEvict(value = {"shop", "productCategory"}, allEntries = true)
+	public void save(Shop shop) {
+		Assert.notNull(shop);
+
+		super.save(shop);
+		shopDao.flush();
+	}
+
+	@Override
+	@Transactional
+	@CacheEvict(value = { "shop", "productCategory"}, allEntries = true)
+	public Shop update(Shop shop) {
+		Assert.notNull(shop);
+		Shop pshop = super.update(shop);
+		shopDao.flush();
+		return pshop;
 	}
 	
 }
