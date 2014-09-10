@@ -21,6 +21,9 @@
 						<dd>[${constraintViolation.propertyPath}] ${constraintViolation.message}</dd>
 					[/#list]
 				[/#if]
+				[#if errorMessage??]
+					<dd>${errorMessage}</dd>
+				[/#if]
 				<dd>
 					<a href="javascript:;" onclick="window.history.back(); return false;">${message("admin.error.back")}</a>
 				</dd>

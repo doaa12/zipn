@@ -16,4 +16,14 @@ public interface LBSService {
 	 */
 	public BigDecimal[] getCoordinate(String address);
 	
+	/**
+	 * 计算两地距离
+	 * @param lat1：纬度
+	 * @param lng1：经度
+	 * @param lat2
+	 * @param lng2
+	 * @return
+	 */
+	public double getDistance(double lat1, double lng1, double lat2, double lng2);
+	
 }

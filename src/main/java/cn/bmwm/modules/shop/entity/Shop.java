@@ -189,14 +189,14 @@ public class Shop extends BaseEntity {
 	private Integer avgPrice;
 	
 	/**
-	 * 店铺经度
-	 */
-	private BigDecimal longitude;
-	
-	/**
 	 * 店铺纬度
 	 */
 	private BigDecimal latitude;
+	
+	/**
+	 * 店铺经度
+	 */
+	private BigDecimal longitude;
 	
 	/**
 	 * 获取店铺名称
@@ -205,7 +205,7 @@ public class Shop extends BaseEntity {
 	@JsonProperty
 	@NotEmpty
 	@Length(max = 200)
-	@Column(nullable = false)
+	@Column(length = 100, nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -220,6 +220,7 @@ public class Shop extends BaseEntity {
 	 */
 	@JsonProperty
 	@Length(max = 500)
+	@Column(length = 500)
 	public String getDescription() {
 		return description;
 	}
@@ -247,6 +248,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Column(length = 500)
 	public String getNotice() {
 		return notice;
 	}
@@ -259,6 +261,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺支付账号
 	 * @return
 	 */
+	@Column(length = 50)
 	public String getPayAccount() {
 		return payAccount;
 	}

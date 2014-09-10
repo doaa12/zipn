@@ -25,6 +25,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.entity.ShopReview;
+import cn.bmwm.modules.shop.service.LBSService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
@@ -59,6 +60,9 @@ public class ShopController extends AppBaseController {
 	
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
+	
+	@Resource(name = "lbsServiceImpl")
+	private LBSService lbsService;
 	
 	
 	/**
@@ -136,7 +140,7 @@ public class ShopController extends AppBaseController {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("flag", 1);
 		result.put("version", 1);
-		result.put("data", getShopItems(itemPage.getList()));
+		result.put("data", getShopItems(itemPage.getList(), x, y));
 		
 		return result;
 		
@@ -203,7 +207,7 @@ public class ShopController extends AppBaseController {
 	 * @param shopList
 	 * @return
 	 */
-	public List<ItemShop> getShopItems(List<Shop> shopList) {
+	public List<ItemShop> getShopItems(List<Shop> shopList, Double x, Double y) {
 		
 		List<ItemShop> list = new ArrayList<ItemShop>();
 		
@@ -214,7 +218,7 @@ public class ShopController extends AppBaseController {
 			ItemShop item = new ItemShop();
 			item.setCode(shop.getId());
 			item.setTitle(shop.getName());
-			item.setDistance("300米");
+			item.setDistance(getDistance(shop, x, y));
 			item.setPrice(shop.getAvgPrice());
 			item.setScore(shop.getAvgScore());
 			item.setStatus(shop.getStatus());
@@ -277,6 +281,32 @@ public class ShopController extends AppBaseController {
 		detail.setRecommend(this.getProductItemCategory(shop.getProductCategory(), recommendList));
 		
 		return detail;
+		
+	}
+	
+	/**
+	 * 计算距离,x:经度,y:纬度
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public String getDistance(Shop shop, Double x, Double y) {
+		
+		if(x == null || y == null) {
+			return "";
+		}
+		
+		if(shop.getLatitude() == null || shop.getLongitude() == null) {
+			return "";
+		}
+		
+		double distance = lbsService.getDistance(y, x, shop.getLatitude().doubleValue(), shop.getLongitude().doubleValue());
+		
+		if(distance < 1) {
+			return (int)(distance * 1000) + "米";
+		}else{
+			return (long)distance + "千米";
+		}
 		
 	}
 	

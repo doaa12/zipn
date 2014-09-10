@@ -21,6 +21,11 @@ import com.alibaba.fastjson.JSONObject;
  */
 @Service("lbsServiceImpl")
 public class LBSServiceImpl implements LBSService {
+	
+	/**
+	 * 地球半径(km)
+	 */
+	public static final double EARTH_RADIUS = 6378.137;
 
 	@Resource(name = "httpServiceImpl")
 	private HttpService httpService;
@@ -73,6 +78,37 @@ public class LBSServiceImpl implements LBSService {
 		}
 		
 		return new BigDecimal[]{y, x};
+		
+	}
+	
+	/**
+	 * 计算两地距离
+	 * @param lat1：纬度
+	 * @param lng1：经度
+	 * @param lat2
+	 * @param lng2
+	 * @return
+	 */
+	public double getDistance(double lat1, double lng1, double lat2, double lng2) {
+		double radLat1 = rad(lat1);
+	    double radLat2 = rad(lat2);
+	    double a = radLat1 - radLat2;
+	    double b = rad(lng1) - rad(lng2);
+	    double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + 
+	    Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+	    s = s * EARTH_RADIUS;
+	    s = Math.round(s * 10000) / 10000;
+	    return s;
+	}
+	
+	private double rad(double d){
+		return (d * Math.PI) / 180.0;
+	}
+	
+	public static void main(String[] args) {
+		
+		LBSServiceImpl lbs = new LBSServiceImpl();
+		System.out.println(lbs.getDistance(28.464142378681, 111.99046415183, 31.195375899548, 121.64038810364));
 		
 	}
 

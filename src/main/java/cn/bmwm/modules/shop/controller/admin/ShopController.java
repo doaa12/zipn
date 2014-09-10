@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.entity.Admin;
@@ -72,7 +73,7 @@ public class ShopController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(Shop shop, Long productCategoryId, Long provinceId, Long cityId, Long areaId, Long adminId, ModelMap model) {
+	public String save(Shop shop, Long productCategoryId, Long provinceId, Long cityId, Long areaId, Long adminId, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		ProductCategory productCategory = productCategoryService.find(productCategoryId);
 		shop.setProductCategory(productCategory);
@@ -107,6 +108,8 @@ public class ShopController extends BaseController {
 		
 		shopService.save(shop);
 		
+		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
 		
 	}
@@ -128,7 +131,7 @@ public class ShopController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(Long shopId, Long adminId, Boolean isList, Boolean isTop, ModelMap model) {
+	public String update(Long shopId, Long adminId, Boolean isList, Boolean isTop, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		Admin admin = adminService.find(adminId);
 		
@@ -148,6 +151,8 @@ public class ShopController extends BaseController {
 		shop.setIsTop(isTop);
 		
 		shopService.update(shop);
+		
+		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
 		return "redirect:list.jhtml";
 		

@@ -36,7 +36,7 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
 public class BaseController {
 
 	/** 错误视图 */
-	protected static final String ERROR_VIEW = "/admin/common/error";
+	public static final String ERROR_VIEW = "/admin/common/error";
 
 	/** 错误消息 */
 	protected static final Message ERROR_MESSAGE = Message.error("admin.message.error");
@@ -45,7 +45,7 @@ public class BaseController {
 	protected static final Message SUCCESS_MESSAGE = Message.success("admin.message.success");
 
 	/** "验证结果"参数名称 */
-	private static final String CONSTRAINT_VIOLATIONS_ATTRIBUTE_NAME = "constraintViolations";
+	public static final String CONSTRAINT_VIOLATIONS_ATTRIBUTE_NAME = "constraintViolations";
 
 	@Resource(name = "validator")
 	private Validator validator;
