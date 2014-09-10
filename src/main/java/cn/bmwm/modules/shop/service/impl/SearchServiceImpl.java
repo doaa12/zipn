@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
@@ -34,11 +33,14 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
+import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.ArticleDao;
 import cn.bmwm.modules.shop.dao.ProductDao;
+import cn.bmwm.modules.shop.dao.ShopDao;
 import cn.bmwm.modules.shop.entity.Article;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.SearchService;
 
 /**
@@ -56,14 +58,20 @@ public class SearchServiceImpl implements SearchService {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
+	
 	@Resource(name = "articleDaoImpl")
 	private ArticleDao articleDao;
+	
 	@Resource(name = "productDaoImpl")
 	private ProductDao productDao;
+	
+	@Resource(name = "shopDaoImpl")
+	private ShopDao shopDao;
 
 	public void index() {
 		index(Article.class);
 		index(Product.class);
+		index(Shop.class);
 	}
 
 	public void index(Class<?> type) {
@@ -88,6 +96,16 @@ public class SearchServiceImpl implements SearchService {
 				fullTextEntityManager.clear();
 				productDao.clear();
 			}
+		} else if(type == Shop.class) {
+			for(int i = 0 ; i < shopDao.count(); i += 20) {
+				List<Shop> shops = shopDao.findList(i, 20, null, null);
+				for(Shop shop : shops) {
+					fullTextEntityManager.index(shop);
+				}
+				fullTextEntityManager.flushToIndexes();
+				fullTextEntityManager.clear();
+				shopDao.clear();
+			}
 		}
 	}
 
@@ -104,10 +122,18 @@ public class SearchServiceImpl implements SearchService {
 			fullTextEntityManager.index(product);
 		}
 	}
+	
+	public void index(Shop shop) {
+		if (shop != null) {
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			fullTextEntityManager.index(shop);
+		}
+	}
 
 	public void purge() {
 		purge(Article.class);
 		purge(Product.class);
+		purge(Shop.class);
 	}
 
 	public void purge(Class<?> type) {
@@ -116,6 +142,8 @@ public class SearchServiceImpl implements SearchService {
 			fullTextEntityManager.purgeAll(Article.class);
 		} else if (type == Product.class) {
 			fullTextEntityManager.purgeAll(Product.class);
+		} else if(type == Shop.class) {
+			fullTextEntityManager.purgeAll(Shop.class);
 		}
 	}
 
@@ -130,6 +158,13 @@ public class SearchServiceImpl implements SearchService {
 		if (product != null) {
 			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 			fullTextEntityManager.purge(Product.class, product.getId());
+		}
+	}
+	
+	public void purge(Shop shop) {
+		if (shop != null) {
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			fullTextEntityManager.purge(Shop.class, shop.getId());
 		}
 	}
 
@@ -170,7 +205,6 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional(readOnly = true)
 	public Page<Product> search(String keyword, BigDecimal startPrice, BigDecimal endPrice, OrderType orderType, Pageable pageable) {
 		if (StringUtils.isEmpty(keyword)) {
 			return new Page<Product>();
@@ -241,5 +275,73 @@ public class SearchServiceImpl implements SearchService {
 		}
 		return new Page<Product>();
 	}
-
+	/*
+	public ItemPage<Product> search(String city, String keyword, BigDecimal startPrice, BigDecimal endPrice, OrderType orderType, Integer page, Integer size) {
+		if (StringUtils.isEmpty(keyword)) {
+			return null;
+		}
+		try {
+			String text = QueryParser.escape(keyword);
+			TermQuery snQuery = new TermQuery(new Term("sn", text));
+			Query keywordQuery = new QueryParser(Version.LUCENE_35, "keyword", new IKAnalyzer()).parse(text);
+			QueryParser nameParser = new QueryParser(Version.LUCENE_35, "name", new IKAnalyzer());
+			nameParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+			Query nameQuery = nameParser.parse(text);
+			FuzzyQuery nameFuzzyQuery = new FuzzyQuery(new Term("name", text), FUZZY_QUERY_MINIMUM_SIMILARITY);
+			TermQuery introductionQuery = new TermQuery(new Term("introduction", text));
+			TermQuery isMarketableQuery = new TermQuery(new Term("isMarketable", "true"));
+			TermQuery isListQuery = new TermQuery(new Term("isList", "true"));
+			TermQuery isGiftQuery = new TermQuery(new Term("isGift", "false"));
+			BooleanQuery textQuery = new BooleanQuery();
+			BooleanQuery query = new BooleanQuery();
+			textQuery.add(snQuery, Occur.SHOULD);
+			textQuery.add(keywordQuery, Occur.SHOULD);
+			textQuery.add(nameQuery, Occur.SHOULD);
+			textQuery.add(nameFuzzyQuery, Occur.SHOULD);
+			textQuery.add(introductionQuery, Occur.SHOULD);
+			query.add(isMarketableQuery, Occur.MUST);
+			query.add(isListQuery, Occur.MUST);
+			query.add(isGiftQuery, Occur.MUST);
+			query.add(textQuery, Occur.MUST);
+			if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
+				BigDecimal temp = startPrice;
+				startPrice = endPrice;
+				endPrice = temp;
+			}
+			if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0 && endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
+				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", startPrice.doubleValue(), endPrice.doubleValue(), true, true);
+				query.add(numericRangeQuery, Occur.MUST);
+			} else if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
+				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", startPrice.doubleValue(), null, true, false);
+				query.add(numericRangeQuery, Occur.MUST);
+			} else if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
+				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", null, endPrice.doubleValue(), false, true);
+				query.add(numericRangeQuery, Occur.MUST);
+			}
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Product.class);
+			SortField[] sortFields = null;
+			if (orderType == OrderType.priceAsc) {
+				sortFields = new SortField[] { new SortField("price", SortField.DOUBLE, false), new SortField("createDate", SortField.LONG, true) };
+			} else if (orderType == OrderType.priceDesc) {
+				sortFields = new SortField[] { new SortField("price", SortField.DOUBLE, true), new SortField("createDate", SortField.LONG, true) };
+			} else if (orderType == OrderType.salesDesc) {
+				sortFields = new SortField[] { new SortField("sales", SortField.INT, true), new SortField("createDate", SortField.LONG, true) };
+			} else if (orderType == OrderType.scoreDesc) {
+				sortFields = new SortField[] { new SortField("score", SortField.INT, true), new SortField("createDate", SortField.LONG, true) };
+			} else if (orderType == OrderType.dateDesc) {
+				sortFields = new SortField[] { new SortField("createDate", SortField.LONG, true) };
+			} else {
+				sortFields = new SortField[] { new SortField("isTop", SortField.STRING, true), new SortField(null, SortField.SCORE), new SortField("modifyDate", SortField.LONG, true) };
+			}
+			fullTextQuery.setSort(new Sort(sortFields));
+			fullTextQuery.setFirstResult((pageable.getPageNumber() - 1) * pageable.getPageSize());
+			fullTextQuery.setMaxResults(pageable.getPageSize());
+			return new Page<Product>(fullTextQuery.getResultList(), fullTextQuery.getResultSize(), pageable);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Page<Product>();
+	}
+	 */
 }

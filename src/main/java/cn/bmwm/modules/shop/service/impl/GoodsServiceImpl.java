@@ -22,6 +22,7 @@ import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.service.GoodsService;
+import cn.bmwm.modules.shop.service.SearchService;
 import cn.bmwm.modules.shop.service.StaticService;
 
 /**
@@ -35,10 +36,15 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 
 	@Resource(name = "goodsDaoImpl")
 	private GoodsDao goodsDao;
+	
 	@Resource(name = "productDaoImpl")
 	private ProductDao productDao;
-	@Resource(name = "staticServiceImpl")
-	private StaticService staticService;
+	
+	//@Resource(name = "staticServiceImpl")
+	//private StaticService staticService;
+	
+	@Resource(name = "searchServiceImpl")
+	private SearchService searchService;
 
 	@Resource(name = "goodsDaoImpl")
 	public void setBaseDao(GoodsDao goodsDao) {
@@ -49,17 +55,21 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
 	public void save(Goods goods) {
+		
 		Assert.notNull(goods);
 
 		super.save(goods);
 		goodsDao.flush();
-		/*
+		
 		if (goods.getProducts() != null) {
 			for (Product product : goods.getProducts()) {
-				staticService.build(product);
+				//staticService.build(product);
+				if(product.getIsList() && !product.getIsGift()) {
+					searchService.index(product);
+				}
 			}
 		}
-		*/
+		
 	}
 
 	@Override
@@ -77,22 +87,25 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 		}, excludes);
 		List<Product> products = productDao.findList(goods, excludes);
 		
-		/*
 		for (Product product : products) {
-			staticService.delete(product);
+			//staticService.delete(product);
+			if(product.getIsList() && !product.getIsGift()) {
+				searchService.purge(product);
+			}
 		}
-		*/
 		
 		Goods pGoods = super.update(goods);
 		goodsDao.flush();
 		
-		/*
 		if (pGoods.getProducts() != null) {
 			for (Product product : pGoods.getProducts()) {
-				staticService.build(product);
+				//staticService.build(product);
+				if(product.getIsList() && !product.getIsGift()) {
+					searchService.index(product);
+				}
 			}
 		}
-		*/
+		
 		return pGoods;
 		
 	}
@@ -124,7 +137,10 @@ public class GoodsServiceImpl extends BaseServiceImpl<Goods, Long> implements Go
 	public void delete(Goods goods) {
 		if (goods != null && goods.getProducts() != null) {
 			for (Product product : goods.getProducts()) {
-				staticService.delete(product);
+				//staticService.delete(product);
+				if(product.getIsList() && !product.getIsGift()) {
+					searchService.purge(product);
+				}
 			}
 		}
 		super.delete(goods);

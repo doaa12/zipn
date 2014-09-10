@@ -1939,6 +1939,7 @@ public class Product extends BaseEntity {
 	 * 是否促销
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public Boolean getIsPromotion() {
 		return isPromotion;
 	}
@@ -2117,6 +2118,7 @@ public class Product extends BaseEntity {
 	 * 获取商品所在城市
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	public String getCity() {
 		return city;
 	}
@@ -2129,6 +2131,7 @@ public class Product extends BaseEntity {
 	 * 获取所在城市区域
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.NO)
 	public String getRegion() {
 		return region;
 	}

@@ -43,7 +43,7 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.service.ProductService;
-import cn.bmwm.modules.shop.service.StaticService;
+import cn.bmwm.modules.shop.service.SearchService;
 
 /**
  * Service - 商品
@@ -63,8 +63,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	@Resource(name = "productDaoImpl")
 	private ProductDao productDao;
 	
-	@Resource(name = "staticServiceImpl")
-	private StaticService staticService;
+	//@Resource(name = "staticServiceImpl")
+	//private StaticService staticService;
+	
+	@Resource(name = "searchServiceImpl")
+	private SearchService searchService;
 
 	@Resource(name = "productDaoImpl")
 	public void setBaseDao(ProductDao productDao) {
@@ -316,7 +319,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Long... ids) {
-		super.delete(ids);
+		//super.delete(ids);
+		for(Long id : ids) {
+			delete(find(id));
+		}
 	}
 
 	@Override
@@ -324,7 +330,8 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Product product) {
 		if (product != null) {
-			staticService.delete(product);
+			//staticService.delete(product);
+			searchService.purge(product);
 		}
 		super.delete(product);
 	}

@@ -383,11 +383,16 @@ public class ProductController extends BaseController {
 			product.setSpecificationValues(null);
 			products.add(product);
 		}
+		
 		goods.getProducts().clear();
 		goods.getProducts().addAll(products);
+		
 		goodsService.save(goods);
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
+		
 	}
 	
 	/**
@@ -588,11 +593,16 @@ public class ProductController extends BaseController {
 					"orderItems", "giftItems", "productNotifies" });
 			products.add(pProduct);
 		}
+		
 		goods.getProducts().clear();
 		goods.getProducts().addAll(products);
+		
 		goodsService.update(goods);
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
+		
 	}
 	
 	/**

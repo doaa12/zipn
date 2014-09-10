@@ -23,8 +23,13 @@ import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Store;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -208,6 +213,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	@NotEmpty
 	@Length(max = 200)
 	@Column(length = 100, nullable = false)
@@ -224,6 +230,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	@Length(max = 500)
 	@Column(length = 500)
 	public String getDescription() {
@@ -239,6 +246,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	@Column(nullable = false)
 	public Integer getStatus() {
 		return status;
@@ -253,6 +261,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	@Column(length = 500)
 	public String getNotice() {
 		return notice;
@@ -426,6 +435,7 @@ public class Shop extends BaseEntity {
 	 * 获取是否置顶
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public Boolean getIsTop() {
 		return isTop;
 	}
@@ -438,6 +448,7 @@ public class Shop extends BaseEntity {
 	 * 获取是否列出
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public Boolean getIsList() {
 		return isList;
 	}
@@ -473,6 +484,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺所在区域
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public String getRegion() {
 		return region;
 	}
@@ -486,6 +498,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	@NotEmpty
 	public String getCity() {
 		return city;
@@ -500,6 +513,7 @@ public class Shop extends BaseEntity {
 	 * @return
 	 */
 	@JsonProperty
+	@Field(store = Store.YES, index = Index.TOKENIZED, analyzer = @Analyzer(impl = IKAnalyzer.class))
 	public String getAddress() {
 		return address;
 	}
@@ -512,6 +526,7 @@ public class Shop extends BaseEntity {
 	 * 获取店铺列表图片
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.NO)
 	public String getImage() {
 		return image;
 	}
@@ -523,6 +538,7 @@ public class Shop extends BaseEntity {
 	/**
 	 * @return the favoriteCount
 	 */
+	@Field(store = Store.YES, index = Index.NO)
 	public Long getFavoriteCount() {
 		return favoriteCount;
 	}
@@ -538,6 +554,7 @@ public class Shop extends BaseEntity {
 	 * 总评分数
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.NO)
 	public Long getTotalScore() {
 		return totalScore;
 	}
@@ -550,6 +567,7 @@ public class Shop extends BaseEntity {
 	 * 评分次数
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.NO)
 	public Long getScoreTimes() {
 		if(scoreTimes == null) return 0L;
 		return scoreTimes;
@@ -581,6 +599,7 @@ public class Shop extends BaseEntity {
 		this.treePath = treePath;
 	}
 	
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public String getShopType() {
 		return shopType;
 	}
@@ -593,6 +612,7 @@ public class Shop extends BaseEntity {
 	 * 平均价格
 	 * @return
 	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public Integer getAvgPrice() {
 		return avgPrice;
 	}
@@ -602,6 +622,7 @@ public class Shop extends BaseEntity {
 	}
 	
 	@Column(nullable = false, precision = 21, scale = 15)
+	@Field(store = Store.YES, index = Index.NO)
 	public BigDecimal getLongitude() {
 		return longitude;
 	}
@@ -609,7 +630,8 @@ public class Shop extends BaseEntity {
 	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
-
+	
+	@Field(store = Store.YES, index = Index.NO)
 	@Column(nullable = false, precision = 21, scale = 15)
 	public BigDecimal getLatitude() {
 		return latitude;

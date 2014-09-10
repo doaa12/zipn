@@ -12,7 +12,6 @@ import org.springframework.web.context.ServletContextAware;
 
 import cn.bmwm.modules.shop.service.CacheService;
 import cn.bmwm.modules.shop.service.SearchService;
-import cn.bmwm.modules.shop.service.StaticService;
 
 /**
  * Listener - 初始化
@@ -28,8 +27,8 @@ public class InitListener implements ServletContextAware, ApplicationListener<Co
 	/** servletContext */
 	private ServletContext servletContext;
 
-	@Resource(name = "staticServiceImpl")
-	private StaticService staticService;
+	//@Resource(name = "staticServiceImpl")
+	//private StaticService staticService;
 	@Resource(name = "cacheServiceImpl")
 	private CacheService cacheService;
 	@Resource(name = "searchServiceImpl")
