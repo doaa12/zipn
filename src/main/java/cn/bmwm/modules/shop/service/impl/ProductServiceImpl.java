@@ -133,6 +133,16 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	}
 	
 	/**
+	 * 查询最新发布的商品
+	 * @param city
+	 * @return
+	 */
+	@Cacheable(value = "product", key = "'city' + #city + 'findNewList'")
+	public List<Product> findNewList(String city) {
+		return productDao.findNewList(city);
+	}
+	
+	/**
 	 * 商品列表
 	 * @param city : 城市
 	 * @param category : 分类

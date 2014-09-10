@@ -75,8 +75,11 @@ public class IndexController extends AppBaseController {
 		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
 		
 		List<Shop> favoriteShopList = shopService.findFavoriteTopShopList(city);
+		ItemCategory favoriteShopCategory = this.getFavoriteShopItemCategory(favoriteShopList);
 		
-		ItemCategory favoriteItemCategory = this.getFavoriteShopItemCategory(favoriteShopList);
+		//发布新品
+		List<Product> favoriteProductList = productService.findNewList(city);
+		ItemCategory favoriteProductCategory = this.getFavoriteProductItemCategory(favoriteProductList);
 		
 		List<ItemCategory> products = new LinkedList<ItemCategory>();
 		
@@ -104,7 +107,13 @@ public class IndexController extends AppBaseController {
 		
 		List<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
 		
-		itemCategoryList.add(favoriteItemCategory);
+		if(favoriteShopCategory != null) {
+			itemCategoryList.add(favoriteShopCategory);
+		}
+		
+		if(favoriteProductCategory != null) {
+			itemCategoryList.add(favoriteProductCategory);
+		}
 		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
@@ -143,11 +152,47 @@ public class IndexController extends AppBaseController {
 		}
 		
 		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setCode(0L);
 		itemCategory.setShowmore(0);
 		itemCategory.setShowtype(1);
 		itemCategory.setTitle("动态");
 		itemCategory.setDataList(itemList);
 		itemCategory.setMoretype(1);
+		
+		return itemCategory;
+		
+	}
+	
+	/**
+	 * 获取首页收藏店铺发布新品
+	 * @param shopList
+	 * @return
+	 */
+	public ItemCategory getFavoriteProductItemCategory(List<Product> list) {
+		
+		if(list == null || list.size() == 0) {
+			return null;
+		}
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		for(Product product : list) {
+			Item item = new Item();
+			item.setCode(product.getId());
+			item.setTitle(product.getName());
+			item.setType(2);
+			item.setImageurl(product.getImage());
+			item.setArea(product.getRegion());
+			itemList.add(item);
+		}
+		
+		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setCode(0L);
+		itemCategory.setShowmore(0);
+		itemCategory.setShowtype(2);
+		itemCategory.setTitle("");
+		itemCategory.setDataList(itemList);
+		itemCategory.setMoretype(2);
 		
 		return itemCategory;
 		

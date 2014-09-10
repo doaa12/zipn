@@ -290,6 +290,13 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	List<Product> findHotList(String city, ProductCategory category);
 	
 	/**
+	 * 查询最新发布的商品
+	 * @param city
+	 * @return
+	 */
+	List<Product> findNewList(String city);
+	
+	/**
 	 * 商品列表
 	 * @param city : 城市
 	 * @param category : 分类

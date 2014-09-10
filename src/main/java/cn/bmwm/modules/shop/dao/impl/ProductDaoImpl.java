@@ -166,6 +166,17 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	}
 	
 	/**
+	 * 查询最新发布的商品
+	 * @param city
+	 * @return
+	 */
+	public List<Product> findNewList(String city) {
+		String jpql = " select product from Product product where product.city like :city and product.isList = true order by createDate desc ";
+		TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("city", "%" + city + "%").setFirstResult(0).setMaxResults(5).getResultList();
+	}
+	
+	/**
 	 * 商品列表
 	 * @param city : 城市
 	 * @param category : 分类
