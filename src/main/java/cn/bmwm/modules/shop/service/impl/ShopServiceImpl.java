@@ -50,6 +50,16 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	}
 	
 	/**
+	 * 查找收藏数量前几名的店铺
+	 * @param city
+	 * @return
+	 */
+	@Cacheable(value = "shop", key = "'city' + #city + 'findFavoriteTopShopList'")
+	public List<Shop> findFavoriteTopShopList(String city) {
+		return shopDao.findFavoriteTopShopList(city);
+	}
+	
+	/**
 	 * 查找店铺列表
 	 * @param city : 城市
 	 * @param category : 分类

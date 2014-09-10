@@ -164,6 +164,11 @@ public class Shop extends BaseEntity {
 	private String logo;
 	
 	/**
+	 * 店铺收藏数量
+	 */
+	private Long favoriteCount;
+	
+	/**
 	 * 总评分数
 	 */
 	private Long totalScore;
@@ -514,7 +519,21 @@ public class Shop extends BaseEntity {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	
+	/**
+	 * @return the favoriteCount
+	 */
+	public Long getFavoriteCount() {
+		return favoriteCount;
+	}
 
+	/**
+	 * @param favoriteCount the favoriteCount to set
+	 */
+	public void setFavoriteCount(Long favoriteCount) {
+		this.favoriteCount = favoriteCount;
+	}
+	
 	/**
 	 * 总评分数
 	 * @return

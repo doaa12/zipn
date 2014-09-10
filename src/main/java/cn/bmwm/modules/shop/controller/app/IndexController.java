@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
@@ -70,6 +71,13 @@ public class IndexController extends AppBaseController {
 		
 		List<ProductCategory> categories = productCategoryService.findRoots();
 		
+		//TODO:收藏店铺动态，待定，需要登录后才可以显示
+		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
+		
+		List<Shop> favoriteShopList = shopService.findFavoriteTopShopList(city);
+		
+		ItemCategory favoriteItemCategory = this.getFavoriteShopItemCategory(favoriteShopList);
+		
 		List<ItemCategory> products = new LinkedList<ItemCategory>();
 		
 		List<ItemCategory> shops = new LinkedList<ItemCategory>();
@@ -96,12 +104,11 @@ public class IndexController extends AppBaseController {
 		
 		List<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
 		
+		itemCategoryList.add(favoriteItemCategory);
+		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
 		if(products.size() > 0) itemCategoryList.addAll(products);
-		
-		//TODO:收藏店铺动态，待定，需要登录后才可以显示
-		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
 		
 		result.put("flag", 1);
 		result.put("version", 1);
@@ -109,6 +116,40 @@ public class IndexController extends AppBaseController {
 		result.put("categories", categories);
 		
 		return result;
+		
+	}
+	
+	/**
+	 * 获取首页收藏店铺动态
+	 * @param shopList
+	 * @return
+	 */
+	public ItemCategory getFavoriteShopItemCategory(List<Shop> shopList) {
+		
+		if(shopList == null || shopList.size() == 0) {
+			return null;
+		}
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		for(Shop shop : shopList) {
+			Item item = new Item();
+			item.setCode(shop.getId());
+			item.setTitle(shop.getName());
+			item.setType(1);
+			item.setImageurl(shop.getImage());
+			item.setArea(shop.getRegion());
+			itemList.add(item);
+		}
+		
+		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setShowmore(0);
+		itemCategory.setShowtype(1);
+		itemCategory.setTitle("动态");
+		itemCategory.setDataList(itemList);
+		itemCategory.setMoretype(1);
+		
+		return itemCategory;
 		
 	}
 	

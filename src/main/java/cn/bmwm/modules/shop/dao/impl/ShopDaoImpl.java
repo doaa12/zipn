@@ -15,6 +15,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import cn.bmwm.common.persistence.Page;
@@ -141,6 +142,18 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		String jpql = " select shop from Shop shop where shop.treePath like :treePath and shop.isList = true and shop.isTop = true and shop.city like :city order by shop.totalScore / shop.scoreTimes desc ";
 		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
 		return query.setFlushMode(FlushModeType.COMMIT).setParameter("treePath", "%," + category.getId() + ",%").setParameter("city", "%" + city + "%").setFirstResult(0).setMaxResults(10).getResultList();
+	}
+	
+	/**
+	 * 查找收藏数量前几名的店铺
+	 * @param city
+	 * @return
+	 */
+	@Cacheable(value = "shop", key = "'city' + #city + 'findFavoriteTopShopList'")
+	public List<Shop> findFavoriteTopShopList(String city) {
+		String jpql = " select shop from Shop shop where shop.city like :city and shop.isList = true order by shop.favoriteCount desc,createDate ";
+		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("city", "%" + city + "%").setFirstResult(0).setMaxResults(5).getResultList();
 	}
 	
 	/**

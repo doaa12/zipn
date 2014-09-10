@@ -47,6 +47,13 @@ public interface ShopDao extends BaseDao<Shop,Long> {
 	List<Shop> findRecommendList(String city, ProductCategory category);
 	
 	/**
+	 * 查找收藏数量前几名的店铺
+	 * @param city
+	 * @return
+	 */
+	List<Shop> findFavoriteTopShopList(String city);
+	
+	/**
 	 * 获取所有开通的城市
 	 * @return
 	 */
