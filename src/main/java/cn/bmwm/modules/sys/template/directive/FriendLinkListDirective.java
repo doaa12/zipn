@@ -29,7 +29,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("friendLinkListDirective")
+@Component("friendLinkListDirective")
 public class FriendLinkListDirective extends BaseDirective {
 
 	/** 变量名称 */

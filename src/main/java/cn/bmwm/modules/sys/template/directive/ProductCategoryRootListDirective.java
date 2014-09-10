@@ -27,7 +27,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("productCategoryRootListDirective")
+@Component("productCategoryRootListDirective")
 public class ProductCategoryRootListDirective extends BaseDirective {
 
 	/** 变量名称 */

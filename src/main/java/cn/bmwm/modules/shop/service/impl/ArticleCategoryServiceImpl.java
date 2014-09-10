@@ -24,7 +24,7 @@ import cn.bmwm.modules.shop.service.ArticleCategoryService;
  *
  * @version 1.0
  */
-//@Service("articleCategoryServiceImpl")
+@Service("articleCategoryServiceImpl")
 public class ArticleCategoryServiceImpl extends BaseServiceImpl<ArticleCategory, Long> implements ArticleCategoryService {
 
 	@Resource(name = "articleCategoryDaoImpl")

@@ -27,7 +27,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("currentMemberDirective")
+@Component("currentMemberDirective")
 public class CurrentMemberDirective extends BaseDirective {
 
 	/** 变量名称 */

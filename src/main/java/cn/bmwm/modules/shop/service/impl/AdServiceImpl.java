@@ -21,7 +21,7 @@ import cn.bmwm.modules.shop.service.AdService;
  *
  * @version 1.0
  */
-//@Service("adServiceImpl")
+@Service("adServiceImpl")
 public class AdServiceImpl extends BaseServiceImpl<Ad, Long> implements AdService {
 
 	@Resource(name = "adDaoImpl")

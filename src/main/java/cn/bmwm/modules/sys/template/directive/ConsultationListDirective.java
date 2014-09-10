@@ -36,7 +36,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("consultationListDirective")
+@Component("consultationListDirective")
 public class ConsultationListDirective extends BaseDirective {
 
 	/** "会员ID"参数名称 */

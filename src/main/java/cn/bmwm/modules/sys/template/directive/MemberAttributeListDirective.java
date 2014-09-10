@@ -27,7 +27,7 @@ import freemarker.template.TemplateModel;
  *
  * @version 1.0
  */
-//@Component("memberAttributeListDirective")
+@Component("memberAttributeListDirective")
 public class MemberAttributeListDirective extends BaseDirective {
 
 	/** 变量名称 */

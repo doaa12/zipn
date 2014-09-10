@@ -117,8 +117,6 @@
 				<entry key="pagination" value-ref="paginationDirective" />
 				<entry key="ad_position" value-ref="adPositionDirective" />
 				<entry key="navigation_list" value-ref="navigationListDirective" />
-				
-				<!--
 				<entry key="execute_time" value-ref="executeTimeDirective" />
 				<entry key="current_member" value-ref="currentMemberDirective" />
 				<entry key="seo" value-ref="seoDirective" />
@@ -137,7 +135,6 @@
 				<entry key="review_list" value-ref="reviewListDirective" />
 				<entry key="consultation_list" value-ref="consultationListDirective" />
 				<entry key="promotion_list" value-ref="promotionListDirective" />
-				-->
 			</map>
 		</property>
 	</bean>

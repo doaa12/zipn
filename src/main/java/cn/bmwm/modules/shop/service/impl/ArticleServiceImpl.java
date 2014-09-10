@@ -37,7 +37,7 @@ import cn.bmwm.modules.shop.service.StaticService;
  *
  * @version 1.0
  */
-//@Service("articleServiceImpl")
+@Service("articleServiceImpl")
 public class ArticleServiceImpl extends BaseServiceImpl<Article, Long> implements ArticleService, DisposableBean {
 
 	/** 查看点击数时间 */
