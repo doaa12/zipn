@@ -54,6 +54,13 @@ public interface ShopDao extends BaseDao<Shop,Long> {
 	List<Shop> findFavoriteTopShopList(String city);
 	
 	/**
+	 * 查询虚拟分类店铺
+	 * @param category
+	 * @return
+	 */
+	List<Shop> findVirtualCategoryShopList(Long catId);
+	
+	/**
 	 * 获取所有开通的城市
 	 * @return
 	 */

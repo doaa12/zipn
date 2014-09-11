@@ -157,6 +157,17 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	}
 	
 	/**
+	 * 查询虚拟分类店铺
+	 * @param category
+	 * @return
+	 */
+	public List<Shop> findVirtualCategoryShopList(Long catId) {
+		String jpql = " select shop from Shop shop join shop.virtualCategories category where category.id = :id order by shop.isTop desc,shop.favoriteCount desc ";
+		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("id", catId).setMaxResults(10).getResultList();
+	}
+	
+	/**
 	 * 获取所有开通的城市
 	 * @return
 	 */

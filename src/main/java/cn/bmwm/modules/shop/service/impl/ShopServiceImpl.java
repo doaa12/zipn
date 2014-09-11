@@ -76,6 +76,16 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	}
 	
 	/**
+	 * 查询虚拟分类店铺
+	 * @param category
+	 * @return
+	 */
+	@Cacheable(value = "shop", key = "'catId' + #catId + 'findVirtualCategoryShopList'")
+	public List<Shop> findVirtualCategoryShopList(Long catId) {
+		return shopDao.findVirtualCategoryShopList(catId);
+	}
+	
+	/**
 	 * 后台管理查找店铺分页
 	 * @param productCategory
 	 * @param city

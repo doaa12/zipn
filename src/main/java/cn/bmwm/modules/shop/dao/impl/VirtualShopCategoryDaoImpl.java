@@ -6,8 +6,6 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.FlushModeType;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -17,7 +15,6 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import cn.bmwm.modules.shop.dao.VirtualShopCategoryDao;
-import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.VirtualShopCategory;
 
 /**
@@ -54,17 +51,6 @@ public class VirtualShopCategoryDaoImpl extends BaseDaoImpl<VirtualShopCategory,
 		
 		return super.findList(cq, 0, null, null, null);
 		
-	}
-	
-	/**
-	 * 查询虚拟分类店铺
-	 * @param category
-	 * @return
-	 */
-	public List<Shop> findShopList(Long catId) {
-		String jpql = " select shop from Shop shop join shop.virtualCategories category where category.id = :id order by shop.isTop desc,shop.favoriteCount desc ";
-		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);
-		return query.setFlushMode(FlushModeType.COMMIT).setParameter("id", catId).setMaxResults(10).getResultList();
 	}
 	
 }

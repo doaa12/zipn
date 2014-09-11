@@ -93,7 +93,7 @@ public class IndexController extends AppBaseController {
 		
 		if(virtualShopCategoryList != null && virtualShopCategoryList.size() > 0) {
 			for(VirtualShopCategory virtualShopCategory : virtualShopCategoryList) {
-				List<Shop> shopList = virtualShopCategoryService.findShopList(virtualShopCategory.getId());
+				List<Shop> shopList = shopService.findVirtualCategoryShopList(virtualShopCategory.getId());
 				ItemCategory shopVirtualCategory = getVirtualShopCategory(virtualShopCategory, shopList);
 				shops.add(shopVirtualCategory);
 			}

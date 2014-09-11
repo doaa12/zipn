@@ -5,7 +5,6 @@ package cn.bmwm.modules.shop.service;
 
 import java.util.List;
 
-import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.VirtualShopCategory;
 
 /**
@@ -21,12 +20,5 @@ public interface VirtualShopCategoryService extends BaseService<VirtualShopCateg
 	 * @return
 	 */
 	List<VirtualShopCategory> findList(String city);
-	
-	/**
-	 * 查询虚拟分类店铺
-	 * @param category
-	 * @return
-	 */
-	List<Shop> findShopList(Long catId);
 	
 }
