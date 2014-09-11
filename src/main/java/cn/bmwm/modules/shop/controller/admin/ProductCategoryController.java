@@ -34,6 +34,7 @@ public class ProductCategoryController extends BaseController {
 
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
+	
 	@Resource(name = "brandServiceImpl")
 	private BrandService brandService;
 

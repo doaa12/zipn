@@ -347,6 +347,11 @@ public class Product extends BaseEntity {
 	private Map<Parameter, String> parameterValue = new HashMap<Parameter, String>();
 	
 	/**
+	 * 虚拟分类,用于首页归类商品推荐
+	 */
+	private List<VirtualProductCategory> virtualCategories = new ArrayList<VirtualProductCategory>();
+	
+	/**
 	 * 是否促销
 	 */
 	private Boolean isPromotion;
@@ -1935,6 +1940,21 @@ public class Product extends BaseEntity {
 		this.parameterValue = parameterValue;
 	}
 	
+	/**
+	 * @return the virtualCategories
+	 */
+	@ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+	public List<VirtualProductCategory> getVirtualCategories() {
+		return virtualCategories;
+	}
+
+	/**
+	 * @param virtualCategories the virtualCategories to set
+	 */
+	public void setVirtualCategories(List<VirtualProductCategory> virtualCategories) {
+		this.virtualCategories = virtualCategories;
+	}
+
 	/**
 	 * 是否促销
 	 * @return

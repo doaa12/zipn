@@ -10,6 +10,7 @@ import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.VirtualShopCategory;
 
 /**
  * App - 基础Controller

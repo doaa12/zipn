@@ -18,11 +18,13 @@ import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.VirtualShopCategory;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopFavoriteService;
 import cn.bmwm.modules.shop.service.ShopService;
+import cn.bmwm.modules.shop.service.VirtualShopCategoryService;
 import cn.bmwm.modules.sys.exception.BusinessException;
 
 
@@ -50,6 +52,9 @@ public class IndexController extends AppBaseController {
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 	
+	@Resource(name = "virtualShopCategoryServiceImpl")
+	private VirtualShopCategoryService virtualShopCategoryService;
+	
 	/**
 	 * App - 首页
 	 * 根据不同城市,查找该城市顶级分类下的置顶店铺和置顶商品,以及所有商品分类
@@ -69,8 +74,6 @@ public class IndexController extends AppBaseController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
-		List<ProductCategory> categories = productCategoryService.findRoots();
-		
 		//TODO:收藏店铺动态，待定，需要登录后才可以显示
 		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
 		
@@ -84,6 +87,19 @@ public class IndexController extends AppBaseController {
 		List<ItemCategory> products = new LinkedList<ItemCategory>();
 		
 		List<ItemCategory> shops = new LinkedList<ItemCategory>();
+		
+		//虚拟店铺分类
+		List<VirtualShopCategory> virtualShopCategoryList = virtualShopCategoryService.findList(city);
+		
+		if(virtualShopCategoryList != null && virtualShopCategoryList.size() > 0) {
+			for(VirtualShopCategory virtualShopCategory : virtualShopCategoryList) {
+				List<Shop> shopList = virtualShopCategoryService.findShopList(virtualShopCategory.getId());
+				ItemCategory shopVirtualCategory = getVirtualShopCategory(virtualShopCategory, shopList);
+				shops.add(shopVirtualCategory);
+			}
+		}
+		
+		List<ProductCategory> categories = productCategoryService.findRoots();
 		
 		for(ProductCategory category : categories) {
 			
@@ -193,6 +209,40 @@ public class IndexController extends AppBaseController {
 		itemCategory.setTitle("");
 		itemCategory.setDataList(itemList);
 		itemCategory.setMoretype(2);
+		
+		return itemCategory;
+		
+	}
+	
+	/**
+	 * 获取首页虚拟店铺分类
+	 * @param category
+	 * @param list
+	 * @return
+	 */
+	protected ItemCategory getVirtualShopCategory(VirtualShopCategory category, List<Shop> list) {
+		
+		if(list == null || list.size() == 0) return null;
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		for(Shop shop : list) {
+			Item item = new Item();
+			item.setCode(shop.getId());
+			item.setTitle(shop.getName());
+			item.setType(1);
+			item.setImageurl(shop.getImage());
+			item.setArea(shop.getRegion());
+			itemList.add(item);
+		}
+		
+		ItemCategory itemCategory = new ItemCategory();
+		itemCategory.setCode(category.getId());
+		itemCategory.setShowmore(0);
+		itemCategory.setShowtype(3);
+		itemCategory.setTitle(category.getName());
+		itemCategory.setDataList(itemList);
+		itemCategory.setMoretype(1);
 		
 		return itemCategory;
 		

@@ -20,6 +20,7 @@ import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.ShopDao;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.VirtualShopCategory;
 import cn.bmwm.modules.shop.service.ShopService;
 
 /**
@@ -98,7 +99,6 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	@CacheEvict(value = {"shop", "productCategory"}, allEntries = true)
 	public void save(Shop shop) {
 		Assert.notNull(shop);
-
 		super.save(shop);
 		shopDao.flush();
 	}
@@ -107,10 +107,23 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	@Transactional
 	@CacheEvict(value = { "shop", "productCategory"}, allEntries = true)
 	public Shop update(Shop shop) {
+		
 		Assert.notNull(shop);
+		
 		Shop pshop = super.update(shop);
+		
+		List<VirtualShopCategory> virtualCategories = shop.getVirtualCategories();
+		
+		if(virtualCategories != null && virtualCategories.size() > 0) {
+			for(VirtualShopCategory category : virtualCategories) {
+				category.getShops().add(shop);
+			}
+		}
+		
 		shopDao.flush();
+		
 		return pshop;
+		
 	}
 	
 }

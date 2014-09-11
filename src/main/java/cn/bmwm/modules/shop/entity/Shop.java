@@ -13,6 +13,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -122,6 +123,11 @@ public class Shop extends BaseEntity {
 	 * 店铺图片
 	 */
 	private List<ShopImage> shopImages = new ArrayList<ShopImage>();
+	
+	/**
+	 * 虚拟分类,用于首页归类店铺推荐
+	 */
+	private List<VirtualShopCategory> virtualCategories = new ArrayList<VirtualShopCategory>();
 	
 	/**
 	 * 店铺所在商品分类
@@ -472,6 +478,21 @@ public class Shop extends BaseEntity {
 		this.shopImages = shopImages;
 	}
 	
+	/**
+	 * @return the virtualCategories
+	 */
+	@ManyToMany(mappedBy = "shops", fetch = FetchType.LAZY)
+	public List<VirtualShopCategory> getVirtualCategories() {
+		return virtualCategories;
+	}
+
+	/**
+	 * @param virtualCategories the virtualCategories to set
+	 */
+	public void setVirtualCategories(List<VirtualShopCategory> virtualCategories) {
+		this.virtualCategories = virtualCategories;
+	}
+
 	public String getLogo() {
 		return logo;
 	}

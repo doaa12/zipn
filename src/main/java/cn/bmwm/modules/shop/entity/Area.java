@@ -69,6 +69,11 @@ public class Area extends OrderEntity {
 	private Set<DeliveryCenter> deliveryCenters = new HashSet<DeliveryCenter>();
 	
 	/**
+	 * 店铺虚拟分类
+	 */
+	private Set<VirtualShopCategory> virtualShopCategories = new HashSet<VirtualShopCategory>();
+	
+	/**
 	 * 店铺
 	 */
 	private Set<Shop> shops = new HashSet<Shop>();
@@ -258,6 +263,23 @@ public class Area extends OrderEntity {
 		this.deliveryCenters = deliveryCenters;
 	}
 	
+	/**
+	 * 虚拟店铺分类
+	 * @return the virtualShopCategories
+	 */
+	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+	public Set<VirtualShopCategory> getVirtualShopCategories() {
+		return virtualShopCategories;
+	}
+
+	/**
+	 * @param virtualShopCategories the virtualShopCategories to set
+	 */
+	public void setVirtualShopCategories(
+			Set<VirtualShopCategory> virtualShopCategories) {
+		this.virtualShopCategories = virtualShopCategories;
+	}
+
 	/**
 	 * 店铺区域
 	 * @return

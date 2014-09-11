@@ -170,6 +170,16 @@ $().ready(function() {
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<th>
+					${message("Shop.virtualShopCategory")}:
+				</th>
+				<td>
+					[#list virtualCategories as category]
+						<input type="checkbox" name="virtualCategories" value="${category.id}">${category.name}&nbsp;-&nbsp;${category.city}<br/>
+					[/#list]
+				</td>
+			</tr>
 		</table>
 		<table class="input">
 			<tr>

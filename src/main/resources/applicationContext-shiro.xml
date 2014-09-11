@@ -25,6 +25,7 @@
 				
 				/admin/product/** = perms["admin:product"]
 				/admin/product_category/** = perms["admin:productCategory"]
+				/admin/virtual_shop_category/** = perms["admin:virtualShopCategory"]
 				/admin/parameter_group/** = perms["admin:parameterGroup"]
 				/admin/attribute/** = perms["admin:attribute"]
 				/admin/specification/** = perms["admin:specification"]
