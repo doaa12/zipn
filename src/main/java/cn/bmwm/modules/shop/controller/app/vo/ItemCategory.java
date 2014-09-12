@@ -7,7 +7,7 @@ import java.util.List;
  * @author zby
  * 2014-8-29 下午9:06:46
  */
-public class ItemCategory {
+public class ItemCategory<T> {
 
 	/**
 	 * 标识ID
@@ -37,7 +37,7 @@ public class ItemCategory {
 	/**
 	 * 显示项列表
 	 */
-	private List<Item> dataList;
+	private List<T> dataList;
 
 	public Long getCode() {
 		return code;
@@ -79,11 +79,11 @@ public class ItemCategory {
 		this.showtype = showtype;
 	}
 
-	public List<Item> getDataList() {
+	public List<T> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(List<Item> dataList) {
+	public void setDataList(List<T> dataList) {
 		this.dataList = dataList;
 	}
 	

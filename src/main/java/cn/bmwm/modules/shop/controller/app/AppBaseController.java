@@ -25,7 +25,7 @@ public class AppBaseController extends BaseController {
 	 * @param list
 	 * @return
 	 */
-	protected ItemCategory getProductItemCategory(ProductCategory category, List<Product> list) {
+	protected ItemCategory<Item> getProductItemCategory(ProductCategory category, List<Product> list) {
 		
 		if(list == null || list.size() == 0) return null;
 		
@@ -41,7 +41,7 @@ public class AppBaseController extends BaseController {
 			itemList.add(item);
 		}
 		
-		ItemCategory itemCategory = new ItemCategory();
+		ItemCategory<Item> itemCategory = new ItemCategory<Item>();
 		itemCategory.setCode(category.getId());
 		itemCategory.setShowmore(1);
 		itemCategory.setShowtype(3);
@@ -59,7 +59,7 @@ public class AppBaseController extends BaseController {
 	 * @param list
 	 * @return
 	 */
-	protected ItemCategory getShopItemCategory(ProductCategory category, List<Shop> list) {
+	protected ItemCategory<Item> getShopItemCategory(ProductCategory category, List<Shop> list) {
 		
 		if(list == null || list.size() == 0) return null;
 		
@@ -75,7 +75,7 @@ public class AppBaseController extends BaseController {
 			itemList.add(item);
 		}
 		
-		ItemCategory itemCategory = new ItemCategory();
+		ItemCategory<Item> itemCategory = new ItemCategory<Item>();
 		itemCategory.setCode(category.getId());
 		itemCategory.setShowmore(1);
 		itemCategory.setShowtype(3);

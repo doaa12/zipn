@@ -1,14 +1,16 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.util.List;
+
 /**
- * 显示项VO
+ * 收藏店铺动态
  * @author zby
- * 2014-8-29 下午9:08:22
+ * 2014-9-12 下午8:24:57
  */
-public class Item {
+public class ShopDynamic {
 	
 	/**
-	 * 标识ID
+	 * 主键ID标识
 	 */
 	private Long code;
 	
@@ -28,23 +30,14 @@ public class Item {
 	private String imageurl;
 	
 	/**
-	 * 商品价格
+	 * 店铺更新时间
 	 */
-	private double price;
+	private String updateTime;
 	
 	/**
-	 * 店铺所在区域
+	 * 店铺发布新品
 	 */
-	private String area = "";
-	
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
+	private List<Item> list;
 
 	public Long getCode() {
 		return code;
@@ -52,6 +45,14 @@ public class Item {
 
 	public void setCode(Long code) {
 		this.code = code;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public String getTitle() {
@@ -70,22 +71,20 @@ public class Item {
 		this.imageurl = imageurl;
 	}
 
-	public double getPrice() {
-		return price;
+	public String getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 
-	public String getArea() {
-		return area;
+	public List<Item> getList() {
+		return list;
 	}
 
-	public void setArea(String area) {
-		if(area != null) {
-			this.area = area;
-		}
+	public void setList(List<Item> list) {
+		this.list = list;
 	}
-
+	
 }

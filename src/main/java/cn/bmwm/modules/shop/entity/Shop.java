@@ -662,4 +662,8 @@ public class Shop extends BaseEntity {
 		this.latitude = latitude;
 	}
 	
+	public String toString() {
+		return this.getId().toString();
+	}
+	
 }

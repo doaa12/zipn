@@ -141,7 +141,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	 * @param time : 最小发布时间
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "'shopList' + #shopList + 'time' + #time + 'findShopNewList'")
+	@Cacheable(value = "product", key = "'shopList' + #shopList.toString() + 'time' + #time + 'findShopNewList'")
 	public List<Product> findShopNewList(List<Shop> shopList, Date time) {
 		return productDao.findShopNewList(shopList, time);
 	}
@@ -281,7 +281,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void save(Product product) {
 		Assert.notNull(product);
 
@@ -292,7 +292,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public Product update(Product product) {
 		Assert.notNull(product);
 
@@ -304,21 +304,21 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public Product update(Product product, String... ignoreProperties) {
 		return super.update(product, ignoreProperties);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Long id) {
 		super.delete(id);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Long... ids) {
 		//super.delete(ids);
 		for(Long id : ids) {
@@ -328,7 +328,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Product product) {
 		if (product != null) {
 			//staticService.delete(product);

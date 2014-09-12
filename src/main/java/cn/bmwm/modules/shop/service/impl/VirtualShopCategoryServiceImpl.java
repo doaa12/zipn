@@ -7,7 +7,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.bmwm.modules.shop.dao.VirtualShopCategoryDao;
 import cn.bmwm.modules.shop.entity.VirtualShopCategory;
@@ -34,8 +37,30 @@ public class VirtualShopCategoryServiceImpl extends BaseServiceImpl<VirtualShopC
 	 * @param city
 	 * @return
 	 */
+	@Cacheable(value = "virtualShopCategory", key = "'city' + #city + 'findList'")
 	public List<VirtualShopCategory> findList(String city) {
 		return virtualShopCategoryDao.findList(city);
+	}
+	
+	@Override
+	@Transactional
+	@CacheEvict(value = {"virtualShopCategory", "shop"}, allEntries = true)
+	public void save(VirtualShopCategory virtualShopCategory) {
+		super.save(virtualShopCategory);
+	}
+	
+	@Override
+	@Transactional
+	@CacheEvict(value = {"virtualShopCategory", "shop"}, allEntries = true)
+	public VirtualShopCategory update(VirtualShopCategory virtualShopCategory) {
+		return super.update(virtualShopCategory);
+	}
+	
+	@Override
+	@Transactional
+	@CacheEvict(value = {"virtualShopCategory", "shop"}, allEntries = true)
+	public void delete(Long ... ids) {
+		super.delete(ids);
 	}
 	
 }
