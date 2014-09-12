@@ -77,66 +77,62 @@ public class ProductCategoryServiceImpl extends BaseServiceImpl<ProductCategory,
 	 * 获取商品分层分类树
 	 * @return
 	 */
-	@Transactional(readOnly = true)
-	@Cacheable("productCategory")
+	@Cacheable(value = "productCategory", key = "'findHierarchicalTree'")
 	public List<ProductCategory> findHierarchicalTree(){
 		return productCategoryDao.findHierarchicalTree();
 	}
 
-	@Transactional(readOnly = true)
 	public List<ProductCategory> findChildren(ProductCategory productCategory) {
 		return productCategoryDao.findChildren(productCategory, null);
 	}
 
-	@Transactional(readOnly = true)
 	public List<ProductCategory> findChildren(ProductCategory productCategory, Integer count) {
 		return productCategoryDao.findChildren(productCategory, count);
 	}
 
-	@Transactional(readOnly = true)
-	@Cacheable("productCategory")
+	@Cacheable(value = "productCategory", key = "'productCategory' + #productCategory + 'count' + #count + 'cacheRegion' + #cacheRegion + 'findChildren'")
 	public List<ProductCategory> findChildren(ProductCategory productCategory, Integer count, String cacheRegion) {
 		return productCategoryDao.findChildren(productCategory, count);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void save(ProductCategory productCategory) {
 		super.save(productCategory);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public ProductCategory update(ProductCategory productCategory) {
 		return super.update(productCategory);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public ProductCategory update(ProductCategory productCategory, String... ignoreProperties) {
 		return super.update(productCategory, ignoreProperties);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Long id) {
 		super.delete(id);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(Long... ids) {
 		super.delete(ids);
 	}
 
 	@Override
 	@Transactional
-	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
+	@CacheEvict(value = { "product", "shop", "productCategory", "review", "consultation" }, allEntries = true)
 	public void delete(ProductCategory productCategory) {
 		super.delete(productCategory);
 	}

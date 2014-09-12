@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.controller.admin;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 
@@ -122,16 +124,26 @@ public class ProductCategoryController extends BaseController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public @ResponseBody
 	Message delete(Long id) {
+		
 		ProductCategory productCategory = productCategoryService.find(id);
 		if (productCategory == null) {
 			return ERROR_MESSAGE;
 		}
+		
 		List<ProductCategory> children = productCategory.getChildren();
 		if (children != null && !children.isEmpty()) {
 			return Message.error("admin.productCategory.deleteExistChildrenNotAllowed");
 		}
+		
+		Set<Shop> shops = productCategory.getShops();
+		if(shops != null && !shops.isEmpty()) {
+			return Message.error("admin.productCategory.deleteExistShopNotAllowed");
+		}
+		
 		productCategoryService.delete(id);
+		
 		return SUCCESS_MESSAGE;
+		
 	}
 
 }

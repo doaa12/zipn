@@ -121,6 +121,7 @@ $().ready(function() {
 					</td>
 					<td>
 						<a href="edit.jhtml?id=${brand.id}">[${message("admin.common.edit")}]</a>
+						<a href="${base}${brand.path}" target="_blank">[${message("admin.common.view")}]</a>
 					</td>
 				</tr>
 			[/#list]

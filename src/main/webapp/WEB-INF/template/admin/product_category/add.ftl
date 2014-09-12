@@ -70,42 +70,6 @@ $().ready(function() {
 					</select>
 				</td>
 			</tr>
-			<tr class="brands">
-				<th>
-					${message("ProductCategory.brands")}:
-				</th>
-				<td>
-					[#list brands as brand]
-						<label>
-							<input type="checkbox" name="brandIds" value="${brand.id}" />${brand.name}
-						</label>
-					[/#list]
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoTitle")}:
-				</th>
-				<td>
-					<input type="text" name="seoTitle" class="text" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoKeywords")}:
-				</th>
-				<td>
-					<input type="text" name="seoKeywords" class="text" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoDescription")}:
-				</th>
-				<td>
-					<input type="text" name="seoDescription" class="text" maxlength="200" />
-				</td>
-			</tr>
 			<tr>
 				<th>
 					${message("admin.common.order")}:

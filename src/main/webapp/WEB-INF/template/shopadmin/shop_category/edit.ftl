@@ -51,42 +51,6 @@ $().ready(function() {
 					<input type="text" id="name" name="name" class="text" value="${shopCategory.name}" maxlength="200" />
 				</td>
 			</tr>
-			<tr class="brands">
-				<th>
-					${message("ProductCategory.brands")}:
-				</th>
-				<td>
-					[#list brands as brand]
-						<label>
-							<input type="checkbox" name="brandIds" value="${brand.id}"[#if shopCategory.brands?seq_contains(brand)] checked="checked"[/#if] />${brand.name}
-						</label>
-					[/#list]
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoTitle")}:
-				</th>
-				<td>
-					<input type="text" name="seoTitle" class="text" value="${shopCategory.seoTitle}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoKeywords")}:
-				</th>
-				<td>
-					<input type="text" name="seoKeywords" class="text" value="${shopCategory.seoKeywords}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("ProductCategory.seoDescription")}:
-				</th>
-				<td>
-					<input type="text" name="seoDescription" class="text" value="${shopCategory.seoDescription}" maxlength="200" />
-				</td>
-			</tr>
 			<tr>
 				<th>
 					${message("admin.common.order")}:

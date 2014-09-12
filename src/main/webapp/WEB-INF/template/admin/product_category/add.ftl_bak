@@ -52,6 +52,62 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
+					${message("ProductCategory.parent")}:
+				</th>
+				<td>
+					<select name="parentId">
+						<option value="">${message("admin.productCategory.root")}</option>
+						[#list productCategoryTree as category]
+							<option value="${category.id}">
+								[#if category.grade != 0]
+									[#list 1..category.grade as i]
+										&nbsp;&nbsp;
+									[/#list]
+								[/#if]
+								${category.name}
+							</option>
+						[/#list]
+					</select>
+				</td>
+			</tr>
+			<tr class="brands">
+				<th>
+					${message("ProductCategory.brands")}:
+				</th>
+				<td>
+					[#list brands as brand]
+						<label>
+							<input type="checkbox" name="brandIds" value="${brand.id}" />${brand.name}
+						</label>
+					[/#list]
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoTitle")}:
+				</th>
+				<td>
+					<input type="text" name="seoTitle" class="text" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoKeywords")}:
+				</th>
+				<td>
+					<input type="text" name="seoKeywords" class="text" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoDescription")}:
+				</th>
+				<td>
+					<input type="text" name="seoDescription" class="text" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
 					${message("admin.common.order")}:
 				</th>
 				<td>

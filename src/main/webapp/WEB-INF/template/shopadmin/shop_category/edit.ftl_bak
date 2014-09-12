@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>${message("admin.productCategory.add")} </title>
+<title>${message("admin.productCategory.edit")} </title>
 <meta name="author" content="Sunry" />
 <meta name="copyright" content="" />
 <link href="${base}/resources/admin/css/common.css" rel="stylesheet" type="text/css" />
@@ -38,16 +38,53 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.productCategory.add")}
+		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.productCategory.edit")}
 	</div>
-	<form id="inputForm" action="save.jhtml" method="post">
+	<form id="inputForm" action="update.jhtml" method="post">
+		<input type="hidden" name="id" value="${shopCategory.id}" />
 		<table class="input">
 			<tr>
 				<th>
 					<span class="requiredField">*</span>${message("ProductCategory.name")}:
 				</th>
 				<td>
-					<input type="text" id="name" name="name" class="text" maxlength="200" />
+					<input type="text" id="name" name="name" class="text" value="${shopCategory.name}" maxlength="200" />
+				</td>
+			</tr>
+			<tr class="brands">
+				<th>
+					${message("ProductCategory.brands")}:
+				</th>
+				<td>
+					[#list brands as brand]
+						<label>
+							<input type="checkbox" name="brandIds" value="${brand.id}"[#if shopCategory.brands?seq_contains(brand)] checked="checked"[/#if] />${brand.name}
+						</label>
+					[/#list]
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoTitle")}:
+				</th>
+				<td>
+					<input type="text" name="seoTitle" class="text" value="${shopCategory.seoTitle}" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoKeywords")}:
+				</th>
+				<td>
+					<input type="text" name="seoKeywords" class="text" value="${shopCategory.seoKeywords}" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("ProductCategory.seoDescription")}:
+				</th>
+				<td>
+					<input type="text" name="seoDescription" class="text" value="${shopCategory.seoDescription}" maxlength="200" />
 				</td>
 			</tr>
 			<tr>
@@ -55,7 +92,7 @@ $().ready(function() {
 					${message("admin.common.order")}:
 				</th>
 				<td>
-					<input type="text" name="order" class="text" maxlength="9" />
+					<input type="text" name="order" class="text" value="${shopCategory.order}" maxlength="9" />
 				</td>
 			</tr>
 			<tr>

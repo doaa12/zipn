@@ -552,46 +552,6 @@ $().ready(function() {
 					</label>
 				</td>
 			</tr>
-			<tr>
-				<th>
-					${message("Product.memo")}:
-				</th>
-				<td>
-					<input type="text" name="memo" class="text" value="${product.memo}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.keyword")}:
-				</th>
-				<td>
-					<input type="text" name="keyword" class="text" value="${product.keyword}" maxlength="200" title="${message("admin.product.keywordTitle")}" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoTitle")}:
-				</th>
-				<td>
-					<input type="text" name="seoTitle" class="text" value="${product.seoTitle}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoKeywords")}:
-				</th>
-				<td>
-					<input type="text" name="seoKeywords" class="text" value="${product.seoKeywords}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoDescription")}:
-				</th>
-				<td>
-					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" />
-				</td>
-			</tr>
 		</table>
 		<table class="input tabContent">
 			<tr>
