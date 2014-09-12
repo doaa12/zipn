@@ -103,26 +103,27 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 */
 	public List<Product> findRecommendList(String city, ProductCategory category) {
 		
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
 		
-		Predicate restrictions = criteriaBuilder.conjunction();
+		Predicate restrictions = cb.conjunction();
 		
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), false));
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), true));
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isTop"), true));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
 		
 		if(category != null){
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+			restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		}
 		
-		criteriaQuery.where(restrictions);
-		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createDate")));
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("createDate")));
 		
-		return super.findList(criteriaQuery, 0, 10, null, null);
+		return super.findList(cq, 0, 10, null, null);
 		
 	}
 	
@@ -132,7 +133,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @return
 	 */
 	public List<Product> findShopRecommendList(Shop shop) {
-		String jpql = " select product from Product product where product.shop = :shop and product.isMarketable = true and product.isGift = false and product.isTop = true ";
+		String jpql = " select product from Product product where product.shop = :shop and product.isList = true and product.isMarketable = true and product.isGift = false and product.isTop = true ";
 		TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
 		return query.setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).setFirstResult(0).setMaxResults(10).getResultList();
 	}
@@ -143,37 +144,58 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 */
 	public List<Product> findHotList(String city, ProductCategory category) {
 		
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
 		
-		Predicate restrictions = criteriaBuilder.conjunction();
+		Predicate restrictions = cb.conjunction();
 		
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), false));
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
+		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
 		
 		if(category != null){
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+			restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		}
 		
-		criteriaQuery.where(restrictions);
-		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("sales")));
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("sales")));
 		
-		return super.findList(criteriaQuery, 0, 10, null, null);
+		return super.findList(cq, 0, 10, null, null);
 		
 	}
 	
 	/**
-	 * 查询最新发布的商品
-	 * @param city
+	 * 查询店铺最新发布的商品
+	 * @param shopList : 店铺集合
+	 * @param time : 最小发布时间
 	 * @return
 	 */
-	public List<Product> findNewList(String city) {
-		String jpql = " select product from Product product where product.city like :city and product.isList = true order by createDate desc ";
-		TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
-		return query.setFlushMode(FlushModeType.COMMIT).setParameter("city", "%" + city + "%").setFirstResult(0).setMaxResults(5).getResultList();
+	public List<Product> findShopNewList(List<Shop> shopList, Date time) {
+		
+		if(shopList == null || shopList.size() == 0) return null;
+		
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		
+		Predicate restrictions = cb.conjunction();
+		
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
+		restrictions = cb.and(restrictions, root.get("shop").in(shopList));
+		restrictions = cb.and(restrictions, cb.greaterThanOrEqualTo(root.<Date>get("createDate"), time));
+		
+		cq.where(restrictions);
+		
+		cq.orderBy(cb.desc(root.get("createDate")));
+		
+		return super.findList(cq, 0, null, null, null);
+		
 	}
 	
 	/**
@@ -195,6 +217,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Predicate restrictions = cb.conjunction();
 		
 		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
 		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
 		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
 		restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
@@ -258,6 +281,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		Predicate restrictions = cb.conjunction();
 		
 		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
+		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
 		restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), false));
 		restrictions = cb.and(restrictions, cb.equal(root.get("shop"), shop));
 		
@@ -310,7 +334,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 * @return
 	 */
 	public Long findShopProductCount(Shop shop) {
-		String jpql = " select count(*) from Product product where product.shop = :shop and product.isList = true and product.isGift = false ";
+		String jpql = " select count(*) from Product product where product.shop = :shop and product.isMarketable = true and product.isList = true and product.isGift = false ";
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		return query.setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).getSingleResult();
 	}
@@ -319,43 +343,43 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		if (StringUtils.isEmpty(keyword)) {
 			return Collections.<Product> emptyList();
 		}
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
 		if (pattern.matcher(keyword).matches()) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("id"), Long.valueOf(keyword)), criteriaBuilder.like(root.<String> get("sn"), "%" + keyword + "%"), criteriaBuilder.like(root.<String> get("fullName"), "%" + keyword + "%")));
+			restrictions = cb.and(restrictions, cb.or(cb.equal(root.get("id"), Long.valueOf(keyword)), cb.like(root.<String> get("sn"), "%" + keyword + "%"), cb.like(root.<String> get("fullName"), "%" + keyword + "%")));
 		} else {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.like(root.<String> get("sn"), "%" + keyword + "%"), criteriaBuilder.like(root.<String> get("fullName"), "%" + keyword + "%")));
+			restrictions = cb.and(restrictions, cb.or(cb.like(root.<String> get("sn"), "%" + keyword + "%"), cb.like(root.<String> get("fullName"), "%" + keyword + "%")));
 		}
 		if (isGift != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
 		}
-		criteriaQuery.where(restrictions);
-		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("isTop")));
-		return super.findList(criteriaQuery, null, count, null, null);
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("isTop")));
+		return super.findList(cq, null, count, null, null);
 	}
 
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
 		/*
 		if (productCategory != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("productCategory"), productCategory), criteriaBuilder.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
 		}
 		*/
 		if (brand != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));
+			restrictions = cb.and(restrictions, cb.equal(root.get("brand"), brand));
 		}
 		if (promotion != null) {
-			Subquery<Product> subquery1 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery1 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
 			subquery1.select(subqueryRoot1);
-			subquery1.where(criteriaBuilder.equal(subqueryRoot1, root), criteriaBuilder.equal(subqueryRoot1.join("promotions"), promotion));
+			subquery1.where(cb.equal(subqueryRoot1, root), cb.equal(subqueryRoot1.join("promotions"), promotion));
 			
 			/*
 			Subquery<Product> subquery2 = criteriaQuery.subquery(Product.class);
@@ -364,27 +388,27 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			subquery2.where(criteriaBuilder.equal(subqueryRoot2, root), criteriaBuilder.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
 			*/
 			
-			Subquery<Product> subquery3 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery3 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
 			subquery3.select(subqueryRoot3);
-			subquery3.where(criteriaBuilder.equal(subqueryRoot3, root), criteriaBuilder.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
+			subquery3.where(cb.equal(subqueryRoot3, root), cb.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
 
 			//restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
 		
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery3)));
+			restrictions = cb.and(restrictions, cb.or(cb.exists(subquery1), cb.exists(subquery3)));
 			
 		}
 		if (tags != null && !tags.isEmpty()) {
-			Subquery<Product> subquery = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery = cq.subquery(Product.class);
 			Root<Product> subqueryRoot = subquery.from(Product.class);
 			subquery.select(subqueryRoot);
-			subquery.where(criteriaBuilder.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.exists(subquery));
+			subquery.where(cb.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
+			restrictions = cb.and(restrictions, cb.exists(subquery));
 		}
 		if (attributeValue != null) {
 			for (Entry<Attribute, String> entry : attributeValue.entrySet()) {
 				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + entry.getKey().getPropertyIndex();
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get(propertyName), entry.getValue()));
+				restrictions = cb.and(restrictions, cb.equal(root.get(propertyName), entry.getValue()));
 			}
 		}
 		if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
@@ -393,41 +417,41 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			endPrice = temp;
 		}
 		if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get("price"), startPrice));
+			restrictions = cb.and(restrictions, cb.ge(root.<Number> get("price"), startPrice));
 		}
 		if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get("price"), endPrice));
+			restrictions = cb.and(restrictions, cb.le(root.<Number> get("price"), endPrice));
 		}
 		if (isMarketable != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), isMarketable));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), isMarketable));
 		}
 		if (isList != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isList"), isList));
 		}
 		if (isTop != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isTop"), isTop));
 		}
 		if (isGift != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
 		}
 		Path<Integer> stock = root.get("stock");
 		Path<Integer> allocatedStock = root.get("allocatedStock");
 		if (isOutOfStock != null) {
 			if (isOutOfStock) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, allocatedStock));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, allocatedStock));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, allocatedStock)));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, allocatedStock)));
 			}
 		}
 		if (isStockAlert != null) {
 			Setting setting = SettingUtils.get();
 			if (isStockAlert) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount())));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, cb.sum(allocatedStock, setting.getStockAlertCount())));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount()))));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, cb.sum(allocatedStock, setting.getStockAlertCount()))));
 			}
 		}
-		criteriaQuery.where(restrictions);
+		cq.where(restrictions);
 		if (orderType == OrderType.priceAsc) {
 			orders.add(Order.asc("price"));
 			orders.add(Order.desc("createDate"));
@@ -446,65 +470,65 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			orders.add(Order.desc("isTop"));
 			orders.add(Order.desc("modifyDate"));
 		}
-		return super.findList(criteriaQuery, null, count, filters, orders);
+		return super.findList(cq, null, count, filters, orders);
 	}
 
 	public List<Product> findList(ProductCategory productCategory, Date beginDate, Date endDate, Integer first, Integer count) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), true));
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
+		restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), true));
 		if (productCategory != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.equal(root.get("productCategory"), productCategory), criteriaBuilder.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
+			restrictions = cb.and(restrictions, cb.or(cb.equal(root.get("productCategory"), productCategory), cb.like(root.get("productCategory").<String> get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%")));
 		}
 		if (beginDate != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThanOrEqualTo(root.<Date> get("createDate"), beginDate));
+			restrictions = cb.and(restrictions, cb.greaterThanOrEqualTo(root.<Date> get("createDate"), beginDate));
 		}
 		if (endDate != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThanOrEqualTo(root.<Date> get("createDate"), endDate));
+			restrictions = cb.and(restrictions, cb.lessThanOrEqualTo(root.<Date> get("createDate"), endDate));
 		}
-		criteriaQuery.where(restrictions);
-		criteriaQuery.orderBy(criteriaBuilder.desc(root.get("isTop")));
-		return super.findList(criteriaQuery, first, count, null, null);
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("isTop")));
+		return super.findList(cq, first, count, null, null);
 	}
 
 	public List<Product> findList(Goods goods, Set<Product> excludes) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
 		if (goods != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("goods"), goods));
+			restrictions = cb.and(restrictions, cb.equal(root.get("goods"), goods));
 		}
 		if (excludes != null && !excludes.isEmpty()) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.not(root.in(excludes)));
+			restrictions = cb.and(restrictions, cb.not(root.in(excludes)));
 		}
-		criteriaQuery.where(restrictions);
-		return entityManager.createQuery(criteriaQuery).setFlushMode(FlushModeType.COMMIT).getResultList();
+		cq.where(restrictions);
+		return entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT).getResultList();
 	}
 
 	public List<Object[]> findSalesList(Date beginDate, Date endDate, Integer count) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
-		Root<Product> product = criteriaQuery.from(Product.class);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+		Root<Product> product = cq.from(Product.class);
 		Join<Product, OrderItem> orderItems = product.join("orderItems");
 		Join<Product, cn.bmwm.modules.shop.entity.Order> order = orderItems.join("order");
-		criteriaQuery.multiselect(product.get("id"), product.get("sn"), product.get("name"), product.get("fullName"), product.get("price"), criteriaBuilder.sum(orderItems.<Integer> get("quantity")), criteriaBuilder.sum(criteriaBuilder.prod(orderItems.<Integer> get("quantity"), orderItems.<BigDecimal> get("price"))));
-		Predicate restrictions = criteriaBuilder.conjunction();
+		cq.multiselect(product.get("id"), product.get("sn"), product.get("name"), product.get("fullName"), product.get("price"), cb.sum(orderItems.<Integer> get("quantity")), cb.sum(cb.prod(orderItems.<Integer> get("quantity"), orderItems.<BigDecimal> get("price"))));
+		Predicate restrictions = cb.conjunction();
 		if (beginDate != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.greaterThanOrEqualTo(order.<Date> get("createDate"), beginDate));
+			restrictions = cb.and(restrictions, cb.greaterThanOrEqualTo(order.<Date> get("createDate"), beginDate));
 		}
 		if (endDate != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.lessThanOrEqualTo(order.<Date> get("createDate"), endDate));
+			restrictions = cb.and(restrictions, cb.lessThanOrEqualTo(order.<Date> get("createDate"), endDate));
 		}
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(order.get("orderStatus"), OrderStatus.completed), criteriaBuilder.equal(order.get("paymentStatus"), PaymentStatus.paid));
-		criteriaQuery.where(restrictions);
-		criteriaQuery.groupBy(product.get("id"), product.get("sn"), product.get("name"), product.get("fullName"), product.get("price"));
-		criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.sum(criteriaBuilder.prod(orderItems.<Integer> get("quantity"), orderItems.<BigDecimal> get("price")))));
-		TypedQuery<Object[]> query = entityManager.createQuery(criteriaQuery).setFlushMode(FlushModeType.COMMIT);
+		restrictions = cb.and(restrictions, cb.equal(order.get("orderStatus"), OrderStatus.completed), cb.equal(order.get("paymentStatus"), PaymentStatus.paid));
+		cq.where(restrictions);
+		cq.groupBy(product.get("id"), product.get("sn"), product.get("name"), product.get("fullName"), product.get("price"));
+		cq.orderBy(cb.desc(cb.sum(cb.prod(orderItems.<Integer> get("quantity"), orderItems.<BigDecimal> get("price")))));
+		TypedQuery<Object[]> query = entityManager.createQuery(cq).setFlushMode(FlushModeType.COMMIT);
 		if (count != null && count >= 0) {
 			query.setMaxResults(count);
 		}
@@ -512,47 +536,47 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	}
 
 	public Page<Product> findPage(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
 		if (productCategory != null) {
 			Join<Product,Shop> join = root.join("shop");
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(join.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
+			restrictions = cb.and(restrictions, cb.like(join.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + productCategory.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		}
 		if (brand != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));
+			restrictions = cb.and(restrictions, cb.equal(root.get("brand"), brand));
 		}
 		if (promotion != null) {
-			Subquery<Product> subquery1 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery1 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
 			subquery1.select(subqueryRoot1);
-			subquery1.where(criteriaBuilder.equal(subqueryRoot1, root), criteriaBuilder.equal(subqueryRoot1.join("promotions"), promotion));
+			subquery1.where(cb.equal(subqueryRoot1, root), cb.equal(subqueryRoot1.join("promotions"), promotion));
 
-			Subquery<Product> subquery2 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery2 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot2 = subquery2.from(Product.class);
 			subquery2.select(subqueryRoot2);
-			subquery2.where(criteriaBuilder.equal(subqueryRoot2, root), criteriaBuilder.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
+			subquery2.where(cb.equal(subqueryRoot2, root), cb.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
 
-			Subquery<Product> subquery3 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery3 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
 			subquery3.select(subqueryRoot3);
-			subquery3.where(criteriaBuilder.equal(subqueryRoot3, root), criteriaBuilder.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
+			subquery3.where(cb.equal(subqueryRoot3, root), cb.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
 
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
+			restrictions = cb.and(restrictions, cb.or(cb.exists(subquery1), cb.exists(subquery2), cb.exists(subquery3)));
 		}
 		if (tags != null && !tags.isEmpty()) {
-			Subquery<Product> subquery = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery = cq.subquery(Product.class);
 			Root<Product> subqueryRoot = subquery.from(Product.class);
 			subquery.select(subqueryRoot);
-			subquery.where(criteriaBuilder.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.exists(subquery));
+			subquery.where(cb.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
+			restrictions = cb.and(restrictions, cb.exists(subquery));
 		}
 		if (attributeValue != null) {
 			for (Entry<Attribute, String> entry : attributeValue.entrySet()) {
 				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + entry.getKey().getPropertyIndex();
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get(propertyName), entry.getValue()));
+				restrictions = cb.and(restrictions, cb.equal(root.get(propertyName), entry.getValue()));
 			}
 		}
 		if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
@@ -561,41 +585,41 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			endPrice = temp;
 		}
 		if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get("price"), startPrice));
+			restrictions = cb.and(restrictions, cb.ge(root.<Number> get("price"), startPrice));
 		}
 		if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get("price"), endPrice));
+			restrictions = cb.and(restrictions, cb.le(root.<Number> get("price"), endPrice));
 		}
 		if (isMarketable != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), isMarketable));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), isMarketable));
 		}
 		if (isList != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isList"), isList));
 		}
 		if (isTop != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isTop"), isTop));
 		}
 		if (isGift != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
 		}
 		Path<Integer> stock = root.get("stock");
 		Path<Integer> allocatedStock = root.get("allocatedStock");
 		if (isOutOfStock != null) {
 			if (isOutOfStock) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, allocatedStock));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, allocatedStock));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, allocatedStock)));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, allocatedStock)));
 			}
 		}
 		if (isStockAlert != null) {
 			Setting setting = SettingUtils.get();
 			if (isStockAlert) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount())));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, cb.sum(allocatedStock, setting.getStockAlertCount())));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount()))));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, cb.sum(allocatedStock, setting.getStockAlertCount()))));
 			}
 		}
-		criteriaQuery.where(restrictions);
+		cq.where(restrictions);
 		List<Order> orders = pageable.getOrders();
 		if (orderType == OrderType.priceAsc) {
 			orders.add(Order.asc("price"));
@@ -615,55 +639,55 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			orders.add(Order.desc("isTop"));
 			orders.add(Order.desc("modifyDate"));
 		}
-		return super.findPage(criteriaQuery, pageable);
+		return super.findPage(cq, pageable);
 	}
 	
 	//zhoupuyue
 	public Page<Product> findPage(Shop shop, ShopCategory shopCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Pageable pageable) {
 		
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
 		
-		Predicate restrictions = criteriaBuilder.conjunction();
-		restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shop"), shop));
+		Predicate restrictions = cb.conjunction();
+		restrictions = cb.and(restrictions, cb.equal(root.get("shop"), shop));
 		
 		if (shopCategory != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("shopCategory"), shopCategory));
+			restrictions = cb.and(restrictions, cb.equal(root.get("shopCategory"), shopCategory));
 		}
 		if (brand != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("brand"), brand));
+			restrictions = cb.and(restrictions, cb.equal(root.get("brand"), brand));
 		}
 		if (promotion != null) {
-			Subquery<Product> subquery1 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery1 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
 			subquery1.select(subqueryRoot1);
-			subquery1.where(criteriaBuilder.equal(subqueryRoot1, root), criteriaBuilder.equal(subqueryRoot1.join("promotions"), promotion));
+			subquery1.where(cb.equal(subqueryRoot1, root), cb.equal(subqueryRoot1.join("promotions"), promotion));
 
-			Subquery<Product> subquery2 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery2 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot2 = subquery2.from(Product.class);
 			subquery2.select(subqueryRoot2);
-			subquery2.where(criteriaBuilder.equal(subqueryRoot2, root), criteriaBuilder.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
+			subquery2.where(cb.equal(subqueryRoot2, root), cb.equal(subqueryRoot2.join("productCategory").join("promotions"), promotion));
 
-			Subquery<Product> subquery3 = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery3 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
 			subquery3.select(subqueryRoot3);
-			subquery3.where(criteriaBuilder.equal(subqueryRoot3, root), criteriaBuilder.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
+			subquery3.where(cb.equal(subqueryRoot3, root), cb.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
 
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.exists(subquery1), criteriaBuilder.exists(subquery2), criteriaBuilder.exists(subquery3)));
+			restrictions = cb.and(restrictions, cb.or(cb.exists(subquery1), cb.exists(subquery2), cb.exists(subquery3)));
 		}
 		if (tags != null && !tags.isEmpty()) {
-			Subquery<Product> subquery = criteriaQuery.subquery(Product.class);
+			Subquery<Product> subquery = cq.subquery(Product.class);
 			Root<Product> subqueryRoot = subquery.from(Product.class);
 			subquery.select(subqueryRoot);
-			subquery.where(criteriaBuilder.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.exists(subquery));
+			subquery.where(cb.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
+			restrictions = cb.and(restrictions, cb.exists(subquery));
 		}
 		if (attributeValue != null) {
 			for (Entry<Attribute, String> entry : attributeValue.entrySet()) {
 				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + entry.getKey().getPropertyIndex();
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get(propertyName), entry.getValue()));
+				restrictions = cb.and(restrictions, cb.equal(root.get(propertyName), entry.getValue()));
 			}
 		}
 		if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
@@ -672,41 +696,41 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			endPrice = temp;
 		}
 		if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.ge(root.<Number> get("price"), startPrice));
+			restrictions = cb.and(restrictions, cb.ge(root.<Number> get("price"), startPrice));
 		}
 		if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get("price"), endPrice));
+			restrictions = cb.and(restrictions, cb.le(root.<Number> get("price"), endPrice));
 		}
 		if (isMarketable != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), isMarketable));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), isMarketable));
 		}
 		if (isList != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isList"), isList));
 		}
 		if (isTop != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isTop"), isTop));
 		}
 		if (isGift != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
 		}
 		Path<Integer> stock = root.get("stock");
 		Path<Integer> allocatedStock = root.get("allocatedStock");
 		if (isOutOfStock != null) {
 			if (isOutOfStock) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, allocatedStock));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, allocatedStock));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, allocatedStock)));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, allocatedStock)));
 			}
 		}
 		if (isStockAlert != null) {
 			Setting setting = SettingUtils.get();
 			if (isStockAlert) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount())));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, cb.sum(allocatedStock, setting.getStockAlertCount())));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount()))));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, cb.sum(allocatedStock, setting.getStockAlertCount()))));
 			}
 		}
-		criteriaQuery.where(restrictions);
+		cq.where(restrictions);
 		List<Order> orders = pageable.getOrders();
 		if (orderType == OrderType.priceAsc) {
 			orders.add(Order.asc("price"));
@@ -726,61 +750,61 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			orders.add(Order.desc("isTop"));
 			orders.add(Order.desc("modifyDate"));
 		}
-		return super.findPage(criteriaQuery, pageable);
+		return super.findPage(cq, pageable);
 	}
 
 	public Page<Product> findPage(Member member, Pageable pageable) {
 		if (member == null) {
 			return new Page<Product>(Collections.<Product> emptyList(), 0, pageable);
 		}
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		criteriaQuery.where(criteriaBuilder.equal(root.join("favoriteMembers"), member));
-		return super.findPage(criteriaQuery, pageable);
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		cq.where(cb.equal(root.join("favoriteMembers"), member));
+		return super.findPage(cq, pageable);
 	}
 
 	public Long count(Member favoriteMember, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert) {
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-		Root<Product> root = criteriaQuery.from(Product.class);
-		criteriaQuery.select(root);
-		Predicate restrictions = criteriaBuilder.conjunction();
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
 		if (favoriteMember != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.join("favoriteMembers"), favoriteMember));
+			restrictions = cb.and(restrictions, cb.equal(root.join("favoriteMembers"), favoriteMember));
 		}
 		if (isMarketable != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isMarketable"), isMarketable));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isMarketable"), isMarketable));
 		}
 		if (isList != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isList"), isList));
 		}
 		if (isTop != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isTop"), isTop));
 		}
 		if (isGift != null) {
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isGift"), isGift));
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
 		}
 		Path<Integer> stock = root.get("stock");
 		Path<Integer> allocatedStock = root.get("allocatedStock");
 		if (isOutOfStock != null) {
 			if (isOutOfStock) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, allocatedStock));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, allocatedStock));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, allocatedStock)));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, allocatedStock)));
 			}
 		}
 		if (isStockAlert != null) {
 			Setting setting = SettingUtils.get();
 			if (isStockAlert) {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.isNotNull(stock), criteriaBuilder.lessThanOrEqualTo(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount())));
+				restrictions = cb.and(restrictions, cb.isNotNull(stock), cb.lessThanOrEqualTo(stock, cb.sum(allocatedStock, setting.getStockAlertCount())));
 			} else {
-				restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.or(criteriaBuilder.isNull(stock), criteriaBuilder.greaterThan(stock, criteriaBuilder.sum(allocatedStock, setting.getStockAlertCount()))));
+				restrictions = cb.and(restrictions, cb.or(cb.isNull(stock), cb.greaterThan(stock, cb.sum(allocatedStock, setting.getStockAlertCount()))));
 			}
 		}
-		criteriaQuery.where(restrictions);
-		return super.count(criteriaQuery, null);
+		cq.where(restrictions);
+		return super.count(cq, null);
 	}
 
 	public boolean isPurchased(Member member, Product product) {

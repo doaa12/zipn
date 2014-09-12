@@ -37,6 +37,11 @@ public class Item {
 	 */
 	private String area = "";
 	
+	/**
+	 * 商品发布时间
+	 */
+	private String updateTime;
+	
 
 	public Integer getType() {
 		return type;
@@ -87,5 +92,21 @@ public class Item {
 			this.area = area;
 		}
 	}
-	
+
+	/**
+	 * @return the updateTime
+	 */
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	/**
+	 * @param updateTime the updateTime to set
+	 */
+	public void setUpdateTime(String updateTime) {
+		if(updateTime != null) {
+			this.updateTime = updateTime;
+		}
+	}
+
 }

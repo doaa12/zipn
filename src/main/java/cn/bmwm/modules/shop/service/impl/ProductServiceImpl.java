@@ -136,13 +136,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	}
 	
 	/**
-	 * 查询最新发布的商品
-	 * @param city
+	 * 查询店铺最新发布的商品
+	 * @param shopList : 店铺
+	 * @param time : 最小发布时间
 	 * @return
 	 */
-	@Cacheable(value = "product", key = "'city' + #city + 'findNewList'")
-	public List<Product> findNewList(String city) {
-		return productDao.findNewList(city);
+	@Cacheable(value = "product", key = "'shopList' + #shopList + 'time' + #time + 'findShopNewList'")
+	public List<Product> findShopNewList(List<Shop> shopList, Date time) {
+		return productDao.findShopNewList(shopList, time);
 	}
 	
 	/**

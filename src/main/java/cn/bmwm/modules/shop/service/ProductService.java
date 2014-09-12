@@ -196,11 +196,11 @@ public interface ProductService extends BaseService<Product, Long> {
 	List<Product> findHotList(String city, ProductCategory category);
 	
 	/**
-	 * 查询最新发布的商品
-	 * @param city
+	 * 查询店铺最新发布的商品
+	 * @param shopList
 	 * @return
 	 */
-	List<Product> findNewList(String city);
+	List<Product> findShopNewList(List<Shop> shopList, Date time);
 	
 	/**
 	 * 商品列表

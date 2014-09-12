@@ -1,6 +1,8 @@
 package cn.bmwm.modules.shop.controller.app;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,18 +76,23 @@ public class IndexController extends AppBaseController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
-		//TODO:收藏店铺动态，待定，需要登录后才可以显示
+		//TODO:收藏店铺动态,根据用户最后一次登录时间来获取收藏店铺动态;如果收藏动态为空,取收藏最多的店铺的动态
 		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
 		
-		List<Shop> favoriteShopList = shopService.findFavoriteTopShopList(city);
-		ItemCategory favoriteShopCategory = this.getFavoriteShopItemCategory(favoriteShopList);
+		//首页按用户最近登录时间获取新品;如果用户收藏为空,按15天来获取收藏最多的店铺的动态
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -15);
+		Date time = calendar.getTime();
 		
-		//发布新品
-		List<Product> favoriteProductList = productService.findNewList(city);
-		ItemCategory favoriteProductCategory = this.getFavoriteProductItemCategory(favoriteProductList);
+		//TODO:先按用户收藏店铺来获取店铺动态;如果收藏动态为空,获取收藏次数前5的店铺动态
+		List<Shop> favoriteShopList = shopService.findFavoriteTopShopList(city);
+		
+		//获取收藏店铺发布新品
+		List<Product> favoriteProductList = productService.findShopNewList(favoriteShopList, time);
+		
+		ItemCategory favoriteShopCategory = this.getFavoriteShopItemCategory(favoriteShopList, favoriteProductList);
 		
 		List<ItemCategory> products = new LinkedList<ItemCategory>();
-		
 		List<ItemCategory> shops = new LinkedList<ItemCategory>();
 		
 		//虚拟店铺分类
@@ -101,13 +108,17 @@ public class IndexController extends AppBaseController {
 		
 		List<ProductCategory> categories = productCategoryService.findRoots();
 		
+		
+		//查找每个顶级分类下的推荐店铺和推荐商品
 		for(ProductCategory category : categories) {
 			
 			List<Product> productList = productService.findRecommendList(city, category);
 			
+			/*
 			if(productList == null || productList.size() == 0){
 				productList = productService.findHotList(city, category);
 			}
+			*/
 			
 			ItemCategory productItemCategory = this.getProductItemCategory(category, productList);
 			
@@ -127,10 +138,6 @@ public class IndexController extends AppBaseController {
 			itemCategoryList.add(favoriteShopCategory);
 		}
 		
-		if(favoriteProductCategory != null) {
-			itemCategoryList.add(favoriteProductCategory);
-		}
-		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
 		if(products.size() > 0) itemCategoryList.addAll(products);
@@ -147,11 +154,16 @@ public class IndexController extends AppBaseController {
 	/**
 	 * 获取首页收藏店铺动态
 	 * @param shopList
+	 * @param productList
 	 * @return
 	 */
-	public ItemCategory getFavoriteShopItemCategory(List<Shop> shopList) {
+	public ItemCategory getFavoriteShopItemCategory(List<Shop> shopList, List<Product> productList) {
 		
 		if(shopList == null || shopList.size() == 0) {
+			return null;
+		}
+		
+		if(productList == null || productList.size() == 0) {
 			return null;
 		}
 		
@@ -164,6 +176,7 @@ public class IndexController extends AppBaseController {
 			item.setType(1);
 			item.setImageurl(shop.getImage());
 			item.setArea(shop.getRegion());
+			item.setUpdateTime(getTime(shop.getModifyDate()));
 			itemList.add(item);
 		}
 		
@@ -174,41 +187,6 @@ public class IndexController extends AppBaseController {
 		itemCategory.setTitle("动态");
 		itemCategory.setDataList(itemList);
 		itemCategory.setMoretype(1);
-		
-		return itemCategory;
-		
-	}
-	
-	/**
-	 * 获取首页收藏店铺发布新品
-	 * @param shopList
-	 * @return
-	 */
-	public ItemCategory getFavoriteProductItemCategory(List<Product> list) {
-		
-		if(list == null || list.size() == 0) {
-			return null;
-		}
-		
-		List<Item> itemList = new ArrayList<Item>();
-		
-		for(Product product : list) {
-			Item item = new Item();
-			item.setCode(product.getId());
-			item.setTitle(product.getName());
-			item.setType(2);
-			item.setImageurl(product.getImage());
-			item.setArea(product.getRegion());
-			itemList.add(item);
-		}
-		
-		ItemCategory itemCategory = new ItemCategory();
-		itemCategory.setCode(0L);
-		itemCategory.setShowmore(0);
-		itemCategory.setShowtype(2);
-		itemCategory.setTitle("");
-		itemCategory.setDataList(itemList);
-		itemCategory.setMoretype(2);
 		
 		return itemCategory;
 		
@@ -245,6 +223,29 @@ public class IndexController extends AppBaseController {
 		itemCategory.setMoretype(1);
 		
 		return itemCategory;
+		
+	}
+	
+	/**
+	 * 获取发布时间
+	 * @param time
+	 * @return
+	 */
+	public String getTime(Date time) {
+		
+		Date now = new Date();
+		long lnow = now.getTime();
+		long ltime = time.getTime();
+		
+		long sub = lnow - ltime;
+		
+		if(sub < 60 * 60 * 1000L) {
+			return (sub / (60 * 1000L)) + "分钟前";
+		}else if(sub < 24 * 60 * 60 * 1000L) {
+			return (sub / (60 * 60 * 1000L)) + "小时前";
+		}else {
+			return (sub / (24 * 60 * 60 * 1000L)) + "天前";
+		}
 		
 	}
 	
