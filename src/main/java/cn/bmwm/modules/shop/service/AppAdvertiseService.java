@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service;
 
+import java.util.List;
+
 import cn.bmwm.modules.shop.entity.AppAdvertise;
 
 /**
@@ -14,6 +16,6 @@ public interface AppAdvertiseService extends BaseService<AppAdvertise,Long> {
 	 * @param city
 	 * @return
 	 */
-	AppAdvertise findByCity(String city);
+	List<AppAdvertise> findByCity(String city);
 	
 }

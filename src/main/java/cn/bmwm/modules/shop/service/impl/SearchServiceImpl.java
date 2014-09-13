@@ -33,7 +33,6 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
-import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.dao.ArticleDao;
 import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.ShopDao;
@@ -275,52 +274,46 @@ public class SearchServiceImpl implements SearchService {
 		}
 		return new Page<Product>();
 	}
-	/*
-	public ItemPage<Product> search(String city, String keyword, BigDecimal startPrice, BigDecimal endPrice, OrderType orderType, Integer page, Integer size) {
+	
+	public List<Product> search(String city, String keyword, OrderType orderType, Integer page, Integer size) {
+		
 		if (StringUtils.isEmpty(keyword)) {
 			return null;
 		}
+		
 		try {
+			
 			String text = QueryParser.escape(keyword);
+			
 			TermQuery snQuery = new TermQuery(new Term("sn", text));
 			Query keywordQuery = new QueryParser(Version.LUCENE_35, "keyword", new IKAnalyzer()).parse(text);
 			QueryParser nameParser = new QueryParser(Version.LUCENE_35, "name", new IKAnalyzer());
 			nameParser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			Query nameQuery = nameParser.parse(text);
+			
 			FuzzyQuery nameFuzzyQuery = new FuzzyQuery(new Term("name", text), FUZZY_QUERY_MINIMUM_SIMILARITY);
 			TermQuery introductionQuery = new TermQuery(new Term("introduction", text));
 			TermQuery isMarketableQuery = new TermQuery(new Term("isMarketable", "true"));
 			TermQuery isListQuery = new TermQuery(new Term("isList", "true"));
 			TermQuery isGiftQuery = new TermQuery(new Term("isGift", "false"));
+			
 			BooleanQuery textQuery = new BooleanQuery();
-			BooleanQuery query = new BooleanQuery();
 			textQuery.add(snQuery, Occur.SHOULD);
 			textQuery.add(keywordQuery, Occur.SHOULD);
 			textQuery.add(nameQuery, Occur.SHOULD);
 			textQuery.add(nameFuzzyQuery, Occur.SHOULD);
 			textQuery.add(introductionQuery, Occur.SHOULD);
+			
+			BooleanQuery query = new BooleanQuery();
 			query.add(isMarketableQuery, Occur.MUST);
 			query.add(isListQuery, Occur.MUST);
-			query.add(isGiftQuery, Occur.MUST);
+			query.add(isGiftQuery, Occur.MUST); 
 			query.add(textQuery, Occur.MUST);
-			if (startPrice != null && endPrice != null && startPrice.compareTo(endPrice) > 0) {
-				BigDecimal temp = startPrice;
-				startPrice = endPrice;
-				endPrice = temp;
-			}
-			if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0 && endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
-				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", startPrice.doubleValue(), endPrice.doubleValue(), true, true);
-				query.add(numericRangeQuery, Occur.MUST);
-			} else if (startPrice != null && startPrice.compareTo(new BigDecimal(0)) >= 0) {
-				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", startPrice.doubleValue(), null, true, false);
-				query.add(numericRangeQuery, Occur.MUST);
-			} else if (endPrice != null && endPrice.compareTo(new BigDecimal(0)) >= 0) {
-				NumericRangeQuery<Double> numericRangeQuery = NumericRangeQuery.newDoubleRange("price", null, endPrice.doubleValue(), false, true);
-				query.add(numericRangeQuery, Occur.MUST);
-			}
+			
 			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 			FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Product.class);
 			SortField[] sortFields = null;
+			
 			if (orderType == OrderType.priceAsc) {
 				sortFields = new SortField[] { new SortField("price", SortField.DOUBLE, false), new SortField("createDate", SortField.LONG, true) };
 			} else if (orderType == OrderType.priceDesc) {
@@ -334,14 +327,21 @@ public class SearchServiceImpl implements SearchService {
 			} else {
 				sortFields = new SortField[] { new SortField("isTop", SortField.STRING, true), new SortField(null, SortField.SCORE), new SortField("modifyDate", SortField.LONG, true) };
 			}
+			
+			int first = (page - 1) * size;
+			
 			fullTextQuery.setSort(new Sort(sortFields));
-			fullTextQuery.setFirstResult((pageable.getPageNumber() - 1) * pageable.getPageSize());
-			fullTextQuery.setMaxResults(pageable.getPageSize());
-			return new Page<Product>(fullTextQuery.getResultList(), fullTextQuery.getResultSize(), pageable);
+			fullTextQuery.setFirstResult((first));
+			fullTextQuery.setMaxResults(size);
+			
+			return fullTextQuery.getResultList();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Page<Product>();
+		
+		return null;
+		
 	}
-	 */
+	
 }

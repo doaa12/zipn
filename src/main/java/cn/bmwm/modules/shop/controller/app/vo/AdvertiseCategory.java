@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.util.List;
+
 /**
  * 首页广告
  * @author zby
@@ -17,15 +19,7 @@ public class AdvertiseCategory {
 	 */
 	private Integer showmore;
 	
-	/**
-	 * 图片地址
-	 */
-	private String imageurl;
-	
-	/**
-	 * 链接地址
-	 */
-	private String linkurl;
+	private List<AdvertiseItem> dataList;
 
 	public Integer getShowtype() {
 		return showtype;
@@ -43,20 +37,12 @@ public class AdvertiseCategory {
 		this.showmore = showmore;
 	}
 
-	public String getImageurl() {
-		return imageurl;
+	public List<AdvertiseItem> getDataList() {
+		return dataList;
 	}
 
-	public void setImageurl(String imageurl) {
-		this.imageurl = imageurl;
+	public void setDataList(List<AdvertiseItem> dataList) {
+		this.dataList = dataList;
 	}
 
-	public String getLinkurl() {
-		return linkurl;
-	}
-
-	public void setLinkurl(String linkurl) {
-		this.linkurl = linkurl;
-	}
-	
 }

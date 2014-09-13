@@ -23,11 +23,10 @@ public class AppAdvertiseDaoImpl extends BaseDaoImpl<AppAdvertise,Long> implemen
 	 * @param city
 	 * @return
 	 */
-	public AppAdvertise findByCity(String city) {
+	public List<AppAdvertise> findByCity(String city) {
 		String jpql = " select ad from AppAdvertise ad where ad.city like :city and ad.isEnabled = true ";
 		TypedQuery<AppAdvertise> query = entityManager.createQuery(jpql, AppAdvertise.class);
-		List<AppAdvertise> list = query.setFlushMode(FlushModeType.COMMIT).setParameter("city", "%" + city + "%").setMaxResults(1).getResultList();
-		return list == null || list.size() == 0 ? null : list.get(0);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("city", "%" + city + "%").getResultList();
 	}
 	
 }

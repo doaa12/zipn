@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.dao;
 
+import java.util.List;
+
 import cn.bmwm.modules.shop.entity.AppAdvertise;
 
 /**
@@ -14,6 +16,6 @@ public interface AppAdvertiseDao extends BaseDao<AppAdvertise,Long> {
 	 * @param city
 	 * @return
 	 */
-	AppAdvertise findByCity(String city);
+	List<AppAdvertise> findByCity(String city);
 	
 }

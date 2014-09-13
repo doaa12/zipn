@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
+import cn.bmwm.modules.shop.controller.app.vo.AdvertiseItem;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDynamic;
@@ -122,8 +123,8 @@ public class IndexController extends AppBaseController {
 		}
 		
 		//广告
-		AppAdvertise appAdvertise = appAdvertiseService.findByCity(city);
-		AdvertiseCategory advertiseCategory = getAdvertiseCategory(appAdvertise);
+		List<AppAdvertise> appAdvertiseList = appAdvertiseService.findByCity(city);
+		AdvertiseCategory advertiseCategory = getAdvertiseCategory(appAdvertiseList);
 		
 		List<ProductCategory> categories = productCategoryService.findRoots();
 		
@@ -153,15 +154,15 @@ public class IndexController extends AppBaseController {
 		
 		List<Object> itemCategoryList = new ArrayList<Object>();
 		
+		if(advertiseCategory != null) {
+			itemCategoryList.add(advertiseCategory);
+		}
+		
 		if(favoriteShopCategory != null) {
 			itemCategoryList.add(favoriteShopCategory);
 		}
 		
 		if(virtualShops.size() > 0) itemCategoryList.addAll(virtualShops);
-		
-		if(advertiseCategory != null) {
-			itemCategoryList.add(advertiseCategory);
-		}
 		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
@@ -276,15 +277,24 @@ public class IndexController extends AppBaseController {
 	 * @param appAdvertise
 	 * @return
 	 */
-	public AdvertiseCategory getAdvertiseCategory(AppAdvertise appAdvertise) {
+	public AdvertiseCategory getAdvertiseCategory(List<AppAdvertise> list) {
 		
-		if(appAdvertise == null) return null;
+		if(list == null || list.size() == 0) return null;
 		
 		AdvertiseCategory category = new AdvertiseCategory();
 		category.setShowmore(0);
 		category.setShowtype(4);
-		category.setImageurl(appAdvertise.getImageUrl());
-		category.setLinkurl(appAdvertise.getLinkUrl());
+		
+		List<AdvertiseItem> itemList = new ArrayList<AdvertiseItem>();
+		
+		for(AppAdvertise ad : list) {
+			AdvertiseItem item = new AdvertiseItem();
+			item.setImageurl(ad.getImageUrl());
+			item.setLinkurl(ad.getLinkUrl());
+			itemList.add(item);
+		}
+		
+		category.setDataList(itemList);
 		
 		return category;
 		

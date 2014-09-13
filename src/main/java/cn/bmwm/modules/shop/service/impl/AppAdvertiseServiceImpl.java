@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,7 +35,7 @@ public class AppAdvertiseServiceImpl extends BaseServiceImpl<AppAdvertise,Long> 
 	 * @return
 	 */
 	@Cacheable(value = "appAd", key = "'city' + #city + 'findByCity'")
-	public AppAdvertise findByCity(String city) {
+	public List<AppAdvertise> findByCity(String city) {
 		return appAdvertiseDao.findByCity(city);
 	}
 	
