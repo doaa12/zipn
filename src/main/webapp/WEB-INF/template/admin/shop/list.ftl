@@ -98,7 +98,7 @@ $().ready(function() {
 		});
 	});
 	
-	// 商品筛选
+	// 店铺筛选
 	$filterSelect.mouseover(function() {
 		var $this = $(this);
 		var offset = $this.offset();

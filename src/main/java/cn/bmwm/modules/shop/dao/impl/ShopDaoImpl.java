@@ -53,11 +53,11 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		if(city != null && city.trim().length() > 0){
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.like(root.<String>get("city"), "%" + city + "%"));
 		}
-		if(isTop != null){
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isToop"), isTop));
+		if(isList != null){
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
 		}
 		if(isTop != null){
-			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isList"), isList));
+			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isTop"), isTop));
 		}
 		
 		criteriaQuery.where(restrictions);
