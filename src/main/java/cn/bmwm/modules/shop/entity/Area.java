@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -77,6 +78,11 @@ public class Area extends OrderEntity {
 	 * 店铺
 	 */
 	private Set<Shop> shops = new HashSet<Shop>();
+	
+	/**
+	 * 广告
+	 */
+	private AppAdvertise appAdvertise;
 	
 
 	/**
@@ -291,6 +297,15 @@ public class Area extends OrderEntity {
 
 	public void setShops(Set<Shop> shops) {
 		this.shops = shops;
+	}
+	
+	@OneToOne(mappedBy = "area", fetch = FetchType.LAZY)
+	public AppAdvertise getAppAdvertise() {
+		return appAdvertise;
+	}
+
+	public void setAppAdvertise(AppAdvertise appAdvertise) {
+		this.appAdvertise = appAdvertise;
 	}
 
 	/**

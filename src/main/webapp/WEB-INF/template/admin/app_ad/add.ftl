@@ -7,6 +7,7 @@
 <meta name="copyright" content="" />
 <link href="${base}/resources/admin/css/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${base}/resources/admin/js/jquery.js"></script>
+<script type="text/javascript" src="${base}/resources/admin/js/jquery.tools.js"></script>
 <script type="text/javascript" src="${base}/resources/admin/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${base}/resources/admin/js/common.js"></script>
 <script type="text/javascript" src="${base}/resources/admin/js/input.js"></script>
@@ -17,8 +18,13 @@ $().ready(function() {
 	var $provinceId = $("#provinceId");
 	var $cityId = $("#cityId");
 	var $areaId = $("#areaId");
+	var $browserButton = $("#browserButton");
 	
-	//修改店铺省份
+	[@flash_message /]
+	
+	$browserButton.browser();
+	
+	//修改省份
 	$provinceId.change(function(){
 		$.ajax({
 			url: "/admin/area/children.jhtml",
@@ -44,7 +50,7 @@ $().ready(function() {
 		});
 	});
 	
-	//修改店铺城市
+	//修改城市
 	$cityId.change(function(){
 		$.ajax({
 			url: "/admin/area/children.jhtml",
@@ -71,17 +77,9 @@ $().ready(function() {
 	// 表单验证
 	$inputForm.validate({
 		rules: {
-			productCategoryId: "required",
-			name: "required",
-			adminId: {
-				min: 1
-			},
+			imageUrl: "required",
+			linkUrl: "required",
 			provinceId: "required"
-		},
-		messages: {
-			adminId: {
-				min: "${message("admin.shop.validate.admin.select")}"
-			}
 		}
 	});
 
@@ -90,37 +88,10 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.shop.add")}
+		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.add")}
 	</div>
 	<form id="inputForm" action="save.jhtml" method="post">
 		<table id="shopTable" class="input">
-			<tr>
-				<th>
-					<span class="requiredField">*</span>${message("Shop.productCategory")}:
-				</th>
-				<td>
-					<select id="productCategoryId" name="productCategoryId">
-						[#list productCategoryTree as productCategory]
-							<option value="${productCategory.id}">
-								[#if productCategory.grade != 0]
-									[#list 1..productCategory.grade as i]
-										&nbsp;&nbsp;
-									[/#list]
-								[/#if]
-								${productCategory.name}
-							</option>
-						[/#list]
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<span class="requiredField">*</span>${message("Shop.name")}:
-				</th>
-				<td>
-					<input type="text" id="name" name="name" class="text" maxlength="200" />
-				</td>
-			</tr>
 			<tr>
 				<th>
 					<span class="requiredField">*</span>${message("Shop.city")}:
@@ -147,38 +118,28 @@ $().ready(function() {
 				</th>
 				<td>
 					<label>
-						<input type="checkbox" name="isList" value="true"/>${message("Shop.isList")}
-						<input type="hidden" name="_isList" value="false" />
-					</label>
-					<label>
-						<input type="checkbox" name="isTop" value="true"/>${message("Shop.isTop")}
-						<input type="hidden" name="_isTop" value="false" />
+						<input type="checkbox" name="isEnabled" value="true"/>${message("admin.appAdvertise.isEnabled")}
+						<input type="hidden" name="_isEnabled" value="false" />
 					</label>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<span class="requiredField">*</span>${message("Shop.admin")}:
+					<span class="requiredField">*</span>${message("AppAdvertise.imageurl")}:
 				</th>
 				<td>
-					<select id="adminId" name="adminId">
-						<option value="0">请选择...</option>
-						[#list admins as admin]
-							<option value="${admin.id}">
-								${admin.username}
-							</option>
-						[/#list]
-					</select>
+					<span class="fieldSet">
+						<input type="text" id="imageUrl" name="imageUrl" class="text_medium" maxlength="200" title="${message("admin.appAdvertise.imageTitle")}" />
+						<input type="button" id="browserButton" class="button" value="${message("admin.browser.select")}" />
+					</span>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					${message("Shop.virtualShopCategory")}:
+					<span class="requiredField">*</span>${message("admin.appAdvertise.linkurl")}:
 				</th>
 				<td>
-					[#list virtualCategories as category]
-						<input type="checkbox" name="virtualCategories" value="${category.id}">${category.name}&nbsp;-&nbsp;${category.city}<br/>
-					[/#list]
+					<input type="text" id="linkUrl" name="linkUrl" class="text_medium" maxlength="50" title="${message("admin.appAdvertise.linkurlTitle")}"/>
 				</td>
 			</tr>
 		</table>

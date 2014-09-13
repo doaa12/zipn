@@ -47,11 +47,17 @@ $().ready(function() {
 				$cityId.empty();
 			},
 			success: function(data) {
-				var trHtml = '<option value="0">请选择...</option>';
+			
+				var html = '<option value="0">请选择...</option>';
 				$.each(data, function(i, city) {
-					trHtml += '<option value="' + city.id + '">' + city.name + '</option>' ;
+					html += '<option value="' + city.id + '">' + city.name + '</option>' ;
 				});
-				$cityId.append(trHtml);
+				$cityId.append(html);
+				
+				var ahtml = '<option value="0">请选择...</option>';
+				$areaId.empty();
+				$areaId.append(ahtml);
+				
 			}
 		});
 	});
@@ -112,11 +118,6 @@ $().ready(function() {
 					</select>
 					<select id="cityId" name="cityId">
 						<option value="0">请选择...</option>
-						[#list cities as city]
-							<option value="${city.id}">
-								${city.name}
-							</option>
-						[/#list]
 					</select>
 					<select id="areaId" name="areaId" style="display:none;">
 					</select>

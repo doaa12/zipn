@@ -118,13 +118,13 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:productCategory"[#if role.authorities?seq_contains("admin:productCategory")] checked="checked"[/#if] />${message("admin.role.productCategory")}
 						</label>
 						<label>
-							<input type="checkbox" name="authorities" value="admin:brand"[#if role.authorities?seq_contains("admin:brand")] checked="checked"[/#if] />${message("admin.role.brand")}
-						</label>
-						<label>
 							<input type="checkbox" name="authorities" value="admin:shop" [#if role.authorities?seq_contains("admin:shop")] checked="checked"[/#if]/>${message("admin.role.shop")}
 						</label>
 						<label>
 							<input type="checkbox" name="authorities" value="admin:virtualShopCategory" [#if role.authorities?seq_contains("admin:virtualShopCategory")] checked="checked"[/#if]/>${message("admin.role.virtualShopCategory")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:appAdvertise" [#if role.authorities?seq_contains("admin:appAdvertise")] checked="checked"[/#if]/>${message("admin.role.appAdvertise")}
 						</label>
 					</span>
 				</td>

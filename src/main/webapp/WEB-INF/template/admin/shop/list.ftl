@@ -128,7 +128,7 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.product.list")} <span>(${message("admin.page.total", page.total)})</span>
+		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.shop.list")} <span>(${message("admin.page.total", page.total)})</span>
 	</div>
 	<form id="listForm" action="list.jhtml" method="get">
 		<input type="hidden" id="productCategoryId" name="productCategoryId" value="${productCategoryId}" />
@@ -148,7 +148,7 @@ $().ready(function() {
 				</a>
 				<div class="menuWrap">
 					<a href="javascript:;" id="filterSelect" class="button">
-						${message("admin.product.filter")}<span class="arrow">&nbsp;</span>
+						${message("admin.shop.filter")}<span class="arrow">&nbsp;</span>
 					</a>
 					<div class="popupMenu">
 						<ul id="filterOption" class="check">

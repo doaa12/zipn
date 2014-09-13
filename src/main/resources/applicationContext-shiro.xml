@@ -31,6 +31,7 @@
 				/admin/specification/** = perms["admin:specification"]
 				/admin/brand/** = perms["admin:brand"]
 				/admin/shop/** = perms["admin:shop"]
+				/admin/app_ad/** = perms["admin:appAdvertise"]
 				/admin/product_notify/** = perms["admin:productNotify"]
 
 				/admin/order/** = perms["admin:order"]

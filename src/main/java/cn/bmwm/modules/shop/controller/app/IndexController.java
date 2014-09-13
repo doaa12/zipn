@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDynamic;
+import cn.bmwm.modules.shop.entity.AppAdvertise;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.VirtualShopCategory;
+import cn.bmwm.modules.shop.service.AppAdvertiseService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
@@ -57,6 +60,9 @@ public class IndexController extends AppBaseController {
 	
 	@Resource(name = "virtualShopCategoryServiceImpl")
 	private VirtualShopCategoryService virtualShopCategoryService;
+	
+	@Resource(name = "appAdvertiseServiceImpl")
+	private AppAdvertiseService appAdvertiseService;
 	
 	/**
 	 * App - 首页
@@ -100,6 +106,7 @@ public class IndexController extends AppBaseController {
 		
 		List<ItemCategory<Item>> products = new LinkedList<ItemCategory<Item>>();
 		List<ItemCategory<Item>> shops = new LinkedList<ItemCategory<Item>>();
+		List<ItemCategory<Item>> virtualShops = new LinkedList<ItemCategory<Item>>();
 		
 		//虚拟店铺分类
 		List<VirtualShopCategory> virtualShopCategoryList = virtualShopCategoryService.findList(city);
@@ -109,10 +116,14 @@ public class IndexController extends AppBaseController {
 				List<Shop> shopList = shopService.findVirtualCategoryShopList(virtualShopCategory.getId());
 				ItemCategory<Item> shopVirtualCategory = getVirtualShopCategory(virtualShopCategory, shopList);
 				if(shopVirtualCategory != null) {
-					shops.add(shopVirtualCategory);
+					virtualShops.add(shopVirtualCategory);
 				}
 			}
 		}
+		
+		//广告
+		AppAdvertise appAdvertise = appAdvertiseService.findByCity(city);
+		AdvertiseCategory advertiseCategory = getAdvertiseCategory(appAdvertise);
 		
 		List<ProductCategory> categories = productCategoryService.findRoots();
 		
@@ -144,6 +155,12 @@ public class IndexController extends AppBaseController {
 		
 		if(favoriteShopCategory != null) {
 			itemCategoryList.add(favoriteShopCategory);
+		}
+		
+		if(virtualShops.size() > 0) itemCategoryList.addAll(virtualShops);
+		
+		if(advertiseCategory != null) {
+			itemCategoryList.add(advertiseCategory);
 		}
 		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
@@ -251,6 +268,25 @@ public class IndexController extends AppBaseController {
 		itemCategory.setMoretype(1);
 		
 		return itemCategory;
+		
+	}
+	
+	/**
+	 * 获取首页广告
+	 * @param appAdvertise
+	 * @return
+	 */
+	public AdvertiseCategory getAdvertiseCategory(AppAdvertise appAdvertise) {
+		
+		if(appAdvertise == null) return null;
+		
+		AdvertiseCategory category = new AdvertiseCategory();
+		category.setShowmore(0);
+		category.setShowtype(4);
+		category.setImageurl(appAdvertise.getImageUrl());
+		category.setLinkurl(appAdvertise.getLinkUrl());
+		
+		return category;
 		
 	}
 	

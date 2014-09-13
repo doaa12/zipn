@@ -61,7 +61,7 @@ $().ready(function() {
 			<th>
 				<div id="nav" class="nav">
 					<ul>
-						[#list ["admin:product", "admin:productCategory", "admin:brand", "admin:shop", "admin:virtualShopCategory", "shopadmin:product", "shopadmin:shopCategory", "shopadmin:parameterGroup", "shopadmin:attribute", "shopadmin:specification", "shopadmin:shopsetting"] as permission]
+						[#list ["admin:product", "admin:productCategory", "admin:shop", "admin:virtualShopCategory", "admin:appAdvertise", "shopadmin:product", "shopadmin:shopCategory", "shopadmin:parameterGroup", "shopadmin:attribute", "shopadmin:specification", "shopadmin:shopsetting"] as permission]
 							[@shiro.hasPermission name = permission]
 								<li>
 									<a href="#product">${message("admin.main.productNav")}</a>
@@ -85,7 +85,7 @@ $().ready(function() {
 								[#break /]
 							[/@shiro.hasPermission]
 						[/#list]
-						[#list ["admin:navigation", "admin:article", "admin:articleCategory", "admin:tag", "admin:friendLink", "admin:adPosition", "admin:ad", "admin:template", "admin:cache", "admin:static", "admin:index"] as permission]
+						[#list ["admin:navigation", "admin:article", "admin:articleCategory", "admin:tag", "admin:friendLink", "admin:template", "admin:cache", "admin:static", "admin:index"] as permission]
 							[@shiro.hasPermission name = permission]
 								<li>
 									<a href="#content">${message("admin.main.contentNav")}</a>
@@ -147,11 +147,6 @@ $().ready(function() {
 							<a href="../product_category/list.jhtml" target="iframe">${message("admin.main.productCategory")}</a>
 						</dd>
 					[/@shiro.hasPermission]
-					[@shiro.hasPermission name="admin:brand"]
-						<dd>
-							<a href="../brand/list.jhtml" target="iframe">${message("admin.main.brand")}</a>
-						</dd>
-					[/@shiro.hasPermission]
 					[@shiro.hasPermission name="admin:shop"]
 						<dd>
 							<a href="../shop/list.jhtml" target="iframe">${message("admin.role.shop")}</a>
@@ -160,6 +155,11 @@ $().ready(function() {
 					[@shiro.hasPermission name="admin:virtualShopCategory"]
 						<dd>
 							<a href="../virtual_shop_category/list.jhtml" target="iframe">${message("admin.role.virtualShopCategory")}</a>
+						</dd>
+					[/@shiro.hasPermission]
+					[@shiro.hasPermission name="admin:appAdvertise"]
+						<dd>
+							<a href="../app_ad/list.jhtml" target="iframe">${message("admin.role.appAdvertise")}</a>
 						</dd>
 					[/@shiro.hasPermission]
 					[@shiro.hasPermission name="shopadmin:shopsetting"]
@@ -284,16 +284,6 @@ $().ready(function() {
 					[@shiro.hasPermission name="admin:friendLink"]
 						<dd>
 							<a href="../friend_link/list.jhtml" target="iframe">${message("admin.main.friendLink")}</a>
-						</dd>
-					[/@shiro.hasPermission]
-					[@shiro.hasPermission name="admin:adPosition"]
-						<dd>
-							<a href="../ad_position/list.jhtml" target="iframe">${message("admin.main.adPosition")}</a>
-						</dd>
-					[/@shiro.hasPermission]
-					[@shiro.hasPermission name="admin:ad"]
-						<dd>
-							<a href="../ad/list.jhtml" target="iframe">${message("admin.main.ad")}</a>
 						</dd>
 					[/@shiro.hasPermission]
 					[@shiro.hasPermission name="admin:template"]

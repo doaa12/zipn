@@ -117,13 +117,13 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:productCategory" />${message("admin.role.productCategory")}
 						</label>
 						<label>
-							<input type="checkbox" name="authorities" value="admin:brand" />${message("admin.role.brand")}
-						</label>
-						<label>
 							<input type="checkbox" name="authorities" value="admin:shop" />${message("admin.role.shop")}
 						</label>
 						<label>
 							<input type="checkbox" name="authorities" value="admin:virtualShopCategory" />${message("admin.role.virtualShopCategory")}
+						</label>
+						<label>
+							<input type="checkbox" name="authorities" value="admin:appAdvertise" />${message("admin.role.appAdvertise")}
 						</label>
 					</span>
 				</td>
