@@ -79,7 +79,8 @@ $().ready(function() {
 		rules: {
 			imageUrl: "required",
 			linkUrl: "required",
-			provinceId: "required"
+			provinceId: "required",
+			order: "required"
 		}
 	});
 
@@ -140,6 +141,14 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="text" id="linkUrl" name="linkUrl" class="text_medium" maxlength="50" title="${message("admin.appAdvertise.linkurlTitle")}"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("admin.appAdvertise.order")}:
+				</th>
+				<td>
+					<input type="text" id="order" name="order" class="text_medium" maxlength="50" title="${message("admin.appAdvertise.orderTitle")}"/>
 				</td>
 			</tr>
 		</table>

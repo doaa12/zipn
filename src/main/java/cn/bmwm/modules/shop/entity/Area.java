@@ -5,6 +5,7 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -82,7 +82,7 @@ public class Area extends OrderEntity {
 	/**
 	 * 广告
 	 */
-	private AppAdvertise appAdvertise;
+	private List<AppAdvertise> advertiseList;
 	
 
 	/**
@@ -299,13 +299,13 @@ public class Area extends OrderEntity {
 		this.shops = shops;
 	}
 	
-	@OneToOne(mappedBy = "area", fetch = FetchType.LAZY)
-	public AppAdvertise getAppAdvertise() {
-		return appAdvertise;
+	@OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+	public List<AppAdvertise> getAdvertiseList() {
+		return advertiseList;
 	}
 
-	public void setAppAdvertise(AppAdvertise appAdvertise) {
-		this.appAdvertise = appAdvertise;
+	public void setAdvertiseList(List<AppAdvertise> advertiseList) {
+		this.advertiseList = advertiseList;
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package cn.bmwm.modules.shop.controller.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.entity.AppAdvertise;
 import cn.bmwm.modules.shop.entity.Area;
 import cn.bmwm.modules.shop.service.AppAdvertiseService;
@@ -38,7 +42,10 @@ public class AppAdvertiseController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Boolean isEnabled, ModelMap model) {
 		model.addAttribute("isEnabled", isEnabled);
-		model.addAttribute("list", appAdvertiseService.findList(null, null, null));
+		Order order = Order.asc("order");
+		List<Order> orderList = new ArrayList<Order>();
+		orderList.add(order);
+		model.addAttribute("list", appAdvertiseService.findList(null, null, orderList));
 		return "/admin/app_ad/list";
 	}
 	
@@ -166,6 +173,7 @@ public class AppAdvertiseController extends BaseController {
 		ad.setImageUrl(appAdvertise.getImageUrl());
 		ad.setLinkUrl(appAdvertise.getLinkUrl());
 		ad.setIsEnabled(appAdvertise.getIsEnabled());
+		ad.setOrder(appAdvertise.getOrder());
 		
 		appAdvertiseService.update(ad);
 		

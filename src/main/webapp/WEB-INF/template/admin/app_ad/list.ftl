@@ -104,6 +104,9 @@ $().ready(function() {
 					<a href="javascript:;" class="sort" name="city">${message("AppAdvertise.city")}</a>
 				</th>
 				<th>
+					<a href="javascript:;" class="sort" name="order">${message("AppAdvertise.order")}</a>
+				</th>
+				<th>
 					<a href="javascript:;" class="sort" name="imageUrl">${message("AppAdvertise.imageurl")}</a>
 				</th>
 				<th>
@@ -123,6 +126,9 @@ $().ready(function() {
 				<tr>
 					<td>
 						${ad.city}
+					</td>
+					<td>
+						${ad.order}
 					</td>
 					<td>
 						<a href="${ad.imageUrl}" target="_blank">${ad.imageUrl}</a>

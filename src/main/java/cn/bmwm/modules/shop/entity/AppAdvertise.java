@@ -2,7 +2,7 @@ package cn.bmwm.modules.shop.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "xx_app_advertise")
 @SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_app_advertise_sequence")
-public class AppAdvertise extends BaseEntity {
+public class AppAdvertise extends OrderEntity {
 
 	private static final long serialVersionUID = 5626163391841594183L;
 	
@@ -48,7 +48,7 @@ public class AppAdvertise extends BaseEntity {
 	 */
 	private String description;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	public Area getArea() {
 		return area;
 	}
