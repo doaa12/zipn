@@ -139,13 +139,13 @@ public class Product extends BaseEntity {
 	/** 全称 */
 	private String fullName;
 	
-	/**
-	 * 原价
-	 */
-	private BigDecimal originalPrice;
-
 	/** 销售价 */
 	private BigDecimal price;
+	
+	/**
+	 * 价格类型
+	 */
+	private String priceType;
 
 	/** 成本价 */
 	private BigDecimal cost;
@@ -188,6 +188,11 @@ public class Product extends BaseEntity {
 
 	/** 介绍 */
 	private String introduction;
+	
+	/**
+	 * 商品描述
+	 */
+	private String description;
 
 	/** 备注 */
 	private String memo;
@@ -468,24 +473,6 @@ public class Product extends BaseEntity {
 	}
 	
 	/**
-	 * 获取原价
-	 * @return
-	 */
-	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
-	@NumericField
-	@FieldBridge(impl = BigDecimalNumericFieldBridge.class)
-	@Min(0)
-	@Digits(integer = 12, fraction = 3)
-	@Column(nullable = false, precision = 21, scale = 6)
-	public BigDecimal getOriginalPrice() {
-		return originalPrice;
-	}
-
-	public void setOriginalPrice(BigDecimal originalPrice) {
-		this.originalPrice = originalPrice;
-	}
-
-	/**
 	 * 获取销售价
 	 * 
 	 * @return 销售价
@@ -510,6 +497,17 @@ public class Product extends BaseEntity {
 	 */
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	
+	/**
+	 * 价格类型
+	 */
+	public String getPriceType() {
+		return priceType;
+	}
+
+	public void setPriceType(String priceType) {
+		this.priceType = priceType;
 	}
 
 	/**
@@ -815,6 +813,18 @@ public class Product extends BaseEntity {
 	 */
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+	
+	/**
+	 * 获取商品描述
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**

@@ -35,7 +35,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品图片
 	 */
-	private String imageurl = "";
+	private List<String> imageList;
 	
 	/**
 	 * 评价次数
@@ -71,6 +71,11 @@ public class ProductDetail implements Serializable {
 	 * 店铺图片
 	 */
 	private String storeImageUrl = "";
+	
+	/**
+	 * 商家电话
+	 */
+	private String phone;
 	
 	/**
 	 * 商品评价
@@ -113,14 +118,12 @@ public class ProductDetail implements Serializable {
 		}
 	}
 
-	public String getImageurl() {
-		return imageurl;
+	public List<String> getImageList() {
+		return imageList;
 	}
 
-	public void setImageurl(String imageurl) {
-		if(imageurl != null) {
-			this.imageurl = imageurl;
-		}
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
 	}
 
 	public Long getEvaluateNumber() {
@@ -185,6 +188,14 @@ public class ProductDetail implements Serializable {
 		if(storeImageUrl != null) {
 			this.storeImageUrl = storeImageUrl;
 		}
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public List<Evaluate> getEvaluate() {

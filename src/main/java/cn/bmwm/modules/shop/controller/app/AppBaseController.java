@@ -114,7 +114,7 @@ public class AppBaseController extends BaseController {
 			item.setId(product.getId());
 			item.setName(product.getName());
 			item.setPrice(product.getPrice().doubleValue());
-			item.setOriginalPrice(product.getOriginalPrice() == null ? item.getPrice() * 1.5 : product.getOriginalPrice().doubleValue());
+			item.setOriginalPrice(product.getMarketPrice().doubleValue());
 			item.setImageurl(product.getImage());
 			item.setEvaluateCount(product.getScoreCount());
 			item.setAttribute1(product.getAttributeValue0());

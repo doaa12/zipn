@@ -21,6 +21,7 @@ import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.controller.app.vo.ProductDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.Review;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -71,15 +72,27 @@ public class ProductController extends AppBaseController {
 		detail.setCode(product.getId());
 		detail.setTitle(product.getName());
 		detail.setPrice(product.getPrice().doubleValue());
-		detail.setPriceType("销售价");
-		detail.setImageurl(product.getImage());
+		detail.setPriceType(product.getPriceType());
+		detail.setDesc(product.getDescription());
+		
 		detail.setEvaluateNumber(reviewService.count(null, product, null, true));
 		detail.setScore(product.getAvgScore());
 		detail.setDescurl(product.getIntroduction());
-		//detail.setDesc(product.getattribute);
 		detail.setStoreId(shop.getId());
 		detail.setStoreName(shop.getName());
+		detail.setPhone(shop.getTelephone());
 		detail.setStoreImageUrl(shop.getImage());
+		
+		List<ProductImage> images = product.getProductImages();
+		List<String> imageList = new ArrayList<String>();
+		
+		if(images != null && images.size() > 0) {
+			for(ProductImage image : images) {
+				imageList.add(image.getLarge());
+			}
+		}
+		
+		detail.setImageList(imageList);
 		
 		List<Order> orders = new ArrayList<Order>();
 		orders.add(new Order("createDate", Order.Direction.desc));

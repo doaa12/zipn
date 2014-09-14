@@ -108,6 +108,15 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	}
 	
 	/**
+	 * 查找商品
+	 */
+	@Override
+	@Cacheable(value = "product", key = "'id' + #id + 'find'")
+	public Product find(Long id) {
+		return productDao.find(id);
+	}
+	
+	/**
 	 * 查找推荐商品
 	 * @return
 	 */

@@ -418,6 +418,14 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
+					${message("Product.priceType")}:
+				</th>
+				<td>
+					<input type="text" name="priceType" class="text" value="${product.priceType}" maxlength="16" title="${message("shopadmin.product.priceTypeTitle")}"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
 					${message("Product.memberPrice")}:
 				</th>
 				<td>
@@ -504,6 +512,14 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="text" name="point" class="text" value="${product.point}" maxlength="9" title="${message("admin.product.pointTitle")}" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("shopadmin.product.description")}:
+				</th>
+				<td>
+					<textarea id="description" name="description" rows="5" cols="60" maxlength="500" class="text">${product.description}</textarea>
 				</td>
 			</tr>
 			<tr>
