@@ -445,13 +445,18 @@ public class ProductController extends BaseController {
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		product.setShopCategory(shopCategory);
 		
-		if (!isValid(product)) {
-			return ERROR_VIEW;
-		}
 		Product pProduct = productService.find(product.getId());
+		
 		if (pProduct == null) {
 			return ERROR_VIEW;
 		}
+		
+		product.setIsTop(pProduct.getIsTop());
+		
+		if (!isValid(product)) {
+			return ERROR_VIEW;
+		}
+		
 		if (StringUtils.isNotEmpty(product.getSn()) && !productService.snUnique(pProduct.getSn(), product.getSn())) {
 			return ERROR_VIEW;
 		}

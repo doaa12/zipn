@@ -271,6 +271,7 @@ $().ready(function() {
 		rules: {
 			shopCategoryId: "required",
 			name: "required",
+			description: "required",
 			sn: {
 				pattern: /^[0-9a-zA-Z_-]+$/,
 				remote: {
