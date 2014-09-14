@@ -206,6 +206,7 @@ public class IndexController extends AppBaseController {
 					item.setImageurl(product.getImage());
 					item.setTitle(product.getName());
 					item.setType(2);
+					item.setPrice(product.getPrice().doubleValue());
 					products.add(item);
 				}
 			}
@@ -257,6 +258,7 @@ public class IndexController extends AppBaseController {
 			item.setType(1);
 			item.setImageurl(shop.getImage());
 			item.setArea(shop.getRegion());
+			item.setPrice(shop.getAvgPrice());
 			itemList.add(item);
 		}
 		

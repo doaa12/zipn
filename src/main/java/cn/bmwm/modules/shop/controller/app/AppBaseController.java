@@ -79,6 +79,7 @@ public class AppBaseController extends BaseController {
 			item.setType(1);
 			item.setImageurl(shop.getImage());
 			item.setArea(shop.getRegion());
+			item.setPrice(shop.getAvgPrice());
 			itemList.add(item);
 		}
 		
