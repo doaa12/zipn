@@ -90,7 +90,7 @@ public class ShopController extends BaseController {
 		ProductCategory productCategory = productCategoryService.find(productCategoryId);
 		shop.setProductCategory(productCategory);
 		shop.setTreePath(productCategory.getTreePath() + productCategory.getId() + ",");
-		shop.setShopType(productCategory.getName());
+		shop.setCategoryName(productCategory.getName());
 		shop.setPayAccount("");
 		
 		if(areaId != null && areaId != 0) {

@@ -205,14 +205,14 @@ public class Shop extends BaseEntity {
 	private String treePath;
 	
 	/**
-	 * 店铺类型，比如餐厅
+	 * 店铺经营范围
 	 */
 	private String shopType;
 	
 	/**
 	 * 平均价格
 	 */
-	private Integer avgPrice;
+	private Double avgPrice;
 	
 	/**
 	 * 店铺纬度
@@ -223,6 +223,11 @@ public class Shop extends BaseEntity {
 	 * 店铺经度
 	 */
 	private BigDecimal longitude;
+	
+	/**
+	 * 电话
+	 */
+	private String telephone;
 	
 	/**
 	 * 获取店铺名称
@@ -642,6 +647,10 @@ public class Shop extends BaseEntity {
 		this.treePath = treePath;
 	}
 	
+	/**
+	 * 店铺经营范围
+	 * @return
+	 */
 	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
 	public String getShopType() {
 		return shopType;
@@ -652,15 +661,15 @@ public class Shop extends BaseEntity {
 	}
 
 	/**
-	 * 平均价格
+	 * 人均消费价格
 	 * @return
 	 */
 	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
-	public Integer getAvgPrice() {
+	public Double getAvgPrice() {
 		return avgPrice;
 	}
 
-	public void setAvgPrice(Integer avgPrice) {
+	public void setAvgPrice(Double avgPrice) {
 		this.avgPrice = avgPrice;
 	}
 	
@@ -684,6 +693,14 @@ public class Shop extends BaseEntity {
 		this.latitude = latitude;
 	}
 	
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
 	public String toString() {
 		return this.getId().toString();
 	}

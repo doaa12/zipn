@@ -42,9 +42,9 @@ public class ItemShop implements Serializable {
 	private Integer status;
 	
 	/**
-	 * 平局价格
+	 * 人均消费价格
 	 */
-	private Integer price;
+	private Double price;
 	
 	/**
 	 * 区域
@@ -110,11 +110,11 @@ public class ItemShop implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

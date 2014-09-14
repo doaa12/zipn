@@ -76,11 +76,11 @@ public class SearchController extends AppBaseController {
 		if(order == 4) {
 			List<Shop> shops = searchService.search(city, keyword, page, size);
 			List<ItemShop> itemList = getShopItems(shops, x, y);
-			result.put("dataList", itemList);
+			result.put("data", itemList);
 		}else {
 			List<Product> products = searchService.search(city, keyword, orderType, page, size);
 			List<ItemProduct> itemList = getProductItems(products);
-			result.put("dataList", itemList);
+			result.put("data", itemList);
 		}
 		
 		return result;

@@ -36,7 +36,17 @@ $().ready(function() {
 			payAccount: "required",
 			status: "required",
 			image: "required",
-			logo: "required"
+			logo: "required",
+			avgPrice: {
+				required: true,
+				min: 0,
+				decimal: {
+					integer: 12,
+					fraction: ${setting.priceScale}
+				}
+			},
+			shopType: "required",
+			telephone: "required"
 		}
 	});
 	
@@ -139,6 +149,30 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="text" id="payAccount" name="payAccount" value="${shop.payAccount}" class="text_medium" maxlength="50" title="${message("shopadmin.shop.payaccountTitle")}"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.avgPrice")}:
+				</th>
+				<td>
+					<input type="text" id="avgPrice" name="avgPrice" class="text_medium" value="${shop.avgPrice}" title="${message("shopadmin.shop.avgpriceTitle")}" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.scope")}:
+				</th>
+				<td>
+					<input type="text" id="shopType" name="shopType" class="text_medium" value="${shop.shopType}" title="${message("shopadmin.shop.scopeTitle")}"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("Shop.telephone")}:
+				</th>
+				<td>
+					<input type="text" id="telephone" name="telephone" class="text_medium" value="${shop.telephone}" title="${message("shopadmin.shop.telephoneTitle")}"/>
 				</td>
 			</tr>
 			<tr>

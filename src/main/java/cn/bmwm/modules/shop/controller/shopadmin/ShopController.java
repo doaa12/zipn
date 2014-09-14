@@ -94,6 +94,9 @@ public class ShopController extends BaseController {
 		pshop.setLogo(shop.getLogo());
 		pshop.setStatus(shop.getStatus());
 		pshop.setShopImages(shop.getShopImages());
+		pshop.setTelephone(shop.getTelephone());
+		pshop.setShopType(shop.getShopType());
+		pshop.setAvgPrice(shop.getAvgPrice());
 		pshop.setLatitude(coordinate[0]);
 		pshop.setLongitude(coordinate[1]);
 		
