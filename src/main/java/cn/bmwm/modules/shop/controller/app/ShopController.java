@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
-import cn.bmwm.modules.shop.controller.app.vo.ItemShop;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
@@ -25,7 +24,6 @@ import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.entity.ShopReview;
-import cn.bmwm.modules.shop.service.LBSService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
@@ -60,9 +58,6 @@ public class ShopController extends AppBaseController {
 	
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
-	
-	@Resource(name = "lbsServiceImpl")
-	private LBSService lbsService;
 	
 	
 	/**
@@ -203,42 +198,6 @@ public class ShopController extends AppBaseController {
 	}
 	
 	/**
-	 * 获取店铺列表
-	 * @param shopList
-	 * @return
-	 */
-	public List<ItemShop> getShopItems(List<Shop> shopList, Double x, Double y) {
-		
-		List<ItemShop> list = new ArrayList<ItemShop>();
-		
-		if(shopList == null || shopList.size() == 0 ) return list;
-		
-		for(Shop shop : shopList) {
-			
-			ItemShop item = new ItemShop();
-			item.setCode(shop.getId());
-			item.setTitle(shop.getName());
-			item.setDistance(getDistance(shop, x, y));
-			item.setPrice(shop.getAvgPrice());
-			item.setScore(shop.getAvgScore());
-			item.setStatus(shop.getStatus());
-			item.setCategory(shop.getProductCategory().getName());
-			item.setArea(shop.getArea().getName());
-			item.setImageurl(shop.getImage());
-			
-			if(shop.getShopType() != null) {
-				item.setType(shop.getShopType());
-			}
-			
-			list.add(item);
-			
-		}
-		
-		return list;
-		
-	}
-	
-	/**
 	 * 获取店铺详情
 	 * @param shop
 	 * @return
@@ -281,32 +240,6 @@ public class ShopController extends AppBaseController {
 		detail.setRecommend(this.getProductItemCategory(shop.getProductCategory(), recommendList));
 		
 		return detail;
-		
-	}
-	
-	/**
-	 * 计算距离,x:经度,y:纬度
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public String getDistance(Shop shop, Double x, Double y) {
-		
-		if(x == null || y == null) {
-			return "";
-		}
-		
-		if(shop.getLatitude() == null || shop.getLongitude() == null) {
-			return "";
-		}
-		
-		double distance = lbsService.getDistance(y, x, shop.getLatitude().doubleValue(), shop.getLongitude().doubleValue());
-		
-		if(distance < 1) {
-			return (int)(distance * 1000) + "米";
-		}else{
-			return (long)distance + "千米";
-		}
 		
 	}
 	

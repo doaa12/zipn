@@ -27,10 +27,13 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Similarity;
 import org.hibernate.search.annotations.Store;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.wltea.analyzer.lucene.IKAnalyzer;
+import org.wltea.analyzer.lucene.IKSimilarity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,6 +42,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author zby
  * 2014-8-16 下午8:23:23
  */
+@Indexed
+@Similarity(impl = IKSimilarity.class)
 @Entity
 @Table(name = "xx_shop")
 @SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_shop_sequence")
@@ -178,6 +183,11 @@ public class Shop extends BaseEntity {
 	 * 店铺收藏数量
 	 */
 	private Long favoriteCount;
+	
+	/**
+	 * 类目名称
+	 */
+	private String categoryName;
 	
 	/**
 	 * 总评分数
@@ -571,6 +581,18 @@ public class Shop extends BaseEntity {
 		this.favoriteCount = favoriteCount;
 	}
 	
+	/**
+	 * 店铺所在类目
+	 * @return
+	 */
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
 	/**
 	 * 总评分数
 	 * @return

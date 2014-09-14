@@ -5,11 +5,13 @@
 package cn.bmwm.modules.shop.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.entity.Article;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
 
 
@@ -41,6 +43,13 @@ public interface SearchService {
 	 *            文章
 	 */
 	void index(Article article);
+	
+	/**
+	 * 创建索引
+	 * @param shop
+	 * 			店铺
+	 */
+	public void index(Shop shop);
 
 	/**
 	 * 创建索引
@@ -106,5 +115,26 @@ public interface SearchService {
 	 * @return 商品分页
 	 */
 	Page<Product> search(String keyword, BigDecimal startPrice, BigDecimal endPrice, OrderType orderType, Pageable pageable);
+	
+	/**
+	 * 商品搜索
+	 * @param city
+	 * @param keyword
+	 * @param orderType
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	List<Product> search(String city, String keyword, OrderType orderType, Integer page, Integer size);
+	
+	/**
+	 * 店铺搜索
+	 * @param city
+	 * @param keyword
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public List<Shop> search(String city, String keyword, Integer page, Integer size);
 
 }

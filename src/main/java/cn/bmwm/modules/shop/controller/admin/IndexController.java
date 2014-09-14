@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.modules.shop.entity.Article;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ArticleService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.SearchService;
+import cn.bmwm.modules.shop.service.ShopService;
 
 /**
  * Controller - 索引
@@ -35,8 +36,13 @@ public class IndexController extends BaseController {
 
 	@Resource(name = "articleServiceImpl")
 	private ArticleService articleService;
+	
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
+	
+	@Resource(name = "shopServiceImpl")
+	private ShopService shopService;
+	
 	@Resource(name = "searchServiceImpl")
 	private SearchService searchService;
 
@@ -51,7 +57,11 @@ public class IndexController extends BaseController {
 		/**
 		 * 商品
 		 */
-		product
+		product,
+		/**
+		 * 店铺
+		 */
+		shop
 	}
 
 	/**
@@ -102,6 +112,19 @@ public class IndexController extends BaseController {
 			}
 			first += products.size();
 			if (products.size() == count) {
+				isCompleted = false;
+			}
+		} else if (buildType == BuildType.shop) {
+			if (first == 0 && isPurge != null && isPurge) {
+				searchService.purge(Shop.class);
+			}
+			List<Shop> shops = shopService.findList(first, count, null, null);
+			for (Shop shop : shops) {
+				searchService.index(shop);
+				buildCount++;
+			}
+			first += shops.size();
+			if (shops.size() == count) {
 				isCompleted = false;
 			}
 		}

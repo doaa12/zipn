@@ -28,6 +28,11 @@ public class ItemProduct {
 	private double price;
 	
 	/**
+	 * 原价
+	 */
+	private double originalPrice;
+	
+	/**
 	 * 商品评论数
 	 */
 	private Long evaluateCount;
@@ -68,6 +73,14 @@ public class ItemProduct {
 		if(imageurl != null) {
 			this.imageurl = imageurl;
 		}
+	}
+
+	public double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(double originalPrice) {
+		this.originalPrice = originalPrice;
 	}
 
 	public double getPrice() {

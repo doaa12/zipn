@@ -138,6 +138,11 @@ public class Product extends BaseEntity {
 
 	/** 全称 */
 	private String fullName;
+	
+	/**
+	 * 原价
+	 */
+	private BigDecimal originalPrice;
 
 	/** 销售价 */
 	private BigDecimal price;
@@ -460,6 +465,24 @@ public class Product extends BaseEntity {
 	 */
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+	
+	/**
+	 * 获取原价
+	 * @return
+	 */
+	@Field(store = Store.YES, index = Index.UN_TOKENIZED)
+	@NumericField
+	@FieldBridge(impl = BigDecimalNumericFieldBridge.class)
+	@Min(0)
+	@Digits(integer = 12, fraction = 3)
+	@Column(nullable = false, precision = 21, scale = 6)
+	public BigDecimal getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(BigDecimal originalPrice) {
+		this.originalPrice = originalPrice;
 	}
 
 	/**

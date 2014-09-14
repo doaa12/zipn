@@ -275,6 +275,15 @@ public class SearchServiceImpl implements SearchService {
 		return new Page<Product>();
 	}
 	
+	/**
+	 * 商品搜索
+	 * @param city
+	 * @param keyword
+	 * @param orderType
+	 * @param page
+	 * @param size
+	 * @return
+	 */
 	public List<Product> search(String city, String keyword, OrderType orderType, Integer page, Integer size) {
 		
 		if (StringUtils.isEmpty(keyword)) {
@@ -285,8 +294,6 @@ public class SearchServiceImpl implements SearchService {
 			
 			String text = QueryParser.escape(keyword);
 			
-			TermQuery snQuery = new TermQuery(new Term("sn", text));
-			Query keywordQuery = new QueryParser(Version.LUCENE_35, "keyword", new IKAnalyzer()).parse(text);
 			QueryParser nameParser = new QueryParser(Version.LUCENE_35, "name", new IKAnalyzer());
 			nameParser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			Query nameQuery = nameParser.parse(text);
@@ -298,8 +305,6 @@ public class SearchServiceImpl implements SearchService {
 			TermQuery isGiftQuery = new TermQuery(new Term("isGift", "false"));
 			
 			BooleanQuery textQuery = new BooleanQuery();
-			textQuery.add(snQuery, Occur.SHOULD);
-			textQuery.add(keywordQuery, Occur.SHOULD);
 			textQuery.add(nameQuery, Occur.SHOULD);
 			textQuery.add(nameFuzzyQuery, Occur.SHOULD);
 			textQuery.add(introductionQuery, Occur.SHOULD);
@@ -327,6 +332,62 @@ public class SearchServiceImpl implements SearchService {
 			} else {
 				sortFields = new SortField[] { new SortField("isTop", SortField.STRING, true), new SortField(null, SortField.SCORE), new SortField("modifyDate", SortField.LONG, true) };
 			}
+			
+			int first = (page - 1) * size;
+			
+			fullTextQuery.setSort(new Sort(sortFields));
+			fullTextQuery.setFirstResult((first));
+			fullTextQuery.setMaxResults(size);
+			
+			return fullTextQuery.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
+	
+	/**
+	 * 店铺搜索
+	 * @param city
+	 * @param keyword
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public List<Shop> search(String city, String keyword, Integer page, Integer size) {
+		
+		if (StringUtils.isEmpty(keyword)) {
+			return null;
+		}
+		
+		try {
+			
+			String text = QueryParser.escape(keyword);
+			
+			QueryParser nameParser = new QueryParser(Version.LUCENE_35, "name", new IKAnalyzer());
+			nameParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+			Query nameQuery = nameParser.parse(text);
+			
+			FuzzyQuery nameFuzzyQuery = new FuzzyQuery(new Term("name", text), FUZZY_QUERY_MINIMUM_SIMILARITY);
+			TermQuery descriptionQuery = new TermQuery(new Term("description", text));
+			TermQuery isListQuery = new TermQuery(new Term("isList", "true"));
+			
+			BooleanQuery textQuery = new BooleanQuery();
+			textQuery.add(nameQuery, Occur.SHOULD);
+			textQuery.add(nameFuzzyQuery, Occur.SHOULD);
+			textQuery.add(descriptionQuery, Occur.SHOULD);
+			
+			BooleanQuery query = new BooleanQuery();
+			query.add(isListQuery, Occur.MUST);
+			query.add(textQuery, Occur.MUST);
+			
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(query, Shop.class);
+			
+			SortField[] sortFields = new SortField[] { new SortField("isTop", SortField.STRING, true), new SortField(null, SortField.SCORE), new SortField("modifyDate", SortField.LONG, true) };
 			
 			int first = (page - 1) * size;
 			

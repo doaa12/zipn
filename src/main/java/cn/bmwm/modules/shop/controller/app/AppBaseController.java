@@ -3,13 +3,17 @@ package cn.bmwm.modules.shop.controller.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
+import cn.bmwm.modules.shop.controller.app.vo.ItemShop;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.service.LBSService;
 
 /**
  * App - 基础Controller
@@ -17,6 +21,9 @@ import cn.bmwm.modules.shop.entity.Shop;
  * 2014-8-30 上午11:01:27
  */
 public class AppBaseController extends BaseController {
+	
+	@Resource(name = "lbsServiceImpl")
+	private LBSService lbsService;
 
 	
 	/**
@@ -106,6 +113,7 @@ public class AppBaseController extends BaseController {
 			item.setId(product.getId());
 			item.setName(product.getName());
 			item.setPrice(product.getPrice().doubleValue());
+			item.setOriginalPrice(product.getOriginalPrice() == null ? item.getPrice() * 1.5 : product.getOriginalPrice().doubleValue());
 			item.setImageurl(product.getImage());
 			item.setEvaluateCount(product.getScoreCount());
 			item.setAttribute1(product.getAttributeValue0());
@@ -116,6 +124,68 @@ public class AppBaseController extends BaseController {
 		}
 		
 		return list;
+		
+	}
+	
+	/**
+	 * 获取店铺列表
+	 * @param shopList
+	 * @return
+	 */
+	public List<ItemShop> getShopItems(List<Shop> shopList, Double x, Double y) {
+		
+		List<ItemShop> list = new ArrayList<ItemShop>();
+		
+		if(shopList == null || shopList.size() == 0 ) return list;
+		
+		for(Shop shop : shopList) {
+			
+			ItemShop item = new ItemShop();
+			item.setCode(shop.getId());
+			item.setTitle(shop.getName());
+			item.setDistance(getDistance(shop, x, y));
+			item.setPrice(shop.getAvgPrice());
+			item.setScore(shop.getAvgScore());
+			item.setStatus(shop.getStatus());
+			item.setCategory(shop.getCategoryName());
+			item.setArea(shop.getRegion());
+			item.setImageurl(shop.getImage());
+			
+			if(shop.getShopType() != null) {
+				item.setType(shop.getShopType());
+			}
+			
+			list.add(item);
+			
+		}
+		
+		return list;
+		
+	}
+	
+	/**
+	 * 计算距离,x:经度,y:纬度
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public String getDistance(Shop shop, Double x, Double y) {
+		
+		if(x == null || y == null) {
+			return "";
+		}
+		
+		if(shop.getLatitude() == null || shop.getLongitude() == null) {
+			return "";
+		}
+		
+		double distance = lbsService.getDistance(y, x, shop.getLatitude().doubleValue(), shop.getLongitude().doubleValue());
+		
+		if(distance < 1) {
+			return (int)(distance * 1000) + "米";
+		}else{
+			return (long)distance + "千米";
+		}
 		
 	}
 	
