@@ -135,6 +135,11 @@ public class Shop extends BaseEntity {
 	private List<VirtualShopCategory> virtualCategories = new ArrayList<VirtualShopCategory>();
 	
 	/**
+	 * 店铺活动
+	 */
+	private List<ShopActivity> shopActivities = new ArrayList<ShopActivity>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -506,6 +511,20 @@ public class Shop extends BaseEntity {
 	 */
 	public void setVirtualCategories(List<VirtualShopCategory> virtualCategories) {
 		this.virtualCategories = virtualCategories;
+	}
+	
+	/**
+	 * 获取店铺活动
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	@OrderBy("order asc")
+	public List<ShopActivity> getShopActivities() {
+		return shopActivities;
+	}
+
+	public void setShopActivities(List<ShopActivity> shopActivities) {
+		this.shopActivities = shopActivities;
 	}
 
 	public String getLogo() {

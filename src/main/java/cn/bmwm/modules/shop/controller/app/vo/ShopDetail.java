@@ -86,7 +86,7 @@ public class ShopDetail implements Serializable {
 	/**
 	 * 店铺活动
 	 */
-	private ShopActivity activity;
+	private List<ShopActivity> activityList;
 	
 	/**
 	 * 店铺热销商品
@@ -217,12 +217,12 @@ public class ShopDetail implements Serializable {
 		}
 	}
 
-	public ShopActivity getActivity() {
-		return activity;
+	public List<ShopActivity> getActivityList() {
+		return activityList;
 	}
 
-	public void setActivity(ShopActivity activity) {
-		this.activity = activity;
+	public void setActivityList(List<ShopActivity> activityList) {
+		this.activityList = activityList;
 	}
 
 	public ItemCategory<Item> getRecommend() {

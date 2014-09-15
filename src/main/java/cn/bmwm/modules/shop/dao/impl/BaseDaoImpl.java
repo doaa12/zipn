@@ -86,6 +86,17 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		criteriaQuery.select(criteriaQuery.from(entityClass));
 		return findList(criteriaQuery, first, count, filters, orders);
 	}
+	
+	public List<T> findList(Shop shop, List<Filter> filters, List<Order> orders) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(entityClass);
+		Root<T> root = cq.from(entityClass);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
+		restrictions = cb.and(restrictions, cb.equal(root.get("shop"), shop));
+		cq.where(restrictions);
+		return findList(cq, null, null, filters, orders);
+	}
 
 	public Page<T> findPage(Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

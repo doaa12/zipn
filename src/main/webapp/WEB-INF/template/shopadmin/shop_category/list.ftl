@@ -80,7 +80,6 @@ $().ready(function() {
 				</td>
 				<td>
 					<a href="edit.jhtml?id=${shopCategory.id}">[${message("admin.common.edit")}]</a>
-					<a href="javascript:;" class="delete" val="${shopCategory.id}">[${message("admin.common.delete")}]</a>
 				</td>
 			</tr>
 		[/#list]

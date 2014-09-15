@@ -21,6 +21,7 @@ import cn.bmwm.modules.shop.controller.app.vo.ShopDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.ShopActivity;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.entity.ShopReview;
@@ -234,6 +235,19 @@ public class ShopController extends AppBaseController {
 		detail.setEvaluate(shopReview == null ? "" : shopReview.getContent());
 		
 		//TODO:添加店铺活动
+		List<ShopActivity> shopActivities = shop.getShopActivities();
+		List<cn.bmwm.modules.shop.controller.app.vo.ShopActivity> activityList = new ArrayList<cn.bmwm.modules.shop.controller.app.vo.ShopActivity>();
+		
+		if(shopActivities != null && shopActivities.size() > 0) {
+			for(ShopActivity shopActivity : shopActivities) {
+				cn.bmwm.modules.shop.controller.app.vo.ShopActivity activity = new cn.bmwm.modules.shop.controller.app.vo.ShopActivity();
+				activity.setImageurl(shopActivity.getImageurl());
+				activity.setLinkurl(shopActivity.getLinkurl());
+				activityList.add(activity);
+			}
+		}
+		
+		detail.setActivityList(activityList);
 		
 		//店铺热销商品
 		List<Product> hostList = productService.findShopHotList(shop);

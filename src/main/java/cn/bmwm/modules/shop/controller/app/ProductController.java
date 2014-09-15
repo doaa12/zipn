@@ -72,6 +72,7 @@ public class ProductController extends AppBaseController {
 		detail.setCode(product.getId());
 		detail.setTitle(product.getName());
 		detail.setPrice(product.getPrice().doubleValue());
+		detail.setOriginalPrice(product.getMarketPrice().doubleValue());
 		detail.setPriceType(product.getPriceType());
 		detail.setDesc(product.getDescription());
 		

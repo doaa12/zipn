@@ -89,7 +89,7 @@ $().ready(function() {
 </head>
 <body>
 	<div class="path">
-		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.attribute.add")}
+		<a href="${base}/admin/common/index.jhtml">${message("admin.path.index")}</a> &raquo; ${message("admin.appAdvertise.edit")}
 	</div>
 	<form id="inputForm" action="update.jhtml" method="post">
 		<input type="hidden" name="id" value="${ad.id}">

@@ -45,7 +45,7 @@ public class AppAdvertiseController extends BaseController {
 		Order order = Order.asc("order");
 		List<Order> orderList = new ArrayList<Order>();
 		orderList.add(order);
-		model.addAttribute("list", appAdvertiseService.findList(null, null, orderList));
+		model.addAttribute("list", appAdvertiseService.findList(10000, null, orderList));
 		return "/admin/app_ad/list";
 	}
 	

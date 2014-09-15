@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.LockModeType;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
@@ -58,6 +60,15 @@ public interface BaseDao<T, ID extends Serializable> {
 	 * @return 实体对象集合
 	 */
 	List<T> findList(Integer first, Integer count, List<Filter> filters, List<Order> orders);
+	
+	/**
+	 * 查找店铺实体对象集合
+	 * @param shop
+	 * @param filters
+	 * @param orders
+	 * @return
+	 */
+	List<T> findList(Shop shop, List<Filter> filters, List<Order> orders);
 
 	/**
 	 * 查找实体对象分页

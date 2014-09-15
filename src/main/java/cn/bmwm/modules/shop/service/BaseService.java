@@ -76,6 +76,15 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @return 实体对象集合
 	 */
 	List<T> findList(Integer first, Integer count, List<Filter> filters, List<Order> orders);
+	
+	/**
+	 * 查找店铺实体对象集合
+	 * @param shop
+	 * @param filters
+	 * @param orders
+	 * @return
+	 */
+	List<T> findList(Shop shop, List<Filter> filters, List<Order> orders);
 
 	/**
 	 * 查找实体对象分页

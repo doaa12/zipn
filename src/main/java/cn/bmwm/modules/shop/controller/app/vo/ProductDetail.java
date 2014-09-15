@@ -23,9 +23,14 @@ public class ProductDetail implements Serializable {
 	private String title = "";
 	
 	/**
-	 * 商品价格
+	 * 商品销售价格
 	 */
 	private Double price;
+	
+	/**
+	 * 商品原价
+	 */
+	private Double originalPrice;
 	
 	/**
 	 * 价格类型
@@ -106,6 +111,14 @@ public class ProductDetail implements Serializable {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(Double originalPrice) {
+		this.originalPrice = originalPrice;
 	}
 
 	public String getPriceType() {
