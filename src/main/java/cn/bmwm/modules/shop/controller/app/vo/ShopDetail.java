@@ -89,9 +89,9 @@ public class ShopDetail implements Serializable {
 	private ShopActivity activity;
 	
 	/**
-	 * 店铺推荐商品
+	 * 店铺热销商品
 	 */
-	private ItemCategory recommend;
+	private ItemCategory<Item> recommend;
 
 	public Long getCode() {
 		return code;
@@ -225,11 +225,11 @@ public class ShopDetail implements Serializable {
 		this.activity = activity;
 	}
 
-	public ItemCategory getRecommend() {
+	public ItemCategory<Item> getRecommend() {
 		return recommend;
 	}
 
-	public void setRecommend(ItemCategory recommend) {
+	public void setRecommend(ItemCategory<Item> recommend) {
 		this.recommend = recommend;
 	}
 	

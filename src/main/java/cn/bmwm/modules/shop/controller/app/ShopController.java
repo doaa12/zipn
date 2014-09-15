@@ -235,9 +235,10 @@ public class ShopController extends AppBaseController {
 		
 		//TODO:添加店铺活动
 		
-		List<Product> recommendList = productService.findShopRecommendList(shop);
+		//店铺热销商品
+		List<Product> hostList = productService.findShopHotList(shop);
 		
-		detail.setRecommend(this.getProductItemCategory(shop.getProductCategory(), recommendList));
+		detail.setRecommend(this.getProductItemCategory(shop.getProductCategory(), hostList));
 		
 		return detail;
 		

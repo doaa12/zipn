@@ -128,12 +128,12 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	}
 	
 	/**
-	 * 查找店铺推荐商品
+	 * 查找店铺热销商品
 	 * @param shop ： 店铺
 	 * @return
 	 */
-	public List<Product> findShopRecommendList(Shop shop) {
-		String jpql = " select product from Product product where product.shop = :shop and product.isList = true and product.isMarketable = true and product.isGift = false and product.isTop = true ";
+	public List<Product> findShopHotList(Shop shop) {
+		String jpql = " select product from Product product where product.shop = :shop and product.isList = true and product.isMarketable = true and product.isGift = false order by product.sales desc ";
 		TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
 		return query.setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).setFirstResult(0).setMaxResults(10).getResultList();
 	}

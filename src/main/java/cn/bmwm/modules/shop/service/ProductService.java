@@ -187,7 +187,7 @@ public interface ProductService extends BaseService<Product, Long> {
 	 * @param shop ： 店铺
 	 * @return
 	 */
-	List<Product> findShopRecommendList(Shop shop);
+	List<Product> findShopHotList(Shop shop);
 	
 	/**
 	 * 查找热销商品
