@@ -207,7 +207,7 @@ public class ShopController extends AppBaseController {
 		ShopDetail detail = new ShopDetail();
 		
 		detail.setCode(shop.getId());
-		detail.setTitle(shop.getName());
+		detail.setTitle("最受欢迎");
 		detail.setHeaderImageurl(shop.getLogo());
 		detail.setScore(shop.getAvgScore());
 		detail.setCollectFlag(0);
