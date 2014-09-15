@@ -39,11 +39,6 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 		super.setBaseDao(shopDao);
 	}
 	
-	@Cacheable(value = "shop", key = "'id' + #id + 'find'")
-	public Shop find(Long id) {
-		return super.find(id);
-	}
-	
 	/**
 	 * 查找推荐店铺
 	 * @param category
