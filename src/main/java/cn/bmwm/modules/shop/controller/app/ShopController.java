@@ -224,7 +224,7 @@ public class ShopController extends AppBaseController {
 		
 		if(shopImages != null && shopImages.size() > 0) {
 			for(ShopImage image : shopImages) {
-				imageList.add(image.getMedium());
+				imageList.add(image.getSource());
 			}
 		}
 		

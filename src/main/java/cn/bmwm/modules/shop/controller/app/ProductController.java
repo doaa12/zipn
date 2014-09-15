@@ -88,7 +88,7 @@ public class ProductController extends AppBaseController {
 		
 		if(images != null && images.size() > 0) {
 			for(ProductImage image : images) {
-				imageList.add(image.getMedium());
+				imageList.add(image.getSource());
 			}
 		}
 		
