@@ -23,7 +23,6 @@ import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.service.GoodsService;
 import cn.bmwm.modules.shop.service.SearchService;
-import cn.bmwm.modules.shop.service.StaticService;
 
 /**
  * Service - 货品

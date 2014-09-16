@@ -381,6 +381,11 @@ public class ProductController extends BaseController {
 			product.setGoods(goods);
 			product.setSpecifications(null);
 			product.setSpecificationValues(null);
+			product.setCity(city);
+			product.setRegion(shop.getRegion());
+			product.setTreePath(shopCategory.getTreePath());
+			product.setShopCategory(shopCategory);
+			product.setIsTop(false);
 			products.add(product);
 		}
 		

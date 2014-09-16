@@ -488,7 +488,7 @@ public class ProductController extends BaseController {
 	 * 更新
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(Long id, Boolean isTop) {
+	public String update(Long id, Boolean isTop, RedirectAttributes redirectAttributes) {
 		
 		if(isTop == null) {
 			isTop = false;
@@ -506,6 +506,8 @@ public class ProductController extends BaseController {
 		}
 		
 		goodsService.update(goods);
+		
+		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
 		return "redirect:list.jhtml";
 		
