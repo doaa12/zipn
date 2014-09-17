@@ -42,6 +42,15 @@ public class VirtualShopCategoryServiceImpl extends BaseServiceImpl<VirtualShopC
 		return virtualShopCategoryDao.findList(city);
 	}
 	
+	/**
+	 * 后台管理查询虚拟店铺分类
+	 * @param city
+	 * @return
+	 */
+	public List<VirtualShopCategory> adminFindList(String city) {
+		return virtualShopCategoryDao.findList(city);
+	}
+	
 	@Override
 	@Transactional
 	@CacheEvict(value = {"virtualShopCategory", "shop"}, allEntries = true)

@@ -44,6 +44,15 @@ public interface FileService {
 	 * @return 访问URL
 	 */
 	String upload(FileType fileType, MultipartFile multipartFile, boolean async);
+	
+	/**
+	 * 对图片进行切割后再上传
+	 * @param fileType
+	 * @param multipartFile
+	 * @param async
+	 * @return
+	 */
+	public String zoomUpload(FileType fileType, MultipartFile multipartFile, boolean async);
 
 	/**
 	 * 文件上传(异步)

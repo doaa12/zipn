@@ -21,4 +21,11 @@ public interface VirtualShopCategoryService extends BaseService<VirtualShopCateg
 	 */
 	List<VirtualShopCategory> findList(String city);
 	
+	/**
+	 * 后台管理查询虚拟店铺分类
+	 * @param city
+	 * @return
+	 */
+	List<VirtualShopCategory> adminFindList(String city);
+	
 }

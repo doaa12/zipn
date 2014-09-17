@@ -29,14 +29,13 @@ public interface ShopService extends BaseService<Shop,Long>{
 	Page<Shop> findPage(ProductCategory productCategory, String city, Boolean isTop, Boolean isList, Pageable pageable);
 	
 	/**
-	 * 查找店铺列表
+	 * 查找附近店铺列表
 	 * @param city : 城市
-	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
 	 * @return
 	 */
-	ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y);
+	ItemPage<Shop> findList(String city, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y);
 	
 	/**
 	 * 查找推荐店铺

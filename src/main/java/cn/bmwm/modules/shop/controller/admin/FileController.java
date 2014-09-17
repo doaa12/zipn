@@ -48,7 +48,7 @@ public class FileController extends BaseController {
 		if (!fileService.isValid(fileType, file)) {
 			data.put("message", Message.warn("admin.upload.invalid"));
 		} else {
-			String url = fileService.upload(fileType, file, false);
+			String url = fileService.zoomUpload(fileType, file, false);
 			if (url == null) {
 				data.put("message", Message.warn("admin.upload.error"));
 			} else {

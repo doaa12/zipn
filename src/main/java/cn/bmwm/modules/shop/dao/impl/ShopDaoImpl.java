@@ -68,9 +68,8 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	}
 	
 	/**
-	 * 查找店铺列表
+	 * 查找附近店铺列表
 	 * @param city : 城市
-	 * @param category : 分类
 	 * @param page : 页码
 	 * @param size : 每页记录数
 	 * @param order : 排序，1：推荐，2：人气，3：距离，4：价格
@@ -78,7 +77,7 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	 * @param y : 纬度
 	 * @return
 	 */
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
+	public ItemPage<Shop> findList(String city, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
 		
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Shop> cq = cb.createQuery(Shop.class);
@@ -89,7 +88,6 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		
 		restrictions = cb.and(restrictions, cb.equal(root.get("isList"), true));
 		restrictions = cb.and(restrictions, cb.like(root.<String>get("city"), "%" + city + "%"));
-		restrictions = cb.and(restrictions, cb.like(root.<String>get("treePath"), "%" + ProductCategory.TREE_PATH_SEPARATOR + category.getId() + ProductCategory.TREE_PATH_SEPARATOR + "%"));
 		
 		cq.where(restrictions);
 		
@@ -126,7 +124,6 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 		itemPage.setPage(page);
 		itemPage.setSize(size);
 		itemPage.setList(list);
-		
 		
 		return itemPage;
 		

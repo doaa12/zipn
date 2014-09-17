@@ -61,7 +61,7 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	}
 	
 	/**
-	 * 查找店铺列表
+	 * 查找附近店铺列表
 	 * @param city : 城市
 	 * @param category : 分类
 	 * @param page : 页码
@@ -70,9 +70,9 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop,Long> implements ShopS
 	 * @param y : 纬度
 	 * @return
 	 */
-	@Cacheable(value = "shop", key = "'city' + #city + 'category' + #category + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findList'")
-	public ItemPage<Shop> findList(String city, ProductCategory category, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
-		return shopDao.findList(city, category, page, size, order, x, y);
+	@Cacheable(value = "shop", key = "'city' + #city + 'page' + #page + 'size' + #size + 'order' + #order + 'x' + #x + 'y' + #y + 'findList'")
+	public ItemPage<Shop> findList(String city, Integer page, Integer size, Integer order, BigDecimal x, BigDecimal y) {
+		return shopDao.findList(city, page, size, order, x, y);
 	}
 	
 	/**
