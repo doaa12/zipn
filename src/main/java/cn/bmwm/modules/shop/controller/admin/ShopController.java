@@ -201,8 +201,17 @@ public class ShopController extends BaseController {
 			}
 		}
 		
+		List<VirtualShopCategory> shopVritualCategoryList = shop.getVirtualCategories();
+		if(shopVritualCategoryList != null && shopVritualCategoryList.size() > 0) {
+			for(VirtualShopCategory category : shopVritualCategoryList) {
+				category.getShops().remove(shop);
+			}
+		}
+		
+		
+		List<VirtualShopCategory> virtualCategoryList = new ArrayList<VirtualShopCategory>();
+		
 		if(virtualCategories != null && virtualCategories.length > 0) {
-			List<VirtualShopCategory> virtualCategoryList = new ArrayList<VirtualShopCategory>();
 			for(Long catId : virtualCategories) {
 				VirtualShopCategory category = virtualShopCategoryService.find(catId);
 				virtualCategoryList.add(category);
