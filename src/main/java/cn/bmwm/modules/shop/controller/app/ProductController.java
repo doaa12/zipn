@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.controller.app.vo.Evaluate;
-import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.controller.app.vo.ProductDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
@@ -127,17 +126,14 @@ public class ProductController extends AppBaseController {
 	
 	/**
 	 * 商品列表
-	 * 首页和一级分类下的商品推荐,点击更多,显示该分类下的商品列表
+	 * 首页和一级分类下的商品推荐,点击更多,显示该分类下的推荐商品列表
 	 * catId : 分类ID
 	 * city : 城市
-	 * page : 页码
-	 * size : 每页显示商品数
-	 * order : 排序方式，1：促销，2：新品，3：销量，4：推荐
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city, Integer page, Integer size, Integer order) {
+	public Map<String,Object> list(Long catId, String city) {
 		
 		if(catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null ! ");
@@ -153,17 +149,13 @@ public class ProductController extends AppBaseController {
 			throw new BusinessException(" Invalid Parameter 'catId' ! ");
 		}
 		
-		if(page == null) page = 1;
-		if(size == null) size = 10;
-		if(order == null) order = 1;
-		
-		ItemPage<Product> itemPage = productService.findProductList(city, category, page, size, order);
+		List<Product> productList = productService.findRecommendList(city, category);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		result.put("flag", 1);
 		result.put("version", 1);
-		result.put("data", getProductItems(itemPage.getList()));
+		result.put("data", getProductItems(productList));
 		
 		return result;
 		
