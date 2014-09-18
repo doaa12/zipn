@@ -146,7 +146,13 @@ public class ShopController extends BaseController {
 		model.addAttribute("shop", shop);
 		model.addAttribute("admins", adminService.findFreeAdmins());
 		
-		List<VirtualShopCategory> categories = virtualShopCategoryService.findList("");
+		String city = shop.getCity();
+		String region = shop.getRegion();
+		if(!city.endsWith("市")){
+			city = city.substring(0, city.length() - region.length());
+		}
+		
+		List<VirtualShopCategory> categories = virtualShopCategoryService.adminFindList(city);
 		List<VirtualShopCategory> shopCategories = shop.getVirtualCategories();
 		
 		if(categories != null && categories.size() > 0) {

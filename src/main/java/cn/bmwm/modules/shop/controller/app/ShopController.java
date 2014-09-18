@@ -3,7 +3,6 @@
  */
 package cn.bmwm.modules.shop.controller.app;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,15 +91,12 @@ public class ShopController extends AppBaseController {
 
 	/**
 	 * 店铺列表
-	 * 首页和一级分类下的商铺推荐,点击更多,显示该分类下的店铺列表
-	 * @param order : 排序，1：推荐，2：人气，3：附近，4：价格
-	 * @param x : 经度
-	 * @param y : 纬度
+	 * 首页和一级分类下的商铺推荐,点击更多,显示该分类下推荐的店铺列表
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city, Integer order, Integer page, Integer size, Double x, Double y) {
+	public Map<String,Object> list(Long catId, String city) {
 		
 		if(catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null ! ");
@@ -116,27 +112,12 @@ public class ShopController extends AppBaseController {
 			throw new BusinessException(" Invalid Parameter 'catId' ! ");
 		}
 		
-		if(page == null) page = 1;
-		if(size == null) size = 10;
-		if(order == null) order = 1;
-		
-		BigDecimal decimalx = null;
-		BigDecimal decimaly = null;
-		
-		if(x != null) {
-			decimalx = new BigDecimal(x);
-		}
-		
-		if(y != null) {
-			decimaly = new BigDecimal(y);
-		}
-		
-		ItemPage<Shop> itemPage = shopService.findList(city, category, page, size, order, decimalx, decimaly);
+		List<Shop> shopList = shopService.findRecommendList(city, category);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("flag", 1);
 		result.put("version", 1);
-		result.put("data", getShopItems(itemPage.getList(), x, y));
+		result.put("data", getShopItems(shopList, null, null));
 		
 		return result;
 		

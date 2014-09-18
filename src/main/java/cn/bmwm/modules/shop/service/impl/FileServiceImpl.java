@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.bmwm.common.utils.FileInfo;
 import cn.bmwm.common.utils.FreemarkerUtils;
+import cn.bmwm.common.utils.ImageUtils;
 import cn.bmwm.common.utils.FileInfo.FileType;
 import cn.bmwm.common.utils.FileInfo.OrderType;
 import cn.bmwm.modules.shop.service.FileService;
@@ -138,6 +139,62 @@ public class FileServiceImpl implements FileService, ServletContextAware {
 				} else {
 					try {
 						storagePlugin.upload(destPath, tempFile, multipartFile.getContentType());
+					} finally {
+						FileUtils.deleteQuietly(tempFile);
+					}
+				}
+				return storagePlugin.getUrl(destPath);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 对图片进行切割后再上传
+	 * @param fileType
+	 * @param multipartFile
+	 * @param async
+	 * @return
+	 */
+	public String zoomUpload(FileType fileType, MultipartFile multipartFile, boolean async) {
+		if (multipartFile == null) {
+			return null;
+		}
+		Setting setting = SettingUtils.get();
+		String uploadPath;
+		if (fileType == FileType.flash) {
+			uploadPath = setting.getFlashUploadPath();
+		} else if (fileType == FileType.media) {
+			uploadPath = setting.getMediaUploadPath();
+		} else if (fileType == FileType.file) {
+			uploadPath = setting.getFileUploadPath();
+		} else {
+			uploadPath = setting.getImageUploadPath();
+		}
+		try {
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("uuid", UUID.randomUUID().toString());
+			String path = FreemarkerUtils.process(uploadPath, model);
+			String destPath = path + UUID.randomUUID() + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+			
+			File tempFile = new File(System.getProperty("java.io.tmpdir") + "/upload_" + UUID.randomUUID() + ".tmp");
+			File smallTempFile = new File(System.getProperty("java.io.tmpdir") + "/upload_" + UUID.randomUUID() + ".jpg");
+			
+			if (!tempFile.getParentFile().exists()) {
+				tempFile.getParentFile().mkdirs();
+			}
+			multipartFile.transferTo(tempFile);
+			
+			ImageUtils.zoom(tempFile, smallTempFile, setting.getThumbnailProductImageWidth(), setting.getThumbnailProductImageHeight());
+			
+			for (StoragePlugin storagePlugin : pluginService.getStoragePlugins(true)) {
+				if (async) {
+					addTask(storagePlugin, destPath, smallTempFile, multipartFile.getContentType());
+				} else {
+					try {
+						storagePlugin.upload(destPath, smallTempFile, multipartFile.getContentType());
 					} finally {
 						FileUtils.deleteQuietly(tempFile);
 					}
