@@ -195,14 +195,16 @@ public class ShopController extends BaseController {
 			}
 		}
 		
+		List<VirtualShopCategory> virtualCategoryList = new ArrayList<VirtualShopCategory>();
+		
 		if(virtualCategories != null && virtualCategories.length > 0) {
-			List<VirtualShopCategory> virtualCategoryList = new ArrayList<VirtualShopCategory>();
 			for(Long catId : virtualCategories) {
 				VirtualShopCategory category = virtualShopCategoryService.find(catId);
 				virtualCategoryList.add(category);
 			}
-			shop.setVirtualCategories(virtualCategoryList);
 		}
+		
+		shop.setVirtualCategories(virtualCategoryList);
 		
 		shop.setIsList(isList);
 		shop.setIsTop(isTop);
