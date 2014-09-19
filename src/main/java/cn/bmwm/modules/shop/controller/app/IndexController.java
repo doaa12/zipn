@@ -122,9 +122,13 @@ public class IndexController extends AppBaseController {
 			}
 		}
 		
-		//广告
-		List<AppAdvertise> appAdvertiseList = appAdvertiseService.findByCity(city);
-		AdvertiseCategory advertiseCategory = getAdvertiseCategory(appAdvertiseList);
+		//首页顶部广告
+		List<AppAdvertise> appTopAdvertiseList = appAdvertiseService.findByCity(city, 1);
+		//首页中间广告，放到虚拟店铺分类下面
+		List<AppAdvertise> appMiddleAdvertiseList = appAdvertiseService.findByCity(city, 2);
+		
+		AdvertiseCategory topAdvertiseCategory = getAdvertiseCategory(appTopAdvertiseList);
+		AdvertiseCategory middleAdvertiseCategory = getAdvertiseCategory(appMiddleAdvertiseList);
 		
 		List<ProductCategory> categories = productCategoryService.findRoots();
 		
@@ -154,8 +158,8 @@ public class IndexController extends AppBaseController {
 		
 		List<Object> itemCategoryList = new ArrayList<Object>();
 		
-		if(advertiseCategory != null) {
-			itemCategoryList.add(advertiseCategory);
+		if(topAdvertiseCategory != null) {
+			itemCategoryList.add(topAdvertiseCategory);
 		}
 		
 		if(favoriteShopCategory != null) {
@@ -163,6 +167,10 @@ public class IndexController extends AppBaseController {
 		}
 		
 		if(virtualShops.size() > 0) itemCategoryList.addAll(virtualShops);
+		
+		if(middleAdvertiseCategory != null) {
+			itemCategoryList.add(middleAdvertiseCategory);
+		}
 		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
@@ -271,34 +279,6 @@ public class IndexController extends AppBaseController {
 		itemCategory.setMoretype(1);
 		
 		return itemCategory;
-		
-	}
-	
-	/**
-	 * 获取首页广告
-	 * @param appAdvertise
-	 * @return
-	 */
-	public AdvertiseCategory getAdvertiseCategory(List<AppAdvertise> list) {
-		
-		if(list == null || list.size() == 0) return null;
-		
-		AdvertiseCategory category = new AdvertiseCategory();
-		category.setShowmore(0);
-		category.setShowtype(4);
-		
-		List<AdvertiseItem> itemList = new ArrayList<AdvertiseItem>();
-		
-		for(AppAdvertise ad : list) {
-			AdvertiseItem item = new AdvertiseItem();
-			item.setImageurl(ad.getImageUrl());
-			item.setLinkurl(ad.getLinkUrl());
-			itemList.add(item);
-		}
-		
-		category.setDataList(itemList);
-		
-		return category;
 		
 	}
 	

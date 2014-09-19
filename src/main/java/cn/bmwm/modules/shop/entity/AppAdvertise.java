@@ -48,6 +48,11 @@ public class AppAdvertise extends OrderEntity {
 	 */
 	private String description;
 	
+	/**
+	 * 广告类型，1：首页顶部，2：首页中部，3：顶级分类顶部
+	 */
+	private Integer type;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	public Area getArea() {
 		return area;
@@ -95,6 +100,14 @@ public class AppAdvertise extends OrderEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 }

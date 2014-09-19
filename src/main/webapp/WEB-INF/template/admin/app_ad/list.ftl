@@ -78,6 +78,9 @@ $().ready(function() {
 				<span class="addIcon">&nbsp;</span>${message("admin.common.add")}
 			</a>
 			<div class="buttonWrap">
+				<a href="javascript:;" id="deleteButton" class="iconButton disabled">
+					<span class="deleteIcon">&nbsp;</span>${message("admin.common.delete")}
+				</a>
 				<a href="javascript:;" id="refreshButton" class="iconButton">
 					<span class="refreshIcon">&nbsp;</span>${message("admin.common.refresh")}
 				</a>
@@ -100,6 +103,9 @@ $().ready(function() {
 		</div>
 		<table id="listTable" class="list">
 			<tr>
+				<th class="check">
+					<input type="checkbox" id="selectAll" />
+				</th>
 				<th>
 					<a href="javascript:;" class="sort" name="city">${message("AppAdvertise.city")}</a>
 				</th>
@@ -111,6 +117,9 @@ $().ready(function() {
 				</th>
 				<th>
 					<a href="javascript:;" class="sort" name="linkUrl">${message("AppAdvertise.linkurl")}</a>
+				</th>
+				<th>
+					<a href="javascript:;" class="sort" name="type">${message("admin.appAdvertise.type")}</a>
 				</th>
 				<th>
 					<a href="javascript:;" class="sort" name="isEnabled">${message("AppAdvertise.isEnabled")}</a>
@@ -125,6 +134,9 @@ $().ready(function() {
 			[#list list as ad]
 				<tr>
 					<td>
+						<input type="checkbox" name="ids" value="${ad.id}" />
+					</td>
+					<td>
 						${ad.city}
 					</td>
 					<td>
@@ -135,6 +147,9 @@ $().ready(function() {
 					</td>
 					<td>
 						<a href="${ad.linkUrl}" target="_blank">${ad.linkUrl}</a>
+					</td>
+					<td>
+						[#if ad.type == 1]首页顶部[#elseif ad.type == 2]首页中部[#else]顶级分类顶部[/#if]
 					</td>
 					<td>
 						<span class="${ad.isEnabled?string("true", "false")}Icon">&nbsp;</span>

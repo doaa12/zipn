@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
+import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
+import cn.bmwm.modules.shop.entity.AppAdvertise;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.service.AppAdvertiseService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ShopService;
@@ -42,6 +46,9 @@ public class CategoryController extends AppBaseController {
 	
 	@Resource(name = "shopServiceImpl")
 	private ShopService shopService;
+	
+	@Resource(name = "appAdvertiseServiceImpl")
+	private AppAdvertiseService appAdvertiseService;
 	
 	/**
 	 * 一级分类,按子分类返回该分类下的的推荐店铺和推荐商品
@@ -70,9 +77,13 @@ public class CategoryController extends AppBaseController {
 		
 		List<ProductCategory> children = category.getChildren();
 		
-		List<ItemCategory> products = new LinkedList<ItemCategory>();
+		//顶级分类下顶部广告
+		List<AppAdvertise> appTopAdvertiseList = appAdvertiseService.findByCity(city, 3);
+		AdvertiseCategory topAdvertiseCategory = getAdvertiseCategory(appTopAdvertiseList);
 		
-		List<ItemCategory> shops = new LinkedList<ItemCategory>();
+		List<ItemCategory<Item>> products = new LinkedList<ItemCategory<Item>>();
+		
+		List<ItemCategory<Item>> shops = new LinkedList<ItemCategory<Item>>();
 		
 		for(ProductCategory cat : children) {
 			
@@ -82,13 +93,13 @@ public class CategoryController extends AppBaseController {
 				list = productService.findHotList(city, cat);
 			}
 			
-			ItemCategory productItemCategory = this.getProductItemCategory(cat, list);
+			ItemCategory<Item> productItemCategory = this.getProductItemCategory(cat, list);
 			
 			List<Shop> shopList = shopService.findRecommendList(city, cat);
 			
 			if(shopList == null || shopList.size() == 0) continue;
 			
-			ItemCategory shopItemCategory = this.getShopItemCategory(cat, shopList);
+			ItemCategory<Item> shopItemCategory = this.getShopItemCategory(cat, shopList);
 			
 			if(productItemCategory != null) products.add(productItemCategory);
 			
@@ -96,7 +107,11 @@ public class CategoryController extends AppBaseController {
 			
 		}
 		
-		List<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
+		List<Object> itemCategoryList = new ArrayList<Object>();
+		
+		if(topAdvertiseCategory != null) {
+			itemCategoryList.add(topAdvertiseCategory);
+		}
 		
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		

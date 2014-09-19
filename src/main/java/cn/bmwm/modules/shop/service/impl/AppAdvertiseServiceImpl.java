@@ -32,11 +32,12 @@ public class AppAdvertiseServiceImpl extends BaseServiceImpl<AppAdvertise,Long> 
 	/**
 	 * 获取城市广告
 	 * @param city
+	 * @param type：广告类型，1：首页顶部，2：首页中部，3：顶级分类下顶部
 	 * @return
 	 */
-	@Cacheable(value = "appAd", key = "'city' + #city + 'findByCity'")
-	public List<AppAdvertise> findByCity(String city) {
-		return appAdvertiseDao.findByCity(city);
+	@Cacheable(value = "appAd", key = "'city' + #city + 'type' + #type + 'findByCity'")
+	public List<AppAdvertise> findByCity(String city, Integer type) {
+		return appAdvertiseDao.findByCity(city, type);
 	}
 	
 	@Override
@@ -51,6 +52,17 @@ public class AppAdvertiseServiceImpl extends BaseServiceImpl<AppAdvertise,Long> 
 	@CacheEvict(value = {"appAd", "area"}, allEntries = true)
 	public AppAdvertise update(AppAdvertise appAdvertise) {
 		return super.update(appAdvertise);
+	}
+	
+	@Override
+	@Transactional
+	@CacheEvict(value = {"appAd", "area"}, allEntries = true)
+	public void delete(Long...ids) {
+		if(ids != null) {
+			for(Long id : ids) {
+				delete(find(id));
+			}
+		}
 	}
 	
 }

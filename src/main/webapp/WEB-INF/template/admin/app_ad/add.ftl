@@ -77,6 +77,10 @@ $().ready(function() {
 	// 表单验证
 	$inputForm.validate({
 		rules: {
+			type: {
+				required: true,
+				min: 1
+			},
 			imageUrl: "required",
 			linkUrl: "required",
 			provinceId: "required",
@@ -95,7 +99,7 @@ $().ready(function() {
 		<table id="shopTable" class="input">
 			<tr>
 				<th>
-					<span class="requiredField">*</span>${message("Shop.city")}:
+					<span class="requiredField">*</span>${message("admin.appAdvertise.city")}:
 				</th>
 				<td>
 					<select id="provinceId" name="provinceId">
@@ -110,6 +114,19 @@ $().ready(function() {
 						<option value="0">请选择...</option>
 					</select>
 					<select id="areaId" name="areaId" style="display:none;">
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<span class="requiredField">*</span>${message("admin.appAdvertise.type")}:
+				</th>
+				<td>
+					<select id="type" name="type">
+						<option value="0">请选择...</option>
+						<option value="1">首页顶部</option>
+						<option value="2">首页中部</option>
+						<option value="3">顶级分类顶部</option>
 					</select>
 				</td>
 			</tr>

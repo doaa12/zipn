@@ -6,10 +6,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import cn.bmwm.modules.shop.controller.admin.BaseController;
+import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
+import cn.bmwm.modules.shop.controller.app.vo.AdvertiseItem;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.controller.app.vo.ItemShop;
+import cn.bmwm.modules.shop.entity.AppAdvertise;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -187,6 +190,34 @@ public class AppBaseController extends BaseController {
 		}else{
 			return (long)distance + "千米";
 		}
+		
+	}
+	
+	/**
+	 * 获取首页广告
+	 * @param appAdvertise
+	 * @return
+	 */
+	public AdvertiseCategory getAdvertiseCategory(List<AppAdvertise> list) {
+		
+		if(list == null || list.size() == 0) return null;
+		
+		AdvertiseCategory category = new AdvertiseCategory();
+		category.setShowmore(0);
+		category.setShowtype(4);
+		
+		List<AdvertiseItem> itemList = new ArrayList<AdvertiseItem>();
+		
+		for(AppAdvertise ad : list) {
+			AdvertiseItem item = new AdvertiseItem();
+			item.setImageurl(ad.getImageUrl());
+			item.setLinkurl(ad.getLinkUrl());
+			itemList.add(item);
+		}
+		
+		category.setDataList(itemList);
+		
+		return category;
 		
 	}
 	

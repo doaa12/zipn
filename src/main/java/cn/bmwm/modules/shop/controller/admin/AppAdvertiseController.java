@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Order;
+import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.AppAdvertise;
 import cn.bmwm.modules.shop.entity.Area;
 import cn.bmwm.modules.shop.service.AppAdvertiseService;
@@ -181,6 +183,16 @@ public class AppAdvertiseController extends BaseController {
 		
 		return "redirect:list.jhtml";
 		
+	}
+	
+	/**
+	 * 删除
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public @ResponseBody
+	Message delete(Long[] ids) {
+		appAdvertiseService.delete(ids);
+		return SUCCESS_MESSAGE;
 	}
 	
 }
