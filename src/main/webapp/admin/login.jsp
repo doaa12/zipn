@@ -155,7 +155,7 @@ if (applicationContext != null) {
 				<table>
 					<tr>
 						<td width="190" rowspan="2" align="center" valign="bottom">
-							<img src="<%=base%>/resources/admin/images/logo.jpg" alt="logo" />
+							<img src="<%=base%>/resources/admin/images/1.png" alt="logo" />
 						</td>
 						<th>
 							<%=SpringUtils.getMessage("admin.login.username")%>:

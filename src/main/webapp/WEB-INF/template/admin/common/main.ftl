@@ -55,7 +55,7 @@ $().ready(function() {
 		<tr>
 			<th class="logo">
 				<a href="main.jhtml">
-					<img src="${base}/resources/admin/images/logo.jpg" alt="后台管理" />
+					<img src="${base}/resources/admin/images/1.png" alt="后台管理" />
 				</a>
 			</th>
 			<th>
