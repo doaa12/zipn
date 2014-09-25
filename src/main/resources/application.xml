@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zipn> 
-	<setting name="siteName" value="健康管理"/>
+	<setting name="siteName" value="至品购物"/>
 	<setting name="siteUrl" value="http://121.40.146.235"/>
 	<setting name="fileUrl" value="http://121.40.146.235/files"/>
 	<setting name="fileBasePath" value="/web/files"/>
 	<setting name="logo" value="/upload/image/logo.gif"/>
-	<setting name="hotSearch" value="健康,体检"/>  
+	<setting name="hotSearch" value="O2O，本地生活服务"/>  
 	<setting name="address" value="盐城市希望大道南路"/>  
 	<setting name="phone" value="400-8888888"/>  
 	<setting name="zipCode" value="224000"/>  
