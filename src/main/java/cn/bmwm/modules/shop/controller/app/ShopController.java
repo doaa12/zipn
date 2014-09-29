@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.modules.shop.controller.app.vo.Item;
+import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDetail;
 import cn.bmwm.modules.shop.entity.Product;
@@ -189,7 +191,7 @@ public class ShopController extends AppBaseController {
 		ShopDetail detail = new ShopDetail();
 		
 		detail.setCode(shop.getId());
-		detail.setTitle("最受欢迎");
+		detail.setTitle(shop.getName());
 		detail.setHeaderImageurl(shop.getLogo());
 		detail.setScore(shop.getAvgScore());
 		detail.setCollectFlag(0);
@@ -233,9 +235,47 @@ public class ShopController extends AppBaseController {
 		//店铺热销商品
 		List<Product> hostList = productService.findShopHotList(shop);
 		
-		detail.setRecommend(this.getProductItemCategory(shop.getProductCategory(), hostList));
+		detail.setRecommend(this.getShopProductItemCategory(shop, hostList));
 		
 		return detail;
+		
+	}
+	
+	/**
+	 * 获取商铺主页热销商品
+	 * @param shop
+	 * @param list
+	 * @return
+	 */
+	protected ItemCategory<Item> getShopProductItemCategory(Shop shop, List<Product> list) {
+		
+		ItemCategory<Item> itemCategory = new ItemCategory<Item>();
+		itemCategory.setCode(shop.getId());
+		itemCategory.setShowmore(1);
+		itemCategory.setShowtype(3);
+		itemCategory.setTitle("最受欢迎");
+		itemCategory.setMoretype(2);
+		
+		List<Item> itemList = new ArrayList<Item>();
+		
+		if(list == null || list.size() == 0) {
+			itemCategory.setDataList(itemList);
+			return itemCategory;
+		}
+		
+		for(Product product : list) {
+			Item item = new Item();
+			item.setCode(product.getId());
+			item.setTitle(product.getName());
+			item.setType(2);
+			item.setImageurl(product.getImage());
+			item.setPrice(product.getPrice().doubleValue());
+			itemList.add(item);
+		}
+		
+		itemCategory.setDataList(itemList);
+		
+		return itemCategory;
 		
 	}
 	
