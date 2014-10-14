@@ -93,6 +93,7 @@ public class RegisterController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
+		/*
 		Object ocode = session.getAttribute("code");
 		
 		if(ocode == null) {
@@ -104,12 +105,13 @@ public class RegisterController {
 		if(!scode.equals(code)) {
 			throw new BusinessException(" Parameter 'code' is invalid ! ");
 		}
+		*/
 		
-		if(phone == null || phone.trim().equals("")) {
+		if(StringUtils.isBlank(phone)) {
 			throw new BusinessException(" Parameter 'phone' can not be empty ! ");
 		}
 		
-		if(password == null || password.trim().equals("")) {
+		if(StringUtils.isBlank(password)) {
 			throw new BusinessException(" Parameter 'password' can not be empty ! ");
 		}
 		
