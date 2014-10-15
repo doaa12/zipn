@@ -7,6 +7,8 @@ import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 import javax.crypto.Cipher;
 
@@ -101,10 +103,11 @@ public final class RSAUtils {
 		Assert.notNull(privateKey);
 		Assert.notNull(data);
 		try {
-			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
+			Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			return cipher.doFinal(data);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -125,4 +128,25 @@ public final class RSAUtils {
 		return data != null ? new String(data) : null;
 	}
 
+	public static void main(String[] args) {
+		
+		KeyPair keyPair = generateKeyPair();
+		
+		RSAPrivateKey privateKey = (RSAPrivateKey)keyPair.getPrivate();
+		RSAPublicKey publicKey = (RSAPublicKey)keyPair.getPublic();
+		
+		publicKey.getModulus().toByteArray();
+		
+		String text = "#$()*jds%^&#@@@!";
+		
+		String encryptText = encrypt(publicKey, text);
+		
+		System.out.println(encryptText);
+		
+		String decryptText = decrypt(privateKey, encryptText);
+		
+		System.out.println(decryptText);
+		
+	}
+	
 }

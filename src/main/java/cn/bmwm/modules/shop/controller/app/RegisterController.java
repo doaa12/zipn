@@ -8,6 +8,7 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.sys.exception.BusinessException;
 import cn.bmwm.modules.sys.model.Setting;
+import cn.bmwm.modules.sys.security.Principal;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
 /**
@@ -89,7 +92,9 @@ public class RegisterController {
 	 * @param password
 	 * @return
 	 */
-	public Map<String,Object> register(String phone, String password, String code, HttpServletRequest request, HttpSession session) {
+	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> register(String phone, String password, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -108,15 +113,19 @@ public class RegisterController {
 		*/
 		
 		if(StringUtils.isBlank(phone)) {
-			throw new BusinessException(" Parameter 'phone' can not be empty ! ");
+			throw new BusinessException(" Parameter 'username' can not be empty ! ");
 		}
 		
 		if(StringUtils.isBlank(password)) {
 			throw new BusinessException(" Parameter 'password' can not be empty ! ");
 		}
 		
-		if (memberService.usernameDisabled(phone) || memberService.usernameExists(phone)) {
+		if (memberService.usernameExists(phone)) {
 			throw new BusinessException(" phone '" + phone + "' has bean registered ! ");
+		}
+		
+		if(memberService.usernameDisabled(phone)) {
+			throw new BusinessException(" phone '" + phone + "' is in the black list ! ");
 		}
 		
 		Setting setting = SettingUtils.get();
@@ -142,6 +151,8 @@ public class RegisterController {
 		
 		result.put("flag", 1);
 		
+		session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), member.getUsername()));
+		WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
 		return result;
 		

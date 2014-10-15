@@ -20,11 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,11 +32,11 @@ import cn.bmwm.common.utils.CommonAttributes;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.Area;
+import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.Member;
-import cn.bmwm.modules.shop.entity.MemberAttribute;
-import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.entity.Member.Gender;
+import cn.bmwm.modules.shop.entity.MemberAttribute;
 import cn.bmwm.modules.shop.entity.MemberAttribute.Type;
 import cn.bmwm.modules.shop.service.AreaService;
 import cn.bmwm.modules.shop.service.CaptchaService;
@@ -125,6 +123,7 @@ public class RegisterController extends BaseController {
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public @ResponseBody
 	Message submit(String captchaId, String captcha, String username, String email, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		
 		String password = rsaService.decryptParameter("enPassword", request);
 		rsaService.removePrivateKey(request);
 

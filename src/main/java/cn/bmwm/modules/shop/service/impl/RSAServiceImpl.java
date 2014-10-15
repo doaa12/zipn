@@ -31,7 +31,7 @@ public class RSAServiceImpl implements RSAService {
 
 	/** "私钥"参数名称 */
 	private static final String PRIVATE_KEY_ATTRIBUTE_NAME = "privateKey";
-
+	
 	@Transactional(readOnly = true)
 	public RSAPublicKey generateKey(HttpServletRequest request) {
 		Assert.notNull(request);
