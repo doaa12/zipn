@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.utils.Constants;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.MemberService;
+import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.exception.BusinessException;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.security.Principal;
@@ -41,6 +43,9 @@ public class RegisterController {
 	
 	@Resource(name = "memberRankServiceImpl")
 	private MemberRankService memberRankService;
+	
+	@Resource(name = "rsaServiceImpl")
+	private RSAService rsaService;
 	
 	/**
 	 * 检查用户名是否被禁用或已存在
@@ -94,9 +99,10 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> register(String phone, String password, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public Map<String,Object> register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
-		Map<String,Object> result = new HashMap<String,Object>();
+		String password = rsaService.decryptParameter("enpassword", request);
+		rsaService.removePrivateKey(request);
 		
 		/*
 		Object ocode = session.getAttribute("code");
@@ -112,20 +118,26 @@ public class RegisterController {
 		}
 		*/
 		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
 		if(StringUtils.isBlank(phone)) {
-			throw new BusinessException(" Parameter 'username' can not be empty ! ");
+			result.put("flag", Constants.USERNAME_BLANK);
+			return result;
 		}
 		
 		if(StringUtils.isBlank(password)) {
-			throw new BusinessException(" Parameter 'password' can not be empty ! ");
+			result.put("flag", Constants.PASSWORD_BLANK);
+			return result;
 		}
 		
 		if (memberService.usernameExists(phone)) {
-			throw new BusinessException(" phone '" + phone + "' has bean registered ! ");
+			result.put("flag", Constants.USERNAME_EXISTS);
+			return result;
 		}
 		
 		if(memberService.usernameDisabled(phone)) {
-			throw new BusinessException(" phone '" + phone + "' is in the black list ! ");
+			result.put("flag", Constants.USERNAME_DISABLED);
+			return result;
 		}
 		
 		Setting setting = SettingUtils.get();

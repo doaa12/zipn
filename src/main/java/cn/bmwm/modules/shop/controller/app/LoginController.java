@@ -13,18 +13,19 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import cn.bmwm.common.utils.Constants;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
-import cn.bmwm.modules.sys.exception.BusinessException;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.model.Setting.AccountLockType;
 import cn.bmwm.modules.sys.security.Principal;
@@ -61,14 +62,28 @@ public class LoginController {
 		String password = rsaService.decryptParameter("enpassword", request);
 		rsaService.removePrivateKey(request);
 		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		if(StringUtils.isBlank(phone)) {
+			result.put("flag", Constants.USERNAME_BLANK);
+			return result;
+		}
+		
+		if(StringUtils.isBlank(password)) {
+			result.put("flag", Constants.PASSWORD_BLANK);
+			return result;
+		}
+		
 		Member member = memberService.findByUsername(phone);
 		
 		if (member == null) {
-			throw new BusinessException(" phone does not exist ! ");
+			result.put("flag", Constants.USER_NOT_EXISTS);
+			return result;
 		}
 		
 		if (!member.getIsEnabled()) {
-			throw new BusinessException(" user is disabled ! ");
+			result.put("flag", Constants.USER_DISABLED);
+			return result;
 		}
 		
 		Setting setting = SettingUtils.get();
@@ -79,7 +94,8 @@ public class LoginController {
 				
 				int loginFailureLockTime = setting.getAccountLockTime();
 				if (loginFailureLockTime == 0) {
-					throw new BusinessException(" the account has been locked ! ");
+					result.put("flag", Constants.USER_LOCKED);
+					return result;
 				}
 				
 				Date lockedDate = member.getLockedDate();
@@ -91,7 +107,8 @@ public class LoginController {
 					member.setLockedDate(null);
 					memberService.update(member);
 				} else {
-					throw new BusinessException(" the account has been locked ! ");
+					result.put("flag", Constants.USER_LOCKED);
+					return result;
 				}
 				
 			} else {
@@ -114,11 +131,8 @@ public class LoginController {
 			member.setLoginFailureCount(loginFailureCount);
 			memberService.update(member);
 			
-			if (ArrayUtils.contains(setting.getAccountLockTypes(), AccountLockType.member)) {
-				throw new BusinessException(" account locked " + loginFailureCount + " times ! ");
-			} else {
-				throw new BusinessException(" incorrect credentials ! "); 
-			}
+			result.put("flag", Constants.PASSWORD_ERROR);
+			return result;
 			
 		}
 		
