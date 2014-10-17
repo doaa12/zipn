@@ -21,14 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Constants;
-import cn.bmwm.common.utils.WebUtils;
+import cn.bmwm.common.utils.MD5Utils;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.exception.BusinessException;
 import cn.bmwm.modules.sys.model.Setting;
-import cn.bmwm.modules.sys.security.Principal;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
 /**
@@ -172,8 +171,11 @@ public class RegisterController {
 		
 		result.put("flag", 1);
 		
-		session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), member.getUsername()));
-		WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
+		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), member.getUsername()));
+		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
+		
+		result.put("principle", MD5Utils.encode(member.getId().toString()));
+		result.put("lastLoginTime", System.currentTimeMillis());
 		
 		return result;
 		

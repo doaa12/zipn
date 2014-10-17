@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.utils.MD5Utils;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.Member;
@@ -28,7 +29,6 @@ import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.model.Setting.AccountLockType;
-import cn.bmwm.modules.sys.security.Principal;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
 
@@ -164,9 +164,11 @@ public class LoginController {
 			session.setAttribute(entry.getKey(), entry.getValue());
 		}
 
-		session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
-		WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
-
+		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
+		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
+		
+		result.put("principle", MD5Utils.encode(member.getId().toString()));
+		result.put("lastLoginTime", System.currentTimeMillis());
 		result.put("flag", 1);
 		
 		return result;

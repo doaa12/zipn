@@ -15,23 +15,32 @@
 	<mvc:annotation-driven validator="validator" />
 
 	<mvc:interceptors>
+		<!--  
 		<mvc:interceptor>
 			<mvc:mapping path="/order/**" />
 			<mvc:mapping path="/member/**" />
 			<bean id="memberInterceptor" class="cn.bmwm.modules.sys.interceptor.MemberInterceptor" />
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/payment/**" />
-			<mvc:exclude-mapping path="/app/**" />
-			<bean id="tokenInterceptor" class="cn.bmwm.modules.sys.interceptor.TokenInterceptor" />
-		</mvc:interceptor>
+		-->
 		<!-- 
 		<mvc:interceptor>
 			<mvc:mapping path="/admin/**" />
 			<bean id="executeTimeInterceptor" class="cn.bmwm.modules.sys.interceptor.ExecuteTimeInterceptor" />
 		</mvc:interceptor>
 		-->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/payment/**" />
+			<mvc:exclude-mapping path="/app/**" />
+			<bean id="tokenInterceptor" class="cn.bmwm.modules.sys.interceptor.TokenInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/app/**"/>
+			<mvc:exclude-mapping path="/app/login/**"/>
+			<mvc:exclude-mapping path="/app/register/**"/>
+			<mvc:exclude-mapping path="/app/common/**"/>
+			<bean id="appLoginInterceptor" class="cn.bmwm.modules.sys.interceptor.AppLoginInterceptor" />
+		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/admin/**" />
 			<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">

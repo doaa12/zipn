@@ -404,6 +404,11 @@ public class Setting implements Serializable {
 	 * 百度地图云服务地址
 	 */
 	private String lbsURL;
+	
+	/**
+	 * 保持登录的天数
+	 */
+	private Integer keepLoginDays;
 
 	/**
 	 * 获取网站名称
@@ -2125,6 +2130,20 @@ public class Setting implements Serializable {
 
 	public void setLbsURL(String lbsURL) {
 		this.lbsURL = lbsURL;
+	}
+
+	/**
+	 * @return the keepLoginDays
+	 */
+	public Integer getKeepLoginDays() {
+		return keepLoginDays;
+	}
+
+	/**
+	 * @param keepLoginDays the keepLoginDays to set
+	 */
+	public void setKeepLoginDays(Integer keepLoginDays) {
+		this.keepLoginDays = keepLoginDays;
 	}
 
 	/**

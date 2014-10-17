@@ -81,6 +81,7 @@
 	<setting name="cnzzPassword" value=""/>
 	<setting name="lbsAk" value="GM7ryBPN4LjNKRq5xNGTxBXC"/>
 	<setting name="lbsURL" value="http://api.map.baidu.com/geocoder/v2/?address={address}&amp;output=json&amp;ak={ak}"/>
+	<setting name="keepLoginDays" value="7"/>
 	<logConfig operation="系统设置" urlPattern="/admin/setting/update.jhtml"/>  
 	<logConfig operation="添加管理员" urlPattern="/admin/admin/save.jhtml"/>  
 	<logConfig operation="编辑管理员" urlPattern="/admin/admin/update.jhtml"/>  
