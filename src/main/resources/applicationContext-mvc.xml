@@ -23,6 +23,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/payment/**" />
+			<mvc:exclude-mapping path="/app/**" />
 			<bean id="tokenInterceptor" class="cn.bmwm.modules.sys.interceptor.TokenInterceptor" />
 		</mvc:interceptor>
 		<!-- 

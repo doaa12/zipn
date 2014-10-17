@@ -1,5 +1,6 @@
 package cn.bmwm.common.utils;
 
+import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -7,8 +8,6 @@ import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 
 import javax.crypto.Cipher;
 
@@ -128,16 +127,16 @@ public final class RSAUtils {
 		return data != null ? new String(data) : null;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
+		/*
+		 
 		KeyPair keyPair = generateKeyPair();
 		
 		RSAPrivateKey privateKey = (RSAPrivateKey)keyPair.getPrivate();
 		RSAPublicKey publicKey = (RSAPublicKey)keyPair.getPublic();
 		
-		publicKey.getModulus().toByteArray();
-		
-		String text = "#$()*jds%^&#@@@!";
+		String text = "123456";
 		
 		String encryptText = encrypt(publicKey, text);
 		
@@ -146,6 +145,20 @@ public final class RSAUtils {
 		String decryptText = decrypt(privateKey, encryptText);
 		
 		System.out.println(decryptText);
+		
+		*/
+		
+		String password = "123456";
+		
+		String n = "AIucMLgTvheqm8eSijRLwEw5B6r9IbkZAa8iPv9Fpl9yvN2YdiAIXarJ287TtKsdMHNLMhOXr+dPco9mOexqKrRMDEwtScTPtiXgN3E2R6kewb8IEHQWS21nZf5Qr+AwlNu54yVG5G3Do5P/2Wysh93lCYc3EWTMOdRtUFSJ2xgR";
+		String e = "AQAB";
+		
+		sun.security.rsa.RSAPublicKeyImpl publicKey = new sun.security.rsa.RSAPublicKeyImpl(
+				new BigInteger(Base64.decodeBase64(n)), new BigInteger(Base64.decodeBase64(e)));
+		
+		String enpassword = encrypt(publicKey, password);
+		
+		System.out.println(enpassword);
 		
 	}
 	

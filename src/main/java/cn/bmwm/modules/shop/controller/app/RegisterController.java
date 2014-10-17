@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +40,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
 @RequestMapping(value = "/app/register")
 public class RegisterController {
 	
+	public static final Log log = LogFactory.getLog(RegisterController.class);
+	
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 	
@@ -62,10 +66,12 @@ public class RegisterController {
 		
 		result.put("version", 1);
 		
-		if (memberService.usernameDisabled(phone) || memberService.usernameExists(phone)) {
-			result.put("flag", 1);
-		} else {
+		if (memberService.usernameDisabled(phone)) {
 			result.put("flag", 2);
+		}else if(memberService.usernameExists(phone)){
+			result.put("flag", 3);
+		}else {
+			result.put("flag", 1);
 		}
 		
 		return result;
@@ -99,7 +105,10 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public Map<String,Object> register(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		
+		
+		log.info("enpassword: " + request.getParameter("enpassword"));
 		
 		String password = rsaService.decryptParameter("enpassword", request);
 		rsaService.removePrivateKey(request);

@@ -167,7 +167,9 @@ public class LoginController {
 		session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
 		WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 
-		return null;
+		result.put("flag", 1);
+		
+		return result;
 		
 	}
 	
