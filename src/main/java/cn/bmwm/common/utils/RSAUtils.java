@@ -1,6 +1,7 @@
 package cn.bmwm.common.utils;
 
 import java.math.BigInteger;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -8,6 +9,8 @@ import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 
 import javax.crypto.Cipher;
 
@@ -148,17 +151,67 @@ public final class RSAUtils {
 		
 		*/
 		
+		/*
 		String password = "123456";
 		
-		String n = "AIucMLgTvheqm8eSijRLwEw5B6r9IbkZAa8iPv9Fpl9yvN2YdiAIXarJ287TtKsdMHNLMhOXr+dPco9mOexqKrRMDEwtScTPtiXgN3E2R6kewb8IEHQWS21nZf5Qr+AwlNu54yVG5G3Do5P/2Wysh93lCYc3EWTMOdRtUFSJ2xgR";
+		String n = "MIICXAIBAAKBgQCsp3jzlP8VHN444eyE5yKuhT77eUNWJKQT1btCOQQU5DmcTNc46T9pSPM7NYgF7h5uSMhh/LUiQ/znPIRItlhykyK10OUQ+E1jaZhFxjzpELOaHpr94h2iSGcWPfISofZDrOivSjKriW4rkSatTh4Zjfi1zipzbxDfJZwVX/fzbQIDAQABAoGAKIlNeYsi9LcJabuJh46o8uav6eUHrUL/DvUgeSTf03PeHtdftKn2zGZnTSB9Zj8JAAWwnmjxsjDaQQRRXq0JSKjSOvTBs2Jk3UDEJQaIGMd+pHnyYY2ZGeLRwGZ+S6xfNFPN8/P3FEt9lqUBdMuFdnKRXizHd2jN+YdSYawbEgECQQGqeaaIKQE76iZ5Od54f/jAxjvoSbkbQlXfpjIxALzxQXW0drSsBGna3BAidT/zCZgmberp6cFt/zd/M0lJiPTtAkBno5b2ZtedxUnKB49FqrcvpMNGUzT4uYh4uz9AuTKB9QevgIpu4UVZbB8mOAK11TvgTLS6ZiBbDewstUeP/aiBAkEBnwxXgyoM9mdx3AbyuWkqCUqjoPSmvp23fzp6nHAwcccYK3JfcQ22i3YiCbb8bqYGule9CLsjMc7xDs015OfyHQJACrJLpmq+3j26e+uD0gDonzY2IU/9K56agztwL9HtcJRFksuFfiQp8CzEmkE1pma3o1LHZGWd+UfalFKxbB8WAQJBAY0WI7v4wDEnwH1z/nuCAyhgGY8f9Apo1X5GSR27p3d/zWl9YddfIVF37nYQ2wD4UuZJkkuAD4yB0JGELPU3Bqg=";
 		String e = "AQAB";
 		
 		sun.security.rsa.RSAPublicKeyImpl publicKey = new sun.security.rsa.RSAPublicKeyImpl(
 				new BigInteger(Base64.decodeBase64(n)), new BigInteger(Base64.decodeBase64(e)));
 		
 		String enpassword = encrypt(publicKey, password);
-		
 		System.out.println(enpassword);
+		*/
+		
+		String prikey = "eUgiRFCqYqN/PiV0PjCR2RSLiDSAgOCzEgbvfg8fH6gTerWa+aIB+30eX8V1mkqA"
+					  + "PXbUaFlgrwwFiuimmwDFNZim2+OxlT9Hceo4txpnm7bhl2fhznK8IkvvVAKCI/wf"
+					  + "BhG/Jmp/SBYmknWJZFIxbpNo9zjTAsbhHdNUP+9HPmJcOGdUYdUWHRcwsVhPxXil"
+					  + "xef+pfcdvw9lXCY9gbnfDMWVsNhdV6hrkjEXFoMhyhurnqp9hRf4iCEN/RCiL9Xv"
+					  + "fVp4h7+SY4Bm33Ct/C7ojuTUuII+s5CF0hJFSOedqzwLQ65KT2qa/tMFNT2EbVeM"
+					  + "QWtmQoXYSeR5U1OnviUnWcBhgz+IrDR+xWx/ruAJyyrRTvQJBjFRZ8RHEpU+4vtg"
+					  + "1tJ6XkcIj+rOOrFnOkX0BJ2KvNIGGJ7QVg68K6NxpQYgXXdjNJjZY4FgY/Cz2ADb"
+					  + "xH/2dAlW6Al+KzeiRXbZEckG0lwi1HZroR0ve/WX6wDlmUUF251eK4GmHTfkgojJ"
+					  + "utNPUyb0GhBiy/gWatALNdotWYmmc3YRbOTgdI+39iu7MOF4fRqlfth0qbtHZHMg"
+					  + "ghmomUt837iBg5gBpWxqYb9dDP+n27XuUMlJLXWqbyvRQWDLRdAYMsh6XBgxIV7j"
+					  + "yqYghQ36l/S36ulmlQ78jyd1dU/V7MQbkaTSAHFUjBKo8HEmaiM1n4hx6fqI20Rs"
+					  + "o6leI5WoxrF507ahLIasEOSvNiFLX2zS7KH23vWogwlp2tBV1yzH9aMqfa3Zv4pZ"
+					  + "tyVVkpyyzT5vlgjIBr7mXQY+KbxN+aAS6ds+BpyRNE6ggPs6A/aqeg==";
+		
+		String pubkey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsp3jzlP8VHN444eyE5yKuhT77"
+					  + "eUNWJKQT1btCOQQU5DmcTNc46T9pSPM7NYgF7h5uSMhh/LUiQ/znPIRItlhykyK1"
+					  + "0OUQ+E1jaZhFxjzpELOaHpr94h2iSGcWPfISofZDrOivSjKriW4rkSatTh4Zjfi1"
+					  + "zipzbxDfJZwVX/fzbQIDAQAB";
+		
+		String e = "key_pair_tag";
+		
+		String text = "123456";
+		
+		/*
+		byte[] keyBytes = new BASE64Decoder().decodeBuffer(key);
+		
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+		
+		String text = "GM2LNyVY7Cw+hwwHmlxtH4ND8vKD5UaQ3b6P9xOyaGYgZ2pAEZ4+2ngzfYbJtgxeoybSsdJUo0x80S9POh5hJzRHV70Y1+GiQ5A4tTQiI3srmipw+0f5k4pHM0bqpoF1Acpb/XKIDSoyQUlGz3QVp9zDnmFD43XX+tbrr3HjkqM=";
+		
+		System.out.println(decrypt(privateKey, text));
+		*/
+		
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		
+		RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(new BigInteger(Base64.decodeBase64(pubkey)), new BigInteger(Base64.decodeBase64(e)));
+		PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+		
+		String enText = encrypt(publicKey, text);
+		System.out.println(enText);
+		
+		RSAPrivateKeySpec privateKeySpec = new RSAPrivateKeySpec(new BigInteger(Base64.decodeBase64(prikey)), new BigInteger(Base64.decodeBase64(e)));
+		PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+		
+		//String text = "GM2LNyVY7Cw+hwwHmlxtH4ND8vKD5UaQ3b6P9xOyaGYgZ2pAEZ4+2ngzfYbJtgxeoybSsdJUo0x80S9POh5hJzRHV70Y1+GiQ5A4tTQiI3srmipw+0f5k4pHM0bqpoF1Acpb/XKIDSoyQUlGz3QVp9zDnmFD43XX+tbrr3HjkqM=";
+		System.out.println(decrypt(privateKey, enText));
 		
 	}
 	
