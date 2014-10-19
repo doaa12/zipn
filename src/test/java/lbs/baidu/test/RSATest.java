@@ -14,6 +14,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 
+import cn.bmwm.common.utils.MD5Utils;
 import cn.bmwm.common.utils.RSAUtils;
 
 /**
@@ -114,6 +115,12 @@ public class RSATest extends TestCase {
 		
 		System.out.println(text);
 		
+	}
+	
+	public void testMD5() {
+		String md5 = MD5Utils.encode("123");
+		System.out.println(md5);
+		System.out.println(System.currentTimeMillis());
 	}
 	
 }
