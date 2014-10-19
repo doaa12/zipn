@@ -109,9 +109,6 @@ public class RegisterController {
 		
 		log.info("enpassword: " + request.getParameter("enpassword"));
 		
-		String password = rsaService.decryptParameter("enpassword", request);
-		rsaService.removePrivateKey(request);
-		
 		/*
 		Object ocode = session.getAttribute("code");
 		
@@ -132,6 +129,15 @@ public class RegisterController {
 			result.put("flag", Constants.USERNAME_BLANK);
 			return result;
 		}
+		
+		String enPassword = request.getParameter("enpassword");
+		
+		if(StringUtils.isBlank(enPassword)) {
+			result.put("flag", Constants.PASSWORD_BLANK);
+			return result;
+		}
+		
+		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
 			result.put("flag", Constants.PASSWORD_BLANK);

@@ -59,8 +59,7 @@ public class LoginController {
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public Map<String,Object> login(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
-		String password = rsaService.decryptParameter("enpassword", request);
-		rsaService.removePrivateKey(request);
+		String enPassword = request.getParameter("enpassword");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -68,6 +67,13 @@ public class LoginController {
 			result.put("flag", Constants.USERNAME_BLANK);
 			return result;
 		}
+		
+		if(StringUtils.isBlank(enPassword)) {
+			result.put("flag", Constants.PASSWORD_BLANK);
+			return result;
+		}
+		
+		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
 			result.put("flag", Constants.PASSWORD_BLANK);

@@ -43,5 +43,12 @@ public interface RSAService {
 	 * @return 解密内容
 	 */
 	String decryptParameter(String name, HttpServletRequest request);
+	
+	/**
+	 * 解密
+	 * @param text
+	 * @return
+	 */
+	String decrypt(String text) ;
 
 }
