@@ -82,6 +82,8 @@
 	<setting name="lbsAk" value="GM7ryBPN4LjNKRq5xNGTxBXC"/>
 	<setting name="lbsURL" value="http://api.map.baidu.com/geocoder/v2/?address={address}&amp;output=json&amp;ak={ak}"/>
 	<setting name="keepLoginDays" value="7"/>
+	<setting name="rsaPublicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsp3jzlP8VHN444eyE5yKuhT77eUNWJKQT1btCOQQU5DmcTNc46T9pSPM7NYgF7h5uSMhh/LUiQ/znPIRItlhykyK10OUQ+E1jaZhFxjzpELOaHpr94h2iSGcWPfISofZDrOivSjKriW4rkSatTh4Zjfi1zipzbxDfJZwVX/fzbQIDAQAB"/>
+	<setting name="rsaPrivateKey" value="MIICXAIBAAKBgQCsp3jzlP8VHN444eyE5yKuhT77eUNWJKQT1btCOQQU5DmcTNc46T9pSPM7NYgF7h5uSMhh/LUiQ/znPIRItlhykyK10OUQ+E1jaZhFxjzpELOaHpr94h2iSGcWPfISofZDrOivSjKriW4rkSatTh4Zjfi1zipzbxDfJZwVX/fzbQIDAQABAoGAKIlNeYsi9LcJabuJh46o8uav6eUHrUL/DvUgeSTf03PeHtdftKn2zGZnTSB9Zj8JAAWwnmjxsjDaQQRRXq0JSKjSOvTBs2Jk3UDEJQaIGMd+pHnyYY2ZGeLRwGZ+S6xfNFPN8/P3FEt9lqUBdMuFdnKRXizHd2jN+YdSYawbEgECQQGqeaaIKQE76iZ5Od54f/jAxjvoSbkbQlXfpjIxALzxQXW0drSsBGna3BAidT/zCZgmberp6cFt/zd/M0lJiPTtAkBno5b2ZtedxUnKB49FqrcvpMNGUzT4uYh4uz9AuTKB9QevgIpu4UVZbB8mOAK11TvgTLS6ZiBbDewstUeP/aiBAkEBnwxXgyoM9mdx3AbyuWkqCUqjoPSmvp23fzp6nHAwcccYK3JfcQ22i3YiCbb8bqYGule9CLsjMc7xDs015OfyHQJACrJLpmq+3j26e+uD0gDonzY2IU/9K56agztwL9HtcJRFksuFfiQp8CzEmkE1pma3o1LHZGWd+UfalFKxbB8WAQJBAY0WI7v4wDEnwH1z/nuCAyhgGY8f9Apo1X5GSR27p3d/zWl9YddfIVF37nYQ2wD4UuZJkkuAD4yB0JGELPU3Bqg="/>
 	<logConfig operation="系统设置" urlPattern="/admin/setting/update.jhtml"/>  
 	<logConfig operation="添加管理员" urlPattern="/admin/admin/save.jhtml"/>  
 	<logConfig operation="编辑管理员" urlPattern="/admin/admin/update.jhtml"/>  

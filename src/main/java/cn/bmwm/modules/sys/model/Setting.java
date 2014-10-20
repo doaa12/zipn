@@ -409,6 +409,11 @@ public class Setting implements Serializable {
 	 * 保持登录的天数
 	 */
 	private Integer keepLoginDays;
+	
+	/**
+	 * RSA私钥
+	 */
+	private String rsaPrivateKey;
 
 	/**
 	 * 获取网站名称
@@ -2144,6 +2149,20 @@ public class Setting implements Serializable {
 	 */
 	public void setKeepLoginDays(Integer keepLoginDays) {
 		this.keepLoginDays = keepLoginDays;
+	}
+	
+	/**
+	 * @return the rsaPrivateKey
+	 */
+	public String getRsaPrivateKey() {
+		return rsaPrivateKey;
+	}
+
+	/**
+	 * @param rsaPrivateKey the rsaPrivateKey to set
+	 */
+	public void setRsaPrivateKey(String rsaPrivateKey) {
+		this.rsaPrivateKey = rsaPrivateKey;
 	}
 
 	/**

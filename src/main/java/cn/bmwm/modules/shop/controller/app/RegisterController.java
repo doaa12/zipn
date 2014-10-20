@@ -124,6 +124,7 @@ public class RegisterController {
 		*/
 		
 		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("version", 1);
 		
 		if(StringUtils.isBlank(phone)) {
 			result.put("flag", Constants.USERNAME_BLANK);

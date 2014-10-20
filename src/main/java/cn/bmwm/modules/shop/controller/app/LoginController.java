@@ -18,6 +18,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Constants;
 import cn.bmwm.common.utils.MD5Utils;
@@ -57,11 +58,14 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> login(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		String enPassword = request.getParameter("enpassword");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("version", 1);
 		
 		if(StringUtils.isBlank(phone)) {
 			result.put("flag", Constants.USERNAME_BLANK);

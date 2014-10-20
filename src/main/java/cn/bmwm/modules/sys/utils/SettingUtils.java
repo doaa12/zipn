@@ -127,8 +127,8 @@ public final class SettingUtils {
 		} else {
 			setting = new Setting();
 			try {
-				File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
-				Document document = new SAXReader().read(shopxxXmlFile);
+				File settingFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
+				Document document = new SAXReader().read(settingFile);
 				List<Element> elements = document.selectNodes("/zipn/setting");
 				for (Element element : elements) {
 					String name = element.attributeValue("name");

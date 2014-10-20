@@ -25,6 +25,8 @@ import cn.bmwm.common.utils.RSAUtils;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.exception.BusinessException;
 import cn.bmwm.modules.sys.exception.SystemException;
+import cn.bmwm.modules.sys.model.Setting;
+import cn.bmwm.modules.sys.utils.SettingUtils;
 
 /**
  * Service - RSA安全
@@ -83,7 +85,9 @@ public class RSAServiceImpl implements RSAService {
 		
 		try {
 			
-			String key = "MIICXAIBAAKBgQCsp3jzlP8VHN444eyE5yKuhT77eUNWJKQT1btCOQQU5DmcTNc46T9pSPM7NYgF7h5uSMhh/LUiQ/znPIRItlhykyK10OUQ+E1jaZhFxjzpELOaHpr94h2iSGcWPfISofZDrOivSjKriW4rkSatTh4Zjfi1zipzbxDfJZwVX/fzbQIDAQABAoGAKIlNeYsi9LcJabuJh46o8uav6eUHrUL/DvUgeSTf03PeHtdftKn2zGZnTSB9Zj8JAAWwnmjxsjDaQQRRXq0JSKjSOvTBs2Jk3UDEJQaIGMd+pHnyYY2ZGeLRwGZ+S6xfNFPN8/P3FEt9lqUBdMuFdnKRXizHd2jN+YdSYawbEgECQQGqeaaIKQE76iZ5Od54f/jAxjvoSbkbQlXfpjIxALzxQXW0drSsBGna3BAidT/zCZgmberp6cFt/zd/M0lJiPTtAkBno5b2ZtedxUnKB49FqrcvpMNGUzT4uYh4uz9AuTKB9QevgIpu4UVZbB8mOAK11TvgTLS6ZiBbDewstUeP/aiBAkEBnwxXgyoM9mdx3AbyuWkqCUqjoPSmvp23fzp6nHAwcccYK3JfcQ22i3YiCbb8bqYGule9CLsjMc7xDs015OfyHQJACrJLpmq+3j26e+uD0gDonzY2IU/9K56agztwL9HtcJRFksuFfiQp8CzEmkE1pma3o1LHZGWd+UfalFKxbB8WAQJBAY0WI7v4wDEnwH1z/nuCAyhgGY8f9Apo1X5GSR27p3d/zWl9YddfIVF37nYQ2wD4UuZJkkuAD4yB0JGELPU3Bqg=";
+			Setting setting = SettingUtils.get();
+			
+			String key = setting.getRsaPrivateKey();
 			
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			
