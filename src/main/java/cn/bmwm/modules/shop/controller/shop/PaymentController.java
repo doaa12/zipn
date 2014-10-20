@@ -11,10 +11,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Order;
-import cn.bmwm.modules.shop.entity.Payment;
-import cn.bmwm.modules.shop.entity.PaymentMethod;
-import cn.bmwm.modules.shop.entity.Sn;
 import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
+import cn.bmwm.modules.shop.entity.Payment;
 import cn.bmwm.modules.shop.entity.Payment.Method;
 import cn.bmwm.modules.shop.entity.Payment.Status;
 import cn.bmwm.modules.shop.entity.Payment.Type;
+import cn.bmwm.modules.shop.entity.PaymentMethod;
+import cn.bmwm.modules.shop.entity.Sn;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.OrderService;
 import cn.bmwm.modules.shop.service.PaymentService;

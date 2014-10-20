@@ -9,21 +9,19 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.SafeKey;
-import cn.bmwm.modules.shop.entity.BaseEntity.Save;
 import cn.bmwm.modules.shop.service.CaptchaService;
 import cn.bmwm.modules.shop.service.MailService;
 import cn.bmwm.modules.shop.service.MemberService;
