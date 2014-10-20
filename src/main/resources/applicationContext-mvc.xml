@@ -76,7 +76,7 @@
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
 
-	<bean id="exceptionResolver" class="cn.bmwm.common.utils.ZipnExceptionResolver">
+	<bean id="exceptionResolver" class="cn.bmwm.common.ZipnExceptionResolver">
 		<property name="defaultErrorView" value="shop/common/error" />
 	</bean>
 

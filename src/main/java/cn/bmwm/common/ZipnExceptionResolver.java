@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.bmwm.common.utils;
+package cn.bmwm.common;
 
 import java.io.IOException;
 import java.io.PrintWriter;
