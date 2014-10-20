@@ -11,10 +11,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,12 +27,12 @@ import cn.bmwm.modules.shop.entity.Coupon;
 import cn.bmwm.modules.shop.entity.CouponCode;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Order;
+import cn.bmwm.modules.shop.entity.Order.OrderStatus;
+import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
 import cn.bmwm.modules.shop.entity.PaymentMethod;
 import cn.bmwm.modules.shop.entity.Receiver;
 import cn.bmwm.modules.shop.entity.Shipping;
 import cn.bmwm.modules.shop.entity.ShippingMethod;
-import cn.bmwm.modules.shop.entity.Order.OrderStatus;
-import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
 import cn.bmwm.modules.shop.service.AreaService;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.CouponCodeService;
