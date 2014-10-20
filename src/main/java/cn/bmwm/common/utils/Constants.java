@@ -10,44 +10,84 @@ package cn.bmwm.common.utils;
  */
 public class Constants {
 	
+	//----------------------- 用户 -----------------------
+	
 	/**
 	 * 用户名为空
 	 */
-	public static final int USERNAME_BLANK = 101;
+	public static final int USER_USERNAME_BLANK = 101;
 	
 	/**
 	 * 密码为空
 	 */
-	public static final int PASSWORD_BLANK = 102;
+	public static final int USER_PASSWORD_BLANK = 102;
 
 	/**
 	 * 用户名不存在
 	 */
-	public static final int USER_NOT_EXISTS = 103;
+	public static final int USER_USER_NOT_EXISTS = 103;
 	
 	/**
 	 * 账号被冻结
 	 */
-	public static final int USER_DISABLED = 104;
+	public static final int USER_USER_DISABLED = 104;
 	
 	/**
 	 * 密码错误
 	 */
-	public static final int PASSWORD_ERROR = 105;
+	public static final int USER_PASSWORD_ERROR = 105;
 	
 	/**
 	 * 账号被锁定
 	 */
-	public static final int USER_LOCKED = 106;
+	public static final int USER_USER_LOCKED = 106;
 	
 	/**
 	 * 用户名已存在
 	 */
-	public static final int USERNAME_EXISTS = 107;
+	public static final int USER_USERNAME_EXISTS = 107;
 	
 	/**
 	 * 用户名被禁用
 	 */
-	public static final int USERNAME_DISABLED = 108;
+	public static final int USER_USERNAME_DISABLED = 108;
+	
+	
+	//----------------------- 购物车 -----------------------
+	
+	/**
+	 * 购物车商品数量小于1
+	 */
+	public static final int CART_QUANTITY_ERROR = 121;
+	
+	/**
+	 * 商品不存在
+	 */
+	public static final int CART_PRODUCT_NOT_EXISTS = 122;
+	
+	/**
+	 * 商品未上架
+	 */
+	public static final int CART_PRODUCT_NOT_MARKETABLE = 123;
+	
+	/**
+	 * 该商品是赠品
+	 */
+	public static final int CART_PRODUCT_GIFT = 124;
+	
+	/**
+	 * 超出购物车商品最大数量
+	 */
+	public static final int CART_PRODUCT_MAX_COUNT = 125;
+	
+	/**
+	 * 超出单品允许最大数量
+	 */
+	public static final int CART_ITEM_MAX_QUANTITY = 126;
+	
+	/**
+	 * 超出库存数量
+	 */
+	public static final int CART_PRODUCT_STOCK_QUANTITY = 127;
 	
 }

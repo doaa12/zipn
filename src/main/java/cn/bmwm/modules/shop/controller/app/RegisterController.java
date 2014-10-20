@@ -127,31 +127,31 @@ public class RegisterController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(phone)) {
-			result.put("flag", Constants.USERNAME_BLANK);
+			result.put("flag", Constants.USER_USERNAME_BLANK);
 			return result;
 		}
 		
 		String enPassword = request.getParameter("enpassword");
 		
 		if(StringUtils.isBlank(enPassword)) {
-			result.put("flag", Constants.PASSWORD_BLANK);
+			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
-			result.put("flag", Constants.PASSWORD_BLANK);
+			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		if (memberService.usernameExists(phone)) {
-			result.put("flag", Constants.USERNAME_EXISTS);
+			result.put("flag", Constants.USER_USERNAME_EXISTS);
 			return result;
 		}
 		
 		if(memberService.usernameDisabled(phone)) {
-			result.put("flag", Constants.USERNAME_DISABLED);
+			result.put("flag", Constants.USER_USERNAME_DISABLED);
 			return result;
 		}
 		

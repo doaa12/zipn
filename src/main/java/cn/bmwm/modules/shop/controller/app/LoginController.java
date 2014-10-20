@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Constants;
 import cn.bmwm.common.utils.MD5Utils;
-import cn.bmwm.common.utils.WebUtils;
-import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.Member;
-import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.model.Setting;
@@ -48,9 +45,6 @@ public class LoginController {
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 	
-	@Resource(name = "cartServiceImpl")
-	private CartService cartService;
-	
 	/**
 	 * 登录
 	 * @param phone
@@ -68,31 +62,31 @@ public class LoginController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(phone)) {
-			result.put("flag", Constants.USERNAME_BLANK);
+			result.put("flag", Constants.USER_USERNAME_BLANK);
 			return result;
 		}
 		
 		if(StringUtils.isBlank(enPassword)) {
-			result.put("flag", Constants.PASSWORD_BLANK);
+			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
-			result.put("flag", Constants.PASSWORD_BLANK);
+			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		Member member = memberService.findByUsername(phone);
 		
 		if (member == null) {
-			result.put("flag", Constants.USER_NOT_EXISTS);
+			result.put("flag", Constants.USER_USER_NOT_EXISTS);
 			return result;
 		}
 		
 		if (!member.getIsEnabled()) {
-			result.put("flag", Constants.USER_DISABLED);
+			result.put("flag", Constants.USER_USER_DISABLED);
 			return result;
 		}
 		
@@ -104,7 +98,7 @@ public class LoginController {
 				
 				int loginFailureLockTime = setting.getAccountLockTime();
 				if (loginFailureLockTime == 0) {
-					result.put("flag", Constants.USER_LOCKED);
+					result.put("flag", Constants.USER_USER_LOCKED);
 					return result;
 				}
 				
@@ -117,7 +111,7 @@ public class LoginController {
 					member.setLockedDate(null);
 					memberService.update(member);
 				} else {
-					result.put("flag", Constants.USER_LOCKED);
+					result.put("flag", Constants.USER_USER_LOCKED);
 					return result;
 				}
 				
@@ -141,7 +135,8 @@ public class LoginController {
 			member.setLoginFailureCount(loginFailureCount);
 			memberService.update(member);
 			
-			result.put("flag", Constants.PASSWORD_ERROR);
+			result.put("flag", Constants.USER_PASSWORD_ERROR);
+			
 			return result;
 			
 		}
@@ -150,7 +145,8 @@ public class LoginController {
 		member.setLoginDate(new Date());
 		member.setLoginFailureCount(0);
 		memberService.update(member);
-
+		
+		/*
 		Cart cart = cartService.getCurrent();
 		if (cart != null) {
 			if (cart.getMember() == null) {
@@ -159,7 +155,8 @@ public class LoginController {
 				WebUtils.removeCookie(request, response, Cart.KEY_COOKIE_NAME);
 			}
 		}
-
+		*/
+		
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		Enumeration<?> keys = session.getAttributeNames();
 		while (keys.hasMoreElements()) {
