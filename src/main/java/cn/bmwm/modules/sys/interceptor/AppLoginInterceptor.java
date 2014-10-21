@@ -16,6 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
 
+import cn.bmwm.common.utils.Constants;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
@@ -30,8 +31,8 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		
-		String principle = request.getHeader("principle");
-		String lastLoginTime = request.getHeader("lastLoginTime");
+		String principle = request.getHeader(Constants.USER_LOGIN_MARK);
+		String lastLoginTime = request.getHeader(Constants.USER_LOGIN_TIME);
 		
 		Setting setting = SettingUtils.get();
 		int keepLoginDays = setting.getKeepLoginDays();

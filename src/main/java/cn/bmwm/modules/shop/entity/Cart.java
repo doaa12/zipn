@@ -39,7 +39,7 @@ public class Cart extends BaseEntity {
 
 	private static final long serialVersionUID = -6565967051825794561L;
 
-	/** 超时时间 */
+	/** 超时时间,一周 */
 	public static final int TIMEOUT = 604800;
 
 	/** 最大商品数 */

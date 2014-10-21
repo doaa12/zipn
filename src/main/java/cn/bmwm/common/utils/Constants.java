@@ -10,6 +10,16 @@ package cn.bmwm.common.utils;
  */
 public class Constants {
 	
+	/**
+	 * 登录标识
+	 */
+	public static final String USER_LOGIN_MARK = "principal";
+	
+	/**
+	 * 登录时间标识
+	 */
+	public static final String USER_LOGIN_TIME = "lastLoginTime";
+	
 	//----------------------- 用户 -----------------------
 	
 	/**
@@ -89,5 +99,15 @@ public class Constants {
 	 * 超出库存数量
 	 */
 	public static final int CART_PRODUCT_STOCK_QUANTITY = 127;
+	
+	/**
+	 * 购物车为空
+	 */
+	public static final int CART_CART_EMPTY = 128;
+	
+	/**
+	 * 购物车项不存在
+	 */
+	public static final int CART_CART_ITEM_NOT_EXISTS = 129;
 	
 }

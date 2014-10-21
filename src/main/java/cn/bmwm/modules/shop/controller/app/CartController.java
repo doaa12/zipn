@@ -4,7 +4,9 @@
  * */
 package cn.bmwm.modules.shop.controller.app;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -22,11 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Constants;
-import cn.bmwm.common.utils.Message;
+import cn.bmwm.modules.shop.controller.app.vo.CartProduct;
+import cn.bmwm.modules.shop.controller.app.vo.CartShop;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.CartItemService;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
@@ -157,9 +161,10 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public String list(ModelMap model) {
-		model.addAttribute("cart", cartService.getCurrent());
-		return "/shop/cart/list";
+	public List<CartShop> list(ModelMap model) {
+		Cart cart = cartService.getAppCurrent();
+		List<CartShop> shopList = getCartShops(cart);
+		return shopList;
 	}
 
 	/**
@@ -168,43 +173,49 @@ public class CartController extends AppBaseController {
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> edit(Long id, Integer quantity) {
-		Map<String, Object> data = new HashMap<String, Object>();
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("version", 1);
+		
 		if (quantity == null || quantity < 1) {
-			data.put("message", ERROR_MESSAGE);
-			return data;
+			result.put("flag", Constants.CART_QUANTITY_ERROR);
+			return result;
 		}
-		Cart cart = cartService.getCurrent();
+		
+		Cart cart = cartService.getAppCurrent();
+		
 		if (cart == null || cart.isEmpty()) {
-			data.put("message", Message.error("shop.cart.notEmpty"));
-			return data;
+			result.put("flag", Constants.CART_CART_EMPTY);
+			return result;
 		}
+		
 		CartItem cartItem = cartItemService.find(id);
 		Set<CartItem> cartItems = cart.getCartItems();
+		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
-			data.put("message", Message.error("shop.cart.cartItemNotExsit"));
-			return data;
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
+			return result;
 		}
+		
 		if (CartItem.MAX_QUANTITY != null && quantity > CartItem.MAX_QUANTITY) {
-			data.put("message", Message.warn("shop.cart.maxCartItemQuantity", CartItem.MAX_QUANTITY));
-			return data;
+			result.put("flag", Constants.CART_ITEM_MAX_QUANTITY);
+			return result;
 		}
+		
 		Product product = cartItem.getProduct();
+		
 		if (product.getStock() != null && quantity > product.getAvailableStock()) {
-			data.put("message", Message.warn("shop.cart.productLowStock"));
-			return data;
+			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
+			return result;
 		}
+		
 		cartItem.setQuantity(quantity);
 		cartItemService.update(cartItem);
 
-		data.put("message", SUCCESS_MESSAGE);
-		data.put("subtotal", cartItem.getSubtotal());
-		data.put("isLowStock", cartItem.getIsLowStock());
-		data.put("quantity", cart.getQuantity());
-		data.put("effectivePoint", cart.getEffectivePoint());
-		data.put("effectivePrice", cart.getEffectivePrice());
-		data.put("promotions", cart.getPromotions());
-		data.put("giftItems", cart.getGiftItems());
-		return data;
+		result.put("flag", 1);
+		
+		return result;
+		
 	}
 
 	/**
@@ -213,28 +224,32 @@ public class CartController extends AppBaseController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> delete(Long id) {
-		Map<String, Object> data = new HashMap<String, Object>();
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("version", 1);
+		
 		Cart cart = cartService.getCurrent();
+		
 		if (cart == null || cart.isEmpty()) {
-			data.put("message", Message.error("shop.cart.notEmpty"));
-			return data;
+			result.put("flag", Constants.CART_CART_EMPTY);
+			return result;
 		}
+		
 		CartItem cartItem = cartItemService.find(id);
 		Set<CartItem> cartItems = cart.getCartItems();
+		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
-			data.put("message", Message.error("shop.cart.cartItemNotExsit"));
-			return data;
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
+			return result;
 		}
+		
 		cartItems.remove(cartItem);
 		cartItemService.delete(cartItem);
 
-		data.put("message", SUCCESS_MESSAGE);
-		data.put("quantity", cart.getQuantity());
-		data.put("effectivePoint", cart.getEffectivePoint());
-		data.put("effectivePrice", cart.getEffectivePrice());
-		data.put("promotions", cart.getPromotions());
-		data.put("isLowStock", cart.getIsLowStock());
-		return data;
+		result.put("flag", 1);
+		
+		return result;
+		
 	}
 
 	/**
@@ -242,10 +257,74 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/clear", method = RequestMethod.POST)
 	@ResponseBody
-	public Message clear() {
+	public Map<String,Object> clear() {
+		
 		Cart cart = cartService.getCurrent();
 		cartService.delete(cart);
-		return SUCCESS_MESSAGE;
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("version", 1);
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 转换数据结构
+	 * @param cart
+	 * @return
+	 */
+	public List<CartShop> getCartShops(Cart cart) {
+		
+		List<CartShop> list = new ArrayList<CartShop>();
+		
+		if(cart == null) return list;
+		
+		Set<CartItem> items = cart.getCartItems();
+		
+		if(items == null || items.size() == 0) return list;
+		
+		Map<Long,CartShop> shopMap = new HashMap<Long,CartShop>();
+		
+		for(CartItem item : items) {
+			
+			Product product = item.getProduct();
+			Shop shop = product.getShop();
+			
+			CartProduct cproduct = new CartProduct();
+			cproduct.setId(product.getId());
+			cproduct.setName(product.getName());
+			cproduct.setPrice(product.getPrice().doubleValue());
+			cproduct.setQuantity(item.getQuantity());
+			
+			//TODO:商品规格
+			cproduct.setSpecification("");
+			
+			if(shopMap.get(shop.getId()) == null) {
+				
+				CartShop cshop = new CartShop();
+				cshop.setShopName(shop.getName());
+				//TODO:店铺促销活动
+				cshop.setShopActivity("");
+				
+				List<CartProduct> productList = new ArrayList<CartProduct>();
+				productList.add(cproduct);
+				cshop.setProductList(productList);
+				
+				shopMap.put(shop.getId(), cshop);
+				
+			}else {
+				CartShop cshop = shopMap.get(shop.getId());
+				cshop.getProductList().add(cproduct);
+			}
+			
+		}
+		
+		list.addAll(shopMap.values());
+		
+		return list;
+		
 	}
 
 }

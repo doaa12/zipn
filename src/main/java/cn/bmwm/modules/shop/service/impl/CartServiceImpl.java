@@ -90,6 +90,54 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 		}
 		return null;
 	}
+	
+	/**
+	 * App购物车
+	 * @return
+	 */
+	public Cart getAppCurrent() {
+		
+		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+		
+		if (requestAttributes == null) return null;
+			
+		HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+		
+		String principal = request.getHeader("principle");
+		
+		if(principal.indexOf("@") < 0) return null;
+		
+		String id = principal.substring(principal.lastIndexOf("@") + 1);
+		
+		if(StringUtils.isBlank(id) || !StringUtils.isNumeric(id)) return null;
+		
+		Member member =  memberDao.find(Long.parseLong(id));
+		
+		if(member == null) return null;
+		
+		Cart cart = member.getCart();
+		
+		if (cart != null) {
+			
+			if (!cart.hasExpired()) {
+				
+				if (!DateUtils.isSameDay(cart.getModifyDate(), new Date())) {
+					cart.setModifyDate(new Date());
+					cartDao.merge(cart);
+				}
+				
+				return cart;
+				
+			} else {
+				
+				cartDao.remove(cart);
+				
+			}
+		}
+		
+		return null;
+		
+	}
 
 	public void merge(Member member, Cart cart) {
 		if (member != null && cart != null && cart.getMember() == null) {

@@ -21,6 +21,12 @@ public interface CartService extends BaseService<Cart, Long> {
 	 * @return 当前购物车,若不存在则返回null
 	 */
 	Cart getCurrent();
+	
+	/**
+	 * App当前购物车
+	 * @return 当前购物车,若不存在则返回null
+	 */
+	Cart getAppCurrent();
 
 	/**
 	 * 合并临时购物车至会员
