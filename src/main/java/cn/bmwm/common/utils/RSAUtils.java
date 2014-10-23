@@ -101,7 +101,7 @@ public final class RSAUtils {
 		Assert.notNull(privateKey);
 		Assert.notNull(data);
 		try {
-			Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			return cipher.doFinal(data);
 		} catch (Exception e) {
@@ -123,6 +123,30 @@ public final class RSAUtils {
 		Assert.notNull(privateKey);
 		Assert.notNull(text);
 		byte[] data = decrypt(privateKey, Base64.decodeBase64(text));
+		return data != null ? new String(data) : null;
+	}
+	
+	/**
+	 * App解密
+	 * 
+	 * @param privateKey
+	 *            私钥
+	 * @param text
+	 *            Base64编码字符串
+	 * @return 解密后的数据
+	 */
+	public static String appDecrypt(PrivateKey privateKey, String text) {
+		Assert.notNull(privateKey);
+		Assert.notNull(text);
+		byte[] data = null;
+		try {
+			Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey);
+			data = cipher.doFinal(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 		return data != null ? new String(data) : null;
 	}
 

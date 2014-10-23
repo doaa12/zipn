@@ -111,7 +111,7 @@ public class RSATest extends TestCase {
 		
 		String enText = "TihlQ+1120JEUgRdoLrcc1s16P1nL68A1Id5U5Wz7wlhOcirVEQvP1lnHu+MGjwb0hqMpGT4NPb4Ad/niLbQEeiIro2EBhpTRdKA9+UM1nr/8rjBoV0UuCmJTxXJyWTinXuLVhipgr4N7TRweOeSN+Hw2DyYLOnpOovyUnPvdHQ=";
 		
-		String text = RSAUtils.decrypt(privateKey, enText);
+		String text = RSAUtils.appDecrypt(privateKey, enText);
 		
 		System.out.println(text);
 		
