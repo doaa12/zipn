@@ -14,7 +14,7 @@
 		<spring.version>3.2.2.RELEASE</spring.version>
 		<hibernate.version>3.6.10.Final</hibernate.version>
 		<product.server.id>product-server-zipn</product.server.id>
-		<tomcat.product.installdir>/web</tomcat.product.installdir>
+		<tomcat.product.installdir>/app</tomcat.product.installdir>
 		<tomcat.product.host>121.40.146.235</tomcat.product.host>
 	</properties>
   
