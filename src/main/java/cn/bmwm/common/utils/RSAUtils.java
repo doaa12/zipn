@@ -1,5 +1,6 @@
 package cn.bmwm.common.utils;
 
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -7,12 +8,18 @@ import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.spec.RSAPrivateKeySpec;
 
 import javax.crypto.Cipher;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.util.Assert;
+
+import cn.bmwm.modules.sys.exception.SystemException;
 
 /**
  * Utils - RSA加密解密
@@ -135,19 +142,39 @@ public final class RSAUtils {
 	 *            Base64编码字符串
 	 * @return 解密后的数据
 	 */
-	public static String appDecrypt(PrivateKey privateKey, String text) {
-		Assert.notNull(privateKey);
+	public static String appDecrypt(String key, String text) {
+		
+		Assert.notNull(key);
 		Assert.notNull(text);
 		byte[] data = null;
-		try {
-			Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey);
-			data = cipher.doFinal(data);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		
+		try{
+			
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			
+			byte[] keyBytes = Base64.decodeBase64(key);
+			
+			RSAPrivateKeyStructure asn1PrivKey = new RSAPrivateKeyStructure((ASN1Sequence) ASN1Sequence.fromByteArray(keyBytes));
+			
+			RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(asn1PrivKey.getModulus(), asn1PrivKey.getPrivateExponent()); 
+			
+			RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+			
+			try {
+				Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
+				cipher.init(Cipher.DECRYPT_MODE, privateKey);
+				data = cipher.doFinal(Base64.decodeBase64(text));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+		}catch(Exception e) {
+			throw new SystemException("解密异常！", e);
 		}
+		
 		return data != null ? new String(data) : null;
+		
 	}
 
 }

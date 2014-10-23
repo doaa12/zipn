@@ -4,19 +4,14 @@
  * */
 package cn.bmwm.modules.shop.service.impl;
 
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPrivateKeySpec;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -89,17 +84,7 @@ public class RSAServiceImpl implements RSAService {
 			
 			String key = setting.getRsaPrivateKey();
 			
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			
-			byte[] keyBytes = Base64.decodeBase64(key);
-			
-			RSAPrivateKeyStructure asn1PrivKey = new RSAPrivateKeyStructure((ASN1Sequence) ASN1Sequence.fromByteArray(keyBytes));
-			
-			RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(asn1PrivKey.getModulus(), asn1PrivKey.getPrivateExponent()); 
-			
-			RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
-			
-			return RSAUtils.decrypt(privateKey, text);
+			return RSAUtils.appDecrypt(key, text);
 			
 		} catch(Exception e) {
 			throw new SystemException("解密异常！", e);
