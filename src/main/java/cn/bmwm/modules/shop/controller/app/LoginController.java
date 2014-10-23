@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.utils.Constants;
-import cn.bmwm.common.utils.MD5Utils;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
@@ -174,7 +173,7 @@ public class LoginController {
 		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
-		result.put(Constants.USER_LOGIN_MARK, MD5Utils.encode(member.getId().toString()) + "@" + member.getId().toString());
+		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("flag", 1);
 		

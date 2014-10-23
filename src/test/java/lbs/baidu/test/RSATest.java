@@ -11,10 +11,10 @@ import java.security.spec.X509EncodedKeySpec;
 import junit.framework.TestCase;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 
-import cn.bmwm.common.utils.MD5Utils;
 import cn.bmwm.common.utils.RSAUtils;
 
 /**
@@ -118,9 +118,8 @@ public class RSATest extends TestCase {
 	}
 	
 	public void testMD5() {
-		String md5 = MD5Utils.encode("123");
+		String md5 = DigestUtils.md5Hex("admin");
 		System.out.println(md5);
-		System.out.println(System.currentTimeMillis());
 	}
 	
 }
