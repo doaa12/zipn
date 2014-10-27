@@ -202,6 +202,8 @@ public class ShopController extends AppBaseController {
 		detail.setType(shop.getShopType());
 		detail.setAddress(shop.getAddress());
 		detail.setNotice(shop.getNotice());
+		detail.setLatitude(shop.getLatitude() == null ? 0 : shop.getLatitude().doubleValue());
+		detail.setLongitude(shop.getLongitude() == null ? 0 : shop.getLongitude().doubleValue());
 		
 		List<ShopImage> shopImages = shop.getShopImages();
 		List<String> imageList = new ArrayList<String>();
