@@ -137,8 +137,14 @@
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
+			<artifactId>cglib</artifactId>
 			<version>3.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>asm</artifactId>
+					<groupId>org.ow2.asm</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>asm</groupId>
