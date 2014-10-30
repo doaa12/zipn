@@ -84,6 +84,16 @@ public class ShopDetail implements Serializable {
 	private String notice = "";
 	
 	/**
+	 * 店铺纬度
+	 */
+	private double latitude;
+	
+	/**
+	 * 店铺经度
+	 */
+	private double longitude;
+	
+	/**
 	 * 店铺活动
 	 */
 	private List<ShopActivity> activityList;
@@ -215,6 +225,34 @@ public class ShopDetail implements Serializable {
 		if(notice != null) {
 			this.notice = notice;
 		}
+	}
+	
+	/**
+	 * @return the latitude
+	 */
+	public double getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public double getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
 	public List<ShopActivity> getActivityList() {
