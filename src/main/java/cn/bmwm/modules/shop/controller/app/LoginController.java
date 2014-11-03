@@ -175,6 +175,7 @@ public class LoginController {
 		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
+		result.put("username", member.getUsername());
 		result.put("flag", 1);
 		
 		return result;

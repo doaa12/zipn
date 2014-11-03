@@ -182,6 +182,7 @@ public class RegisterController {
 		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
+		result.put("username", member.getUsername());
 		
 		return result;
 		
