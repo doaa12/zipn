@@ -10,7 +10,6 @@ import java.util.Iterator;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,7 @@ import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.service.CartService;
+import cn.bmwm.modules.sys.exception.IllegalUserStatusException;
 import cn.bmwm.modules.sys.security.Principal;
 
 /**
@@ -51,11 +51,15 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 	}
 
 	public Cart getCurrent() {
+		
 		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+		
 		if (requestAttributes != null) {
+			
 			HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 			Principal principal = (Principal) request.getSession().getAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME);
 			Member member = principal != null ? memberDao.find(principal.getId()) : null;
+			
 			if (member != null) {
 				Cart cart = member.getCart();
 				if (cart != null) {
@@ -105,15 +109,15 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 		
 		String principal = request.getHeader("principle");
 		
-		if(principal.indexOf("@") < 0) return null;
+		if(principal == null || principal.indexOf("@") < 0) throw new IllegalUserStatusException();
 		
 		String id = principal.substring(principal.lastIndexOf("@") + 1);
 		
-		if(StringUtils.isBlank(id) || !StringUtils.isNumeric(id)) return null;
+		if(StringUtils.isBlank(id) || !StringUtils.isNumeric(id)) throw new IllegalUserStatusException();
 		
 		Member member =  memberDao.find(Long.parseLong(id));
 		
-		if(member == null) return null;
+		if(member == null) throw new IllegalUserStatusException();
 		
 		Cart cart = member.getCart();
 		

@@ -20,7 +20,9 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.sys.exception.BusinessException;
+import cn.bmwm.modules.sys.exception.IllegalUserStatusException;
 import cn.bmwm.modules.sys.exception.SystemException;
+import cn.bmwm.modules.sys.exception.UserNotLoginException;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -52,6 +54,8 @@ public class ZipnExceptionResolver extends SimpleMappingExceptionResolver {
 			
 			if(ex instanceof BusinessException || ex instanceof SystemException) {
 				map.put("message", ex.getMessage());
+			}else if(ex instanceof UserNotLoginException || ex instanceof IllegalUserStatusException) {
+				map.put("flag", 401);
 			}else{
 				map.put("message", " Server Error ! ");
 			}

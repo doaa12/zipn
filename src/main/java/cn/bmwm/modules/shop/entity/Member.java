@@ -141,6 +141,11 @@ public class Member extends BaseEntity {
 
 	/** 手机 */
 	private String mobile;
+	
+	/**
+	 * 个性签名
+	 */
+	private String description;
 
 	/** 会员注册项值0 */
 	private String attributeValue0;
@@ -633,6 +638,22 @@ public class Member extends BaseEntity {
 	 */
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	
+	/**
+	 * 个性签名
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * 设置个性签名
+	 * @param description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
