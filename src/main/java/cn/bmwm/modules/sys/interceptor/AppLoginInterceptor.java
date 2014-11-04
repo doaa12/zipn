@@ -8,17 +8,21 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.alibaba.fastjson.JSONObject;
-
 import cn.bmwm.common.utils.Constants;
+import cn.bmwm.modules.shop.entity.Member;
+import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Interceptor -- App登录检查
@@ -27,11 +31,14 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  */
 public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 
+	@Resource(name = "memberServiceImpl")
+	private MemberService memberService;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		
-		String principle = request.getHeader(Constants.USER_LOGIN_MARK);
+		String principal = request.getHeader(Constants.USER_LOGIN_MARK);
 		String lastLoginTime = request.getHeader(Constants.USER_LOGIN_TIME);
 		
 		Setting setting = SettingUtils.get();
@@ -40,7 +47,13 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(principle) || StringUtils.isBlank(lastLoginTime)) {
+		if(StringUtils.isBlank(principal) || StringUtils.isBlank(lastLoginTime)) {
+			result.put("flag", 401);
+			write(response, result);
+			return false;
+		}
+		
+		if(principal.indexOf("@") == -1) {
 			result.put("flag", 401);
 			write(response, result);
 			return false;
@@ -53,6 +66,24 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 			result.put("flag", 401);
 			write(response, result);
 			return false;
+		}
+		
+		HttpSession session = request.getSession();
+		Object sprincipal = session.getAttribute(Constants.USER_LOGIN_MARK);
+		
+		if(sprincipal == null) {
+			
+			String id = principal.substring(principal.lastIndexOf("@") + 1);
+			Member member = memberService.find(Long.parseLong(id));
+			
+			if(member == null) {
+				result.put("flag", 401);
+				write(response, result);
+				return false;
+			}
+			
+			session.setAttribute(Constants.USER_LOGIN_MARK, member);
+			
 		}
 		
 		return true;

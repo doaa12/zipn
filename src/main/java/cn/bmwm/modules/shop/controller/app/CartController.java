@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,8 +88,8 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 
-		Cart cart = cartService.getCurrent();
-		Member member = memberService.getCurrent();
+		Cart cart = cartService.getAppCurrent();
+		Member member = memberService.getAppCurrent();
 
 		if (cart == null) {
 			cart = new Cart();
@@ -152,6 +151,9 @@ public class CartController extends AppBaseController {
 		
 		result.put("flag", 1);
 		
+		List<CartShop> items = getCartShops(cart);
+		result.put("data", items);
+		
 		return result;
 		
 	}
@@ -161,16 +163,24 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public List<CartShop> list(ModelMap model) {
+	public Map<String,Object> list() {
+		
 		Cart cart = cartService.getAppCurrent();
-		List<CartShop> shopList = getCartShops(cart);
-		return shopList;
+		List<CartShop> items = getCartShops(cart);
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("version", 1);
+		result.put("flag", 1);
+		result.put("data", items);
+		
+		return result;
+		
 	}
 
 	/**
-	 * 编辑
+	 * 更新
 	 */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> edit(Long id, Integer quantity) {
 		
@@ -221,14 +231,14 @@ public class CartController extends AppBaseController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> delete(Long id) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("version", 1);
 		
-		Cart cart = cartService.getCurrent();
+		Cart cart = cartService.getAppCurrent();
 		
 		if (cart == null || cart.isEmpty()) {
 			result.put("flag", Constants.CART_CART_EMPTY);
@@ -255,11 +265,11 @@ public class CartController extends AppBaseController {
 	/**
 	 * 清空
 	 */
-	@RequestMapping(value = "/clear", method = RequestMethod.POST)
+	@RequestMapping(value = "/clear", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> clear() {
 		
-		Cart cart = cartService.getCurrent();
+		Cart cart = cartService.getAppCurrent();
 		cartService.delete(cart);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -297,6 +307,7 @@ public class CartController extends AppBaseController {
 			cproduct.setName(product.getName());
 			cproduct.setPrice(product.getPrice().doubleValue());
 			cproduct.setQuantity(item.getQuantity());
+			cproduct.setCartItemId(item.getId());
 			
 			//TODO:商品规格
 			cproduct.setSpecification("");
@@ -305,6 +316,7 @@ public class CartController extends AppBaseController {
 				
 				CartShop cshop = new CartShop();
 				cshop.setShopName(shop.getName());
+				
 				//TODO:店铺促销活动
 				cshop.setShopActivity("");
 				
