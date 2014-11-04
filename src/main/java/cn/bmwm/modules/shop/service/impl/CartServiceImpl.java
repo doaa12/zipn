@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import cn.bmwm.common.utils.Constants;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.dao.CartDao;
 import cn.bmwm.modules.shop.dao.CartItemDao;
@@ -107,7 +108,7 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 			
 		HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 		
-		String principal = request.getHeader("principle");
+		String principal = request.getHeader(Constants.USER_LOGIN_MARK);
 		
 		if(principal == null || principal.indexOf("@") < 0) throw new IllegalUserStatusException();
 		

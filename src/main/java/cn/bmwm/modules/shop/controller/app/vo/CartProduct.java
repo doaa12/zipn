@@ -16,6 +16,11 @@ public class CartProduct {
 	private Long id;
 	
 	/**
+	 * 购物车项ID
+	 */
+	private Long cartItemId;
+	
+	/**
 	 * 商品名称
 	 */
 	private String name;
@@ -48,6 +53,20 @@ public class CartProduct {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the cartItemId
+	 */
+	public Long getCartItemId() {
+		return cartItemId;
+	}
+
+	/**
+	 * @param cartItemId the cartItemId to set
+	 */
+	public void setCartItemId(Long cartItemId) {
+		this.cartItemId = cartItemId;
 	}
 
 	/**

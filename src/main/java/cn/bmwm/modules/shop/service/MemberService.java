@@ -128,6 +128,12 @@ public interface MemberService extends BaseService<Member, Long> {
 	 * @return 当前登录会员，若不存在则返回null
 	 */
 	Member getCurrent();
+	
+	/**
+	 * 获取App当前登录会员
+	 * @return
+	 */
+	Member getAppCurrent();
 
 	/**
 	 * 获取当前登录用户名

@@ -21,6 +21,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import cn.bmwm.common.utils.Constants;
 import cn.bmwm.modules.shop.dao.DepositDao;
 import cn.bmwm.modules.shop.dao.MemberDao;
 import cn.bmwm.modules.shop.entity.Admin;
@@ -172,7 +173,17 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 		}
 		return null;
 	}
-
+	
+	public Member getAppCurrent() {
+		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+		if (requestAttributes != null) {
+			HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+			Member member = (Member) request.getSession().getAttribute(Constants.USER_LOGIN_MARK);
+			return member;
+		}
+		return null;
+	}
+	
 	@Transactional(readOnly = true)
 	public String getCurrentUsername() {
 		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
