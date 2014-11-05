@@ -61,7 +61,11 @@ public class UserController {
 			return login(request);
 		}
 		
-		return null;
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("flag", 404);
+		result.put("version", 1);
+		
+		return result;
 		
 	}
 	
