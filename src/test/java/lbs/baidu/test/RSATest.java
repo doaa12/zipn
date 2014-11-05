@@ -5,12 +5,15 @@ import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import junit.framework.TestCase;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 
 import cn.bmwm.common.utils.RSAUtils;
 
@@ -98,7 +101,19 @@ public class RSATest extends TestCase {
 		
 		String enText = "UISAZvJiJCQag1/KM4PEmfBfq5Uw+VX1n36+Yi97BL9tRWJiP6+GuRrHfesiKnslX9OksGgO1sfAlCKAzKbb3t+jbDQwhZO+h6wAe8z1LWxkDyHCuZhgSQTSQiXKfjaCya2q2JRHAbDXFfKt/rSPsOf8hw7CRlep6IwIxurUR3Q=";
 		
-		String text = RSAUtils.appDecrypt(key, enText);
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		
+		byte[] keyBytes = Base64.decodeBase64(key);
+		
+		RSAPrivateKeyStructure asn1PrivKey = new RSAPrivateKeyStructure((ASN1Sequence) ASN1Sequence.fromByteArray(keyBytes));
+		
+		RSAPrivateKeySpec keySpec = new RSAPrivateKeySpec(asn1PrivKey.getModulus(), asn1PrivKey.getPrivateExponent());
+		
+		//PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+		
+		RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+		
+		String text = RSAUtils.decrypt(privateKey, enText);
 		
 		System.out.println(text);
 		
