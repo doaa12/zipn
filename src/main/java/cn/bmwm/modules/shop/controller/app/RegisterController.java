@@ -35,7 +35,7 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  * 2014-9-29 下午10:02:00
  */
 @Controller
-@RequestMapping(value = "/app/register")
+@RequestMapping(value = "/app/user")
 public class RegisterController {
 	
 	public static final Log log = LogFactory.getLog(RegisterController.class);
@@ -101,7 +101,7 @@ public class RegisterController {
 	 * @param password
 	 * @return
 	 */
-	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> register(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
