@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -69,14 +70,32 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		HttpSession session = request.getSession();
-		Object sprincipal = session.getAttribute(Constants.USER_LOGIN_MARK);
+		Object principalSession = session.getAttribute(Constants.USER_LOGIN_MARK);
 		
-		if(sprincipal == null) {
+		if(principalSession == null) {
 			
-			String id = principal.substring(principal.lastIndexOf("@") + 1);
-			Member member = memberService.find(Long.parseLong(id));
+			String sid = principal.substring(principal.lastIndexOf("@") + 1);
+			String validation = principal.substring(0, principal.lastIndexOf("@"));
+			
+			long id = 0;
+			
+			try{
+				id = Long.parseLong(sid);
+			}catch(NumberFormatException e) {
+				result.put("flag", 401);
+				write(response, result);
+				return false;
+			}
+			
+			Member member = memberService.find(id);
 			
 			if(member == null) {
+				result.put("flag", 401);
+				write(response, result);
+				return false;
+			}
+			
+			if(!DigestUtils.md5Hex(sid + member.getPassword()).equals(validation)) {
 				result.put("flag", 401);
 				write(response, result);
 				return false;

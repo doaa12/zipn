@@ -174,7 +174,7 @@ public class LoginController {
 		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
-		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
+		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("username", member.getUsername());
 		result.put("flag", 1);

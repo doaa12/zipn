@@ -76,7 +76,9 @@ public class RSATest extends TestCase {
 		
 		String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQAB";
 		
-		String text = "123456";
+		//String text = "123456";
+		
+		String text = "111111";
 		
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		
