@@ -218,7 +218,7 @@ public class CartController extends AppBaseController {
 	 */
 	public Map<String, Object> update(HttpServletRequest request) {
 		
-		String sid = request.getParameter("id");
+		String sid = request.getParameter("cartItemId");
 		String squantity = request.getParameter("quantity");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -238,7 +238,7 @@ public class CartController extends AppBaseController {
 		}
 		
 		if(StringUtils.isBlank(sid)) {
-			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
 		
@@ -273,8 +273,11 @@ public class CartController extends AppBaseController {
 		
 		cartItem.setQuantity(quantity);
 		cartItemService.update(cartItem);
+		
+		List<CartShop> items = getCartShops(cart);
 
 		result.put("flag", 1);
+		result.put("data", items);
 		
 		return result;
 		
@@ -285,13 +288,13 @@ public class CartController extends AppBaseController {
 	 */
 	public Map<String, Object> delete(HttpServletRequest request) {
 		
-		String sid = request.getParameter("id");
+		String sid = request.getParameter("cartItemId");
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(sid)) {
-			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
 		
@@ -314,8 +317,11 @@ public class CartController extends AppBaseController {
 		
 		cartItems.remove(cartItem);
 		cartItemService.delete(cartItem);
-
+		
+		List<CartShop> items = getCartShops(cart);
+		
 		result.put("flag", 1);
+		result.put("data", items);
 		
 		return result;
 		
