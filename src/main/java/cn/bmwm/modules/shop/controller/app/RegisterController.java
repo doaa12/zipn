@@ -35,7 +35,7 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  * 2014-9-29 下午10:02:00
  */
 @Controller
-@RequestMapping(value = "/app/register")
+@RequestMapping(value = "/app/user")
 public class RegisterController {
 	
 	public static final Log log = LogFactory.getLog(RegisterController.class);
@@ -101,7 +101,7 @@ public class RegisterController {
 	 * @param password
 	 * @return
 	 */
-	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> register(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
@@ -180,7 +180,7 @@ public class RegisterController {
 		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), member.getUsername()));
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
-		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
+		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("username", member.getUsername());
 		

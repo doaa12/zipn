@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -28,33 +27,35 @@ import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.model.Setting.AccountLockType;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
-
 /**
- * App -- 登录
  * @author zby
- * 2014-9-29 下午9:52:06
+ * 2014-11-6 下午9:09:04
  */
 @Controller
-@RequestMapping(value = "/app/login")
 public class LoginController {
-	
-	@Resource(name = "rsaServiceImpl")
-	private RSAService rsaService;
 	
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 	
+	@Resource(name = "rsaServiceImpl")
+	private RSAService rsaService;
+	
 	/**
 	 * 登录
 	 * @param phone
-	 * @param password
+	 * @param request
+	 * @param response
+	 * @param session
 	 * @return
 	 */
-	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	@RequestMapping(value="/app/user/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> login(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public Map<String,Object> login(HttpServletRequest request) {
 		
+		String phone = request.getParameter("phone");
 		String enPassword = request.getParameter("enpassword");
+		
+		HttpSession session = request.getSession();
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -173,7 +174,7 @@ public class LoginController {
 		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
-		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString()) + "@" + member.getId().toString());
+		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("username", member.getUsername());
 		result.put("flag", 1);
@@ -181,5 +182,5 @@ public class LoginController {
 		return result;
 		
 	}
-	
+
 }

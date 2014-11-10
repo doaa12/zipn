@@ -77,9 +77,11 @@ public class RSATest extends TestCase {
 	
 	public void testEncrypt1() throws Exception {
 		
-		String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDYQeIK9t/WqpbdQihV6uhkGEfO2X/DWHj6R6cZbVSuPG1b4l0Cja+xzrsecEUZb3d+bNTy2vECnDAf3kLCAJobZtNfjkdo5SlJMOKl46pMkX1bJvz5UYYRyc1/ErOc/6Ydc1NWn27HuK0ehjmSnx00d6J+h5boeK0tQjkCnOgn8wIDAQAB";
+		String key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQAB";
 		
-		String text = "123456";
+		//String text = "123456";
+		
+		String text = "111111";
 		
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		
@@ -97,11 +99,11 @@ public class RSATest extends TestCase {
 	
 	public void testDecrypt1() throws Exception {
 		
-		String key = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBANhB4gr239aqlt1CKFXq6GQYR87Zf8NYePpHpxltVK48bVviXQKNr7HOux5wRRlvd35s1PLa8QKcMB/eQsIAmhtm01+OR2jlKUkw4qXjqkyRfVsm/PlRhhHJzX8Ss5z/ph1zU1afbse4rR6GOZKfHTR3on6Hluh4rS1COQKc6CfzAgMBAAECgYAC1Mn6zsSbcNxMxUL17P9h4BeAk8RicFQVIr8DTDUhmtTrsQj6sZQtRcGZYmrlLFpqI06eZ1Nkb1sJ78T7+ToLP6GuwpBLqnJsjoeSQsPXOoWXJOn0DMFz67E5JcufOxCFBV9MIBSyGtMmypPr2gpaP2VIVAbItt1/mkj08e6PIQJBAPFaCjArC/XeoczaQTr1rqwlCqrzgH0BxP5Iwrw/RnPqOve1p5615sFkqPuYGTKtvjjwGhccoP+y4V6BjmwGH4kCQQDlYfGjnTCN/ypjZdhTV4ccmNyRMSpyNCKuiKmI8opB0CXyRYQ5KszR6RiIB/wezHeDdjRPU0UwtYg5etEERpCbAkEAhthPqOnkHNLug43NtCtgFD3939V8jFtYvNnaM2MG8eyEVbHgnQP0kUi0QR2RtobsKNO9P/x212YSFMM914z0QQJAe3/JTtLx8nHAi7Woy+5jM1Vl49I5zTUeuyOfS7lyEM8VryQYdYMCtb2vVIYgCyEA88mvjkoCBaCnUHM8l/W6IwJBAKbKBKmh1vvXJyMBtstTI/0+hg+n4PpFK9FVHr5I/gJEj/OcJg4w07qaEIKLhMA30LZbDnuE+r64Tyq4ylRq5PE=";
-		
-		String enText = "UISAZvJiJCQag1/KM4PEmfBfq5Uw+VX1n36+Yi97BL9tRWJiP6+GuRrHfesiKnslX9OksGgO1sfAlCKAzKbb3t+jbDQwhZO+h6wAe8z1LWxkDyHCuZhgSQTSQiXKfjaCya2q2JRHAbDXFfKt/rSPsOf8hw7CRlep6IwIxurUR3Q=";
+		String enText = "THJcg9HyyHT5T49Vz2SkxZGACEfFFakEj/UkWU6YGLlW/slbVgkdXAcbRjwEXqNtQl8OXt0Gh0iITN/H2Pu/HlusLv+yJlwEtHn+eFuxzf6un2wrw9M9UbNRrjOCa70hgNdzAkUXRwFMWZzusbshJSVRKYZ6QeEP/F5JXWxDRaY=";
 		
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		
+		String key = "MIICXgIBAAKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQABAoGBAJU5ZZjL2AUaCYLAyd6B3wysehplFDiKTKUJUul6Bka+AEd2I4GnilvWXbEesn0Gn8EU5YzxizJn326UYp8ICizN85EI/jiKDk+gyt6BttDgX3Xf3v0nu15JmjTSD5Fo0m6hphuLEq7/fNDetQ1UgBeKi8jo6aLu9ySn1WTRTwWhAkEA+MbXeZSaVptzxW/B83h9c56/Pscg6FlQ9WsS0w0+7/FKluvAkQU2we5NwK6zJzRC38rlBMHconkNcU3pkUHtbQJBAML9mwhZ9l388Wng4NRyUnx/ZgT6FL1mioKq7vhFdc9FKjACAVmLE/FCKI4pd3MLHu/mGmXiJ/r6qu2WTdyk4akCQQCufkoE7UaUGNVLVugjbhAQWPirf+CFGKDAgyng/xl2EzjOQu3+yjluLUg8Lk1a4j1F23pnq9Kl42KaZpu9VxDBAkEAoccTp5wsQdKo4TWIk/q94Tk6BYsPRg0bgkobtrS6h9tUozwmroorY5GGYFybFEH3ywZYhItcrGjpA/Iea6AI8QJAbNRVCO2ImdT/fngoFKK40PLZSooFu0njRYcNUWGr7GkUxeS7gC3GNYWcZG+f8zbXaXsjyD0pSNeaHFDRmJCcTA==";
 		
 		byte[] keyBytes = Base64.decodeBase64(key);
 		

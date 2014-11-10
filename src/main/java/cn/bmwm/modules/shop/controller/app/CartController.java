@@ -13,10 +13,10 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,7 +42,6 @@ import cn.bmwm.modules.shop.service.ProductService;
  * @version 1.0
  */
 @Controller("appShopCartController")
-@RequestMapping("/app/cart")
 public class CartController extends AppBaseController {
 
 	@Resource(name = "memberServiceImpl")
@@ -56,22 +55,61 @@ public class CartController extends AppBaseController {
 	
 	@Resource(name = "cartItemServiceImpl")
 	private CartItemService cartItemService;
+	
+	@RequestMapping(value = "/app/cart", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> execute(String apiName, HttpServletRequest request) {
+		
+		if("add".equals(apiName)) {
+			return add(request);
+		}else if("list".equals(apiName)) {
+			return list();
+		}else if("update".equals(apiName)) {
+			return update(request);
+		}else if("delete".equals(apiName)) {
+			return delete(request);
+		}else if("clear".equals(apiName)) {
+			return clear();
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("verson", 1);
+		result.put("flag", 404);
+		
+		return result;
+		
+	}
 
 	/**
 	 * 添加
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> add(Long id, Integer quantity, HttpServletRequest request, HttpServletResponse response) {
+	public Map<String,Object> add(HttpServletRequest request) {
+		
+		String sid = request.getParameter("id");
+		String squantity = request.getParameter("quantity");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		result.put("version", 1);
 		
-		if (quantity == null || quantity < 1) {
+		if(StringUtils.isBlank(squantity)) {
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
+		
+		int quantity = Integer.parseInt(squantity);
+		
+		if(quantity < 1) {
+			result.put("flag", Constants.CART_QUANTITY_ERROR);
+			return result;
+		}
+		
+		if(StringUtils.isBlank(sid)) {
+			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
+			return result;
+		}
+		
+		long id = Long.parseLong(sid);
 		
 		Product product = productService.find(id);
 		
@@ -161,8 +199,6 @@ public class CartController extends AppBaseController {
 	/**
 	 * 列表
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@ResponseBody
 	public Map<String,Object> list() {
 		
 		Cart cart = cartService.getAppCurrent();
@@ -180,17 +216,33 @@ public class CartController extends AppBaseController {
 	/**
 	 * 更新
 	 */
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> edit(Long id, Integer quantity) {
+	public Map<String, Object> update(HttpServletRequest request) {
 		
-		Map<String, Object> result = new HashMap<String, Object>();
+		String sid = request.getParameter("cartItemId");
+		String squantity = request.getParameter("quantity");
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
 		result.put("version", 1);
 		
-		if (quantity == null || quantity < 1) {
+		if(StringUtils.isBlank(squantity)) {
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
+		
+		int quantity = Integer.parseInt(squantity);
+		
+		if(quantity < 1) {
+			result.put("flag", Constants.CART_QUANTITY_ERROR);
+			return result;
+		}
+		
+		if(StringUtils.isBlank(sid)) {
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
+			return result;
+		}
+		
+		long id = Long.parseLong(sid);
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -221,8 +273,11 @@ public class CartController extends AppBaseController {
 		
 		cartItem.setQuantity(quantity);
 		cartItemService.update(cartItem);
+		
+		List<CartShop> items = getCartShops(cart);
 
 		result.put("flag", 1);
+		result.put("data", items);
 		
 		return result;
 		
@@ -231,12 +286,19 @@ public class CartController extends AppBaseController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> delete(Long id) {
+	public Map<String, Object> delete(HttpServletRequest request) {
+		
+		String sid = request.getParameter("cartItemId");
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("version", 1);
+		
+		if(StringUtils.isBlank(sid)) {
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
+			return result;
+		}
+		
+		long id = Long.parseLong(sid);
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -255,8 +317,11 @@ public class CartController extends AppBaseController {
 		
 		cartItems.remove(cartItem);
 		cartItemService.delete(cartItem);
-
+		
+		List<CartShop> items = getCartShops(cart);
+		
 		result.put("flag", 1);
+		result.put("data", items);
 		
 		return result;
 		
@@ -265,8 +330,6 @@ public class CartController extends AppBaseController {
 	/**
 	 * 清空
 	 */
-	@RequestMapping(value = "/clear", method = RequestMethod.GET)
-	@ResponseBody
 	public Map<String,Object> clear() {
 		
 		Cart cart = cartService.getAppCurrent();
