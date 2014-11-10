@@ -11,8 +11,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -40,9 +40,11 @@ public class SpecificationValue extends OrderEntity {
 
 	/** 规格 */
 	private Specification specification;
-
-	/** 商品 */
-	private Set<Product> products = new HashSet<Product>();
+	
+	/**
+	 * 商品规格值
+	 */
+	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
 
 	/**
 	 * 获取名称
@@ -79,8 +81,7 @@ public class SpecificationValue extends OrderEntity {
 	/**
 	 * 设置图片
 	 * 
-	 * @param image
-	 *            图片
+	 * @param image 图片
 	 */
 	public void setImage(String image) {
 		this.image = image;
@@ -108,23 +109,19 @@ public class SpecificationValue extends OrderEntity {
 	}
 
 	/**
-	 * 获取商品
-	 * 
-	 * @return 商品
+	 * @return the productSpecificationValues
 	 */
-	@ManyToMany(mappedBy = "specificationValues", fetch = FetchType.LAZY)
-	public Set<Product> getProducts() {
-		return products;
+	@OneToMany(mappedBy = "specificationValue", fetch = FetchType.LAZY)
+	public Set<ProductSpecificationValue> getProductSpecificationValues() {
+		return productSpecificationValues;
 	}
 
 	/**
-	 * 设置商品
-	 * 
-	 * @param products
-	 *            商品
+	 * @param productSpecificationValues the productSpecificationValues to set
 	 */
-	public void setProducts(Set<Product> products) {
-		this.products = products;
+	public void setProductSpecificationValues(
+			Set<ProductSpecificationValue> productSpecificationValues) {
+		this.productSpecificationValues = productSpecificationValues;
 	}
-
+	
 }

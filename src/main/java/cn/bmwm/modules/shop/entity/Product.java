@@ -329,12 +329,6 @@ public class Product extends BaseEntity {
 	/** 收藏会员 */
 	private Set<Member> favoriteMembers = new HashSet<Member>();
 
-	/** 规格 */
-	private Set<Specification> specifications = new HashSet<Specification>();
-
-	/** 规格值 */
-	private Set<SpecificationValue> specificationValues = new HashSet<SpecificationValue>();
-
 	/** 促销 */
 	private Set<Promotion> promotions = new HashSet<Promotion>();
 
@@ -390,6 +384,16 @@ public class Product extends BaseEntity {
 	 * 商品分类路径
 	 */
 	private String treePath;
+	
+	/**
+	 * 商品规格
+	 */
+	private Set<ProductSpecification> productSpecifications = new HashSet<ProductSpecification>();
+	
+	/**
+	 * 商品规格值
+	 */
+	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
 	
 	static {
 		try {
@@ -1788,50 +1792,6 @@ public class Product extends BaseEntity {
 	}
 
 	/**
-	 * 获取规格
-	 * 
-	 * @return 规格
-	 */
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "xx_product_specification")
-	@OrderBy("order asc")
-	public Set<Specification> getSpecifications() {
-		return specifications;
-	}
-
-	/**
-	 * 设置规格
-	 * 
-	 * @param specifications
-	 *            规格
-	 */
-	public void setSpecifications(Set<Specification> specifications) {
-		this.specifications = specifications;
-	}
-
-	/**
-	 * 获取规格值
-	 * 
-	 * @return 规格值
-	 */
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "xx_product_specification_value")
-	@OrderBy("specification asc")
-	public Set<SpecificationValue> getSpecificationValues() {
-		return specificationValues;
-	}
-
-	/**
-	 * 设置规格值
-	 * 
-	 * @param specificationValues
-	 *            规格值
-	 */
-	public void setSpecificationValues(Set<SpecificationValue> specificationValues) {
-		this.specificationValues = specificationValues;
-	}
-
-	/**
 	 * 获取促销
 	 * 
 	 * @return 促销
@@ -2203,6 +2163,38 @@ public class Product extends BaseEntity {
 
 	public void setTreePath(String treePath) {
 		this.treePath = treePath;
+	}
+	
+	/**
+	 * @return the productSpecifications
+	 */
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	public Set<ProductSpecification> getProductSpecifications() {
+		return productSpecifications;
+	}
+
+	/**
+	 * @param productSpecifications the productSpecifications to set
+	 */
+	public void setProductSpecifications(
+			Set<ProductSpecification> productSpecifications) {
+		this.productSpecifications = productSpecifications;
+	}
+
+	/**
+	 * @return the productSpecificationValues
+	 */
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	public Set<ProductSpecificationValue> getProductSpecificationValues() {
+		return productSpecificationValues;
+	}
+
+	/**
+	 * @param productSpecificationValues the productSpecificationValues to set
+	 */
+	public void setProductSpecificationValues(
+			Set<ProductSpecificationValue> productSpecificationValues) {
+		this.productSpecificationValues = productSpecificationValues;
 	}
 
 	/**

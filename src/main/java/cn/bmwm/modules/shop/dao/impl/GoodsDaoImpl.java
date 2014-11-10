@@ -4,18 +4,9 @@
  * */
 package cn.bmwm.modules.shop.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.persistence.FlushModeType;
 
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.CompareToBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -24,8 +15,6 @@ import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.SnDao;
 import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
-import cn.bmwm.modules.shop.entity.Sn.Type;
 
 /**
  * Dao - 货品
@@ -95,6 +84,8 @@ public class GoodsDaoImpl extends BaseDaoImpl<Goods, Long> implements GoodsDao {
 	 *            商品
 	 */
 	private void setValue(Product product) {
+		
+		/*
 		if (product == null) {
 			return;
 		}
@@ -124,6 +115,8 @@ public class GoodsDaoImpl extends BaseDaoImpl<Goods, Long> implements GoodsDao {
 			fullName.append(Product.FULL_NAME_SPECIFICATION_SUFFIX);
 		}
 		product.setFullName(fullName.toString());
+		*/
+		
 	}
 
 }

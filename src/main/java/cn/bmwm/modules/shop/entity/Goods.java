@@ -58,13 +58,26 @@ public class Goods extends BaseEntity {
 	 */
 	@Transient
 	public Set<SpecificationValue> getSpecificationValues() {
+		
 		Set<SpecificationValue> specificationValues = new HashSet<SpecificationValue>();
+		
 		if (getProducts() != null) {
+			
 			for (Product product : getProducts()) {
-				specificationValues.addAll(product.getSpecificationValues());
+				
+				Set<ProductSpecificationValue> set = product.getProductSpecificationValues();
+				
+				if(set != null && set.size() > 0) {
+					for(ProductSpecificationValue value : set) {
+						specificationValues.add(value.getSpecificationValue());
+					}
+				}
+				
 			}
 		}
+		
 		return specificationValues;
+		
 	}
 
 }

@@ -7,9 +7,7 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,7 +27,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.CompareToBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -55,7 +52,6 @@ import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Sn.Type;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
@@ -874,9 +870,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 	 *            商品
 	 */
 	private void setValue(Product product) {
+		
 		if (product == null) {
 			return;
 		}
+		
 		if (StringUtils.isEmpty(product.getSn())) {
 			String sn;
 			do {
@@ -884,25 +882,39 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			} while (snExists(sn));
 			product.setSn(sn);
 		}
+		
 		StringBuffer fullName = new StringBuffer(product.getName());
+		
+		/*
 		if (product.getSpecificationValues() != null && !product.getSpecificationValues().isEmpty()) {
+			
 			List<SpecificationValue> specificationValues = new ArrayList<SpecificationValue>(product.getSpecificationValues());
 			Collections.sort(specificationValues, new Comparator<SpecificationValue>() {
 				public int compare(SpecificationValue a1, SpecificationValue a2) {
 					return new CompareToBuilder().append(a1.getSpecification(), a2.getSpecification()).toComparison();
 				}
 			});
+			
 			fullName.append(Product.FULL_NAME_SPECIFICATION_PREFIX);
 			int i = 0;
+			
 			for (Iterator<SpecificationValue> iterator = specificationValues.iterator(); iterator.hasNext(); i++) {
+				
 				if (i != 0) {
 					fullName.append(Product.FULL_NAME_SPECIFICATION_SEPARATOR);
 				}
+				
 				fullName.append(iterator.next().getName());
+				
 			}
+			
 			fullName.append(Product.FULL_NAME_SPECIFICATION_SUFFIX);
+			
 		}
+		*/
+		
 		product.setFullName(fullName.toString());
+		
 	}
 
 }

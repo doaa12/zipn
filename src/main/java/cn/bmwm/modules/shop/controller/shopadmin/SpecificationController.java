@@ -77,7 +77,7 @@ public class SpecificationController extends BaseController {
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
 		Shop shop = shopService.find(principal.getShopId());
 		
-		specification.setProducts(null);
+		specification.setProductSpecificationValues(null);
 		specification.setShop(shop);
 		
 		specificationService.save(specification);
@@ -155,7 +155,7 @@ public class SpecificationController extends BaseController {
 		if (ids != null) {
 			for (Long id : ids) {
 				Specification specification = specificationService.find(id);
-				if (specification != null && specification.getProducts() != null && !specification.getProducts().isEmpty()) {
+				if (specification != null && specification.getProductSpecificationValues() != null && !specification.getProductSpecificationValues().isEmpty()) {
 					return Message.error("admin.specification.deleteExistProductNotAllowed", specification.getName());
 				}
 			}

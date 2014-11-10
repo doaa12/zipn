@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +34,8 @@ import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductImage;
+import cn.bmwm.modules.shop.entity.ProductSpecification;
+import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
@@ -43,9 +44,9 @@ import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.GoodsService;
+import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
-import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.SpecificationService;
@@ -145,6 +146,7 @@ public class ProductController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Product product, Long productCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		
 		for (Iterator<ProductImage> iterator = product.getProductImages().iterator(); iterator.hasNext();) {
 			ProductImage productImage = iterator.next();
 			if (productImage == null || productImage.isEmpty()) {
@@ -158,23 +160,29 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
+		
 		//product.setProductCategory(productCategoryService.find(productCategoryId));
 		product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+		
 		if (!isValid(product)) {
 			return ERROR_VIEW;
 		}
+		
 		if (StringUtils.isNotEmpty(product.getSn()) && productService.snExists(product.getSn())) {
 			return ERROR_VIEW;
 		}
+		
 		if (product.getMarketPrice() == null) {
 			BigDecimal defaultMarketPrice = calculateDefaultMarketPrice(product.getPrice());
 			product.setMarketPrice(defaultMarketPrice);
 		}
+		
 		if (product.getPoint() == null) {
 			long point = calculateDefaultPoint(product.getPrice());
 			product.setPoint(point);
 		}
+		
 		product.setFullName(null);
 		product.setAllocatedStock(0);
 		product.setScore(0F);
@@ -211,101 +219,62 @@ public class ProductController extends BaseController {
 		for (ProductImage productImage : product.getProductImages()) {
 			imageService.build(productImage);
 		}
+		
 		Collections.sort(product.getProductImages());
+		
 		if (product.getImage() == null && product.getThumbnail() != null) {
 			product.setImage(product.getThumbnail());
 		}
-		/*
-		for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
-			for (Parameter parameter : parameterGroup.getParameters()) {
-				String parameterValue = request.getParameter("parameter_" + parameter.getId());
-				if (StringUtils.isNotEmpty(parameterValue)) {
-					product.getParameterValue().put(parameter, parameterValue);
-				} else {
-					product.getParameterValue().remove(parameter);
-				}
-			}
-		}
-		 */
-		/*
-		for (Attribute attribute : product.getProductCategory().getAttributes()) {
-			String attributeValue = request.getParameter("attribute_" + attribute.getId());
-			if (StringUtils.isNotEmpty(attributeValue)) {
-				product.setAttributeValue(attribute, attributeValue);
-			} else {
-				product.setAttributeValue(attribute, null);
-			}
-		}
-		 */
-		Goods goods = new Goods();
-		List<Product> products = new ArrayList<Product>();
+		
+		List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+		
 		if (specificationIds != null && specificationIds.length > 0) {
+			
 			for (int i = 0; i < specificationIds.length; i++) {
+				
 				Specification specification = specificationService.find(specificationIds[i]);
 				String[] specificationValueIds = request.getParameterValues("specification_" + specification.getId());
+				
 				if (specificationValueIds != null && specificationValueIds.length > 0) {
+					
 					for (int j = 0; j < specificationValueIds.length; j++) {
-						if (i == 0) {
-							if (j == 0) {
-								product.setGoods(goods);
-								product.setSpecifications(new HashSet<Specification>());
-								product.setSpecificationValues(new HashSet<SpecificationValue>());
-								products.add(product);
-							} else {
-								Product specificationProduct = new Product();
-								BeanUtils.copyProperties(product, specificationProduct);
-								specificationProduct.setId(null);
-								specificationProduct.setCreateDate(null);
-								specificationProduct.setModifyDate(null);
-								specificationProduct.setSn(null);
-								specificationProduct.setFullName(null);
-								specificationProduct.setAllocatedStock(0);
-								specificationProduct.setIsList(false);
-								specificationProduct.setScore(0F);
-								specificationProduct.setTotalScore(0L);
-								specificationProduct.setScoreCount(0L);
-								specificationProduct.setHits(0L);
-								specificationProduct.setWeekHits(0L);
-								specificationProduct.setMonthHits(0L);
-								specificationProduct.setSales(0L);
-								specificationProduct.setWeekSales(0L);
-								specificationProduct.setMonthSales(0L);
-								specificationProduct.setWeekHitsDate(new Date());
-								specificationProduct.setMonthHitsDate(new Date());
-								specificationProduct.setWeekSalesDate(new Date());
-								specificationProduct.setMonthSalesDate(new Date());
-								specificationProduct.setGoods(goods);
-								specificationProduct.setReviews(null);
-								specificationProduct.setConsultations(null);
-								specificationProduct.setFavoriteMembers(null);
-								specificationProduct.setSpecifications(new HashSet<Specification>());
-								specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-								specificationProduct.setPromotions(null);
-								specificationProduct.setCartItems(null);
-								specificationProduct.setOrderItems(null);
-								specificationProduct.setGiftItems(null);
-								specificationProduct.setProductNotifies(null);
-								products.add(specificationProduct);
-							}
+						
+						if(i == 0) {
+							
+							//TODO:设置库存
+							ProductSpecification productSpecification = new ProductSpecification();
+							productSpecification.setProduct(product);
+							productSpecifications.add(productSpecification);
+							
 						}
-						Product specificationProduct = products.get(j);
+						
 						SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
-						specificationProduct.getSpecifications().add(specification);
-						specificationProduct.getSpecificationValues().add(specificationValue);
+						
+						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
+						productSpecificationValue.setSpecification(specification);
+						productSpecificationValue.setSpecificationValue(specificationValue);
+						productSpecificationValue.setProduct(product);
+						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
+						
+						product.getProductSpecificationValues().add(productSpecificationValue);
+						
 					}
 				}
 			}
+			
+			product.getProductSpecifications().addAll(productSpecifications);
+			
 		} else {
-			product.setGoods(goods);
-			product.setSpecifications(null);
-			product.setSpecificationValues(null);
-			products.add(product);
+			product.setProductSpecifications(null);
+			product.setProductSpecificationValues(null);
 		}
-		goods.getProducts().clear();
-		goods.getProducts().addAll(products);
-		goodsService.save(goods);
+		
+		productService.save(product);
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
+		
 	}
 
 	/**

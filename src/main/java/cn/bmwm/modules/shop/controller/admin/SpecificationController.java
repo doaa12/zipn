@@ -50,8 +50,11 @@ public class SpecificationController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Specification specification, RedirectAttributes redirectAttributes) {
+		
 		for (Iterator<SpecificationValue> iterator = specification.getSpecificationValues().iterator(); iterator.hasNext();) {
+			
 			SpecificationValue specificationValue = iterator.next();
+			
 			if (specificationValue == null || specificationValue.getName() == null) {
 				iterator.remove();
 			} else {
@@ -60,14 +63,20 @@ public class SpecificationController extends BaseController {
 				}
 				specificationValue.setSpecification(specification);
 			}
+			
 		}
+		
 		if (!isValid(specification)) {
 			return ERROR_VIEW;
 		}
-		specification.setProducts(null);
+		
+		specification.setProductSpecificationValues(null);
 		specificationService.save(specification);
+		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+		
 		return "redirect:list.jhtml";
+		
 	}
 
 	/**
@@ -119,10 +128,11 @@ public class SpecificationController extends BaseController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public @ResponseBody
 	Message delete(Long[] ids) {
+		
 		if (ids != null) {
 			for (Long id : ids) {
 				Specification specification = specificationService.find(id);
-				if (specification != null && specification.getProducts() != null && !specification.getProducts().isEmpty()) {
+				if (specification != null && specification.getProductSpecificationValues() != null && !specification.getProductSpecificationValues().isEmpty()) {
 					return Message.error("admin.specification.deleteExistProductNotAllowed", specification.getName());
 				}
 			}
