@@ -81,7 +81,7 @@ public class ProductController extends AppBaseController {
 		
 		detail.setEvaluateNumber(reviewService.count(null, product, null, true));
 		detail.setScore(product.getAvgScore());
-		detail.setDescurl(product.getIntroduction());
+		detail.setIntroduction(product.getIntroduction());
 		detail.setStoreId(shop.getId());
 		detail.setStoreName(shop.getName());
 		detail.setPhone(shop.getTelephone());

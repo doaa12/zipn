@@ -56,7 +56,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品图文详情
 	 */
-	private String descurl = "";
+	private String introduction;
 	
 	/**
 	 * 商品介绍
@@ -160,14 +160,14 @@ public class ProductDetail implements Serializable {
 	public void setScore(Long score) {
 		this.score = score;
 	}
-
-	public String getDescurl() {
-		return descurl;
+	
+	public String getIntroduction() {
+		return introduction;
 	}
 
-	public void setDescurl(String descurl) {
-		if(descurl != null) {
-			this.descurl = descurl;
+	public void setIntroduction(String introduction) {
+		if(introduction != null) {
+			this.introduction = introduction;
 		}
 	}
 
