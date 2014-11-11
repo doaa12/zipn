@@ -309,7 +309,7 @@ public class Product extends BaseEntity {
 	private String attributeValue19;
 	
 	/** 货品 */
-	private Goods goods;
+	//private Goods goods;
 
 	/** 品牌 */
 	private Brand brand;
@@ -1651,22 +1651,26 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 货品
 	 */
+	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, updatable = false)
 	public Goods getGoods() {
 		return goods;
 	}
-
+	 */
+	
 	/**
 	 * 设置货品
 	 * 
 	 * @param goods
 	 *            货品
 	 */
+	/*
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
-
+	*/
+	
 	/**
 	 * 获取品牌
 	 * 
@@ -2019,6 +2023,7 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 同货品商品，不包含自身
 	 */
+	/*
 	@Transient
 	public List<Product> getSiblings() {
 		List<Product> siblings = new ArrayList<Product>();
@@ -2031,7 +2036,8 @@ public class Product extends BaseEntity {
 		}
 		return siblings;
 	}
-
+	*/
+	
 	/**
 	 * 获取访问路径
 	 * 

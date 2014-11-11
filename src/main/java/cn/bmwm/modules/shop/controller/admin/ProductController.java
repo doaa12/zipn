@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.FileInfo.FileType;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.Brand;
-import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Product.OrderType;
@@ -464,6 +462,9 @@ public class ProductController extends BaseController {
 		}
 		
 		Product product = productService.find(id);
+		product.setIsTop(isTop);
+		
+		/*
 		Goods goods = product.getGoods();
 		Set<Product> products = goods.getProducts();
 		
@@ -475,6 +476,7 @@ public class ProductController extends BaseController {
 		}
 		
 		goodsService.update(goods);
+		*/
 		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		

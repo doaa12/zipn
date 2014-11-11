@@ -236,6 +236,7 @@ public class ProductController extends BaseController {
 			long point = calculateDefaultPoint(product.getPrice());
 			product.setPoint(point);
 		}
+		
 		product.setFullName(null);
 		product.setAllocatedStock(0);
 		product.setScore(0F);

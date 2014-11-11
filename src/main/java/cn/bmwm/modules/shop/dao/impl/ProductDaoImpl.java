@@ -848,9 +848,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		setValue(product);
 		return super.merge(product);
 	}
-
+	
+	/*
 	@Override
 	public void remove(Product product) {
+		
 		if (product != null) {
 			Goods goods = product.getGoods();
 			if (goods != null && goods.getProducts() != null) {
@@ -860,8 +862,11 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 				}
 			}
 		}
+		
 		super.remove(product);
+		
 	}
+	*/
 
 	/**
 	 * 设置值
