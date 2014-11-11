@@ -62,7 +62,6 @@ public class ProductSpecificationValue extends BaseEntity {
 	 * @return the specification
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
 	public Specification getSpecification() {
 		return specification;
 	}

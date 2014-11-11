@@ -2174,7 +2174,7 @@ public class Product extends BaseEntity {
 	/**
 	 * @return the productSpecifications
 	 */
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public Set<ProductSpecification> getProductSpecifications() {
 		return productSpecifications;
 	}
@@ -2190,7 +2190,7 @@ public class Product extends BaseEntity {
 	/**
 	 * @return the productSpecificationValues
 	 */
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public Set<ProductSpecificationValue> getProductSpecificationValues() {
 		return productSpecificationValues;
 	}

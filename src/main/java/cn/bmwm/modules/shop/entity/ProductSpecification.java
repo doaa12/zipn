@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -74,7 +75,7 @@ public class ProductSpecification extends BaseEntity {
 	/**
 	 * @return the productSpecificationValues
 	 */
-	@OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public Set<ProductSpecificationValue> getProductSpecificationValues() {
 		return productSpecificationValues;
 	}
