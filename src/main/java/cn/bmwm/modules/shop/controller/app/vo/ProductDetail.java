@@ -56,7 +56,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品图文详情
 	 */
-	private String introduction;
+	private String introduction = "";
 	
 	/**
 	 * 商品介绍
