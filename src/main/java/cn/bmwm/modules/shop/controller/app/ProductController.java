@@ -119,26 +119,40 @@ public class ProductController extends AppBaseController {
 		detail.setEvaluate(evaluates);
 		
 		//商品规格
-		List<Map<String,Object>> specifications = new ArrayList<Map<String,Object>>();
+		Map<String,Object> specifications = new HashMap<String,Object>();
 		
 		Set<ProductSpecification> productSpecifications = product.getProductSpecifications();
+
+		List<List<String>> productSpecificationList = new ArrayList<List<String>>();
+		List<Long> productPpecificationIdList = new ArrayList<Long>();
 		
 		if(productSpecifications != null && productSpecifications.size() > 0) {
+			
+			int n = 1;
 			
 			for(ProductSpecification productSpecification : productSpecifications) {
 				
 				List<ProductSpecificationValue> productSpecificationValues = productSpecification.getProductSpecificationValues();
-				Map<String,Object> specification = new HashMap<String,Object>();
 				
-				for(int i = 0 ; i < productSpecificationValues.size() ; i++ ) {
-					specification.put("spec" + (i + 1), productSpecificationValues.get(i).getSpecificationValue().getName());
+				if(n == 1) {
+					for(int k = 0 ; k < productSpecificationValues.size() ; k++ ) {
+						productSpecificationList.add(new ArrayList<String>());
+					}
 				}
 				
-				specification.put("specId", productSpecification.getId());
-				specifications.add(specification);
+				for(int i = 0 ; i < productSpecificationValues.size() ; i++ ) {
+					productSpecificationList.get(i).add(productSpecificationValues.get(i).getSpecificationValue().getName());
+				}
+				
+				productPpecificationIdList.add(productSpecification.getId());
+				
+				n++;
 				
 			}
 		}
+		
+		specifications.put("specificationIdList", productPpecificationIdList);
+		specifications.put("specificationList", productSpecificationList);
 		
 		detail.setSpecifications(specifications);
 		

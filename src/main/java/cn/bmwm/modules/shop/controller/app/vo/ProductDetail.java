@@ -91,7 +91,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品规格
 	 */
-	private List<Map<String,Object>> specifications;
+	private Map<String,Object> specifications;
 
 	public Long getCode() {
 		return code;
@@ -225,13 +225,12 @@ public class ProductDetail implements Serializable {
 		this.evaluate = evaluate;
 	}
 
-	public List<Map<String, Object>> getSpecifications() {
+	public Map<String, Object> getSpecifications() {
 		return specifications;
 	}
 
-	public void setSpecifications(List<Map<String, Object>> specifications) {
+	public void setSpecifications(Map<String, Object> specifications) {
 		this.specifications = specifications;
 	}
-	
 
 }
