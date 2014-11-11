@@ -3,8 +3,8 @@
  */
 package cn.bmwm.modules.shop.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -40,7 +41,7 @@ public class ProductSpecification extends BaseEntity {
 	/**
 	 * 商品规格值
 	 */
-	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
+	private List<ProductSpecificationValue> productSpecificationValues = new ArrayList<ProductSpecificationValue>();
 
 	/**
 	 * @return the stock
@@ -76,7 +77,8 @@ public class ProductSpecification extends BaseEntity {
 	 * @return the productSpecificationValues
 	 */
 	@OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public Set<ProductSpecificationValue> getProductSpecificationValues() {
+	@OrderColumn(name = "orders")
+	public List<ProductSpecificationValue> getProductSpecificationValues() {
 		return productSpecificationValues;
 	}
 
@@ -84,7 +86,7 @@ public class ProductSpecification extends BaseEntity {
 	 * @param productSpecificationValues the productSpecificationValues to set
 	 */
 	public void setProductSpecificationValues(
-			Set<ProductSpecificationValue> productSpecificationValues) {
+			List<ProductSpecificationValue> productSpecificationValues) {
 		this.productSpecificationValues = productSpecificationValues;
 	}
 	

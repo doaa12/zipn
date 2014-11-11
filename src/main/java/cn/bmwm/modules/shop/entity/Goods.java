@@ -57,7 +57,7 @@ public class Goods extends BaseEntity {
 	public Set<SpecificationValue> getSpecificationValues() {
 		
 		Set<SpecificationValue> specificationValues = new HashSet<SpecificationValue>();
-		
+		/*
 		if (getProducts() != null) {
 			
 			for (Product product : getProducts()) {
@@ -72,7 +72,7 @@ public class Goods extends BaseEntity {
 				
 			}
 		}
-		
+		*/
 		return specificationValues;
 		
 	}

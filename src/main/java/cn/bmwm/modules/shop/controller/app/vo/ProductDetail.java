@@ -2,6 +2,7 @@ package cn.bmwm.modules.shop.controller.app.vo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品主页
@@ -86,6 +87,11 @@ public class ProductDetail implements Serializable {
 	 * 商品评价
 	 */
 	private List<Evaluate> evaluate;
+	
+	/**
+	 * 商品规格
+	 */
+	private List<Map<String,Object>> specifications;
 
 	public Long getCode() {
 		return code;
@@ -218,5 +224,14 @@ public class ProductDetail implements Serializable {
 	public void setEvaluate(List<Evaluate> evaluate) {
 		this.evaluate = evaluate;
 	}
+
+	public List<Map<String, Object>> getSpecifications() {
+		return specifications;
+	}
+
+	public void setSpecifications(List<Map<String, Object>> specifications) {
+		this.specifications = specifications;
+	}
+	
 
 }

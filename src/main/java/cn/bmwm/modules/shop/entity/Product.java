@@ -390,11 +390,6 @@ public class Product extends BaseEntity {
 	 */
 	private Set<ProductSpecification> productSpecifications = new HashSet<ProductSpecification>();
 	
-	/**
-	 * 商品规格值
-	 */
-	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
-	
 	static {
 		try {
 			File shopxxXmlFile = new ClassPathResource(CommonAttributes.APPLICATION_XML_PATH).getFile();
@@ -2185,22 +2180,6 @@ public class Product extends BaseEntity {
 	public void setProductSpecifications(
 			Set<ProductSpecification> productSpecifications) {
 		this.productSpecifications = productSpecifications;
-	}
-
-	/**
-	 * @return the productSpecificationValues
-	 */
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public Set<ProductSpecificationValue> getProductSpecificationValues() {
-		return productSpecificationValues;
-	}
-
-	/**
-	 * @param productSpecificationValues the productSpecificationValues to set
-	 */
-	public void setProductSpecificationValues(
-			Set<ProductSpecificationValue> productSpecificationValues) {
-		this.productSpecificationValues = productSpecificationValues;
 	}
 
 	/**

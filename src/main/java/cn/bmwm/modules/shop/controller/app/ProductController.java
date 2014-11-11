@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,8 @@ import cn.bmwm.modules.shop.controller.app.vo.ProductDetail;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductImage;
+import cn.bmwm.modules.shop.entity.ProductSpecification;
+import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Review;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -68,6 +71,7 @@ public class ProductController extends AppBaseController {
 		Shop shop = product.getShop();
 		
 		ProductDetail detail = new ProductDetail();
+		
 		detail.setCode(product.getId());
 		detail.setTitle(product.getName());
 		detail.setPrice(product.getPrice().doubleValue());
@@ -113,6 +117,30 @@ public class ProductController extends AppBaseController {
 		}
 		
 		detail.setEvaluate(evaluates);
+		
+		//商品规格
+		List<Map<String,Object>> specifications = new ArrayList<Map<String,Object>>();
+		
+		Set<ProductSpecification> productSpecifications = product.getProductSpecifications();
+		
+		if(productSpecifications != null && productSpecifications.size() > 0) {
+			
+			for(ProductSpecification productSpecification : productSpecifications) {
+				
+				List<ProductSpecificationValue> productSpecificationValues = productSpecification.getProductSpecificationValues();
+				Map<String,Object> specification = new HashMap<String,Object>();
+				
+				for(int i = 0 ; i < productSpecificationValues.size() ; i++ ) {
+					specification.put("spec" + (i + 1), productSpecificationValues.get(i).getSpecificationValue().getName());
+				}
+				
+				specification.put("specId", productSpecification.getId());
+				specifications.add(specification);
+				
+			}
+		}
+		
+		detail.setSpecifications(specifications);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		

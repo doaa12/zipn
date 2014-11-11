@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -41,6 +43,11 @@ public class ProductSpecificationValue extends BaseEntity {
 	 * 商品规格实例
 	 */
 	private ProductSpecification productSpecification;
+	
+	/**
+	 * 排序
+	 */
+	private Integer orders;
 
 	/**
 	 * @return the product
@@ -104,5 +111,28 @@ public class ProductSpecificationValue extends BaseEntity {
 	public void setProductSpecification(ProductSpecification productSpecification) {
 		this.productSpecification = productSpecification;
 	}
+
+	/**
+	 * @return the orders
+	 */
+	public Integer getOrders() {
+		return orders;
+	}
+
+	/**
+	 * @param orders the orders to set
+	 */
+	public void setOrders(Integer orders) {
+		this.orders = orders;
+	}
+	
+	@PrePersist
+	@PreUpdate
+	public void prepareOrders() {
+		if(productSpecification != null) {
+			orders = productSpecification.getProductSpecificationValues().indexOf(this);
+		}
+	}
+	
 
 }

@@ -254,7 +254,8 @@ public class ProductController extends BaseController {
 						productSpecificationValue.setProduct(product);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
 						
-						product.getProductSpecificationValues().add(productSpecificationValue);
+						productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
+						//product.getProductSpecificationValues().add(productSpecificationValue);
 						
 					}
 				}
@@ -264,7 +265,7 @@ public class ProductController extends BaseController {
 			
 		} else {
 			product.setProductSpecifications(null);
-			product.setProductSpecificationValues(null);
+			//product.setProductSpecificationValues(null);
 		}
 		
 		productService.save(product);
