@@ -2081,24 +2081,41 @@ public class Product extends BaseEntity {
 	 */
 	@Transient
 	public Set<Promotion> getValidPromotions() {
+		
 		Set<Promotion> allPromotions = new HashSet<Promotion>();
+		
 		if (getPromotions() != null) {
 			allPromotions.addAll(getPromotions());
 		}
+		
 		if (getShop() != null && getShop().getPromotions() != null) {
 			allPromotions.addAll(getShop().getPromotions());
 		}
+		
+		/*
 		if (getBrand() != null && getBrand().getPromotions() != null) {
 			allPromotions.addAll(getBrand().getPromotions());
 		}
+		*/
+		
 		Set<Promotion> validPromotions = new TreeSet<Promotion>();
+		
 		for (Promotion promotion : allPromotions) {
+			
+			/*
 			if (promotion != null && promotion.hasBegun() && !promotion.hasEnded() && promotion.getMemberRanks() != null
 					&& !promotion.getMemberRanks().isEmpty()) {
 				validPromotions.add(promotion);
 			}
+			*/
+			
+			if (promotion != null && promotion.hasBegun() && !promotion.hasEnded()) {
+				validPromotions.add(promotion);
+			}
 		}
+		
 		return validPromotions;
+		
 	}
 
 	/**

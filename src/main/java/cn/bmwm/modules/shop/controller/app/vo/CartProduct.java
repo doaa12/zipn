@@ -3,6 +3,8 @@
  */
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.math.BigDecimal;
+
 /**
  * 购物车 -- 商品
  * @author zhoupuyue
@@ -28,7 +30,12 @@ public class CartProduct {
 	/**
 	 * 商品价格
 	 */
-	private double price;
+	private BigDecimal price;
+	
+	/**
+	 * 折扣价
+	 */
+	private BigDecimal discountPrice;
 	
 	/**
 	 * 商品数量
@@ -86,15 +93,29 @@ public class CartProduct {
 	/**
 	 * @return the price
 	 */
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
 	/**
 	 * @param price the price to set
 	 */
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	/**
+	 * @return the discountPrice
+	 */
+	public BigDecimal getDiscountPrice() {
+		return discountPrice;
+	}
+
+	/**
+	 * @param discountPrice the discountPrice to set
+	 */
+	public void setDiscountPrice(BigDecimal discountPrice) {
+		this.discountPrice = discountPrice;
 	}
 
 	/**

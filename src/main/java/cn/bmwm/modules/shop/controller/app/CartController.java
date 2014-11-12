@@ -4,6 +4,7 @@
  * */
 package cn.bmwm.modules.shop.controller.app;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +30,14 @@ import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
+import cn.bmwm.modules.shop.entity.ProductSpecification;
+import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.CartItemService;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductService;
+import cn.bmwm.modules.shop.service.ProductSpecificationService;
 
 /**
  * Controller - 购物车
@@ -55,6 +59,9 @@ public class CartController extends AppBaseController {
 	
 	@Resource(name = "cartItemServiceImpl")
 	private CartItemService cartItemService;
+	
+	@Resource(name = "productSpecificationServiceImpl")
+	private ProductSpecificationService productSpecificationService;
 	
 	@RequestMapping(value = "/app/cart", method = RequestMethod.POST)
 	@ResponseBody
@@ -86,6 +93,7 @@ public class CartController extends AppBaseController {
 	public Map<String,Object> add(HttpServletRequest request) {
 		
 		String sid = request.getParameter("id");
+		String sspecId = request.getParameter("specId");
 		String squantity = request.getParameter("quantity");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -110,7 +118,6 @@ public class CartController extends AppBaseController {
 		}
 		
 		long id = Long.parseLong(sid);
-		
 		Product product = productService.find(id);
 		
 		if (product == null) {
@@ -125,7 +132,29 @@ public class CartController extends AppBaseController {
 			result.put("flag", Constants.CART_PRODUCT_GIFT);
 			return result;
 		}
-
+		
+		Set<ProductSpecification> productSpecifications = product.getProductSpecifications();
+		
+		if(productSpecifications != null && productSpecifications.size() > 0) {
+			if(StringUtils.isBlank(sspecId)) {
+				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
+				return result;
+			}
+		}
+		
+		ProductSpecification productSpecification = null;
+		if(!StringUtils.isBlank(sspecId)) {
+			
+			Long specId = Long.parseLong(sspecId);
+			productSpecification = productSpecificationService.find(specId);
+			
+			if(productSpecification == null) {
+				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
+				return result;
+			}
+			
+		}
+		
 		Cart cart = cartService.getAppCurrent();
 		Member member = memberService.getAppCurrent();
 
@@ -141,9 +170,9 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 
-		if (cart.contains(product)) {
+		if (cart.contains(product, productSpecification)) {
 			
-			CartItem cartItem = cart.getCartItem(product);
+			CartItem cartItem = cart.getCartItem(product, productSpecification);
 			
 			if (CartItem.MAX_QUANTITY != null && cartItem.getQuantity() + quantity > CartItem.MAX_QUANTITY) {
 				result.put("flag", Constants.CART_ITEM_MAX_QUANTITY);
@@ -174,6 +203,7 @@ public class CartController extends AppBaseController {
 			cartItem.setQuantity(quantity);
 			cartItem.setProduct(product);
 			cartItem.setCart(cart);
+			cartItem.setProductSpecification(productSpecification);
 			cartItemService.save(cartItem);
 			
 			cart.getCartItems().add(cartItem);
@@ -187,12 +217,7 @@ public class CartController extends AppBaseController {
 		}
 		*/
 		
-		result.put("flag", 1);
-		
-		List<CartShop> items = getCartShops(cart);
-		result.put("data", items);
-		
-		return result;
+		return list();
 		
 	}
 
@@ -274,12 +299,7 @@ public class CartController extends AppBaseController {
 		cartItem.setQuantity(quantity);
 		cartItemService.update(cartItem);
 		
-		List<CartShop> items = getCartShops(cart);
-
-		result.put("flag", 1);
-		result.put("data", items);
-		
-		return result;
+		return list();
 		
 	}
 
@@ -318,12 +338,7 @@ public class CartController extends AppBaseController {
 		cartItems.remove(cartItem);
 		cartItemService.delete(cartItem);
 		
-		List<CartShop> items = getCartShops(cart);
-		
-		result.put("flag", 1);
-		result.put("data", items);
-		
-		return result;
+		return list();
 		
 	}
 
@@ -368,7 +383,8 @@ public class CartController extends AppBaseController {
 			CartProduct cproduct = new CartProduct();
 			cproduct.setId(product.getId());
 			cproduct.setName(product.getName());
-			cproduct.setPrice(product.getPrice().doubleValue());
+			cproduct.setPrice(product.getPrice());
+			cproduct.setDiscountPrice(caculatePrice(item));
 			cproduct.setQuantity(item.getQuantity());
 			cproduct.setCartItemId(item.getId());
 			
@@ -380,8 +396,7 @@ public class CartController extends AppBaseController {
 				CartShop cshop = new CartShop();
 				cshop.setShopName(shop.getName());
 				
-				//TODO:店铺促销活动
-				cshop.setShopActivity("");
+				cshop.setShopActivity(getShopActivity(item));
 				
 				List<CartProduct> productList = new ArrayList<CartProduct>();
 				productList.add(cproduct);
@@ -399,6 +414,49 @@ public class CartController extends AppBaseController {
 		list.addAll(shopMap.values());
 		
 		return list;
+		
+	}
+	
+	/**
+	 * 计算价格
+	 * @param product
+	 * @return
+	 */
+	public BigDecimal caculatePrice(CartItem item) {
+		
+		Product product = item.getProduct();
+		BigDecimal currentPrice = product.getPrice();
+		
+		Set<Promotion> productPromotions = product.getValidPromotions();
+		
+		if(productPromotions != null && productPromotions.size() > 0) {
+			for(Promotion promotion : productPromotions) {
+				currentPrice = promotion.calculatePrice(item.getQuantity(), currentPrice);
+			}
+		}
+		
+		return currentPrice;
+		
+	}
+	
+	/**
+	 * 获取店铺活动
+	 * @param item
+	 * @return
+	 */
+	public String getShopActivity(CartItem item) {
+		
+		Set<Promotion> promotions = item.getProduct().getShop().getPromotions();
+		
+		if(promotions == null || promotions.size() == 0) return "";
+		
+		for(Promotion promotion : promotions) {
+			if (promotion != null && promotion.hasBegun() && !promotion.hasEnded()) {
+				return promotion.getTitle();
+			}
+		}
+		
+		return "";
 		
 	}
 

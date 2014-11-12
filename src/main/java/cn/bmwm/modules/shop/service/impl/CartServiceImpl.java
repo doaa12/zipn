@@ -108,15 +108,7 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 			
 		HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 		
-		String principal = request.getHeader(Constants.USER_LOGIN_MARK);
-		
-		if(principal == null || principal.indexOf("@") < 0) throw new IllegalUserStatusException();
-		
-		String id = principal.substring(principal.lastIndexOf("@") + 1);
-		
-		if(StringUtils.isBlank(id) || !StringUtils.isNumeric(id)) throw new IllegalUserStatusException();
-		
-		Member member =  memberDao.find(Long.parseLong(id));
+		Member member = (Member)request.getSession().getAttribute(Constants.USER_LOGIN_MARK);
 		
 		if(member == null) throw new IllegalUserStatusException();
 		

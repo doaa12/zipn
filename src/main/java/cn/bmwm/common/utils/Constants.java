@@ -110,4 +110,9 @@ public class Constants {
 	 */
 	public static final int CART_CART_ITEM_NOT_EXISTS = 129;
 	
+	/**
+	 * 商品规格不存在
+	 */
+	public static final int CART_CART_SPECIFICATION_NOT_EXISTS = 130;
+	
 }
