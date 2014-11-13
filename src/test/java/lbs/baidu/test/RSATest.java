@@ -20,7 +20,6 @@ import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import cn.bmwm.common.utils.RSAUtils;
-import cn.bmwm.modules.sys.exception.SystemException;
 
 /**
  * @author zby
@@ -104,7 +103,7 @@ public class RSATest extends TestCase {
 	
 	public void testDecrypt1() throws Exception {
 		
-		String enText = "QToI6Lc8ZMv/t9or2cb13qN5KsNezau9+z/otT2bW3Wrej/e2o+FaDSr97hsbPNX6qAJcoj0ax9mm8iN0EY2SMSMC7hzaRcFmCfqJr27BurwEKOQwiFXLGvutusi2t4Hr4kcAqSFxqtvsSqxA5McNYZl8YOePGb0oVGBRODZmpw=";
+		String enText = "qNYAogyr8e2+mcNDMbM+GH/3KxZMXq0CV90QsVsmFFKM3uF63EMD69dJzhGnlgnPnqiAWD4B3mdj4tXZDy5VdcbO6Gf97TacL3xsrfSXH/PWn62fm6fUOl6FQfp9VVGKbVk7kDZn2BCYeSL2S4yLVbNDtOzul3/dYC95UfDQhXg=";
 		
 		String key = "MIICXgIBAAKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQABAoGBAJU5ZZjL2AUaCYLAyd6B3wysehplFDiKTKUJUul6Bka+AEd2I4GnilvWXbEesn0Gn8EU5YzxizJn326UYp8ICizN85EI/jiKDk+gyt6BttDgX3Xf3v0nu15JmjTSD5Fo0m6hphuLEq7/fNDetQ1UgBeKi8jo6aLu9ySn1WTRTwWhAkEA+MbXeZSaVptzxW/B83h9c56/Pscg6FlQ9WsS0w0+7/FKluvAkQU2we5NwK6zJzRC38rlBMHconkNcU3pkUHtbQJBAML9mwhZ9l388Wng4NRyUnx/ZgT6FL1mioKq7vhFdc9FKjACAVmLE/FCKI4pd3MLHu/mGmXiJ/r6qu2WTdyk4akCQQCufkoE7UaUGNVLVugjbhAQWPirf+CFGKDAgyng/xl2EzjOQu3+yjluLUg8Lk1a4j1F23pnq9Kl42KaZpu9VxDBAkEAoccTp5wsQdKo4TWIk/q94Tk6BYsPRg0bgkobtrS6h9tUozwmroorY5GGYFybFEH3ywZYhItcrGjpA/Iea6AI8QJAbNRVCO2ImdT/fngoFKK40PLZSooFu0njRYcNUWGr7GkUxeS7gC3GNYWcZG+f8zbXaXsjyD0pSNeaHFDRmJCcTA==";
 		
@@ -120,15 +119,23 @@ public class RSATest extends TestCase {
 		
 		Provider PROVIDER = new BouncyCastleProvider();
 		
-		//Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
-
 		Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
 		
 		cipher.init(Cipher.DECRYPT_MODE, privateKey);
 		
 		byte[] data = cipher.doFinal(Base64.decodeBase64(enText));
 		
-		System.out.println(new String(data));
+		for(byte b : data) {
+			System.out.print(b + ",");
+		}
+		
+		System.out.println();
+		
+		String text = new String(data, "UTF-8");
+		
+		System.out.println(text);
+		
+		System.out.println(text.length());
 		
 	}
 	
