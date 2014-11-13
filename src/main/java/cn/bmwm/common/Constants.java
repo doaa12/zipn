@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.bmwm.common.utils;
+package cn.bmwm.common;
 
 /**
  * 常量类

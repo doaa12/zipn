@@ -17,7 +17,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.sys.model.Setting;

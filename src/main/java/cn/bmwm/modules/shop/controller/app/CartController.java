@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.controller.app.vo.CartProduct;
 import cn.bmwm.modules.shop.controller.app.vo.CartShop;
 import cn.bmwm.modules.shop.entity.Cart;

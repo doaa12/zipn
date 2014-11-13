@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Member.Gender;
 import cn.bmwm.modules.shop.service.MemberService;

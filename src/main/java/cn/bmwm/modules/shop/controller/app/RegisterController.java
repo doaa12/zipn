@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.MemberService;
@@ -104,9 +104,6 @@ public class RegisterController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> register(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		
-		
-		log.info("enpassword: " + request.getParameter("enpassword"));
 		
 		/*
 		Object ocode = session.getAttribute("code");

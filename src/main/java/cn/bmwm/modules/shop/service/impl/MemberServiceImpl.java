@@ -21,7 +21,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.dao.DepositDao;
 import cn.bmwm.modules.shop.dao.MemberDao;
 import cn.bmwm.modules.shop.entity.Admin;

@@ -17,7 +17,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import cn.bmwm.common.utils.Constants;
+import cn.bmwm.common.Constants;
 import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.dao.CartDao;
 import cn.bmwm.modules.shop.dao.CartItemDao;
