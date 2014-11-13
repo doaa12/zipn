@@ -146,6 +146,7 @@ public final class RSAUtils {
 		
 		Assert.notNull(key);
 		Assert.notNull(text);
+		
 		byte[] data = null;
 		
 		try{

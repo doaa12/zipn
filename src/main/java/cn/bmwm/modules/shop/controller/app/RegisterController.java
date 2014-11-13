@@ -134,6 +134,8 @@ public class RegisterController {
 			return result;
 		}
 		
+		log.warn("phone: " + phone + ",password: " + enPassword);
+		
 		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {

@@ -14,6 +14,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +35,8 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  */
 @Controller
 public class LoginController {
+	
+	public static final Log log = LogFactory.getLog(LoginController.class);
 	
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
@@ -54,6 +58,13 @@ public class LoginController {
 		
 		String phone = request.getParameter("phone");
 		String enPassword = request.getParameter("enpassword");
+		
+		Enumeration enumeration = request.getParameterNames();
+		while(enumeration.hasMoreElements()) {
+			String param = (String)enumeration.nextElement();
+			log.warn(param + ": " + request.getParameter(param));
+		}
+		//log.warn("phone: " + phone + ", password: " + enPassword);
 		
 		HttpSession session = request.getSession();
 		

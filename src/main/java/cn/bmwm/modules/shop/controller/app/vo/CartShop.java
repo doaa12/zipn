@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -21,6 +22,11 @@ public class CartShop {
 	 * 店铺活动
 	 */
 	private String shopActivity;
+	
+	/**
+	 * 总价
+	 */
+	private BigDecimal totalPrice;
 	
 	/**
 	 * 商品
@@ -53,6 +59,20 @@ public class CartShop {
 	 */
 	public void setShopActivity(String shopActivity) {
 		this.shopActivity = shopActivity;
+	}
+
+	/**
+	 * @return the totalPrice
+	 */
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
+
+	/**
+	 * @param totalPrice the totalPrice to set
+	 */
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	/**

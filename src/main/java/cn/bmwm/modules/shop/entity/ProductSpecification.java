@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 商品规格
@@ -32,6 +33,11 @@ public class ProductSpecification extends BaseEntity {
 	 * 库存
 	 */
 	private Integer stock;
+	
+	/**
+	 * 已分配库存
+	 */
+	private Integer allocatedStock;
 	
 	/**
 	 * 商品
@@ -55,6 +61,36 @@ public class ProductSpecification extends BaseEntity {
 	 */
 	public void setStock(Integer stock) {
 		this.stock = stock;
+	}
+
+	/**
+	 * @return the allocatedStock
+	 */
+	public Integer getAllocatedStock() {
+		return allocatedStock;
+	}
+
+	/**
+	 * @param allocatedStock the allocatedStock to set
+	 */
+	public void setAllocatedStock(Integer allocatedStock) {
+		this.allocatedStock = allocatedStock;
+	}
+	
+	/**
+	 * 获取可用库存
+	 * @return
+	 */
+	@Transient
+	public Integer getAvailableStock() {
+		Integer availableStock = null;
+		if (getStock() != null && getAllocatedStock() != null) {
+			availableStock = getStock() - getAllocatedStock();
+			if (availableStock < 0) {
+				availableStock = 0;
+			}
+		}
+		return availableStock;
 	}
 
 	/**

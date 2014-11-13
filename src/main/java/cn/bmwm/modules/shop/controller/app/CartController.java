@@ -31,8 +31,11 @@ import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
+import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.entity.Specification;
+import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.service.CartItemService;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
@@ -179,7 +182,10 @@ public class CartController extends AppBaseController {
 				return result;
 			}
 			
-			if (product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
+			if (productSpecification == null && product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
+				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
+				return result;
+			} else if(productSpecification != null && productSpecification.getStock() != null && cartItem.getQuantity() + quantity > productSpecification.getAvailableStock()) {
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			}
@@ -194,7 +200,10 @@ public class CartController extends AppBaseController {
 				return result;
 			}
 			
-			if (product.getStock() != null && quantity > product.getAvailableStock()) {
+			if (productSpecification == null && product.getStock() != null && quantity > product.getAvailableStock()) {
+				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
+				return result;
+			}else if(productSpecification != null && productSpecification.getStock() != null && quantity > productSpecification.getAvailableStock()) {
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			}
@@ -290,8 +299,12 @@ public class CartController extends AppBaseController {
 		}
 		
 		Product product = cartItem.getProduct();
+		ProductSpecification productSpecification = cartItem.getProductSpecification();
 		
-		if (product.getStock() != null && quantity > product.getAvailableStock()) {
+		if (productSpecification == null && product.getStock() != null && quantity > product.getAvailableStock()) {
+			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
+			return result;
+		}else if(productSpecification != null && productSpecification.getStock() != null && quantity > productSpecification.getAvailableStock()) {
 			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 			return result;
 		}
@@ -388,8 +401,18 @@ public class CartController extends AppBaseController {
 			cproduct.setQuantity(item.getQuantity());
 			cproduct.setCartItemId(item.getId());
 			
-			//TODO:商品规格
-			cproduct.setSpecification("");
+			//商品规格
+			ProductSpecification productSpecification = item.getProductSpecification();
+			if(productSpecification != null) {
+				List<String> specificationList = new ArrayList<String>();
+				List<ProductSpecificationValue> valueList = productSpecification.getProductSpecificationValues();
+				for(ProductSpecificationValue value : valueList) {
+					Specification specification = value.getSpecification();
+					SpecificationValue specificationValue = value.getSpecificationValue();
+					specificationList.add(specification.getName() + " : " + specificationValue.getName());
+				}
+				cproduct.setSpecificationList(specificationList);
+			}
 			
 			if(shopMap.get(shop.getId()) == null) {
 				
@@ -412,6 +435,20 @@ public class CartController extends AppBaseController {
 		}
 		
 		list.addAll(shopMap.values());
+		
+		//按商铺计算总价
+		for(CartShop shop : list) {
+			
+			List<CartProduct> productList = shop.getProductList();
+			BigDecimal totalPrice = new BigDecimal(0);
+			
+			for(CartProduct product : productList) {
+				totalPrice = totalPrice.add(product.getDiscountPrice());
+			}
+			
+			shop.setTotalPrice(totalPrice);
+			
+		}
 		
 		return list;
 		

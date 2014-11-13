@@ -4,6 +4,8 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 购物车 -- 商品
@@ -45,7 +47,7 @@ public class CartProduct {
 	/**
 	 * 商品规格
 	 */
-	private String specification;
+	private List<String> specificationList = new ArrayList<String>();
 
 	
 	/**
@@ -135,15 +137,15 @@ public class CartProduct {
 	/**
 	 * @return the specification
 	 */
-	public String getSpecification() {
-		return specification;
+	public List<String> getSpecificationList() {
+		return specificationList;
 	}
 
 	/**
 	 * @param specification the specification to set
 	 */
-	public void setSpecification(String specification) {
-		this.specification = specification;
+	public void setSpecificationList(List<String> specificationList) {
+		this.specificationList = specificationList;
 	}
 	
 }
