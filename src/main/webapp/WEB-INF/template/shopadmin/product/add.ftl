@@ -31,9 +31,9 @@ $().ready(function() {
 
 	var $inputForm = $("#inputForm");
 	var $shopCategoryId = $("#shopCategoryId");
-	var $isMemberPrice = $("#isMemberPrice");
-	var $memberPriceTr = $("#memberPriceTr");
-	var $memberPrice = $("#memberPriceTr input");
+	//var $isMemberPrice = $("#isMemberPrice");
+	//var $memberPriceTr = $("#memberPriceTr");
+	//var $memberPrice = $("#memberPriceTr input");
 	var $browserButton = $("#browserButton");
 	var $productImageTable = $("#productImageTable");
 	var $addProductImage = $("#addProductImage");
@@ -61,6 +61,7 @@ $().ready(function() {
 	$browserButton.browser();
 	
 	// 会员价
+	/*
 	$isMemberPrice.click(function() {
 		if ($(this).prop("checked")) {
 			$memberPriceTr.show();
@@ -70,6 +71,7 @@ $().ready(function() {
 			$memberPrice.prop("disabled", true);
 		}
 	});
+	*/
 	
 	// 增加商品图片
 	$addProductImage.click(function() {
@@ -250,6 +252,7 @@ $().ready(function() {
 	});
 	
 	$.validator.addClassRules({
+		/*
 		memberPrice: {
 			min: 0,
 			decimal: {
@@ -257,6 +260,7 @@ $().ready(function() {
 				fraction: ${setting.priceScale}
 			}
 		},
+		*/
 		productImageFile: {
 			required: true,
 			extension: "${setting.uploadImageExtension}"
@@ -406,34 +410,6 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					${message("Product.priceType")}:
-				</th>
-				<td>
-					<input type="text" name="priceType" class="text" maxlength="16" title="${message("shopadmin.product.priceTypeTitle")}"/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.memberPrice")}:
-				</th>
-				<td>
-					<label>
-						<input type="checkbox" id="isMemberPrice" name="isMemberPrice" value="true" />${message("admin.product.isMemberPrice")}
-					</label>
-				</td>
-			</tr>
-			<tr id="memberPriceTr" class="hidden">
-				<th>
-					&nbsp;
-				</th>
-				<td>
-					[#list memberRanks as memberRank]
-						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" maxlength="16" style="width: 60px; margin-right: 6px;" disabled="disabled" />
-					[/#list]
-				</td>
-			</tr>
-			<tr>
-				<th>
 					${message("Product.cost")}:
 				</th>
 				<td>
@@ -493,45 +469,10 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					${message("Product.point")}:
-				</th>
-				<td>
-					<input type="text" name="point" class="text" maxlength="9" title="${message("admin.product.pointTitle")}" />
-				</td>
-			</tr>
-			<tr>
-				<th>
 					<span class="requiredField">*</span>${message("shopadmin.product.description")}:
 				</th>
 				<td>
 					<textarea id="description" name="description" rows="5" cols="60" maxlength="500" class="text"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.brand")}:
-				</th>
-				<td>
-					<select name="brandId">
-						<option value="">${message("admin.common.choose")}</option>
-						[#list brands as brand]
-							<option value="${brand.id}">
-								${brand.name}
-							</option>
-						[/#list]
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.tags")}:
-				</th>
-				<td>
-					[#list tags as tag]
-						<label>
-							<input type="checkbox" name="tagIds" value="${tag.id}" />${tag.name}
-						</label>
-					[/#list]
 				</td>
 			</tr>
 			<tr>
@@ -546,10 +487,6 @@ $().ready(function() {
 					<label>
 						<input type="checkbox" name="isList" value="true" checked="checked" />${message("Product.isList")}
 						<input type="hidden" name="_isList" value="false" />
-					</label>
-					<label>
-						<input type="checkbox" name="isGift" value="true" />${message("Product.isGift")}
-						<input type="hidden" name="_isGift" value="false" />
 					</label>
 				</td>
 			</tr>

@@ -652,10 +652,14 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		if (shopCategory != null) {
 			restrictions = cb.and(restrictions, cb.equal(root.get("shopCategory"), shopCategory));
 		}
+		/*
 		if (brand != null) {
 			restrictions = cb.and(restrictions, cb.equal(root.get("brand"), brand));
 		}
+		*/
 		if (promotion != null) {
+			
+			/*
 			Subquery<Product> subquery1 = cq.subquery(Product.class);
 			Root<Product> subqueryRoot1 = subquery1.from(Product.class);
 			subquery1.select(subqueryRoot1);
@@ -670,9 +674,16 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			Root<Product> subqueryRoot3 = subquery3.from(Product.class);
 			subquery3.select(subqueryRoot3);
 			subquery3.where(cb.equal(subqueryRoot3, root), cb.equal(subqueryRoot3.join("brand").join("promotions"), promotion));
-
-			restrictions = cb.and(restrictions, cb.or(cb.exists(subquery1), cb.exists(subquery2), cb.exists(subquery3)));
+			*/
+			
+			Subquery<Product> subquery = cq.subquery(Product.class);
+			Root<Product> subqueryRoot = subquery.from(Product.class);
+			subquery.select(subqueryRoot);
+			subquery.where(cb.equal(subqueryRoot, root), cb.equal(subqueryRoot.join("shop").join("promotions"), promotion));
+			restrictions = cb.and(restrictions, cb.or(cb.exists(subquery)));
+			
 		}
+		/*
 		if (tags != null && !tags.isEmpty()) {
 			Subquery<Product> subquery = cq.subquery(Product.class);
 			Root<Product> subqueryRoot = subquery.from(Product.class);
@@ -680,6 +691,8 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			subquery.where(cb.equal(subqueryRoot, root), subqueryRoot.join("tags").in(tags));
 			restrictions = cb.and(restrictions, cb.exists(subquery));
 		}
+		*/
+		
 		if (attributeValue != null) {
 			for (Entry<Attribute, String> entry : attributeValue.entrySet()) {
 				String propertyName = Product.ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + entry.getKey().getPropertyIndex();

@@ -30,8 +30,6 @@ import cn.bmwm.common.utils.FileInfo.FileType;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.entity.Attribute;
-import cn.bmwm.modules.shop.entity.Brand;
-import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Parameter;
 import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
@@ -45,7 +43,6 @@ import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
-import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.ImageService;
@@ -145,21 +142,21 @@ public class ProductController extends BaseController {
 	 */
 	//zhoupuyue,增加店铺商品列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String shoplist(Long shopCategoryId, Long brandId, Long promotionId, Long tagId, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, Pageable pageable, ModelMap model) {
+	public String shoplist(Long shopCategoryId, Long promotionId, Long tagId, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, Pageable pageable, ModelMap model) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
 		Shop shop = shopService.find(principal.getShopId());
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
 		
-		Brand brand = brandService.find(brandId);
+		//Brand brand = brandService.find(brandId);
 		Promotion promotion = promotionService.find(promotionId);
 		List<Tag> tags = tagService.findList(tagId);
 		model.addAttribute("shopCategories", shop.getShopCategories());
-		model.addAttribute("brands", brandService.findAll());
-		model.addAttribute("promotions", promotionService.findAll());
-		model.addAttribute("tags", tagService.findList(Type.product));
+		//model.addAttribute("brands", brandService.findAll());
+		model.addAttribute("promotions", promotionService.findShopPromotionList(shop));
+		//model.addAttribute("tags", tagService.findList(Type.product));
 		model.addAttribute("shopCategoryId", shopCategoryId);
-		model.addAttribute("brandId", brandId);
+		//model.addAttribute("brandId", brandId);
 		model.addAttribute("promotionId", promotionId);
 		model.addAttribute("tagId", tagId);
 		model.addAttribute("isMarketable", isMarketable);
@@ -168,7 +165,7 @@ public class ProductController extends BaseController {
 		model.addAttribute("isGift", isGift);
 		model.addAttribute("isOutOfStock", isOutOfStock);
 		model.addAttribute("isStockAlert", isStockAlert);
-		model.addAttribute("page", productService.findPage(shop, shopCategory, brand, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
+		model.addAttribute("page", productService.findPage(shop, shopCategory, null, promotion, tags, null, null, null, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, OrderType.dateDesc, pageable));
 		
 		return "/shopadmin/product/list";
 		
@@ -184,9 +181,9 @@ public class ProductController extends BaseController {
 		Shop shop = shopService.find(principal.getShopId());
 		
 		model.addAttribute("shopCategories", shop.getShopCategories());
-		model.addAttribute("brands", brandService.findAll());
-		model.addAttribute("tags", tagService.findList(Type.product));
-		model.addAttribute("memberRanks", memberRankService.findAll());
+		//model.addAttribute("brands", brandService.findAll());
+		//model.addAttribute("tags", tagService.findList(Type.product));
+		//model.addAttribute("memberRanks", memberRankService.findAll());
 		model.addAttribute("specifications", specificationService.findAll());
 		
 		return "/shopadmin/product/add";
@@ -232,10 +229,13 @@ public class ProductController extends BaseController {
 			BigDecimal defaultMarketPrice = calculateDefaultMarketPrice(product.getPrice());
 			product.setMarketPrice(defaultMarketPrice);
 		}
+		
+		/*
 		if (product.getPoint() == null) {
 			long point = calculateDefaultPoint(product.getPrice());
 			product.setPoint(point);
 		}
+		*/
 		
 		product.setFullName(null);
 		product.setAllocatedStock(0);
@@ -267,6 +267,7 @@ public class ProductController extends BaseController {
 		product.setTreePath(shopCategory.getTreePath());
 		product.setShopCategory(shopCategory);
 		
+		/*
 		for (MemberRank memberRank : memberRankService.findAll()) {
 			String price = request.getParameter("memberPrice_" + memberRank.getId());
 			if (StringUtils.isNotEmpty(price) && new BigDecimal(price).compareTo(new BigDecimal(0)) >= 0) {
@@ -275,6 +276,7 @@ public class ProductController extends BaseController {
 				product.getMemberPrice().remove(memberRank);
 			}
 		}
+		*/
 
 		for (ProductImage productImage : product.getProductImages()) {
 			imageService.build(productImage);
@@ -366,10 +368,10 @@ public class ProductController extends BaseController {
 		Shop shop = product.getShop();
 		
 		model.addAttribute("shopCategories", shop.getShopCategories());
-		model.addAttribute("brands", brandService.findAll());
-		model.addAttribute("tags", tagService.findList(Type.product));
-		model.addAttribute("memberRanks", memberRankService.findAll());
-		model.addAttribute("specifications", specificationService.findAll());
+		//model.addAttribute("brands", brandService.findAll());
+		//model.addAttribute("tags", tagService.findList(Type.product));
+		//model.addAttribute("memberRanks", memberRankService.findAll());
+		model.addAttribute("specifications", specificationService.findShopSpecificationList(shop));
 		model.addAttribute("product", product);
 		
 		return "/shopadmin/product/edit";
@@ -426,11 +428,15 @@ public class ProductController extends BaseController {
 			BigDecimal defaultMarketPrice = calculateDefaultMarketPrice(product.getPrice());
 			product.setMarketPrice(defaultMarketPrice);
 		}
+		
+		/*
 		if (product.getPoint() == null) {
 			long point = calculateDefaultPoint(product.getPrice());
 			product.setPoint(point);
 		}
+		*/
 
+		/*
 		for (MemberRank memberRank : memberRankService.findAll()) {
 			String price = request.getParameter("memberPrice_" + memberRank.getId());
 			if (StringUtils.isNotEmpty(price) && new BigDecimal(price).compareTo(new BigDecimal(0)) >= 0) {
@@ -439,6 +445,7 @@ public class ProductController extends BaseController {
 				product.getMemberPrice().remove(memberRank);
 			}
 		}
+		*/
 
 		for (ProductImage productImage : product.getProductImages()) {
 			imageService.build(productImage);

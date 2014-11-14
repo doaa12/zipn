@@ -5,6 +5,7 @@ package cn.bmwm.modules.shop.controller.app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
 import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
+import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Review;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -76,8 +78,15 @@ public class ProductController extends AppBaseController {
 		detail.setTitle(product.getName());
 		detail.setPrice(product.getPrice().doubleValue());
 		detail.setOriginalPrice(product.getMarketPrice().doubleValue());
-		detail.setPriceType(product.getPriceType());
 		detail.setDesc(product.getDescription());
+		
+		Set<Promotion> promotions = product.getValidPromotions();
+		if(promotions != null && promotions.size() > 0) {
+			Iterator<Promotion> iterator = promotions.iterator();
+			if(iterator.hasNext()) {
+				detail.setPriceType(iterator.next().getTitle());
+			}
+		}
 		
 		detail.setEvaluateNumber(reviewService.count(null, product, null, true));
 		detail.setScore(product.getAvgScore());

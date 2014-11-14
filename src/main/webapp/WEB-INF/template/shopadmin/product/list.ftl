@@ -64,21 +64,6 @@ $().ready(function() {
 					<\/tr>
 					<tr>
 						<th>
-							${message("Product.brand")}:
-						<\/th>
-						<td>
-							<select name="brandId">
-								<option value="">${message("admin.common.choose")}<\/option>
-								[#list brands as brand]
-									<option value="${brand.id}"[#if brand.id == brandId] selected="selected"[/#if]>
-										${brand.name}
-									<\/option>
-								[/#list]
-							<\/select>
-						<\/td>
-					<\/tr>
-					<tr>
-						<th>
 							${message("Product.promotions")}:
 						<\/th>
 						<td>
@@ -87,21 +72,6 @@ $().ready(function() {
 								[#list promotions as promotion]
 									<option value="${promotion.id}"[#if promotion.id == promotionId] selected="selected"[/#if]>
 										${promotion.name}
-									<\/option>
-								[/#list]
-							<\/select>
-						<\/td>
-					<\/tr>
-					<tr>
-						<th>
-							${message("Product.tags")}:
-						<\/th>
-						<td>
-							<select name="tagId">
-								<option value="">${message("admin.common.choose")}<\/option>
-								[#list tags as tag]
-									<option value="${tag.id}"[#if tag.id == tagId] selected="selected"[/#if]>
-										${tag.name}
 									<\/option>
 								[/#list]
 							<\/select>
@@ -157,9 +127,7 @@ $().ready(function() {
 	</div>
 	<form id="listForm" action="list.jhtml" method="get">
 		<input type="hidden" id="shopCategoryId" name="shopCategoryId" value="${shopCategoryId}" />
-		<input type="hidden" id="brandId" name="brandId" value="${brandId}" />
 		<input type="hidden" id="promotionId" name="promotionId" value="${promotionId}" />
-		<input type="hidden" id="tagId" name="tagId" value="${tagId}" />
 		<input type="hidden" id="isMarketable" name="isMarketable" value="[#if isMarketable??]${isMarketable?string("true", "false")}[/#if]" />
 		<input type="hidden" id="isList" name="isList" value="[#if isList??]${isList?string("true", "false")}[/#if]" />
 		<input type="hidden" id="isTop" name="isTop" value="[#if isTop??]${isTop?string("true", "false")}[/#if]" />

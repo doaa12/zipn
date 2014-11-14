@@ -38,6 +38,13 @@ public interface PromotionDao extends BaseDao<Promotion, Long> {
 	List<Promotion> findList(Boolean hasBegun, Boolean hasEnded, Integer count, List<Filter> filters, List<Order> orders);
 
 	/**
+	 * 查询店铺促销
+	 * @param shop
+	 * @return
+	 */
+	List<Promotion> findShopPromotionList(Shop shop);
+	
+	/**
 	 * 查询店铺促销商品数量
 	 * @param shop
 	 * @return

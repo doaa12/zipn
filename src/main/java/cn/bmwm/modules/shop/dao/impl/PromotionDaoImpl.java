@@ -66,5 +66,17 @@ public class PromotionDaoImpl extends BaseDaoImpl<Promotion, Long> implements Pr
 		TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
 		return query.setFlushMode(FlushModeType.COMMIT).setParameter("date", date).setParameter("shop", shop).getSingleResult();
 	}
+	
+	/**
+	 * 查询店铺促销
+	 * @param shop
+	 * @return
+	 */
+	public List<Promotion> findShopPromotionList(Shop shop) {
+		String jpql = "select promotion from Promotion promotion where promotion.beginDate <= :date and promotion.endDate >= :date and promotion.shop = :shop ";
+		Date date = new Date();
+		TypedQuery<Promotion> query = entityManager.createQuery(jpql, Promotion.class);
+		return query.setFlushMode(FlushModeType.COMMIT).setParameter("date", date).setParameter("shop", shop).getResultList();
+	}
 
 }

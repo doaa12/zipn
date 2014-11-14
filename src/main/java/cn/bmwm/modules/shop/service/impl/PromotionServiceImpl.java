@@ -43,6 +43,15 @@ public class PromotionServiceImpl extends BaseServiceImpl<Promotion, Long> imple
 	}
 	
 	/**
+	 * 查询店铺促销
+	 * @param shop
+	 * @return
+	 */
+	public List<Promotion> findShopPromotionList(Shop shop) {
+		return promotionDao.findShopPromotionList(shop);
+	}
+	
+	/**
 	 * 查询店铺促销商品数量
 	 * @param shop
 	 * @return

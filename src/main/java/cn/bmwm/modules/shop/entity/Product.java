@@ -141,11 +141,6 @@ public class Product extends BaseEntity {
 	
 	/** 销售价 */
 	private BigDecimal price;
-	
-	/**
-	 * 价格类型
-	 */
-	private String priceType;
 
 	/** 成本价 */
 	private BigDecimal cost;
@@ -498,17 +493,6 @@ public class Product extends BaseEntity {
 		this.price = price;
 	}
 	
-	/**
-	 * 价格类型
-	 */
-	public String getPriceType() {
-		return priceType;
-	}
-
-	public void setPriceType(String priceType) {
-		this.priceType = priceType;
-	}
-
 	/**
 	 * 获取成本价
 	 * 
@@ -1989,6 +1973,29 @@ public class Product extends BaseEntity {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取商品规格
+	 * @return
+	 */
+	@Transient
+	public Set<Specification> getSpecifications() {
+		
+		Set<Specification> specifications = new HashSet<Specification>();
+		
+		if(this.productSpecifications == null && this.productSpecifications.size() == 0) return specifications;
+		
+		for(ProductSpecification productSpecification : productSpecifications) {
+			List<ProductSpecificationValue> productSpecificationValueList = productSpecification.getProductSpecificationValues();
+			if(productSpecificationValueList == null || productSpecificationValueList.size() == 0 ) continue;
+			for(ProductSpecificationValue productSpecificationValue : productSpecificationValueList) {
+				specifications.add(productSpecificationValue.getSpecification());
+			}
+		}
+		
+		return specifications;
+		
 	}
 
 	/**
