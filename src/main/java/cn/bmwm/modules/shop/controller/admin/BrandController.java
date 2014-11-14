@@ -58,7 +58,7 @@ public class BrandController extends BaseController {
 		}
 		brand.setProducts(null);
 		brand.setProductCategories(null);
-		brand.setPromotions(null);
+		//brand.setPromotions(null);
 		brandService.save(brand);
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		return "redirect:list.jhtml";

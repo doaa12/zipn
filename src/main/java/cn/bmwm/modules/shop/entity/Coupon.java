@@ -16,19 +16,14 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.PreRemove;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Length;
@@ -37,7 +32,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import cn.bmwm.common.utils.FreemarkerUtils;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
-
 import freemarker.template.TemplateException;
 
 /**
@@ -46,9 +40,9 @@ import freemarker.template.TemplateException;
  *
  * @version 1.0
  */
-@Entity
-@Table(name = "xx_coupon")
-@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_coupon_sequence")
+//@Entity
+//@Table(name = "xx_coupon")
+//@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_coupon_sequence")
 public class Coupon extends BaseEntity {
 
 	private static final long serialVersionUID = -7907808728349149722L;
@@ -479,6 +473,7 @@ public class Coupon extends BaseEntity {
 	/**
 	 * 删除前处理
 	 */
+	/*
 	@PreRemove
 	public void preRemove() {
 		Set<Promotion> promotions = getPromotions();
@@ -494,5 +489,6 @@ public class Coupon extends BaseEntity {
 			}
 		}
 	}
+	*/
 
 }

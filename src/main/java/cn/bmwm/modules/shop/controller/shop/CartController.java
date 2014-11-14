@@ -169,7 +169,7 @@ public class CartController extends BaseController {
 		data.put("effectivePoint", cart.getEffectivePoint());
 		data.put("effectivePrice", cart.getEffectivePrice());
 		data.put("promotions", cart.getPromotions());
-		data.put("giftItems", cart.getGiftItems());
+		//data.put("giftItems", cart.getGiftItems());
 		return data;
 	}
 

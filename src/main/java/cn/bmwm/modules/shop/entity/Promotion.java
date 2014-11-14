@@ -6,27 +6,18 @@ package cn.bmwm.modules.shop.entity;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -102,24 +93,24 @@ public class Promotion extends OrderEntity {
 	private String introduction;
 
 	/** 允许参加会员等级 */
-	private Set<MemberRank> memberRanks = new HashSet<MemberRank>();
+	//private Set<MemberRank> memberRanks = new HashSet<MemberRank>();
 
 	/** 允许参与商品 */
-	private Set<Product> products = new HashSet<Product>();
+	//private Set<Product> products = new HashSet<Product>();
 
 	/** 允许参与品牌 */
-	private Set<Brand> brands = new HashSet<Brand>();
+	//private Set<Brand> brands = new HashSet<Brand>();
 
 	/** 赠送优惠券 */
-	private Set<Coupon> coupons = new HashSet<Coupon>();
+	//private Set<Coupon> coupons = new HashSet<Coupon>();
 
 	/** 赠品 */
-	private List<GiftItem> giftItems = new ArrayList<GiftItem>();
+	//private List<GiftItem> giftItems = new ArrayList<GiftItem>();
 	
 	/**
 	 * 允许参与的店铺分类
 	 */
-	private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
+	//private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
 	
 	/**
 	 * 店铺
@@ -406,32 +397,38 @@ public class Promotion extends OrderEntity {
 	 * 
 	 * @return 允许参加会员等级
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_member_rank")
 	public Set<MemberRank> getMemberRanks() {
 		return memberRanks;
 	}
-
+	*/
+	
 	/**
 	 * 设置允许参加会员等级
 	 * 
 	 * @param memberRanks
 	 *            允许参加会员等级
 	 */
+	/*
 	public void setMemberRanks(Set<MemberRank> memberRanks) {
 		this.memberRanks = memberRanks;
 	}
+	*/
 
 	/**
 	 * 获取允许参与商品分类
 	 * 
 	 * @return 允许参与商品分类
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_shop_category")
 	public Set<ShopCategory> getShopCategories() {
 		return shopCategories;
 	}
+	*/
 
 	/**
 	 * 设置允许参与商品分类
@@ -439,20 +436,24 @@ public class Promotion extends OrderEntity {
 	 * @param productCategories
 	 *            允许参与店铺商品分类
 	 */
+	/*
 	public void setShopCategories(Set<ShopCategory> shopCategories) {
 		this.shopCategories = shopCategories;
 	}
+	*/
 
 	/**
 	 * 获取允许参与商品
 	 * 
 	 * @return 允许参与商品
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_product")
 	public Set<Product> getProducts() {
 		return products;
 	}
+	*/
 
 	/**
 	 * 设置允许参与商品
@@ -460,20 +461,24 @@ public class Promotion extends OrderEntity {
 	 * @param products
 	 *            允许参与商品
 	 */
+	/*
 	public void setProducts(Set<Product> products) {
 		this.products = products;
 	}
+	*/
 
 	/**
 	 * 获取允许参与品牌
 	 * 
 	 * @return 允许参与品牌
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_brand")
 	public Set<Brand> getBrands() {
 		return brands;
 	}
+	*/
 
 	/**
 	 * 设置允许参与品牌
@@ -481,20 +486,24 @@ public class Promotion extends OrderEntity {
 	 * @param brands
 	 *            允许参与品牌
 	 */
+	/*
 	public void setBrands(Set<Brand> brands) {
 		this.brands = brands;
 	}
+	*/
 
 	/**
 	 * 获取赠送优惠券
 	 * 
 	 * @return 赠送优惠券
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_coupon")
 	public Set<Coupon> getCoupons() {
 		return coupons;
 	}
+	*/
 
 	/**
 	 * 设置赠送优惠券
@@ -502,20 +511,24 @@ public class Promotion extends OrderEntity {
 	 * @param coupons
 	 *            赠送优惠券
 	 */
+	/*
 	public void setCoupons(Set<Coupon> coupons) {
 		this.coupons = coupons;
 	}
+	*/
 
 	/**
 	 * 获取赠品
 	 * 
 	 * @return 赠品
 	 */
+	/*
 	@Valid
 	@OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<GiftItem> getGiftItems() {
 		return giftItems;
 	}
+	*/
 
 	/**
 	 * 设置赠品
@@ -523,9 +536,11 @@ public class Promotion extends OrderEntity {
 	 * @param giftItems
 	 *            赠品
 	 */
+	/*
 	public void setGiftItems(List<GiftItem> giftItems) {
 		this.giftItems = giftItems;
 	}
+	*/
 
 	/**
 	 * 判断是否已开始

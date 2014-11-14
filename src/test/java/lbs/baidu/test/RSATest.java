@@ -11,6 +11,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
@@ -21,6 +22,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
+import org.bouncycastle.asn1.x509.RSAPublicKeyStructure;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import cn.bmwm.common.utils.RSAUtils;
@@ -99,15 +101,25 @@ public class RSATest extends TestCase {
 		
 		byte[] keyBytes = Base64.decodeBase64(key);
 		
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+		//X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
 		
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		
+		RSAPublicKeyStructure asn1PubKey = new RSAPublicKeyStructure((ASN1Sequence) ASN1Sequence.fromByteArray(keyBytes));
+		
+		RSAPublicKeySpec keySpec = new RSAPublicKeySpec(asn1PubKey.getModulus(), asn1PubKey.getPublicExponent()); 
+		
 		RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
 		
-		String enText = RSAUtils.encrypt(publicKey, text);
+		Provider PROVIDER = new BouncyCastleProvider();
 		
-		System.out.println(enText);
+		Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
+		
+		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+		
+		byte[] data = cipher.doFinal(text.getBytes());
+		
+		System.out.println(new String(data));
 		
 	}
 	
@@ -115,7 +127,7 @@ public class RSATest extends TestCase {
 		
 		String enText = "mf2MVKlNw0yiubRfk465g2n9bJXH8n/P5hjcsXQtiqJMh6qPCZnkVydu8Kw/o3RlM61dQG6bvrq5sr+V9PzLPGR01np+RRET8ZZaGK/9HGkpnYE1/WPYSanPEVhz4YWxs5QrBIE4bccym1EW2VUb/ztLmGuUXx1N79I58TpasXY=";
 		
-		String key = "MIICXgIBAAKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQABAoGBAJU5ZZjL2AUaCYLAyd6B3wysehplFDiKTKUJUul6Bka+AEd2I4GnilvWXbEesn0Gn8EU5YzxizJn326UYp8ICizN85EI/jiKDk+gyt6BttDgX3Xf3v0nu15JmjTSD5Fo0m6hphuLEq7/fNDetQ1UgBeKi8jo6aLu9ySn1WTRTwWhAkEA+MbXeZSaVptzxW/B83h9c56/Pscg6FlQ9WsS0w0+7/FKluvAkQU2we5NwK6zJzRC38rlBMHconkNcU3pkUHtbQJBAML9mwhZ9l388Wng4NRyUnx/ZgT6FL1mioKq7vhFdc9FKjACAVmLE/FCKI4pd3MLHu/mGmXiJ/r6qu2WTdyk4akCQQCufkoE7UaUGNVLVugjbhAQWPirf+CFGKDAgyng/xl2EzjOQu3+yjluLUg8Lk1a4j1F23pnq9Kl42KaZpu9VxDBAkEAoccTp5wsQdKo4TWIk/q94Tk6BYsPRg0bgkobtrS6h9tUozwmroorY5GGYFybFEH3ywZYhItcrGjpA/Iea6AI8QJAbNRVCO2ImdT/fngoFKK40PLZSooFu0njRYcNUWGr7GkUxeS7gC3GNYWcZG+f8zbXaXsjyD0pSNeaHFDRmJCcTA==";
+		String key = "FvhricpBPgBR2fx8L1AuxAkp4sgskGQtwkhIjxqtaPIHzW6LGH+YyPUqPoSmHOzDrvSEwj2lmdCoU0cCjHJnZXp003JZbYUqW8A+4akLnUMzvOPUVl05Dmpg7UQ0gTv+s+R7DPlsPLLfD5kjF9BD2L5rt7O2oDrjTGuTyXkarQU=";
 		
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		

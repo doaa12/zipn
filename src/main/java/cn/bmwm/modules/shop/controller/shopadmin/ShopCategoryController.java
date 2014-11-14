@@ -4,7 +4,6 @@
  * */
 package cn.bmwm.modules.shop.controller.shopadmin;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.controller.admin.BaseController;
-import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -69,7 +67,7 @@ public class ShopCategoryController extends BaseController {
 		
 		shopCategory.setParent(parent);
 		shopCategory.setShop(shop);
-		shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		//shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
 		
 		if (!isValid(shopCategory)) {
 			return ERROR_VIEW;
@@ -78,7 +76,7 @@ public class ShopCategoryController extends BaseController {
 		shopCategory.setTreePath(parent.getTreePath() + parent.getId() + ProductCategory.TREE_PATH_SEPARATOR);
 		shopCategory.setParameterGroups(null);
 		shopCategory.setAttributes(null);
-		shopCategory.setPromotions(null);
+		//shopCategory.setPromotions(null);
 		
 		shopCategoryService.save(shopCategory);
 		
@@ -112,7 +110,7 @@ public class ShopCategoryController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(ShopCategory shopCategory, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		
-		shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		//shopCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
 		
 		if (!isValid(shopCategory)) {
 			return ERROR_VIEW;

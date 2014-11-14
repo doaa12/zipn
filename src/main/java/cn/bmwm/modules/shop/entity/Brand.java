@@ -8,15 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PreRemove;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -29,9 +26,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @version 1.0
  */
-@Entity
-@Table(name = "xx_brand")
-@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_brand_sequence")
+//@Entity
+//@Table(name = "xx_brand")
+//@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_brand_sequence")
 public class Brand extends OrderEntity {
 
 	private static final long serialVersionUID = -6109590619136943215L;
@@ -76,12 +73,12 @@ public class Brand extends OrderEntity {
 	private Set<ProductCategory> productCategories = new HashSet<ProductCategory>();
 
 	/** 促销 */
-	private Set<Promotion> promotions = new HashSet<Promotion>();
+	//private Set<Promotion> promotions = new HashSet<Promotion>();
 	
 	/**
 	 * 店铺分类
 	 */
-	private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
+	//private Set<ShopCategory> shopCategories = new HashSet<ShopCategory>();
 
 	/**
 	 * 获取名称
@@ -231,24 +228,30 @@ public class Brand extends OrderEntity {
 	 * 获取店铺商品分类
 	 * @return
 	 */
+	/*
 	@ManyToMany(mappedBy = "brands", fetch = FetchType.LAZY)
 	public Set<ShopCategory> getShopCategories() {
 		return shopCategories;
 	}
+	*/
 
+	/*
 	public void setShopCategories(Set<ShopCategory> shopCategories) {
 		this.shopCategories = shopCategories;
 	}
+	*/
 
 	/**
 	 * 获取促销
 	 * 
 	 * @return 促销
 	 */
+	/*
 	@ManyToMany(mappedBy = "brands", fetch = FetchType.LAZY)
 	public Set<Promotion> getPromotions() {
 		return promotions;
 	}
+	*/
 
 	/**
 	 * 设置促销
@@ -256,9 +259,11 @@ public class Brand extends OrderEntity {
 	 * @param promotions
 	 *            促销
 	 */
+	/*
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
 	}
+	*/
 
 	/**
 	 * 获取访问路径
@@ -290,12 +295,14 @@ public class Brand extends OrderEntity {
 				productCategory.getBrands().remove(this);
 			}
 		}
+		/*
 		Set<Promotion> promotions = getPromotions();
 		if (promotions != null) {
 			for (Promotion promotion : promotions) {
 				promotion.getBrands().remove(this);
 			}
 		}
+		*/
 	}
 
 }

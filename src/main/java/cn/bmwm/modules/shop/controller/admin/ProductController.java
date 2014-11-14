@@ -199,7 +199,7 @@ public class ProductController extends BaseController {
 		product.setReviews(null);
 		product.setConsultations(null);
 		product.setFavoriteMembers(null);
-		product.setPromotions(null);
+		//product.setPromotions(null);
 		product.setCartItems(null);
 		product.setOrderItems(null);
 		product.setGiftItems(null);

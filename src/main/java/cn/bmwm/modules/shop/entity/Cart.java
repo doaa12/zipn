@@ -21,8 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -257,6 +255,7 @@ public class Cart extends BaseEntity {
 	 * 
 	 * @return 赠品项
 	 */
+	/*
 	@Transient
 	public Set<GiftItem> getGiftItems() {
 		Set<GiftItem> giftItems = new HashSet<GiftItem>();
@@ -279,6 +278,7 @@ public class Cart extends BaseEntity {
 		}
 		return giftItems;
 	}
+	*/
 
 	/**
 	 * 获取促销
@@ -376,7 +376,7 @@ public class Cart extends BaseEntity {
 		if (promotion == null || !promotion.hasBegun() || promotion.hasEnded()) {
 			return false;
 		}
-		if (promotion.getMemberRanks() == null || promotion.getMemberRanks().isEmpty() || getMember() == null || getMember().getMemberRank() == null || !promotion.getMemberRanks().contains(getMember().getMemberRank())) {
+		if (getMember() == null) {
 			return false;
 		}
 		Integer quantity = getQuantity(promotion);

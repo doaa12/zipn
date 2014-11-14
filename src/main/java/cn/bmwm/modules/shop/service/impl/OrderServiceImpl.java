@@ -12,7 +12,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -42,12 +41,15 @@ import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Coupon;
 import cn.bmwm.modules.shop.entity.CouponCode;
 import cn.bmwm.modules.shop.entity.Deposit;
-import cn.bmwm.modules.shop.entity.GiftItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Order;
+import cn.bmwm.modules.shop.entity.Order.OrderStatus;
+import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
+import cn.bmwm.modules.shop.entity.Order.ShippingStatus;
 import cn.bmwm.modules.shop.entity.OrderItem;
 import cn.bmwm.modules.shop.entity.OrderLog;
+import cn.bmwm.modules.shop.entity.OrderLog.Type;
 import cn.bmwm.modules.shop.entity.Payment;
 import cn.bmwm.modules.shop.entity.PaymentMethod;
 import cn.bmwm.modules.shop.entity.Product;
@@ -60,10 +62,6 @@ import cn.bmwm.modules.shop.entity.Shipping;
 import cn.bmwm.modules.shop.entity.ShippingItem;
 import cn.bmwm.modules.shop.entity.ShippingMethod;
 import cn.bmwm.modules.shop.entity.Sn;
-import cn.bmwm.modules.shop.entity.Order.OrderStatus;
-import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
-import cn.bmwm.modules.shop.entity.Order.ShippingStatus;
-import cn.bmwm.modules.shop.entity.OrderLog.Type;
 import cn.bmwm.modules.shop.service.OrderService;
 import cn.bmwm.modules.shop.service.StaticService;
 import cn.bmwm.modules.sys.model.Setting;
@@ -248,7 +246,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				orderItems.add(orderItem);
 			}
 		}
-
+		
+		/*
 		for (GiftItem giftItem : cart.getGiftItems()) {
 			if (giftItem != null && giftItem.getGift() != null) {
 				Product gift = giftItem.getGift();
@@ -268,6 +267,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				orderItems.add(orderItem);
 			}
 		}
+		*/
 
 		Setting setting = SettingUtils.get();
 		if (setting.getIsInvoiceEnabled() && isInvoice && StringUtils.isNotEmpty(invoiceTitle)) {
@@ -329,12 +329,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 			couponCode.setUsedDate(new Date());
 			couponCodeDao.merge(couponCode);
 		}
-
+		
+		/*
 		for (Promotion promotion : cart.getPromotions()) {
 			for (Coupon coupon : promotion.getCoupons()) {
 				order.getCoupons().add(coupon);
 			}
 		}
+		*/
 
 		Setting setting = SettingUtils.get();
 		if (setting.getStockAllocationTime() == StockAllocationTime.order || (setting.getStockAllocationTime() == StockAllocationTime.payment && (order.getPaymentStatus() == PaymentStatus.partialPayment || order.getPaymentStatus() == PaymentStatus.paid))) {

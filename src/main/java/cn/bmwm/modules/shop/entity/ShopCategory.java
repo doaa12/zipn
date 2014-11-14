@@ -8,12 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PreRemove;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -71,7 +68,7 @@ public class ShopCategory extends OrderEntity {
 	/** 
 	 * 促销
 	 */
-	private Set<Promotion> promotions = new HashSet<Promotion>();
+	//private Set<Promotion> promotions = new HashSet<Promotion>();
 	
 	/** 
 	 * 参数组 
@@ -86,7 +83,7 @@ public class ShopCategory extends OrderEntity {
 	/**
 	 * 品牌
 	 */
-	private Set<Brand> brands = new HashSet<Brand>();
+	//private Set<Brand> brands = new HashSet<Brand>();
 	
 	
 	/**
@@ -186,6 +183,7 @@ public class ShopCategory extends OrderEntity {
 	 * 获取店铺促销
 	 * @return
 	 */
+	/*
 	@ManyToMany(mappedBy = "shopCategories", fetch = FetchType.LAZY)
 	public Set<Promotion> getPromotions() {
 		return promotions;
@@ -194,6 +192,7 @@ public class ShopCategory extends OrderEntity {
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
 	}
+	*/
 	
 	/**
 	 * 获取参数组
@@ -241,6 +240,7 @@ public class ShopCategory extends OrderEntity {
 	 * 获取店铺商品分类品牌
 	 * @return
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_shop_category_brand")
 	public Set<Brand> getBrands() {
@@ -250,10 +250,12 @@ public class ShopCategory extends OrderEntity {
 	public void setBrands(Set<Brand> brands) {
 		this.brands = brands;
 	}
+	*/
 
 	/**
 	 * 删除前处理
 	 */
+	/*
 	@PreRemove
 	public void preRemove() {
 		Set<Promotion> promotions = getPromotions();
@@ -263,5 +265,6 @@ public class ShopCategory extends OrderEntity {
 			}
 		}
 	}
+	*/
 	
 }

@@ -330,7 +330,7 @@ public class Product extends BaseEntity {
 	private Set<Member> favoriteMembers = new HashSet<Member>();
 
 	/** 促销 */
-	private Set<Promotion> promotions = new HashSet<Promotion>();
+	//private Set<Promotion> promotions = new HashSet<Promotion>();
 
 	/** 购物车项 */
 	private Set<CartItem> cartItems = new HashSet<CartItem>();
@@ -1795,21 +1795,24 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 促销
 	 */
+	/*
 	@ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
 	public Set<Promotion> getPromotions() {
 		return promotions;
 	}
-
+	*/
+	
 	/**
 	 * 设置促销
 	 * 
 	 * @param promotions
 	 *            促销
 	 */
+	/*
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
 	}
-
+	*/
 	/**
 	 * 获取购物车项
 	 * 
@@ -2084,9 +2087,11 @@ public class Product extends BaseEntity {
 		
 		Set<Promotion> allPromotions = new HashSet<Promotion>();
 		
+		/*
 		if (getPromotions() != null) {
 			allPromotions.addAll(getPromotions());
 		}
+		*/
 		
 		if (getShop() != null && getShop().getPromotions() != null) {
 			allPromotions.addAll(getShop().getPromotions());
@@ -2206,6 +2211,7 @@ public class Product extends BaseEntity {
 	 *            促销
 	 * @return 促销是否有效
 	 */
+	/*
 	@Transient
 	public boolean isValid(Promotion promotion) {
 		if (promotion == null || !promotion.hasBegun() || promotion.hasEnded() || promotion.getMemberRanks() == null
@@ -2217,7 +2223,19 @@ public class Product extends BaseEntity {
 		}
 		return false;
 	}
-
+	*/
+	
+	@Transient
+	public boolean isValid(Promotion promotion) {
+		if (promotion == null || !promotion.hasBegun() || promotion.hasEnded()) {
+			return false;
+		}
+		if (getValidPromotions().contains(promotion)) {
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * 删除前处理
 	 */
@@ -2229,12 +2247,14 @@ public class Product extends BaseEntity {
 				favoriteMember.getFavoriteProducts().remove(this);
 			}
 		}
+		/*
 		Set<Promotion> promotions = getPromotions();
 		if (promotions != null) {
 			for (Promotion promotion : promotions) {
 				promotion.getProducts().remove(this);
 			}
 		}
+		*/
 		Set<OrderItem> orderItems = getOrderItems();
 		if (orderItems != null) {
 			for (OrderItem orderItem : orderItems) {
