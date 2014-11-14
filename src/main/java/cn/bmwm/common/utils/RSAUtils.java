@@ -161,20 +161,25 @@ public final class RSAUtils {
 			
 			RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
 			
-			try {
-				Cipher cipher = Cipher.getInstance("RSA", PROVIDER);
-				cipher.init(Cipher.DECRYPT_MODE, privateKey);
-				data = cipher.doFinal(Base64.decodeBase64(text));
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+			Provider PROVIDER = new BouncyCastleProvider();
+			
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
+			
+			cipher.init(Cipher.DECRYPT_MODE, privateKey);
+			
+			data = cipher.doFinal(Base64.decodeBase64(text));
 			
 		}catch(Exception e) {
 			throw new SystemException("解密异常！", e);
 		}
 		
-		return data != null ? new String(data) : null;
+		if(data == null) return null;
+		
+		byte[] result = new byte[data.length - 1];
+		
+		System.arraycopy(data, 0, result, 0, data.length - 1);
+		
+		return data != null ? new String(result) : null;
 		
 	}
 
