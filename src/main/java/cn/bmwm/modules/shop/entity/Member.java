@@ -16,7 +16,6 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -30,7 +29,6 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -184,7 +182,7 @@ public class Member extends BaseEntity {
 	private Area area;
 
 	/** 会员等级 */
-	private MemberRank memberRank;
+	//private MemberRank memberRank;
 
 	/** 购物车 */
 	private Cart cart;
@@ -199,7 +197,7 @@ public class Member extends BaseEntity {
 	private Set<Payment> payments = new HashSet<Payment>();
 
 	/** 优惠码 */
-	private Set<CouponCode> couponCodes = new HashSet<CouponCode>();
+	//private Set<CouponCode> couponCodes = new HashSet<CouponCode>();
 
 	/** 收货地址 */
 	private Set<Receiver> receivers = new HashSet<Receiver>();
@@ -901,12 +899,14 @@ public class Member extends BaseEntity {
 	 * 
 	 * @return 会员等级
 	 */
+	/*
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	public MemberRank getMemberRank() {
 		return memberRank;
 	}
+	*/
 
 	/**
 	 * 设置会员等级
@@ -914,9 +914,11 @@ public class Member extends BaseEntity {
 	 * @param memberRank
 	 *            会员等级
 	 */
+	/*
 	public void setMemberRank(MemberRank memberRank) {
 		this.memberRank = memberRank;
 	}
+	*/
 
 	/**
 	 * 获取购物车
@@ -1003,10 +1005,12 @@ public class Member extends BaseEntity {
 	 * 
 	 * @return 优惠码
 	 */
+	/*
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	public Set<CouponCode> getCouponCodes() {
 		return couponCodes;
 	}
+	*/
 
 	/**
 	 * 设置优惠码
@@ -1014,9 +1018,11 @@ public class Member extends BaseEntity {
 	 * @param couponCodes
 	 *            优惠码
 	 */
+	/*
 	public void setCouponCodes(Set<CouponCode> couponCodes) {
 		this.couponCodes = couponCodes;
 	}
+	*/
 
 	/**
 	 * 获取收货地址

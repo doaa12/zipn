@@ -38,11 +38,9 @@ import cn.bmwm.modules.shop.dao.SnDao;
 import cn.bmwm.modules.shop.entity.Admin;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
-import cn.bmwm.modules.shop.entity.Coupon;
 import cn.bmwm.modules.shop.entity.CouponCode;
 import cn.bmwm.modules.shop.entity.Deposit;
 import cn.bmwm.modules.shop.entity.Member;
-import cn.bmwm.modules.shop.entity.MemberRank;
 import cn.bmwm.modules.shop.entity.Order;
 import cn.bmwm.modules.shop.entity.Order.OrderStatus;
 import cn.bmwm.modules.shop.entity.Order.PaymentStatus;
@@ -215,7 +213,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		} else {
 			order.setFreight(new BigDecimal(0));
 		}
-
+		/*
 		if (couponCode != null && cart.isCouponAllowed()) {
 			couponCodeDao.lock(couponCode, LockModeType.PESSIMISTIC_WRITE);
 			if (!couponCode.getIsUsed() && couponCode.getCoupon() != null && cart.isValid(couponCode.getCoupon())) {
@@ -225,6 +223,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				order.setCouponCode(couponCode);
 			}
 		}
+		*/
 
 		List<OrderItem> orderItems = order.getOrderItems();
 		for (CartItem cartItem : cart.getCartItems()) {
@@ -323,13 +322,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 			order.setLockExpire(DateUtils.addSeconds(new Date(), 20));
 			order.setOperator(operator);
 		}
-
+		
+		/*
 		if (order.getCouponCode() != null) {
 			couponCode.setIsUsed(true);
 			couponCode.setUsedDate(new Date());
 			couponCodeDao.merge(couponCode);
 		}
-		
+		*/
 		/*
 		for (Promotion promotion : cart.getPromotions()) {
 			for (Coupon coupon : promotion.getCoupons()) {
@@ -448,14 +448,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
 		Member member = order.getMember();
 		memberDao.lock(member, LockModeType.PESSIMISTIC_WRITE);
-
+		/*
 		if (order.getShippingStatus() == ShippingStatus.partialShipment || order.getShippingStatus() == ShippingStatus.shipped) {
 			member.setPoint(member.getPoint() + order.getPoint());
 			for (Coupon coupon : order.getCoupons()) {
 				couponCodeDao.build(coupon, member);
 			}
 		}
-
+		*/
+		
+		/*
 		if (order.getShippingStatus() == ShippingStatus.unshipped || order.getShippingStatus() == ShippingStatus.returned) {
 			CouponCode couponCode = order.getCouponCode();
 			if (couponCode != null) {
@@ -467,14 +469,17 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				orderDao.merge(order);
 			}
 		}
+		*/
 
 		member.setAmount(member.getAmount().add(order.getAmountPaid()));
+		/*
 		if (!member.getMemberRank().getIsSpecial()) {
 			MemberRank memberRank = memberRankDao.findByAmount(member.getAmount());
 			if (memberRank != null && memberRank.getAmount().compareTo(member.getMemberRank().getAmount()) > 0) {
 				member.setMemberRank(memberRank);
 			}
 		}
+		*/
 		memberDao.merge(member);
 
 		if (order.getIsAllocatedStock()) {
@@ -536,6 +541,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 	public void cancel(Order order, Admin operator) {
 		Assert.notNull(order);
 
+		/*
 		CouponCode couponCode = order.getCouponCode();
 		if (couponCode != null) {
 			couponCode.setIsUsed(false);
@@ -545,6 +551,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 			order.setCouponCode(null);
 			orderDao.merge(order);
 		}
+		*/
 
 		if (order.getIsAllocatedStock()) {
 			for (OrderItem orderItem : order.getOrderItems()) {

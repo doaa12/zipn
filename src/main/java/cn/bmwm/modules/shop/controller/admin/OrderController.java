@@ -556,8 +556,8 @@ public class OrderController extends BaseController {
 		order.setIsAllocatedStock(pOrder.getIsAllocatedStock());
 		order.setOperator(null);
 		order.setMember(pOrder.getMember());
-		order.setCouponCode(pOrder.getCouponCode());
-		order.setCoupons(pOrder.getCoupons());
+		//order.setCouponCode(pOrder.getCouponCode());
+		//order.setCoupons(pOrder.getCoupons());
 		order.setOrderLogs(pOrder.getOrderLogs());
 		order.setDeposits(pOrder.getDeposits());
 		order.setPayments(pOrder.getPayments());

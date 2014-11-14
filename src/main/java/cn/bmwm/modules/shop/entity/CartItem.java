@@ -5,7 +5,6 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -164,8 +163,9 @@ public class CartItem extends BaseEntity {
 	public BigDecimal getUnitPrice() {
 		if (getProduct() != null && getProduct().getPrice() != null) {
 			Setting setting = SettingUtils.get();
-			if (getCart() != null && getCart().getMember() != null && getCart().getMember().getMemberRank() != null) {
-				MemberRank memberRank = getCart().getMember().getMemberRank();
+			/*
+			if (getCart() != null && getCart().getMember() != null) {
+				//MemberRank memberRank = getCart().getMember().getMemberRank();
 				Map<MemberRank, BigDecimal> memberPrice = getProduct().getMemberPrice();
 				if (memberPrice != null && !memberPrice.isEmpty()) {
 					if (memberPrice.containsKey(memberRank)) {
@@ -176,6 +176,7 @@ public class CartItem extends BaseEntity {
 					return setting.setScale(getProduct().getPrice().multiply(new BigDecimal(memberRank.getScale())));
 				}
 			}
+			*/
 			return setting.setScale(getProduct().getPrice());
 		} else {
 			return new BigDecimal(0);

@@ -122,7 +122,7 @@ public class MemberController extends BaseController {
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Member member, Long memberRankId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-		member.setMemberRank(memberRankService.find(memberRankId));
+		//member.setMemberRank(memberRankService.find(memberRankId));
 		if (!isValid(member, Save.class)) {
 			return ERROR_VIEW;
 		}
@@ -193,7 +193,7 @@ public class MemberController extends BaseController {
 		member.setOrders(null);
 		member.setDeposits(null);
 		member.setPayments(null);
-		member.setCouponCodes(null);
+		//member.setCouponCodes(null);
 		member.setReceivers(null);
 		member.setReviews(null);
 		member.setConsultations(null);
@@ -223,7 +223,7 @@ public class MemberController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Member member, Long memberRankId, Integer modifyPoint, BigDecimal modifyBalance, String depositMemo, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-		member.setMemberRank(memberRankService.find(memberRankId));
+		//member.setMemberRank(memberRankService.find(memberRankId));
 		if (!isValid(member)) {
 			return ERROR_VIEW;
 		}

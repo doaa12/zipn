@@ -220,7 +220,7 @@ public class ProductController extends BaseController {
 		}
 		
 		product.setIsTop(false);
-		product.setBrand(brandService.find(brandId));
+		//product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
 			return ERROR_VIEW;
@@ -400,7 +400,7 @@ public class ProductController extends BaseController {
 			}
 		}
 		
-		product.setBrand(brandService.find(brandId));
+		//product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		product.setShopCategory(shopCategory);
 		product.setCity(shop.getCity());

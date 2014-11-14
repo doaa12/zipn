@@ -4,7 +4,6 @@
  * */
 package cn.bmwm.modules.shop.controller.admin;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.utils.Message;
-import cn.bmwm.modules.shop.entity.Brand;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.BrandService;
@@ -56,7 +54,7 @@ public class ProductCategoryController extends BaseController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(ProductCategory productCategory, Long parentId, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		productCategory.setParent(productCategoryService.find(parentId));
-		productCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		//productCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
 		if (!isValid(productCategory)) {
 			return ERROR_VIEW;
 		}
@@ -90,7 +88,7 @@ public class ProductCategoryController extends BaseController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(ProductCategory productCategory, Long parentId, Long[] brandIds, RedirectAttributes redirectAttributes) {
 		productCategory.setParent(productCategoryService.find(parentId));
-		productCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
+		//productCategory.setBrands(new HashSet<Brand>(brandService.findList(brandIds)));
 		if (!isValid(productCategory)) {
 			return ERROR_VIEW;
 		}

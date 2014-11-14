@@ -12,8 +12,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -84,7 +82,7 @@ public class ProductCategory extends OrderEntity {
 	private Set<Shop> shops = new HashSet<Shop>();
 
 	/** 筛选品牌 */
-	private Set<Brand> brands = new HashSet<Brand>();
+	//private Set<Brand> brands = new HashSet<Brand>();
 
 	/**
 	 * 获取名称
@@ -272,12 +270,14 @@ public class ProductCategory extends OrderEntity {
 	 * 
 	 * @return 筛选品牌
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_product_category_brand")
 	@OrderBy("order asc")
 	public Set<Brand> getBrands() {
 		return brands;
 	}
+	*/
 
 	/**
 	 * 设置筛选品牌
@@ -285,9 +285,11 @@ public class ProductCategory extends OrderEntity {
 	 * @param brands
 	 *            筛选品牌
 	 */
+	/*
 	public void setBrands(Set<Brand> brands) {
 		this.brands = brands;
 	}
+	*/
 	
 	/**
 	 * 获取店铺

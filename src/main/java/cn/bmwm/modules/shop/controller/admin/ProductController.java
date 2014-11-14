@@ -41,7 +41,6 @@ import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.FileService;
-import cn.bmwm.modules.shop.service.GoodsService;
 import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -67,8 +66,8 @@ public class ProductController extends BaseController {
 	private ProductService productService;
 	@Resource(name = "productCategoryServiceImpl")
 	private ProductCategoryService productCategoryService;
-	@Resource(name = "goodsServiceImpl")
-	private GoodsService goodsService;
+	//@Resource(name = "goodsServiceImpl")
+	//private GoodsService goodsService;
 	@Resource(name = "brandServiceImpl")
 	private BrandService brandService;
 	@Resource(name = "promotionServiceImpl")
@@ -160,7 +159,7 @@ public class ProductController extends BaseController {
 		}
 		
 		//product.setProductCategory(productCategoryService.find(productCategoryId));
-		product.setBrand(brandService.find(brandId));
+		//product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		
 		if (!isValid(product)) {

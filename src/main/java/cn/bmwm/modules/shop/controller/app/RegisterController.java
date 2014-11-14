@@ -170,7 +170,7 @@ public class RegisterController {
 		member.setLoginIp(request.getRemoteAddr());
 		member.setLoginDate(new Date());
 		member.setSafeKey(null);
-		member.setMemberRank(memberRankService.findDefault());
+		//member.setMemberRank(memberRankService.findDefault());
 		member.setFavoriteProducts(null);
 		memberService.save(member);
 		

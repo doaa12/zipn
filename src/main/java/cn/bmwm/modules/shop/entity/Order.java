@@ -16,11 +16,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -32,7 +29,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -210,10 +206,10 @@ public class Order extends BaseEntity {
 	private Member member;
 
 	/** 优惠码 */
-	private CouponCode couponCode;
+	//private CouponCode couponCode;
 
 	/** 优惠券 */
-	private List<Coupon> coupons = new ArrayList<Coupon>();
+	//private List<Coupon> coupons = new ArrayList<Coupon>();
 
 	/** 订单项 */
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
@@ -881,10 +877,12 @@ public class Order extends BaseEntity {
 	 * 
 	 * @return 优惠码
 	 */
+	/*
 	@OneToOne(fetch = FetchType.LAZY)
 	public CouponCode getCouponCode() {
 		return couponCode;
 	}
+	*/
 
 	/**
 	 * 设置优惠码
@@ -892,20 +890,24 @@ public class Order extends BaseEntity {
 	 * @param couponCode
 	 *            优惠码
 	 */
+	/*
 	public void setCouponCode(CouponCode couponCode) {
 		this.couponCode = couponCode;
 	}
+	*/
 
 	/**
 	 * 获取优惠券
 	 * 
 	 * @return 优惠券
 	 */
+	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_order_coupon")
 	public List<Coupon> getCoupons() {
 		return coupons;
 	}
+	*/
 
 	/**
 	 * 设置优惠券
@@ -913,9 +915,11 @@ public class Order extends BaseEntity {
 	 * @param coupons
 	 *            优惠券
 	 */
+	/*
 	public void setCoupons(List<Coupon> coupons) {
 		this.coupons = coupons;
 	}
+	*/
 
 	/**
 	 * 获取订单项

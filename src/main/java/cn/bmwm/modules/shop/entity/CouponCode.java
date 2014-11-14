@@ -7,14 +7,10 @@ package cn.bmwm.modules.shop.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PreRemove;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 /**
  * Entity - 优惠码
@@ -22,9 +18,9 @@ import javax.persistence.Table;
  *
  * @version 1.0
  */
-@Entity
-@Table(name = "xx_coupon_code")
-@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_coupon_code_sequence")
+//@Entity
+//@Table(name = "xx_coupon_code")
+//@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_coupon_code_sequence")
 public class CouponCode extends BaseEntity {
 
 	private static final long serialVersionUID = -1812874037224306719L;
@@ -171,11 +167,13 @@ public class CouponCode extends BaseEntity {
 	/**
 	 * 删除前处理
 	 */
+	/*
 	@PreRemove
 	public void preRemove() {
 		if (getOrder() != null) {
 			getOrder().setCouponCode(null);
 		}
 	}
+	*/
 
 }

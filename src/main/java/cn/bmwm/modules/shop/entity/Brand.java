@@ -13,7 +13,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PreRemove;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -281,6 +280,7 @@ public class Brand extends OrderEntity {
 	/**
 	 * 删除前处理
 	 */
+	/*
 	@PreRemove
 	public void preRemove() {
 		Set<Product> products = getProducts();
@@ -295,14 +295,13 @@ public class Brand extends OrderEntity {
 				productCategory.getBrands().remove(this);
 			}
 		}
-		/*
 		Set<Promotion> promotions = getPromotions();
 		if (promotions != null) {
 			for (Promotion promotion : promotions) {
 				promotion.getBrands().remove(this);
 			}
 		}
-		*/
 	}
+	*/
 
 }
