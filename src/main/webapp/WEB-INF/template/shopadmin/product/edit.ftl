@@ -663,7 +663,7 @@ $().ready(function() {
 								<a href="javascript:;" class="deleteSpecificationProduct">[${message("admin.common.delete")}]</a>
 							</td>
 						</tr>
-						[#if product.productSpecifications?has_content]
+						[#if product.specifications?has_content]
 							<tr>
 								<td>
 									${message("admin.product.currentSpecification")}
