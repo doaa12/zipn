@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -69,25 +68,6 @@ public class RegisterController {
 		}else {
 			result.put("flag", 1);
 		}
-		
-		return result;
-		
-	}
-	
-	/**
-	 * 发送验证码短信
-	 * @return
-	 */
-	@RequestMapping(value = "/send_code")
-	public Map<String,Object> sendValidateCode(HttpSession session) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		String code = getValidateCode();
-		
-		session.setAttribute("code", code);
-		result.put("code", code);
-		result.put("flag", 1);
 		
 		return result;
 		
@@ -184,24 +164,6 @@ public class RegisterController {
 		result.put("username", member.getUsername());
 		
 		return result;
-		
-	}
-	
-	/**
-	 * 生成短信验证码
-	 * @return
-	 */
-	public String getValidateCode() {
-		
-		Random random = new Random();
-		
-		StringBuilder code = new StringBuilder();
-		code.append(random.nextInt(10));
-		code.append(random.nextInt(10));
-		code.append(random.nextInt(10));
-		code.append(random.nextInt(10));
-		
-		return code.toString();
 		
 	}
 	

@@ -3,20 +3,14 @@
  */
 package cn.bmwm.modules.shop.controller.app;
 
-import java.security.interfaces.RSAPublicKey;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import cn.bmwm.modules.shop.service.RSAService;
 
 /**
  * 公共 -- Controller
@@ -26,21 +20,43 @@ import cn.bmwm.modules.shop.service.RSAService;
 @Controller("appCommonController")
 @RequestMapping("/app/common")
 public class CommonController {
-
-	@Resource(name = "rsaServiceImpl")
-	private RSAService rsaService;
+	
 	
 	/**
-	 * 公钥
+	 * 发送验证码短信
+	 * @return
 	 */
-	@RequestMapping(value = "/public_key", method = RequestMethod.GET)
-	public @ResponseBody
-	Map<String, String> publicKey(HttpServletRequest request) {
-		RSAPublicKey publicKey = rsaService.generateKey(request);
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("n", Base64.encodeBase64String(publicKey.getModulus().toByteArray()));
-		data.put("e", Base64.encodeBase64String(publicKey.getPublicExponent().toByteArray()));
-		return data;
+	@RequestMapping(value = "/send_code")
+	public Map<String,Object> sendValidateCode(HttpSession session) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		String code = getValidateCode();
+		
+		session.setAttribute("code", code);
+		result.put("code", code);
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 生成短信验证码
+	 * @return
+	 */
+	public String getValidateCode() {
+		
+		Random random = new Random();
+		
+		StringBuilder code = new StringBuilder();
+		code.append(random.nextInt(10));
+		code.append(random.nextInt(10));
+		code.append(random.nextInt(10));
+		code.append(random.nextInt(10));
+		
+		return code.toString();
+		
 	}
 	
 }
