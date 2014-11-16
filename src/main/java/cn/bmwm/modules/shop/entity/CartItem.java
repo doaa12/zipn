@@ -131,6 +131,7 @@ public class CartItem extends BaseEntity {
 	 * 
 	 * @return 赠送积分
 	 */
+	/*
 	@Transient
 	public long getPoint() {
 		if (getProduct() != null && getProduct().getPoint() != null && getQuantity() != null) {
@@ -139,6 +140,7 @@ public class CartItem extends BaseEntity {
 			return 0L;
 		}
 	}
+	*/
 
 	/**
 	 * 获取商品重量

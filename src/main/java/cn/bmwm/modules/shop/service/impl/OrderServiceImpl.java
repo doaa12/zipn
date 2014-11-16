@@ -172,7 +172,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		order.setPromotionDiscount(cart.getDiscount());
 		order.setCouponDiscount(new BigDecimal(0));
 		order.setOffsetAmount(new BigDecimal(0));
-		order.setPoint(cart.getEffectivePoint());
+		//order.setPoint(cart.getEffectivePoint());
 		order.setMemo(memo);
 		order.setMember(cart.getMember());
 

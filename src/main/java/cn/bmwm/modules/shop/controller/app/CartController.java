@@ -104,6 +104,7 @@ public class CartController extends AppBaseController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(squantity)) {
+			result.put("message", "商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
@@ -111,11 +112,13 @@ public class CartController extends AppBaseController {
 		int quantity = Integer.parseInt(squantity);
 		
 		if(quantity < 1) {
+			result.put("message", "商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
 		
 		if(StringUtils.isBlank(sid)) {
+			result.put("message", "商品不存在！");
 			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
 			return result;
 		}
@@ -124,14 +127,17 @@ public class CartController extends AppBaseController {
 		Product product = productService.find(id);
 		
 		if (product == null) {
+			result.put("message", "商品不存在！");
 			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
 			return result;
 		}
 		if (!product.getIsMarketable()) {
+			result.put("message", "商品未上架！");
 			result.put("flag", Constants.CART_PRODUCT_NOT_MARKETABLE);
 			return result;
 		}
 		if (product.getIsGift()) {
+			result.put("message", "该商品是赠品！");
 			result.put("flag", Constants.CART_PRODUCT_GIFT);
 			return result;
 		}
@@ -140,6 +146,7 @@ public class CartController extends AppBaseController {
 		
 		if(productSpecifications != null && productSpecifications.size() > 0) {
 			if(StringUtils.isBlank(sspecId)) {
+				result.put("message", "请选择商品规格！");
 				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
 				return result;
 			}
@@ -152,6 +159,7 @@ public class CartController extends AppBaseController {
 			productSpecification = productSpecificationService.find(specId);
 			
 			if(productSpecification == null) {
+				result.put("message", "商品规格不存在！");
 				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
 				return result;
 			}
@@ -169,6 +177,7 @@ public class CartController extends AppBaseController {
 		}
 
 		if (Cart.MAX_PRODUCT_COUNT != null && cart.getCartItems().size() >= Cart.MAX_PRODUCT_COUNT) {
+			result.put("message", "商品数量超过购物车最大允许商品数量！");
 			result.put("flag", Constants.CART_PRODUCT_MAX_COUNT);
 			return result;
 		}
@@ -178,14 +187,17 @@ public class CartController extends AppBaseController {
 			CartItem cartItem = cart.getCartItem(product, productSpecification);
 			
 			if (CartItem.MAX_QUANTITY != null && cartItem.getQuantity() + quantity > CartItem.MAX_QUANTITY) {
+				result.put("message", "商品数量超过单品最大允许数量！");
 				result.put("flag", Constants.CART_ITEM_MAX_QUANTITY);
 				return result;
 			}
 			
 			if (productSpecification == null && product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
+				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			} else if(productSpecification != null && productSpecification.getStock() != null && cartItem.getQuantity() + quantity > productSpecification.getAvailableStock()) {
+				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			}
@@ -196,14 +208,17 @@ public class CartController extends AppBaseController {
 		} else {
 			
 			if (CartItem.MAX_QUANTITY != null && quantity > CartItem.MAX_QUANTITY) {
+				result.put("message", "商品数量超过单品最大允许数量！");
 				result.put("flag", Constants.CART_ITEM_MAX_QUANTITY);
 				return result;
 			}
 			
 			if (productSpecification == null && product.getStock() != null && quantity > product.getAvailableStock()) {
+				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			}else if(productSpecification != null && productSpecification.getStock() != null && quantity > productSpecification.getAvailableStock()) {
+				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
 			}

@@ -4,7 +4,9 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -121,9 +123,46 @@ public class ProductSpecification extends BaseEntity {
 	/**
 	 * @param productSpecificationValues the productSpecificationValues to set
 	 */
-	public void setProductSpecificationValues(
-			List<ProductSpecificationValue> productSpecificationValues) {
+	public void setProductSpecificationValues(List<ProductSpecificationValue> productSpecificationValues) {
 		this.productSpecificationValues = productSpecificationValues;
+	}
+	
+	/**
+	 * 获取商品规格
+	 * @return
+	 */
+	@Transient
+	public Set<Specification> getSpecifications() {
+		
+		Set<Specification> specifications = new HashSet<Specification>();
+		
+		if(productSpecificationValues == null || productSpecificationValues.size() == 0) return specifications;
+		
+		for(ProductSpecificationValue productSpecificationValue : productSpecificationValues) {
+			specifications.add(productSpecificationValue.getSpecification());
+		}
+		
+		return specifications;
+			
+	}
+	
+	/**
+	 * 获取商品规格值
+	 * @return
+	 */
+	@Transient
+	public Set<SpecificationValue> getSpecificationValues() {
+		
+		Set<SpecificationValue> specificationValues = new HashSet<SpecificationValue>();
+		
+		if(productSpecificationValues == null || productSpecificationValues.size() == 0) return specificationValues;
+		
+		for(ProductSpecificationValue productSpecificationValue : productSpecificationValues) {
+			specificationValues.add(productSpecificationValue.getSpecificationValue());
+		}
+		
+		return specificationValues;
+		
 	}
 	
 }

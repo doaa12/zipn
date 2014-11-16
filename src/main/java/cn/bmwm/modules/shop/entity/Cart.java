@@ -159,6 +159,7 @@ public class Cart extends BaseEntity {
 	 * 
 	 * @return 赠送积分
 	 */
+	/*
 	@Transient
 	public long getPoint() {
 		long point = 0L;
@@ -171,12 +172,14 @@ public class Cart extends BaseEntity {
 		}
 		return point;
 	}
+	*/
 
 	/**
 	 * 获取赠送积分增加值
 	 * 
 	 * @return 赠送积分增加值
 	 */
+	/*
 	@Transient
 	public long getAddedPoint() {
 		long originalPoint = 0L;
@@ -190,17 +193,20 @@ public class Cart extends BaseEntity {
 		long addedPoint = currentPoint - originalPoint;
 		return addedPoint > 0 ? addedPoint : 0L;
 	}
+	*/
 
 	/**
 	 * 获取有效赠送积分
 	 * 
 	 * @return 有效赠送积分
 	 */
+	/*
 	@Transient
 	public long getEffectivePoint() {
 		long effectivePoint = getPoint() + getAddedPoint();
 		return effectivePoint > 0L ? effectivePoint : 0L;
 	}
+	*/
 
 	/**
 	 * 获取商品价格
@@ -331,6 +337,7 @@ public class Cart extends BaseEntity {
 	 *            促销
 	 * @return 促销商品赠送积分
 	 */
+	/*
 	@Transient
 	private long getPoint(Promotion promotion) {
 		long point = 0L;
@@ -343,6 +350,7 @@ public class Cart extends BaseEntity {
 		}
 		return point;
 	}
+	*/
 
 	/**
 	 * 获取促销商品价格

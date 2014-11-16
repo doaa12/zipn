@@ -42,8 +42,8 @@ $().ready(function() {
 	var $attributeTable = $("#attributeTable");
 	var $specificationIds = $("#specificationSelect :checkbox");
 	var $specificationProductTable = $("#specificationProductTable");
-	var $addSpecificationProduct = $("#addSpecificationProduct");
-	var $deleteSpecificationProduct = $("a.deleteSpecificationProduct");
+	var $addProductSpecification = $("#addProductSpecification");
+	var $deleteProductSpecification = $("a.deleteProductSpecification");
 	var productImageIndex = ${(product.productImages?size)!"0"};
 	var previousShopCategoryId = "${product.shopCategory.id}";
 	
@@ -208,7 +208,7 @@ $().ready(function() {
 	});
 	
 	// 增加规格商品
-	$addSpecificationProduct.click(function() {
+	$addProductSpecification.click(function() {
 		if ($specificationIds.filter(":checked").size() == 0) {
 			$.message("warn", "${message("admin.product.specificationRequired")}");
 			return false;
@@ -223,7 +223,7 @@ $().ready(function() {
 	});
 	
 	// 删除规格商品
-	$deleteSpecificationProduct.live("click", function() {
+	$deleteProductSpecification.live("click", function() {
 		var $this = $(this);
 		$.dialog({
 			type: "warn",
@@ -624,7 +624,7 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<td>
-					<a href="javascript:;" id="addSpecificationProduct" class="button">${message("admin.product.addSpecificationProduct")}</a>
+					<a href="javascript:;" id="addProductSpecification" class="button">${message("admin.product.addSpecificationProduct")}</a>
 				</td>
 			</tr>
 			<tr>
@@ -660,47 +660,27 @@ $().ready(function() {
 								</td>
 							[/#list]
 							<td>
-								<a href="javascript:;" class="deleteSpecificationProduct">[${message("admin.common.delete")}]</a>
+								<a href="javascript:;" class="deleteProductSpecification">[${message("admin.common.delete")}]</a>
 							</td>
 						</tr>
-						[#if product.specifications?has_content]
-							<tr>
-								<td>
-									${message("admin.product.currentSpecification")}
-									<input type="hidden" name="specificationProductIds" value="${product.id}" />
-								</td>
-								[#list specifications as specification]
-									<td class="specification_${specification.id}[#if !product.specifications?seq_contains(specification)] hidden[/#if]">
-										<select name="specification_${specification.id}"[#if !product.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
-											[#list specification.specificationValues as specificationValue]
-												<option value="${specificationValue.id}"[#if product.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
-											[/#list]
-										</select>
-									</td>
-								[/#list]
-								<td>
-									-
-								</td>
-							</tr>
-						[/#if]
-						[#list product.siblings as specificationProduct]
+						[#list product.productSpecifications as productSpecification]
 							<tr>
 								<td>
 									&nbsp;
-									<input type="hidden" name="specificationProductIds" value="${specificationProduct.id}" />
+									<input type="hidden" name="productSpecificationIds" value="${productSpecification.id}" />
 								</td>
 								[#list specifications as specification]
-									<td class="specification_${specification.id}[#if !specificationProduct.specifications?seq_contains(specification)] hidden[/#if]">
-										<select name="specification_${specification.id}"[#if !specificationProduct.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+									<td class="specification_${specification.id}[#if !productSpecification.specifications?seq_contains(specification)] hidden[/#if]">
+										<select name="specification_${specification.id}"[#if !productSpecification.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
 											[#list specification.specificationValues as specificationValue]
-												<option value="${specificationValue.id}"[#if specificationProduct.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
+												<option value="${specificationValue.id}"[#if productSpecification.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
 											[/#list]
 										</select>
 									</td>
 								[/#list]
 								<td>
-									<a href="javascript:;" class="deleteSpecificationProduct">[${message("admin.common.delete")}]</a>
-									<a href="edit.jhtml?id=${specificationProduct.id}">[${message("admin.common.edit")}]</a>
+									<a href="javascript:;" class="deleteProductSpecification">[${message("admin.common.delete")}]</a>
+									<a href="edit.jhtml?id=${productSpecification.id}">[${message("admin.common.edit")}]</a>
 								</td>
 							</tr>
 						[/#list]

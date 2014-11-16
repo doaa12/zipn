@@ -5,6 +5,7 @@ package cn.bmwm.modules.sys.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.bmwm.common.Constants;
@@ -31,6 +34,8 @@ import com.alibaba.fastjson.JSONObject;
  * @date 2014-10-17
  */
 public class AppLoginInterceptor extends HandlerInterceptorAdapter {
+	
+	public static final Log log = LogFactory.getLog(AppLoginInterceptor.class);
 
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
@@ -40,7 +45,8 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler) throws Exception {
 		
 		String principal = request.getHeader(Constants.USER_LOGIN_MARK);
-		String lastLoginTime = request.getHeader(Constants.USER_LOGIN_TIME);
+		
+		log.warn("principal: " + principal);
 		
 		Setting setting = SettingUtils.get();
 		int keepLoginDays = setting.getKeepLoginDays();
@@ -48,7 +54,7 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(principal) || StringUtils.isBlank(lastLoginTime)) {
+		if(StringUtils.isBlank(principal)) {
 			result.put("flag", 401);
 			write(response, result);
 			return false;
@@ -60,22 +66,13 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		}
 		
-		long time = Long.parseLong(lastLoginTime);
-		long untilTime = time + keepLoginDays * 24 * 60 * 60 *1000L;
-		
-		if(System.currentTimeMillis() > untilTime) {
-			result.put("flag", 401);
-			write(response, result);
-			return false;
-		}
-		
 		HttpSession session = request.getSession();
-		Object principalSession = session.getAttribute(Constants.USER_LOGIN_MARK);
+		Object sessionPrincipal = session.getAttribute(Constants.USER_LOGIN_MARK);
 		
-		if(principalSession == null) {
+		if(sessionPrincipal == null) {
 			
-			String sid = principal.substring(principal.lastIndexOf("@") + 1);
 			String validation = principal.substring(0, principal.lastIndexOf("@"));
+			String sid = principal.substring(principal.lastIndexOf("@") + 1);
 			
 			long id = 0;
 			
@@ -96,6 +93,16 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 			}
 			
 			if(!DigestUtils.md5Hex(sid + member.getPassword()).equals(validation)) {
+				result.put("flag", 401);
+				write(response, result);
+				return false;
+			}
+			
+			Date loginDate = member.getLoginDate();
+			
+			long untilTime = loginDate.getTime() + keepLoginDays * 24 * 60 * 60 *1000L;
+			
+			if(System.currentTimeMillis() > untilTime) {
 				result.put("flag", 401);
 				write(response, result);
 				return false;

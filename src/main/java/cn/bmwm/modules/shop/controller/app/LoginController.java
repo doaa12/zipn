@@ -59,13 +59,6 @@ public class LoginController {
 		String phone = request.getParameter("phone");
 		String enPassword = request.getParameter("enpassword");
 		
-		Enumeration enumeration = request.getParameterNames();
-		while(enumeration.hasMoreElements()) {
-			String param = (String)enumeration.nextElement();
-			log.warn(param + ": " + request.getParameter(param));
-		}
-		//log.warn("phone: " + phone + ", password: " + enPassword);
-		
 		HttpSession session = request.getSession();
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -78,6 +71,7 @@ public class LoginController {
 		}
 		
 		if(StringUtils.isBlank(enPassword)) {
+			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
@@ -85,6 +79,7 @@ public class LoginController {
 		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
+			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
@@ -92,11 +87,13 @@ public class LoginController {
 		Member member = memberService.findByUsername(phone);
 		
 		if (member == null) {
+			result.put("message", "手机号码未注册！");
 			result.put("flag", Constants.USER_USER_NOT_EXISTS);
 			return result;
 		}
 		
 		if (!member.getIsEnabled()) {
+			result.put("message", "手机号码已禁用！");
 			result.put("flag", Constants.USER_USER_DISABLED);
 			return result;
 		}
@@ -109,6 +106,7 @@ public class LoginController {
 				
 				int loginFailureLockTime = setting.getAccountLockTime();
 				if (loginFailureLockTime == 0) {
+					result.put("message", "手机号码已锁定！");
 					result.put("flag", Constants.USER_USER_LOCKED);
 					return result;
 				}
@@ -122,6 +120,7 @@ public class LoginController {
 					member.setLockedDate(null);
 					memberService.update(member);
 				} else {
+					result.put("message", "手机号码已锁定！");
 					result.put("flag", Constants.USER_USER_LOCKED);
 					return result;
 				}
@@ -146,6 +145,7 @@ public class LoginController {
 			member.setLoginFailureCount(loginFailureCount);
 			memberService.update(member);
 			
+			result.put("message", "密码错误！");
 			result.put("flag", Constants.USER_PASSWORD_ERROR);
 			
 			return result;
@@ -186,7 +186,6 @@ public class LoginController {
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
-		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("username", member.getUsername());
 		result.put("flag", 1);
 		

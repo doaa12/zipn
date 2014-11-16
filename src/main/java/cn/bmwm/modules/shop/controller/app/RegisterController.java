@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
 import cn.bmwm.modules.shop.entity.Member;
-import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.sys.exception.BusinessException;
@@ -43,9 +42,6 @@ public class RegisterController {
 	@Resource(name = "memberServiceImpl")
 	private MemberService memberService;
 	
-	@Resource(name = "memberRankServiceImpl")
-	private MemberRankService memberRankService;
-	
 	@Resource(name = "rsaServiceImpl")
 	private RSAService rsaService;
 	
@@ -65,8 +61,10 @@ public class RegisterController {
 		result.put("version", 1);
 		
 		if (memberService.usernameDisabled(phone)) {
+			result.put("message", "手机号码已禁用！");
 			result.put("flag", 2);
 		}else if(memberService.usernameExists(phone)){
+			result.put("message", "手机号码已注册！");
 			result.put("flag", 3);
 		}else {
 			result.put("flag", 1);
@@ -123,6 +121,7 @@ public class RegisterController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(phone)) {
+			result.put("message", "手机号码为空！");
 			result.put("flag", Constants.USER_USERNAME_BLANK);
 			return result;
 		}
@@ -130,25 +129,27 @@ public class RegisterController {
 		String enPassword = request.getParameter("enpassword");
 		
 		if(StringUtils.isBlank(enPassword)) {
+			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
-		log.warn("phone: " + phone + ",password: " + enPassword);
-		
 		String password = rsaService.decrypt(enPassword);
 		
 		if(StringUtils.isBlank(password)) {
+			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		if (memberService.usernameExists(phone)) {
+			result.put("message", "该手机号码已注册！");
 			result.put("flag", Constants.USER_USERNAME_EXISTS);
 			return result;
 		}
 		
 		if(memberService.usernameDisabled(phone)) {
+			result.put("message", "改手机号码已被禁用！");
 			result.put("flag", Constants.USER_USERNAME_DISABLED);
 			return result;
 		}
@@ -180,7 +181,6 @@ public class RegisterController {
 		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
-		result.put(Constants.USER_LOGIN_TIME, System.currentTimeMillis());
 		result.put("username", member.getUsername());
 		
 		return result;

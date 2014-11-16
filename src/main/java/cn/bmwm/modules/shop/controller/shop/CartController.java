@@ -166,7 +166,7 @@ public class CartController extends BaseController {
 		data.put("subtotal", cartItem.getSubtotal());
 		data.put("isLowStock", cartItem.getIsLowStock());
 		data.put("quantity", cart.getQuantity());
-		data.put("effectivePoint", cart.getEffectivePoint());
+		//data.put("effectivePoint", cart.getEffectivePoint());
 		data.put("effectivePrice", cart.getEffectivePrice());
 		data.put("promotions", cart.getPromotions());
 		//data.put("giftItems", cart.getGiftItems());
@@ -196,7 +196,7 @@ public class CartController extends BaseController {
 
 		data.put("message", SUCCESS_MESSAGE);
 		data.put("quantity", cart.getQuantity());
-		data.put("effectivePoint", cart.getEffectivePoint());
+		//data.put("effectivePoint", cart.getEffectivePoint());
 		data.put("effectivePrice", cart.getEffectivePrice());
 		data.put("promotions", cart.getPromotions());
 		data.put("isLowStock", cart.getIsLowStock());

@@ -175,10 +175,12 @@ public class ProductController extends BaseController {
 			product.setMarketPrice(defaultMarketPrice);
 		}
 		
+		/*
 		if (product.getPoint() == null) {
 			long point = calculateDefaultPoint(product.getPrice());
 			product.setPoint(point);
 		}
+		*/
 		
 		product.setFullName(null);
 		product.setAllocatedStock(0);

@@ -167,7 +167,7 @@ public class Product extends BaseEntity {
 	private String stockMemo;
 
 	/** 赠送积分 */
-	private Long point;
+	//private Long point;
 
 	/** 是否上架 */
 	private Boolean isMarketable;
@@ -384,6 +384,7 @@ public class Product extends BaseEntity {
 	 * 商品规格
 	 */
 	private Set<ProductSpecification> productSpecifications = new HashSet<ProductSpecification>();
+	
 	
 	static {
 		try {
@@ -671,12 +672,14 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 赠送积分
 	 */
+	/*
 	@Field(store = Store.YES, index = Index.NO)
 	@Min(0)
 	@Column(nullable = false)
 	public Long getPoint() {
 		return point;
 	}
+	*/
 
 	/**
 	 * 设置赠送积分
@@ -684,9 +687,11 @@ public class Product extends BaseEntity {
 	 * @param point
 	 *            赠送积分
 	 */
+	/*
 	public void setPoint(Long point) {
 		this.point = point;
 	}
+	*/
 
 	/**
 	 * 获取是否上架

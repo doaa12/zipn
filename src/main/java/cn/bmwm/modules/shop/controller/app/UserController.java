@@ -71,11 +71,13 @@ public class UserController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(oldenPassword)) {
+			result.put("message", "旧密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
 		if(StringUtils.isBlank(newenPassword)) {
+			result.put("message", "新密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
@@ -87,6 +89,7 @@ public class UserController {
 		String oldPassword = rsaService.decrypt(oldenPassword);
 		
 		if (!DigestUtils.md5Hex(oldPassword).equals(member.getPassword())) {
+			result.put("message", "旧密码错误！");
 			result.put("flag", Constants.USER_PASSWORD_ERROR);
 			return result;
 		}

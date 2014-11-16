@@ -48,6 +48,7 @@ import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.ProductService;
+import cn.bmwm.modules.shop.service.ProductSpecificationService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.ShopCategoryService;
 import cn.bmwm.modules.shop.service.ShopService;
@@ -90,6 +91,9 @@ public class ProductController extends BaseController {
 	
 	@Resource(name = "specificationValueServiceImpl")
 	private SpecificationValueService specificationValueService;
+	
+	@Resource(name = "productSpecificationServiceImpl")
+	private ProductSpecificationService productSpecificationService;
 	
 	@Resource(name = "fileServiceImpl")
 	private FileService fileService;
@@ -217,6 +221,7 @@ public class ProductController extends BaseController {
 		}
 		
 		product.setIsTop(false);
+		product.setIsGift(false);
 		//product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		if (!isValid(product)) {
@@ -382,7 +387,7 @@ public class ProductController extends BaseController {
 	 * 更新
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] specificationProductIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] productSpecificationIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
 		Shop shop = shopService.find(principal.getShopId());
@@ -476,10 +481,10 @@ public class ProductController extends BaseController {
 			}
 		}
 		
-		List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+		BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "reviews", "consultations", "favoriteMembers",
+				"productSpecifications", "cartItems", "orderItems", "giftItems", "isGift", "productNotifies"});
 		
-		BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers",
-				"specifications", "specificationValues", "promotions", "cartItems", "orderItems", "giftItems", "productNotifies"});
+		List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
 		
 		if (specificationIds != null && specificationIds.length > 0) {
 			
@@ -494,10 +499,17 @@ public class ProductController extends BaseController {
 						
 						if(i == 0) {
 							
-							//TODO:设置库存
-							ProductSpecification productSpecification = new ProductSpecification();
-							productSpecification.setProduct(product);
-							productSpecifications.add(productSpecification);
+							if(productSpecificationIds != null && j < productSpecificationIds.length) {
+								ProductSpecification productSpecification = productSpecificationService.find(productSpecificationIds[j]);
+								//productSpecification.setProductSpecificationValues(new ArrayList<ProductSpecificationValue>());
+								productSpecification.getProductSpecificationValues().clear();
+								productSpecifications.add(productSpecification);
+							}else {
+								//TODO:设置库存
+								ProductSpecification productSpecification = new ProductSpecification();
+								productSpecification.setProduct(pProduct);
+								productSpecifications.add(productSpecification);
+							}
 							
 						}
 						
@@ -506,7 +518,7 @@ public class ProductController extends BaseController {
 						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
 						productSpecificationValue.setSpecification(specification);
 						productSpecificationValue.setSpecificationValue(specificationValue);
-						productSpecificationValue.setProduct(product);
+						productSpecificationValue.setProduct(pProduct);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
 						
 						productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
@@ -516,14 +528,16 @@ public class ProductController extends BaseController {
 				}
 			}
 			
-			product.getProductSpecifications().addAll(productSpecifications);
+			pProduct.getProductSpecifications().clear();
+			
+			pProduct.getProductSpecifications().addAll(productSpecifications);
 			
 		} else {
-			product.setProductSpecifications(null);
+			pProduct.setProductSpecifications(null);
 			//product.setProductSpecificationValues(null);
 		}
 		
-		productService.update(product);
+		productService.update(pProduct);
 		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
