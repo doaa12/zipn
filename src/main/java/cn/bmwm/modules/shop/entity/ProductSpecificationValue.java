@@ -126,10 +126,11 @@ public class ProductSpecificationValue extends BaseEntity {
 		this.orders = orders;
 	}
 	
-	@PreUpdate
 	@PrePersist
+	@PreUpdate
 	public void prepareOrders() {
 		if(productSpecification != null) {
+			System.out.println(productSpecification.getProductSpecificationValues().size());
 			orders = productSpecification.getProductSpecificationValues().indexOf(this);
 		}
 	}

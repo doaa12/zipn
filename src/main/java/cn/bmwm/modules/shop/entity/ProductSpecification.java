@@ -19,6 +19,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.IndexColumn;
+
 /**
  * 商品规格
  * @author zhoupuyue
@@ -114,8 +116,9 @@ public class ProductSpecification extends BaseEntity {
 	/**
 	 * @return the productSpecificationValues
 	 */
-	@OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderColumn(name = "orders")
+	@IndexColumn(name = "orders")
 	public List<ProductSpecificationValue> getProductSpecificationValues() {
 		return productSpecificationValues;
 	}

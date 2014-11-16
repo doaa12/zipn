@@ -414,6 +414,31 @@ public class Setting implements Serializable {
 	 * RSA私钥
 	 */
 	private String rsaPrivateKey;
+	
+	/**
+	 * 发送短信验证码URL
+	 */
+	private String sendSmsUrl;
+	
+	/**
+	 * 发送短信验证码AppID
+	 */
+	private String sendSmsAppId;
+	
+	/**
+	 * 发送短信验证码AppSecret
+	 */
+	private String sendSmsAppSecret;
+	
+	/**
+	 * 发送短信验证码模板ID
+	 */
+	private String sendSmsTemplateId;
+	
+	/**
+	 * 发送短信验证码授权码
+	 */
+	private String sendSmsGrantCode;
 
 	/**
 	 * 获取网站名称
@@ -2163,6 +2188,46 @@ public class Setting implements Serializable {
 	 */
 	public void setRsaPrivateKey(String rsaPrivateKey) {
 		this.rsaPrivateKey = rsaPrivateKey;
+	}
+	
+	public String getSendSmsUrl() {
+		return sendSmsUrl;
+	}
+
+	public void setSendSmsUrl(String sendSmsUrl) {
+		this.sendSmsUrl = sendSmsUrl;
+	}
+
+	public String getSendSmsAppId() {
+		return sendSmsAppId;
+	}
+
+	public void setSendSmsAppId(String sendSmsAppId) {
+		this.sendSmsAppId = sendSmsAppId;
+	}
+
+	public String getSendSmsAppSecret() {
+		return sendSmsAppSecret;
+	}
+
+	public void setSendSmsAppSecret(String sendSmsAppSecret) {
+		this.sendSmsAppSecret = sendSmsAppSecret;
+	}
+
+	public String getSendSmsTemplateId() {
+		return sendSmsTemplateId;
+	}
+
+	public void setSendSmsTemplateId(String sendSmsTemplateId) {
+		this.sendSmsTemplateId = sendSmsTemplateId;
+	}
+
+	public String getSendSmsGrantCode() {
+		return sendSmsGrantCode;
+	}
+
+	public void setSendSmsGrantCode(String sendSmsGrantCode) {
+		this.sendSmsGrantCode = sendSmsGrantCode;
 	}
 
 	/**
