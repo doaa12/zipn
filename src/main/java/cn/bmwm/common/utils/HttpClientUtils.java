@@ -52,7 +52,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static Map<String,Object> httpGet(String url) {
+	public static JSONObject httpGet(String url) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		
@@ -104,7 +104,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static Map<String,Object> httpPost(String url, Map<String,String> data) {
+	public static JSONObject httpPost(String url, Map<String,String> data) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		

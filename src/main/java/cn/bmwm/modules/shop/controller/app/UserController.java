@@ -48,6 +48,8 @@ public class UserController {
 			return getUserInfo(request);
 		} else if("modifyUserInfo".equals(apiName)) {
 			return modifyUserInfo(request);
+		} else if("resetPassword".equals(apiName)) {
+			return resetPassword(request);
 		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -151,6 +153,75 @@ public class UserController {
 		
 		member.setAddress(address);
 		member.setDescription(description);
+		memberService.update(member);
+		
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 重置密码
+	 * @param request
+	 * @return
+	 */
+	public Map<String,Object> resetPassword(HttpServletRequest request) {
+		
+		String enphone = request.getParameter("phone");
+		String code = request.getParameter("code");
+		String enpassword = request.getParameter("password");
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("version", 1);
+		
+		if(StringUtils.isBlank(code)) {
+			result.put("message", "验证码为空！");
+			result.put("flag", Constants.USER_CODE_EMPTY);
+			return result;
+		}
+		
+		if(StringUtils.isBlank(enphone)) {
+			result.put("message", "手机号码为空！");
+			result.put("flag", Constants.USER_USERNAME_BLANK);
+			return result;
+		}
+		
+		if(StringUtils.isBlank(enpassword)) {
+			result.put("message", "密码为空！");
+			result.put("flag", Constants.USER_PASSWORD_BLANK);
+			return result;
+		}
+		
+		HttpSession session = request.getSession();
+		Object ocode = session.getAttribute(Constants.VALIDATION_CODE);
+		
+		if(ocode == null) {
+			result.put("message", "验证码错误！");
+			result.put("flag", Constants.USER_CODE_ERROR);
+			return result;
+		}
+		
+		String scode = (String)ocode;
+		
+		if(!code.equals(scode)) {
+			result.put("message", "验证码错误！");
+			result.put("flag", Constants.USER_CODE_ERROR);
+			return result;
+		}
+		
+		String phone = rsaService.decrypt(enphone);
+		String password = rsaService.decrypt(enpassword);
+		
+		Member member = memberService.findByUsername(phone);
+		
+		if(member == null) {
+			result.put("message", "手机号码未注册！");
+			result.put("flag", Constants.USER_USER_NOT_EXISTS);
+			return result;
+		}
+		
+		member.setPassword(DigestUtils.md5Hex(password));
 		memberService.update(member);
 		
 		result.put("flag", 1);

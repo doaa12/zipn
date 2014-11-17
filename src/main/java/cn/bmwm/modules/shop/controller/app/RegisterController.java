@@ -81,7 +81,7 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> register(String phone, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public Map<String,Object> register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		/*
 		Object ocode = session.getAttribute("code");
@@ -106,15 +106,37 @@ public class RegisterController {
 			return result;
 		}
 		
-		String enPassword = request.getParameter("enpassword");
+		String enpassword = request.getParameter("enpassword");
 		
-		if(StringUtils.isBlank(enPassword)) {
+		if(StringUtils.isBlank(enpassword)) {
 			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
-		String password = rsaService.decrypt(enPassword);
+		if(StringUtils.isBlank(code)) {
+			result.put("message", "验证码为空！");
+			result.put("flag", Constants.USER_CODE_EMPTY);
+			return result;
+		}
+		
+		Object ocode = session.getAttribute(Constants.VALIDATION_CODE);
+		
+		if(ocode == null) {
+			result.put("message", "验证码错误！");
+			result.put("flag", Constants.USER_CODE_ERROR);
+			return result;
+		}
+		
+		String scode = (String)ocode;
+		
+		if(!code.equals(scode)) {
+			result.put("message", "验证码错误！");
+			result.put("flag", Constants.USER_CODE_ERROR);
+			return result;
+		}
+		
+		String password = rsaService.decrypt(enpassword);
 		
 		if(StringUtils.isBlank(password)) {
 			result.put("message", "密码为空！");

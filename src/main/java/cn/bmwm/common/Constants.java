@@ -16,14 +16,14 @@ public class Constants {
 	public static final String USER_LOGIN_MARK = "principal";
 	
 	/**
-	 * 登录时间标识
+	 * 短信验证码
 	 */
-	public static final String USER_LOGIN_TIME = "lastLoginTime";
+	public static final String VALIDATION_CODE = "validation-code";
 	
 	//----------------------- 用户 -----------------------
 	
 	/**
-	 * 用户名为空
+	 * 手机号码为空
 	 */
 	public static final int USER_USERNAME_BLANK = 101;
 	
@@ -33,7 +33,7 @@ public class Constants {
 	public static final int USER_PASSWORD_BLANK = 102;
 
 	/**
-	 * 用户名不存在
+	 * 手机号码未注册
 	 */
 	public static final int USER_USER_NOT_EXISTS = 103;
 	
@@ -61,6 +61,16 @@ public class Constants {
 	 * 用户名被禁用
 	 */
 	public static final int USER_USERNAME_DISABLED = 108;
+	
+	/**
+	 * 验证码为空
+	 */
+	public static final int USER_CODE_EMPTY = 109;
+	
+	/**
+	 * 验证码错误
+	 */
+	public static final int USER_CODE_ERROR = 110;
 	
 	
 	//----------------------- 购物车 -----------------------

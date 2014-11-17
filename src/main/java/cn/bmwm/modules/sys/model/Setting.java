@@ -435,10 +435,6 @@ public class Setting implements Serializable {
 	 */
 	private String sendSmsTemplateId;
 	
-	/**
-	 * 发送短信验证码授权码
-	 */
-	private String sendSmsGrantCode;
 
 	/**
 	 * 获取网站名称
@@ -2220,14 +2216,6 @@ public class Setting implements Serializable {
 
 	public void setSendSmsTemplateId(String sendSmsTemplateId) {
 		this.sendSmsTemplateId = sendSmsTemplateId;
-	}
-
-	public String getSendSmsGrantCode() {
-		return sendSmsGrantCode;
-	}
-
-	public void setSendSmsGrantCode(String sendSmsGrantCode) {
-		this.sendSmsGrantCode = sendSmsGrantCode;
 	}
 
 	/**
