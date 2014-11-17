@@ -15,5 +15,5 @@ import cn.bmwm.modules.shop.service.SmsAccessTokenService;
  */
 @Service("smsAccessTokenServiceImpl")
 public class SmsAccessTokenServiceImpl extends BaseServiceImpl<SmsAccessToken,Long> implements SmsAccessTokenService {
-
+	
 }

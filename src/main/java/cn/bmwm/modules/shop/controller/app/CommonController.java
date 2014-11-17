@@ -183,14 +183,14 @@ public class CommonController {
 	 */
 	public void refreshAccessToken(String refreshToken) {
 		
+		Setting setting = SettingUtils.get();
+		
 		/*
 		StringBuilder url = new StringBuilder();
 		url.append("https://oauth.api.189.cn/emp/oauth2/v3/access_token");
 		url.append("?grant_type=refresh_token&refresh_token=").append(refreshToken).append("&app_id=").append(setting.getSendSmsAppId());
 		url.append("&app_secret=").append(setting.getSendSmsAppSecret());
 		*/
-		
-		Setting setting = SettingUtils.get();
 		
 		Map<String,String> data = new HashMap<String,String>();
 		data.put("grant_type", "refresh_token");
@@ -218,16 +218,10 @@ public class CommonController {
 		Date expireTime = new Date(System.currentTimeMillis() + expires_in * 1000);
 		
 		if(token != null) {
-			this.smsAccessTokenService.delete(token);
+			token.setAccessToken(accessToken);
+			token.setExpireDate(expireTime);
+			this.smsAccessTokenService.update(token);
 		}
-		
-		SmsAccessToken t = new SmsAccessToken();
-		t.setAccessToken(accessToken);
-		t.setExpireDate(expireTime);
-		
-		this.smsAccessTokenService.save(t);
-		
-		token = t;
 		
 	}
 	
