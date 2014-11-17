@@ -48,8 +48,6 @@ public class UserController {
 			return getUserInfo(request);
 		} else if("modifyUserInfo".equals(apiName)) {
 			return modifyUserInfo(request);
-		} else if("resetPassword".equals(apiName)) {
-			return resetPassword(request);
 		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -166,6 +164,8 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
+	@RequestMapping(value = "/app/user/reset_password", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> resetPassword(HttpServletRequest request) {
 		
 		String phone = request.getParameter("phone");

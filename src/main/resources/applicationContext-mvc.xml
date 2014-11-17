@@ -39,6 +39,7 @@
 			<mvc:exclude-mapping path="/app/user/login.jhtml"/>
 			<mvc:exclude-mapping path="/app/user/register.jhtml"/>
 			<mvc:exclude-mapping path="/app/user/check.jhtml"/>
+			<mvc:exclude-mapping path="/app/user/reset_password.jhtml"/>
 			<mvc:exclude-mapping path="/app/common/**"/>
 			<bean id="appLoginInterceptor" class="cn.bmwm.modules.sys.interceptor.AppLoginInterceptor" />
 		</mvc:interceptor>
