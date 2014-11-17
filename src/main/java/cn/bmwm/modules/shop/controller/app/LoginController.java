@@ -57,7 +57,7 @@ public class LoginController {
 	public Map<String,Object> login(HttpServletRequest request) {
 		
 		String phone = request.getParameter("phone");
-		String enPassword = request.getParameter("enpassword");
+		String enpassword = request.getParameter("enpassword");
 		
 		HttpSession session = request.getSession();
 		
@@ -70,13 +70,13 @@ public class LoginController {
 			return result;
 		}
 		
-		if(StringUtils.isBlank(enPassword)) {
+		if(StringUtils.isBlank(enpassword)) {
 			result.put("message", "密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
-		String password = rsaService.decrypt(enPassword);
+		String password = rsaService.decrypt(enpassword);
 		
 		if(StringUtils.isBlank(password)) {
 			result.put("message", "密码为空！");

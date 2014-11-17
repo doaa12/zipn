@@ -170,7 +170,7 @@ public class UserController {
 		
 		String phone = request.getParameter("phone");
 		String code = request.getParameter("code");
-		String enpassword = request.getParameter("password");
+		String enpassword = request.getParameter("enpassword");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);

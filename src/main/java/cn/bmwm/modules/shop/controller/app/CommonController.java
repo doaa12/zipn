@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
 import cn.bmwm.common.utils.HttpClientUtils;
-import cn.bmwm.common.utils.WebUtils;
 import cn.bmwm.modules.shop.entity.SmsAccessToken;
+import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.shop.service.SmsAccessTokenService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
@@ -47,6 +47,9 @@ public class CommonController {
 	
 	@Resource(name = "smsAccessTokenServiceImpl")
 	private SmsAccessTokenService smsAccessTokenService;
+	
+	@Resource(name = "rsaServiceImpl")
+	private RSAService rsaService;
 	
 	/**
 	 * 手机号码为空
@@ -69,6 +72,11 @@ public class CommonController {
 	public static final int SMS_SEND_TIMES = 104;
 	
 	/**
+	 * 非法的请求
+	 */
+	public static final int SMS_INVALID_REQUEST = 105;
+	
+	/**
 	 * 短信验证码Token
 	 */
 	private SmsAccessToken token;
@@ -76,7 +84,7 @@ public class CommonController {
 	/**
 	 * 每个人发送短信阀值
 	 */
-	private int threshold = 3;
+	private int threshold = 10;
 	
 	/**
 	 * 发送短信历史记录
@@ -89,9 +97,25 @@ public class CommonController {
 	 */
 	@RequestMapping(value = "/send_code", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> sendValidationCode(HttpServletRequest request, HttpSession session, String phone, String macCode) {
+	public Map<String,Object> sendValidationCode(HttpServletRequest request, HttpSession session, String enphone) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
+		
+		if(StringUtils.isBlank(enphone)) {
+			result.put("flag", SMS_PHONE_EMPTY);
+			result.put("message", "手机号码为空！");
+			return result;
+		}
+		
+		String phone = "";
+		
+		try{
+			phone = rsaService.decrypt(enphone);
+		}catch(Exception e) {
+			result.put("flag", SMS_INVALID_REQUEST);
+			result.put("message", "非法的请求！");
+			return result;
+		}
 		
 		if(StringUtils.isBlank(phone)) {
 			result.put("flag", SMS_PHONE_EMPTY);
@@ -99,12 +123,7 @@ public class CommonController {
 			return result;
 		}
 		
-		String ip = WebUtils.getIpAddrByRequest(request);
-		String key = ip + "_" + getFormatDate();
-		
-		if(StringUtils.isNotBlank(macCode)) {
-			key = macCode + "_" + getFormatDate();
-		}
+		String key = phone + "_" + getFormatDate();
 		
 		Integer times = history.get(key);
 		
