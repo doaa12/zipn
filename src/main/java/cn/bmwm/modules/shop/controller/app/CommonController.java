@@ -31,6 +31,7 @@ import cn.bmwm.modules.shop.service.SmsAccessTokenService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -152,7 +153,17 @@ public class CommonController {
 		data.put("template_param", "{\"param1\":" + code + ",\"param2\":30}");
 		data.put("timestamp", getFormatTime());
 		
-		JSONObject object = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data, "GBK");
+		JSONObject object = null;
+		
+		try{
+			object = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data, "GBK");
+		}catch(JSONException e) {
+			history.put(key, times == null ? 1 : times + 1);
+			session.setAttribute(Constants.VALIDATION_CODE, code);
+			result.put("version", 1);
+			result.put("flag", 1);
+			return result;
+		}
 		
 		if(object == null) {
 			result.put("flag", SMS_SEND_ERROR);
@@ -240,7 +251,7 @@ public class CommonController {
 	 * 生成短信验证码
 	 * @return
 	 */
-	public String getValidateCode() {
+	public static String getValidateCode() {
 		
 		Random random = new Random();
 		
@@ -270,6 +281,14 @@ public class CommonController {
 	public String getFormatDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(new Date());
+	}
+	
+	public static void main(String[] args) {
+		
+		for(int i = 0 ; i < 1000 ; i++ ) {
+			System.out.println(getValidateCode());
+		}
+		
 	}
 	
 }

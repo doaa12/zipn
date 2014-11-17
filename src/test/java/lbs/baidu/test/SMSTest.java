@@ -31,7 +31,7 @@ public class SMSTest extends TestCase {
 		data.put("access_token", "24923ffdf4378a5ea8d66931fd6c11691416188315831");
 		data.put("acceptor_tel", "13816168984");
 		data.put("template_id", "91003145");
-		data.put("template_param", "{\"param1\":\"5241\",\"param2\":\"30\"}");
+		data.put("template_param", "{\"param1\":\"0241\",\"param2\":\"30\"}");
 		data.put("timestamp", sdf.format(new Date()));
 		
 		JSONObject object = HttpClientUtils.httpPost("http://api.189.cn/v2/emp/templateSms/sendSms", data, "GBK");
