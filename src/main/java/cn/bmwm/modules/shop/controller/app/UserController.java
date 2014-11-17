@@ -168,7 +168,7 @@ public class UserController {
 	 */
 	public Map<String,Object> resetPassword(HttpServletRequest request) {
 		
-		String enphone = request.getParameter("phone");
+		String phone = request.getParameter("phone");
 		String code = request.getParameter("code");
 		String enpassword = request.getParameter("password");
 		
@@ -181,7 +181,7 @@ public class UserController {
 			return result;
 		}
 		
-		if(StringUtils.isBlank(enphone)) {
+		if(StringUtils.isBlank(phone)) {
 			result.put("message", "手机号码为空！");
 			result.put("flag", Constants.USER_USERNAME_BLANK);
 			return result;
@@ -210,7 +210,6 @@ public class UserController {
 			return result;
 		}
 		
-		String phone = rsaService.decrypt(enphone);
 		String password = rsaService.decrypt(enpassword);
 		
 		Member member = memberService.findByUsername(phone);

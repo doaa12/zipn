@@ -31,10 +31,10 @@ public class SMSTest extends TestCase {
 		data.put("access_token", "24923ffdf4378a5ea8d66931fd6c11691416188315831");
 		data.put("acceptor_tel", "13816168984");
 		data.put("template_id", "91003145");
-		data.put("template_param", "{\"param1\":5241,\"param2\":30}");
+		data.put("template_param", "{\"param1\":\"5241\",\"param2\":\"30\"}");
 		data.put("timestamp", sdf.format(new Date()));
 		
-		JSONObject object = HttpClientUtils.httpPost("http://api.189.cn/v2/emp/templateSms/sendSms", data);
+		JSONObject object = HttpClientUtils.httpPost("http://api.189.cn/v2/emp/templateSms/sendSms", data, "GBK");
 		
 		System.out.println(object.toJSONString());
 		
@@ -62,7 +62,7 @@ public class SMSTest extends TestCase {
 		
 		//JSONObject object = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data);
 		
-		JSONObject object = HttpClientUtils.httpPost(url.toString(), null);
+		JSONObject object = HttpClientUtils.httpPost(url.toString(), null, "GBK");
 		
 		System.out.println(object.toJSONString());
 		

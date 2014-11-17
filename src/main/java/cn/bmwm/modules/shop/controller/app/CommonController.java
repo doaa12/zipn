@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
@@ -85,7 +86,7 @@ public class CommonController {
 	 * 发送验证码短信
 	 * @return
 	 */
-	@RequestMapping(value = "/send_code")
+	@RequestMapping(value = "/send_code", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> sendValidationCode(HttpServletRequest request, HttpSession session, String phone, String macCode) {
 		
@@ -151,7 +152,7 @@ public class CommonController {
 		data.put("template_param", "{\"param1\":" + code + ",\"param2\":30}");
 		data.put("timestamp", getFormatTime());
 		
-		JSONObject object = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data);
+		JSONObject object = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data, "GBK");
 		
 		if(object == null) {
 			result.put("flag", SMS_SEND_ERROR);
@@ -198,7 +199,7 @@ public class CommonController {
 		data.put("app_id", setting.getSendSmsAppId());
 		data.put("app_secret", setting.getSendSmsAppSecret());
 		
-		JSONObject result = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data);
+		JSONObject result = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data, "GBK");
 		
 		if(result == null) {
 			log.warn("刷新Access Token失败！result = null");

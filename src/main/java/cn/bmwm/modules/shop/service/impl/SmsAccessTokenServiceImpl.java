@@ -3,8 +3,11 @@
  */
 package cn.bmwm.modules.shop.service.impl;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
+import cn.bmwm.modules.shop.dao.SmsAccessTokenDao;
 import cn.bmwm.modules.shop.entity.SmsAccessToken;
 import cn.bmwm.modules.shop.service.SmsAccessTokenService;
 
@@ -15,5 +18,10 @@ import cn.bmwm.modules.shop.service.SmsAccessTokenService;
  */
 @Service("smsAccessTokenServiceImpl")
 public class SmsAccessTokenServiceImpl extends BaseServiceImpl<SmsAccessToken,Long> implements SmsAccessTokenService {
+	
+	@Resource(name = "smsAccessTokenDaoImpl")
+	public void setBaseDao(SmsAccessTokenDao smsAccessTokenDao){
+		super.setBaseDao(smsAccessTokenDao);
+	}
 	
 }

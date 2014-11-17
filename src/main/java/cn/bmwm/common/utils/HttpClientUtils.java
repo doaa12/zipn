@@ -52,7 +52,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static JSONObject httpGet(String url) {
+	public static JSONObject httpGet(String url, String encoding) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		
@@ -75,7 +75,7 @@ public class HttpClientUtils {
 			String result = null;
 			
 			if(entity != null){
-				result = EntityUtils.toString(entity, "UTF-8");
+				result = EntityUtils.toString(entity, encoding);
 				EntityUtils.consume(entity);
 			}
 			
@@ -104,7 +104,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static JSONObject httpPost(String url, Map<String,String> data) {
+	public static JSONObject httpPost(String url, Map<String,String> data, String encoding) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		
@@ -142,16 +142,18 @@ public class HttpClientUtils {
 				Header header = httpResponse.getFirstHeader("location");
 				String redirectUrl = header.getValue();
 				System.out.println("重定向URL：" + redirectUrl);
-				return httpPost(redirectUrl, data);
+				return httpPost(redirectUrl, data, encoding);
 			}
 			
 			HttpEntity entity = httpResponse.getEntity();
 			String result = null;
 			
 			if(entity != null){
-				result = EntityUtils.toString(entity, "UTF-8");
+				result = EntityUtils.toString(entity, encoding);
 				EntityUtils.consume(entity);
 			}
+			
+			log.warn(result);
 			
 			return JSONObject.parseObject(result);
 			
