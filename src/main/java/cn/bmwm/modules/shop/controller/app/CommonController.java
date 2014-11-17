@@ -76,7 +76,7 @@ public class CommonController {
 	/**
 	 * 每个人发送短信阀值
 	 */
-	private int threshold = 5;
+	private int threshold = 3;
 	
 	/**
 	 * 发送短信历史记录
