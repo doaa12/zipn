@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -126,6 +124,7 @@ public class ProductSpecificationValue extends BaseEntity {
 		this.orders = orders;
 	}
 	
+	/*
 	@PrePersist
 	@PreUpdate
 	public void prepareOrders() {
@@ -134,6 +133,6 @@ public class ProductSpecificationValue extends BaseEntity {
 			orders = productSpecification.getProductSpecificationValues().indexOf(this);
 		}
 	}
-	
+	*/
 
 }

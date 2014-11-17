@@ -43,10 +43,8 @@ import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
-import cn.bmwm.modules.shop.service.BrandService;
 import cn.bmwm.modules.shop.service.FileService;
 import cn.bmwm.modules.shop.service.ImageService;
-import cn.bmwm.modules.shop.service.MemberRankService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ProductSpecificationService;
 import cn.bmwm.modules.shop.service.PromotionService;
@@ -71,17 +69,11 @@ public class ProductController extends BaseController {
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
 	
-	@Resource(name = "brandServiceImpl")
-	private BrandService brandService;
-	
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
 	
 	@Resource(name = "tagServiceImpl")
 	private TagService tagService;
-	
-	@Resource(name = "memberRankServiceImpl")
-	private MemberRankService memberRankService;
 	
 	@Resource(name = "imageServiceImpl")
 	private ImageService imageService;
@@ -348,6 +340,10 @@ public class ProductController extends BaseController {
 				}
 			}
 			
+			for(ProductSpecification productSpecification : productSpecifications) {
+				productSpecification.prepareOrders();
+			}
+			
 			product.getProductSpecifications().addAll(productSpecifications);
 			
 		} else {
@@ -526,6 +522,10 @@ public class ProductController extends BaseController {
 						
 					}
 				}
+			}
+			
+			for(ProductSpecification productSpecification : productSpecifications) {
+				productSpecification.prepareOrders();
 			}
 			
 			pProduct.getProductSpecifications().clear();

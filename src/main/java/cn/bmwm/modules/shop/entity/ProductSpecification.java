@@ -168,4 +168,11 @@ public class ProductSpecification extends BaseEntity {
 		
 	}
 	
+	public void prepareOrders() {
+		for(int i = 0 ; i < productSpecificationValues.size(); i++ ) {
+			ProductSpecificationValue value = productSpecificationValues.get(i);
+			value.setOrders(i);
+		}
+	}
+	
 }
