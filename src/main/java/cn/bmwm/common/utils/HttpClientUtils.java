@@ -27,8 +27,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.alibaba.fastjson.JSONObject;
-
 import cn.bmwm.modules.sys.exception.SystemException;
 
 /**
@@ -52,7 +50,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static JSONObject httpGet(String url, String encoding) {
+	public static String httpGet(String url, String encoding) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		
@@ -79,7 +77,7 @@ public class HttpClientUtils {
 				EntityUtils.consume(entity);
 			}
 			
-			return JSONObject.parseObject(result);
+			return result;
 			
 		} catch (ClientProtocolException e) {
 			log.error("协议错误！URL: " + url, e);
@@ -104,7 +102,7 @@ public class HttpClientUtils {
 	 * @param request
 	 * @return
 	 */
-	public static JSONObject httpPost(String url, Map<String,String> data, String encoding) {
+	public static String httpPost(String url, Map<String,String> data, String encoding) {
 		
 		if(StringUtils.isBlank(url)) return null;
 		
@@ -153,9 +151,7 @@ public class HttpClientUtils {
 				EntityUtils.consume(entity);
 			}
 			
-			log.warn(result);
-			
-			return JSONObject.parseObject(result);
+			return result;
 			
 		} catch (ClientProtocolException e) {
 			log.error("协议错误！URL: " + url, e);

@@ -112,6 +112,7 @@ public class CommonController {
 		try{
 			phone = rsaService.decrypt(enphone);
 		}catch(Exception e) {
+			log.error("解码异常！enphone=" + enphone, e);
 			result.put("flag", SMS_INVALID_REQUEST);
 			result.put("message", "非法的请求！");
 			return result;
@@ -173,10 +174,15 @@ public class CommonController {
 		data.put("timestamp", getFormatTime());
 		
 		JSONObject object = null;
+		String text = "";
 		
 		try{
-			object = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data, "GBK");
+			
+			text = HttpClientUtils.httpPost(setting.getSendSmsUrl(), data, "GBK");
+			object = JSONObject.parseObject(text);
+			
 		}catch(JSONException e) {
+			log.error("解析JSON异常！text=" + text, e);
 			history.put(key, times == null ? 1 : times + 1);
 			session.setAttribute(Constants.VALIDATION_CODE, code);
 			result.put("version", 1);
@@ -229,7 +235,9 @@ public class CommonController {
 		data.put("app_id", setting.getSendSmsAppId());
 		data.put("app_secret", setting.getSendSmsAppSecret());
 		
-		JSONObject result = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data, "GBK");
+		String text = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data, "GBK");
+		
+		JSONObject result = JSONObject.parseObject(text);
 		
 		if(result == null) {
 			log.warn("刷新Access Token失败！result = null");

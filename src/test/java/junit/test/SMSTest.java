@@ -11,8 +11,6 @@ import java.util.Map;
 import junit.framework.TestCase;
 import cn.bmwm.common.utils.HttpClientUtils;
 
-import com.alibaba.fastjson.JSONObject;
-
 /**
  * @author zhoupuyue
  * @date 2014-11-17
@@ -34,9 +32,9 @@ public class SMSTest extends TestCase {
 		data.put("template_param", "{\"param1\":\"0241\",\"param2\":\"30\"}");
 		data.put("timestamp", sdf.format(new Date()));
 		
-		JSONObject object = HttpClientUtils.httpPost("http://api.189.cn/v2/emp/templateSms/sendSms", data, "GBK");
+		String text = HttpClientUtils.httpPost("http://api.189.cn/v2/emp/templateSms/sendSms", data, "GBK");
 		
-		System.out.println(object.toJSONString());
+		System.out.println(text);
 		
 	}
 	
@@ -62,9 +60,9 @@ public class SMSTest extends TestCase {
 		
 		//JSONObject object = HttpClientUtils.httpPost("https://oauth.api.189.cn/emp/oauth2/v3/access_token", data);
 		
-		JSONObject object = HttpClientUtils.httpPost(url.toString(), null, "GBK");
+		String text = HttpClientUtils.httpPost(url.toString(), null, "GBK");
 		
-		System.out.println(object.toJSONString());
+		System.out.println(text);
 		
 	}
 	
