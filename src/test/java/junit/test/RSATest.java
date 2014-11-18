@@ -1,4 +1,4 @@
-package lbs.baidu.test;
+package junit.test;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
