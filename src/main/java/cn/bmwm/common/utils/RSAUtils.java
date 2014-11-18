@@ -161,8 +161,6 @@ public final class RSAUtils {
 			
 			RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
 			
-			Provider PROVIDER = new BouncyCastleProvider();
-			
 			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", PROVIDER);
 			
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);

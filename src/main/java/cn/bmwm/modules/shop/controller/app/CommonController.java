@@ -95,7 +95,7 @@ public class CommonController {
 	 * 发送验证码短信
 	 * @return
 	 */
-	@RequestMapping(value = "/send_code", method = RequestMethod.GET)
+	@RequestMapping(value = "/send_code", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> sendValidationCode(HttpServletRequest request, HttpSession session, String enphone) {
 		

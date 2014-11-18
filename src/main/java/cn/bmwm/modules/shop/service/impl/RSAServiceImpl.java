@@ -75,7 +75,7 @@ public class RSAServiceImpl implements RSAService {
 	public String decrypt(String text) {
 		
 		if(StringUtils.isBlank(text)) {
-			throw new BusinessException("密码为空！");
+			throw new BusinessException("内容为空！");
 		}
 		
 		try {
