@@ -46,8 +46,6 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 		
 		String principal = request.getHeader(Constants.USER_LOGIN_MARK);
 		
-		log.warn("principal: " + principal);
-		
 		Setting setting = SettingUtils.get();
 		int keepLoginDays = setting.getKeepLoginDays();
 		
@@ -100,7 +98,7 @@ public class AppLoginInterceptor extends HandlerInterceptorAdapter {
 			
 			Date loginDate = member.getLoginDate();
 			
-			long untilTime = loginDate.getTime() + keepLoginDays * 24 * 60 * 60 *1000L;
+			long untilTime = loginDate.getTime() + keepLoginDays * 24 * 60 * 60 * 1000L;
 			
 			if(System.currentTimeMillis() > untilTime) {
 				result.put("flag", 401);
