@@ -30,6 +30,7 @@ import cn.bmwm.modules.shop.service.RSAService;
  * @date 2014-11-3
  */
 @Controller
+@RequestMapping(value = "/app/user")
 public class UserController {
 	
 	@Resource(name = "memberServiceImpl")
@@ -38,30 +39,13 @@ public class UserController {
 	@Resource(name = "rsaServiceImpl")
 	private RSAService rsaService;
 	
-	@RequestMapping(value = "/app/user", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> execute(String apiName, HttpServletRequest request, HttpServletResponse response) {
-		
-		if("changePasword".equals(apiName)) {
-			return changePassword(request, response);
-		} else if("getUserInfo".equals(apiName)) {
-			return getUserInfo(request);
-		} else if("modifyUserInfo".equals(apiName)) {
-			return modifyUserInfo(request);
-		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 404);
-		result.put("version", 1);
-		
-		return result;
-		
-	}
 	
 	/**
 	 * 修改密码
 	 * @return
 	 */
+	@RequestMapping(value = "/change_pasword", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> changePassword(HttpServletRequest request, HttpServletResponse response) {
 		
 		String oldenPassword = request.getParameter("oldpassword");
@@ -107,6 +91,8 @@ public class UserController {
 	 * 获取用户信息
 	 * @return
 	 */
+	@RequestMapping(value = "/get_userinfo", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> getUserInfo(HttpServletRequest request) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -131,6 +117,8 @@ public class UserController {
 	 * @param description
 	 * @return
 	 */
+	@RequestMapping(value = "/modify_userinfo", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> modifyUserInfo(HttpServletRequest request) {
 		
 		String address = request.getParameter("address");
@@ -164,7 +152,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/app/user/reset_password", method = RequestMethod.POST)
+	@RequestMapping(value = "/reset_password", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> resetPassword(HttpServletRequest request) {
 		
@@ -227,6 +215,15 @@ public class UserController {
 		
 		return result;
 		
+	}
+	
+	/**
+	 * 用户查看购物车商品
+	 * @return
+	 */
+	public Map<String,Object> getUserCartProductList(HttpServletRequest request) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		return result;
 	}
 	
 }

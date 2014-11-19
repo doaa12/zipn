@@ -49,6 +49,7 @@ import cn.bmwm.modules.shop.service.ProductSpecificationService;
  * @version 1.0
  */
 @Controller("appShopCartController")
+@RequestMapping(value = "/app/cart")
 public class CartController extends AppBaseController {
 
 	@Resource(name = "memberServiceImpl")
@@ -66,33 +67,12 @@ public class CartController extends AppBaseController {
 	@Resource(name = "productSpecificationServiceImpl")
 	private ProductSpecificationService productSpecificationService;
 	
-	@RequestMapping(value = "/app/cart", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> execute(String apiName, HttpServletRequest request) {
-		
-		if("add".equals(apiName)) {
-			return add(request);
-		}else if("list".equals(apiName)) {
-			return list();
-		}else if("update".equals(apiName)) {
-			return update(request);
-		}else if("delete".equals(apiName)) {
-			return delete(request);
-		}else if("clear".equals(apiName)) {
-			return clear();
-		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("verson", 1);
-		result.put("flag", 404);
-		
-		return result;
-		
-	}
-
+	
 	/**
 	 * 添加
 	 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> add(HttpServletRequest request) {
 		
 		String sid = request.getParameter("id");
@@ -153,6 +133,7 @@ public class CartController extends AppBaseController {
 		}
 		
 		ProductSpecification productSpecification = null;
+		
 		if(!StringUtils.isBlank(sspecId)) {
 			
 			Long specId = Long.parseLong(sspecId);
@@ -248,6 +229,8 @@ public class CartController extends AppBaseController {
 	/**
 	 * 列表
 	 */
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> list() {
 		
 		Cart cart = cartService.getAppCurrent();
@@ -265,6 +248,8 @@ public class CartController extends AppBaseController {
 	/**
 	 * 更新
 	 */
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String, Object> update(HttpServletRequest request) {
 		
 		String sid = request.getParameter("cartItemId");
@@ -334,6 +319,8 @@ public class CartController extends AppBaseController {
 	/**
 	 * 删除
 	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String, Object> delete(HttpServletRequest request) {
 		
 		String sid = request.getParameter("cartItemId");
@@ -373,6 +360,8 @@ public class CartController extends AppBaseController {
 	/**
 	 * 清空
 	 */
+	@RequestMapping(value = "/clear", method = RequestMethod.POST)
+	@ResponseBody
 	public Map<String,Object> clear() {
 		
 		Cart cart = cartService.getAppCurrent();
