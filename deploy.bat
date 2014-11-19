@@ -1,1 +1,1 @@
-mvn clean package wagon:upload -Pproduct
+mvn clean package wagon:upload -Dmaven.test.skip=true -Pproduct
