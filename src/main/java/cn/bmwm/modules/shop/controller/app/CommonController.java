@@ -162,7 +162,8 @@ public class CommonController {
 			return result;
 		}
 		
-		String code = getValidateCode();
+		String code = getValidationCode();
+		
 		Setting setting = SettingUtils.get();
 		
 		Map<String,String> data = new HashMap<String,String>();
@@ -278,12 +279,12 @@ public class CommonController {
 	 * 生成短信验证码
 	 * @return
 	 */
-	public static String getValidateCode() {
+	public static String getValidationCode() {
 		
 		Random random = new Random();
 		
 		StringBuilder code = new StringBuilder();
-		code.append(random.nextInt(10));
+		code.append(random.nextInt(9) + 1);
 		code.append(random.nextInt(10));
 		code.append(random.nextInt(10));
 		code.append(random.nextInt(10));
@@ -312,8 +313,8 @@ public class CommonController {
 	
 	public static void main(String[] args) {
 		
-		for(int i = 0 ; i < 1000 ; i++ ) {
-			System.out.println(getValidateCode());
+		for(int i = 0 ; i < 100 ; i++ ) {
+			System.out.println(getValidationCode());
 		}
 		
 	}
