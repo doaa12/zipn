@@ -276,7 +276,7 @@ public class CommonController {
 	}
 	
 	/**
-	 * 生成短信验证码
+	 * 生成短信验证码，第一个数字必须大于0
 	 * @return
 	 */
 	public static String getValidationCode() {
