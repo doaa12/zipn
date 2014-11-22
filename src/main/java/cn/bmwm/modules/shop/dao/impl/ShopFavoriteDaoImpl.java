@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.util.List;
 
 import javax.persistence.FlushModeType;
+import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Repository;
 
@@ -39,8 +40,13 @@ public class ShopFavoriteDaoImpl extends BaseDaoImpl<ShopFavorite,Long> implemen
 	 * @return
 	 */
 	public ShopFavorite findShopFavoriteByMemberShop(Member member, Shop shop) {
-		String jpql = "select shopFavorite from ShopFavorite shopFavorite where shopFavorite.member = :member and shopFavorite.shop = :shop ";
-		return entityManager.createQuery(jpql, ShopFavorite.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("shop", shop).getSingleResult();
+		try{
+			String jpql = "select shopFavorite from ShopFavorite shopFavorite where shopFavorite.member = :member and shopFavorite.shop = :shop ";
+			return entityManager.createQuery(jpql, ShopFavorite.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("shop", shop).getSingleResult();
+		}catch(NoResultException e) {
+			return null;
+		}
+		
 	}
 	
 }
