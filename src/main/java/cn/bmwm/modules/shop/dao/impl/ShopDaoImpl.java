@@ -15,7 +15,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import cn.bmwm.common.persistence.Page;
@@ -151,7 +150,6 @@ public class ShopDaoImpl extends BaseDaoImpl<Shop,Long> implements ShopDao {
 	 * @param city
 	 * @return
 	 */
-	@Cacheable(value = "shop", key = "'city' + #city + 'findFavoriteTopShopList'")
 	public List<Shop> findFavoriteTopShopList(String city) {
 		String jpql = " select shop from Shop shop where shop.city like :city and shop.isList = true order by shop.favoriteCount desc,createDate ";
 		TypedQuery<Shop> query = entityManager.createQuery(jpql, Shop.class);

@@ -20,6 +20,7 @@ import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDynamic;
 import cn.bmwm.modules.shop.entity.AppAdvertise;
+import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -85,24 +86,35 @@ public class IndexController extends AppBaseController {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
-		//TODO：收藏店铺动态,根据用户最后一次登录时间来获取收藏店铺动态；如果收藏动态为空,取收藏最多的店铺的动态
-		//List<Shop> shopList = shopFavoriteService.findDynamicShops(memberService.getCurrent());
+		Member member = memberService.getAppCurrent();
 		
-		//首页按用户最近登录时间获取新品；如果用户收藏为空,按15天来获取收藏最多的店铺的动态
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, -15);
-		calendar.set(Calendar.HOUR, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		Date time = calendar.getTime();
-		
-		//TODO：先按用户收藏店铺来获取店铺动态；如果收藏动态为空,获取收藏次数前5的店铺动态
-		List<Shop> favoriteShopList = shopService.findFavoriteTopShopList(city);
+		//收藏店铺动态；如果收藏动态为空,获取收藏最多的店铺的动态
+		List<Shop> favoriteShopList = shopFavoriteService.findDynamicShops(member);
 		
 		//获取收藏店铺发布新品
-		List<Product> favoriteProductList = productService.findShopNewList(favoriteShopList, time);
+		List<Product> favoriteProductList = productService.findShopNewList(favoriteShopList, member.getLoginDate());
 		
 		ItemCategory<ShopDynamic> favoriteShopCategory = this.getFavoriteShopItemCategory(favoriteShopList, favoriteProductList);
+		
+		if(favoriteShopCategory == null) {
+			
+			//先按用户收藏店铺来获取店铺动态；如果收藏动态为空,获取收藏次数前5的店铺动态
+			favoriteShopList = shopService.findFavoriteTopShopList(city);
+			
+			//首先按用户最近登录时间获取新品；如果用户收藏为空,按15天来获取收藏最多的店铺的动态
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DATE, -15);
+			calendar.set(Calendar.HOUR, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			Date time = calendar.getTime();
+			
+			//获取收藏店铺发布新品
+			favoriteProductList = productService.findShopNewList(favoriteShopList, time);
+			
+			favoriteShopCategory = this.getFavoriteShopItemCategory(favoriteShopList, favoriteProductList);
+			
+		}
 		
 		List<ItemCategory<Item>> products = new LinkedList<ItemCategory<Item>>();
 		List<ItemCategory<Item>> shops = new LinkedList<ItemCategory<Item>>();
@@ -123,6 +135,7 @@ public class IndexController extends AppBaseController {
 		
 		//首页顶部广告
 		List<AppAdvertise> appTopAdvertiseList = appAdvertiseService.findByCity(city, 1);
+		
 		//首页中间广告，放到虚拟店铺分类下面
 		List<AppAdvertise> appMiddleAdvertiseList = appAdvertiseService.findByCity(city, 2);
 		

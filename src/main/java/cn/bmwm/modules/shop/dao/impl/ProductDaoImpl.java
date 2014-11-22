@@ -35,7 +35,6 @@ import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
-import cn.bmwm.modules.shop.dao.GoodsDao;
 import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.SnDao;
 import cn.bmwm.modules.shop.entity.Attribute;
@@ -67,8 +66,9 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 
 	private static final Pattern pattern = Pattern.compile("\\d*");
 
-	@Resource(name = "goodsDaoImpl")
-	private GoodsDao goodsDao;
+	//@Resource(name = "goodsDaoImpl")
+	//private GoodsDao goodsDao;
+	
 	@Resource(name = "snDaoImpl")
 	private SnDao snDao;
 
