@@ -28,8 +28,19 @@ public class ShopFavoriteDaoImpl extends BaseDaoImpl<ShopFavorite,Long> implemen
 	 * @return
 	 */
 	public List<Shop> findDynamicShops(Member member) {
-		String jpql = "select shopFavorite.shop from ShopFavorite shopFavorite where shopFavorite.member = :member order by shopFavorite.shop.favoriteCount desc ";
+		String jpql = "select favorite.shop from ShopFavorite favorite where favorite.member = :member order by favorite.shop.favoriteCount desc ";
 		return entityManager.createQuery(jpql, Shop.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setMaxResults(10).getResultList();
+	}
+	
+	/**
+	 * 查询用户收藏的店铺
+	 * @param member
+	 * @param shop
+	 * @return
+	 */
+	public ShopFavorite findShopFavoriteByMemberShop(Member member, Shop shop) {
+		String jpql = "select shopFavorite from ShopFavorite shopFavorite where shopFavorite.member = :member and shopFavorite.shop = :shop ";
+		return entityManager.createQuery(jpql, ShopFavorite.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("shop", shop).getSingleResult();
 	}
 	
 }

@@ -23,4 +23,19 @@ public interface ShopFavoriteService extends BaseService<ShopFavorite,Long> {
 	 */
 	List<Shop> findDynamicShops(Member member);
 	
+	/**
+	 * 判断用户是否收藏了该店铺
+	 * @param member
+	 * @param shop
+	 * @return
+	 */
+	boolean isUserCollectShop(Member member, Shop shop);
+	
+	/**
+	 * 收藏店铺
+	 * @param favorite
+	 * @param shop
+	 */
+	void collectShop(ShopFavorite favorite, Shop shop);
+	
 }

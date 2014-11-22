@@ -84,6 +84,11 @@ public class ProductDetail implements Serializable {
 	private String phone;
 	
 	/**
+	 * 用户是否收藏该商品，1：已收藏，0：未收藏
+	 */
+	private Integer collectFlag;
+	
+	/**
 	 * 商品评价
 	 */
 	private List<Evaluate> evaluate;
@@ -92,6 +97,7 @@ public class ProductDetail implements Serializable {
 	 * 商品规格
 	 */
 	private Map<String,Object> specifications;
+	
 
 	public Long getCode() {
 		return code;
@@ -223,6 +229,14 @@ public class ProductDetail implements Serializable {
 
 	public void setEvaluate(List<Evaluate> evaluate) {
 		this.evaluate = evaluate;
+	}
+	
+	public Integer getCollectFlag() {
+		return collectFlag;
+	}
+
+	public void setCollectFlag(Integer collectFlag) {
+		this.collectFlag = collectFlag;
 	}
 
 	public Map<String, Object> getSpecifications() {

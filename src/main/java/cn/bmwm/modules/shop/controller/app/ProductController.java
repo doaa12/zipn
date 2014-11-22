@@ -20,15 +20,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.modules.shop.controller.app.vo.Evaluate;
 import cn.bmwm.modules.shop.controller.app.vo.ProductDetail;
+import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.ProductFavorite;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
 import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Review;
 import cn.bmwm.modules.shop.entity.Shop;
+import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
+import cn.bmwm.modules.shop.service.ProductFavoriteService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ReviewService;
 import cn.bmwm.modules.sys.exception.BusinessException;
@@ -48,8 +52,14 @@ public class ProductController extends AppBaseController {
 	@Resource(name = "productServiceImpl")
 	private ProductService productService;
 	
+	@Resource(name = "memberServiceImpl")
+	private MemberService memberService;
+	
 	@Resource(name = "reviewServiceImpl")
 	private ReviewService reviewService;
+	
+	@Resource(name = "productFavoriteServiceImpl")
+	private ProductFavoriteService productFavoriteService;
 
 	
 	/**
@@ -95,6 +105,7 @@ public class ProductController extends AppBaseController {
 		detail.setStoreName(shop.getName());
 		detail.setPhone(shop.getTelephone());
 		detail.setStoreImageUrl(shop.getImage());
+		detail.setCollectFlag(productFavoriteService.isUserCollectProduct(memberService.getAppCurrent(), product) ? 1 : 0);
 		
 		List<ProductImage> images = product.getProductImages();
 		List<String> imageList = new ArrayList<String>();
@@ -207,6 +218,42 @@ public class ProductController extends AppBaseController {
 		result.put("flag", 1);
 		result.put("version", 1);
 		result.put("data", getProductItems(productList));
+		
+		return result;
+		
+	}
+	
+	/**
+	 * 收藏商品
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/collect", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> collect(Long pid) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("version", 1);
+		
+		if(pid == null) {
+			throw new BusinessException(" Parameter 'pid' can not be null ! ");
+		}
+		
+		Member member = memberService.getAppCurrent();
+		Product product = productService.find(pid);
+		
+		if(product == null) {
+			throw new BusinessException("Invalid Parameter 'pid' ! ");
+		}
+		
+		ProductFavorite favorite = new ProductFavorite();
+		favorite.setMember(member);
+		favorite.setProduct(product);
+		
+		productFavoriteService.save(favorite);
+		
+		result.put("flag", 1);
 		
 		return result;
 		

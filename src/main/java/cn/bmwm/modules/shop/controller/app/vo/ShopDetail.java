@@ -39,7 +39,7 @@ public class ShopDetail implements Serializable {
 	private Integer score;
 	
 	/**
-	 * 是否收藏店铺，1：收藏，0：未收藏
+	 * 是否收藏店铺，1：已收藏，0：未收藏
 	 */
 	private Integer collectFlag;
 	
@@ -49,7 +49,7 @@ public class ShopDetail implements Serializable {
 	private Long allProduct;
 	
 	/**
-	 * 促销促销商品数量
+	 * 促销商品数量
 	 */
 	private Long saleProduct;
 	

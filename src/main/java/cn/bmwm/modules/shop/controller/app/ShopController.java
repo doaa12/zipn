@@ -19,17 +19,21 @@ import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.controller.app.vo.ShopDetail;
+import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopActivity;
 import cn.bmwm.modules.shop.entity.ShopCategory;
+import cn.bmwm.modules.shop.entity.ShopFavorite;
 import cn.bmwm.modules.shop.entity.ShopImage;
 import cn.bmwm.modules.shop.entity.ShopReview;
+import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.ShopCategoryService;
+import cn.bmwm.modules.shop.service.ShopFavoriteService;
 import cn.bmwm.modules.shop.service.ShopReviewService;
 import cn.bmwm.modules.shop.service.ShopService;
 import cn.bmwm.modules.sys.exception.BusinessException;
@@ -60,6 +64,12 @@ public class ShopController extends AppBaseController {
 	
 	@Resource(name = "promotionServiceImpl")
 	private PromotionService promotionService;
+	
+	@Resource(name = "memberServiceImpl")
+	private MemberService memberService;
+	
+	@Resource(name = "shopFavoriteServiceImpl")
+	private ShopFavoriteService shopFavoriteService;
 	
 	
 	/**
@@ -182,6 +192,41 @@ public class ShopController extends AppBaseController {
 	}
 	
 	/**
+	 * 收藏店铺
+	 * @return
+	 */
+	@RequestMapping(value = "/collect", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> collect(Long shopId) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("version", 1);
+		
+		if(shopId == null) {
+			throw new BusinessException(" Parameter 'shopId' can not be null !");
+		}
+		
+		Member member = memberService.getAppCurrent();
+		Shop shop = shopService.find(shopId);
+		
+		if(shop == null) {
+			throw new BusinessException("Invalid Parameter 'shopId' !");
+		}
+		
+		ShopFavorite favorite = new ShopFavorite();
+		favorite.setMember(member);
+		favorite.setShop(shop);
+		
+		shopFavoriteService.collectShop(favorite, shop);
+		
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
+	/**
 	 * 获取店铺详情
 	 * @param shop
 	 * @return
@@ -194,7 +239,7 @@ public class ShopController extends AppBaseController {
 		detail.setTitle(shop.getName());
 		detail.setHeaderImageurl(shop.getLogo());
 		detail.setScore(shop.getAvgScore());
-		detail.setCollectFlag(0);
+		detail.setCollectFlag(shopFavoriteService.isUserCollectShop(memberService.getAppCurrent(), shop) ? 1 : 0);
 		detail.setAllProduct(productService.findShopProductCount(shop));
 		detail.setSaleProduct(promotionService.findShopPromotionCount(shop));
 		detail.setSaleStatus(shop.getStatus());
