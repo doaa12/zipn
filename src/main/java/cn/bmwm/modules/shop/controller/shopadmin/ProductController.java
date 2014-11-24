@@ -177,10 +177,12 @@ public class ProductController extends BaseController {
 		Shop shop = shopService.find(principal.getShopId());
 		
 		model.addAttribute("shopCategories", shop.getShopCategories());
+		
 		//model.addAttribute("brands", brandService.findAll());
 		//model.addAttribute("tags", tagService.findList(Type.product));
 		//model.addAttribute("memberRanks", memberRankService.findAll());
-		model.addAttribute("specifications", specificationService.findAll());
+		
+		model.addAttribute("specifications", specificationService.findList(shop, null, null));
 		
 		return "/shopadmin/product/add";
 		

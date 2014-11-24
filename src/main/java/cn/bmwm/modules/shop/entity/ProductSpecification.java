@@ -3,6 +3,7 @@
  */
 package cn.bmwm.modules.shop.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,11 @@ public class ProductSpecification extends BaseEntity {
 	 * 商品
 	 */
 	private Product product;
+	
+	/**
+	 * 商品价格
+	 */
+	private BigDecimal price;
 	
 	/**
 	 * 商品规格值
@@ -111,6 +117,14 @@ public class ProductSpecification extends BaseEntity {
 	 */
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	/**

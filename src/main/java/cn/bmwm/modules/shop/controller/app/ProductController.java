@@ -145,6 +145,7 @@ public class ProductController extends AppBaseController {
 
 		List<List<String>> productSpecificationList = new ArrayList<List<String>>();
 		List<Long> productPpecificationIdList = new ArrayList<Long>();
+		List<Double> productSpecificationPriceList = new ArrayList<Double>();
 		
 		if(productSpecifications != null && productSpecifications.size() > 0) {
 			
@@ -165,6 +166,7 @@ public class ProductController extends AppBaseController {
 				}
 				
 				productPpecificationIdList.add(productSpecification.getId());
+				productSpecificationPriceList.add(productSpecification.getPrice() == null ? product.getPrice().doubleValue() : productSpecification.getPrice().doubleValue());
 				
 				n++;
 				
@@ -172,6 +174,7 @@ public class ProductController extends AppBaseController {
 		}
 		
 		specifications.put("specificationIdList", productPpecificationIdList);
+		specifications.put("specificationPriceList", productSpecificationPriceList);
 		specifications.put("specificationList", productSpecificationList);
 		
 		detail.setSpecifications(specifications);
