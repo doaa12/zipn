@@ -37,4 +37,14 @@ public class ProductFavoriteServiceImpl extends BaseServiceImpl<ProductFavorite,
 		return favorite != null;
 	}
 	
+	/**
+	 * 获取用户收藏的商品
+	 * @param member
+	 * @param product
+	 * @return
+	 */
+	public ProductFavorite findProductFavorite(Member member, Product product) {
+		return productFavoriteDao.findProductFavoriteByMemberProduct(member, product);
+	}
+	
 }

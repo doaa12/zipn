@@ -227,6 +227,41 @@ public class ShopController extends AppBaseController {
 	}
 	
 	/**
+	 * 取消店铺收藏
+	 * @return
+	 */
+	@RequestMapping(value = "/cancal_collect", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> cancalCollect(Long shopId) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("version", 1);
+		
+		if(shopId == null) {
+			throw new BusinessException(" Parameter 'shopId' can not be null !");
+		}
+		
+		Member member = memberService.getAppCurrent();
+		Shop shop = shopService.find(shopId);
+		
+		if(shop == null) {
+			throw new BusinessException("Invalid Parameter 'shopId' !");
+		}
+		
+		ShopFavorite favorite = shopFavoriteService.findShopFavorite(member, shop);
+		
+		if(favorite != null) {
+			shopFavoriteService.delete(favorite);
+		}
+		
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
+	/**
 	 * 获取店铺详情
 	 * @param shop
 	 * @return

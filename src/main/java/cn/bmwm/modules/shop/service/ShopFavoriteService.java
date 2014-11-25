@@ -32,6 +32,14 @@ public interface ShopFavoriteService extends BaseService<ShopFavorite,Long> {
 	boolean isUserCollectShop(Member member, Shop shop);
 	
 	/**
+	 * 查询店铺收藏
+	 * @param member
+	 * @param shop
+	 * @return
+	 */
+	ShopFavorite findShopFavorite(Member member, Shop shop);
+	
+	/**
 	 * 收藏店铺
 	 * @param favorite
 	 * @param shop

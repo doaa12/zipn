@@ -18,5 +18,13 @@ public interface ProductFavoriteService extends BaseService<ProductFavorite, Lon
 	 * @return
 	 */
 	boolean isUserCollectProduct(Member member, Product product);
+	
+	/**
+	 * 获取用户收藏的商品
+	 * @param member
+	 * @param product
+	 * @return
+	 */
+	ProductFavorite findProductFavorite(Member member, Product product);
 
 }

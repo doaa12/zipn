@@ -262,4 +262,40 @@ public class ProductController extends AppBaseController {
 		
 	}
 	
+	/**
+	 * 取消商品收藏
+	 * @param pid
+	 * @return
+	 */
+	@RequestMapping(value = "/cancal_collect", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> cancalCollect(Long pid) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("version", 1);
+		
+		if(pid == null) {
+			throw new BusinessException(" Parameter 'pid' can not be null ! ");
+		}
+		
+		Member member = memberService.getAppCurrent();
+		Product product = productService.find(pid);
+		
+		if(product == null) {
+			throw new BusinessException("Invalid Parameter 'pid' ! ");
+		}
+		
+		ProductFavorite favorite = productFavoriteService.findProductFavorite(member, product);
+		
+		if(favorite != null) {
+			productFavoriteService.delete(favorite);
+		}
+		
+		result.put("flag", 1);
+		
+		return result;
+		
+	}
+	
 }
