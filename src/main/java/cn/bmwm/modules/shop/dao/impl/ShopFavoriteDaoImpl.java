@@ -41,12 +41,22 @@ public class ShopFavoriteDaoImpl extends BaseDaoImpl<ShopFavorite,Long> implemen
 	 */
 	public ShopFavorite findShopFavoriteByMemberShop(Member member, Shop shop) {
 		try{
-			String jpql = "select shopFavorite from ShopFavorite shopFavorite where shopFavorite.member = :member and shopFavorite.shop = :shop ";
+			String jpql = "select favorite from ShopFavorite favorite where favorite.member = :member and favorite.shop = :shop ";
 			return entityManager.createQuery(jpql, ShopFavorite.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("shop", shop).getSingleResult();
 		}catch(NoResultException e) {
 			return null;
 		}
 		
+	}
+	
+	/**
+	 * 查询收藏店铺
+	 * @param member
+	 * @return
+	 */
+	public List<Shop> findFavoriteShopList(Member member) {
+		String jpql = " select favorite.shop from ShopFavorite favorite where favorite.member = :member and  favorite.shop.isList = true ";
+		return entityManager.createQuery(jpql, Shop.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).getResultList(); 
 	}
 	
 }

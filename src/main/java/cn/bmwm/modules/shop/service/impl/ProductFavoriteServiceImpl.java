@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -45,6 +47,15 @@ public class ProductFavoriteServiceImpl extends BaseServiceImpl<ProductFavorite,
 	 */
 	public ProductFavorite findProductFavorite(Member member, Product product) {
 		return productFavoriteDao.findProductFavoriteByMemberProduct(member, product);
+	}
+	
+	/**
+	 * 查询收藏商品
+	 * @param member
+	 * @return
+	 */
+	public List<Product> findFavoriteProductList(Member member) {
+		return productFavoriteDao.findFavoriteProductList(member);
 	}
 	
 }

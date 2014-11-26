@@ -46,4 +46,11 @@ public interface ShopFavoriteService extends BaseService<ShopFavorite,Long> {
 	 */
 	void collectShop(ShopFavorite favorite, Shop shop);
 	
+	/**
+	 * 查询收藏店铺
+	 * @param member
+	 * @return
+	 */
+	List<Shop> findFavoriteShopList(Member member);
+	
 }

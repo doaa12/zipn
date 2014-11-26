@@ -298,4 +298,28 @@ public class ProductController extends AppBaseController {
 		
 	}
 	
+	/**
+	 * 收藏商品列表
+	 * @return
+	 */
+	@RequestMapping(value = "/collect_list", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> collectList() {
+		
+		Member member = memberService.getAppCurrent();
+		
+		List<Product> productList = productFavoriteService.findFavoriteProductList(member);
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		result.put("flag", 1);
+		result.put("version", 1);
+		result.put("data", getProductItems(productList));
+		
+		return result;
+		
+	}
+	
+	
+	
 }

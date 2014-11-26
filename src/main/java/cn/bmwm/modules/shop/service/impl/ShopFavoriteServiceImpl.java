@@ -90,4 +90,13 @@ public class ShopFavoriteServiceImpl extends BaseServiceImpl<ShopFavorite,Long> 
 		
 	}
 	
+	/**
+	 * 查询收藏店铺
+	 * @param member
+	 * @return
+	 */
+	public List<Shop> findFavoriteShopList(Member member) {
+		return shopFavoriteDao.findFavoriteShopList(member);
+	}
+	
 }

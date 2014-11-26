@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.service;
 
+import java.util.List;
+
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductFavorite;
@@ -26,5 +28,12 @@ public interface ProductFavoriteService extends BaseService<ProductFavorite, Lon
 	 * @return
 	 */
 	ProductFavorite findProductFavorite(Member member, Product product);
+	
+	/**
+	 * 查询收藏商品
+	 * @param member
+	 * @return
+	 */
+	List<Product> findFavoriteProductList(Member member);
 
 }

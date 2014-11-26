@@ -31,4 +31,11 @@ public interface ShopFavoriteDao extends BaseDao<ShopFavorite,Long> {
 	 */
 	ShopFavorite findShopFavoriteByMemberShop(Member member, Shop shop);
 	
+	/**
+	 * 查询收藏店铺
+	 * @param member
+	 * @return
+	 */
+	List<Shop> findFavoriteShopList(Member member);
+	
 }

@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.dao;
 
+import java.util.List;
+
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductFavorite;
@@ -18,5 +20,12 @@ public interface ProductFavoriteDao extends BaseDao<ProductFavorite,Long>{
 	 * @return
 	 */
 	ProductFavorite findProductFavoriteByMemberProduct(Member member, Product product);
+	
+	/**
+	 * 查询收藏商品
+	 * @param member
+	 * @return
+	 */
+	List<Product> findFavoriteProductList(Member member);
 
 }

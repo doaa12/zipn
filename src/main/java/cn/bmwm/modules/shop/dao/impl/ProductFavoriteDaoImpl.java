@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.dao.impl;
 
+import java.util.List;
+
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 
@@ -26,12 +28,22 @@ public class ProductFavoriteDaoImpl extends BaseDaoImpl<ProductFavorite,Long> im
 	 */
 	public ProductFavorite findProductFavoriteByMemberProduct(Member member, Product product) {
 		try{
-			String jpql = "select favorite from ProductFavorite favorite where favorite.member = :member and favorite.product = :product ";
+			String jpql = " select favorite from ProductFavorite favorite where favorite.member = :member and favorite.product = :product ";
 			return entityManager.createQuery(jpql, ProductFavorite.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("product", product).getSingleResult();
 		}catch(NoResultException e) {
 			return null;
 		}
 		
+	}
+	
+	/**
+	 * 查询收藏商品
+	 * @param member
+	 * @return
+	 */
+	public List<Product> findFavoriteProductList(Member member) {
+		String jpql = " select favorite.product from ProductFavorite favorite where favorite.member = :member and favorite.product.isMarketable = true ";
+		return entityManager.createQuery(jpql, Product.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).getResultList();
 	}
 	
 }
