@@ -59,10 +59,7 @@ public class CartController extends AppBaseController {
 	
 	@Resource(name = "cartItemServiceImpl")
 	private CartItemService cartItemService;
-	/*
-	@Resource(name = "productSpecificationServiceImpl")
-	private ProductSpecificationService productSpecificationService;
-	*/
+
 	
 	/**
 	 * 添加
@@ -221,6 +218,7 @@ public class CartController extends AppBaseController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(squantity)) {
+			result.put("message", "购物车商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
@@ -228,11 +226,13 @@ public class CartController extends AppBaseController {
 		int quantity = Integer.parseInt(squantity);
 		
 		if(quantity < 1) {
+			result.put("message", "购物车商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
 		
 		if(StringUtils.isBlank(sid)) {
+			result.put("message", "购物车商品不存在！");
 			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
@@ -242,6 +242,7 @@ public class CartController extends AppBaseController {
 		Cart cart = cartService.getAppCurrent();
 		
 		if (cart == null || cart.isEmpty()) {
+			result.put("message", "购物车为空！");
 			result.put("flag", Constants.CART_CART_EMPTY);
 			return result;
 		}
@@ -250,11 +251,13 @@ public class CartController extends AppBaseController {
 		Set<CartItem> cartItems = cart.getCartItems();
 		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
+			result.put("message", "购物车中不存在该商品！");
 			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
 		
 		if (CartItem.MAX_QUANTITY != null && quantity > CartItem.MAX_QUANTITY) {
+			result.put("message", "商品数量超过单品最大允许数量！");
 			result.put("flag", Constants.CART_ITEM_MAX_QUANTITY);
 			return result;
 		}
@@ -262,6 +265,7 @@ public class CartController extends AppBaseController {
 		Product product = cartItem.getProduct();
 		
 		if (product.getStock() != null && quantity > product.getAvailableStock()) {
+			result.put("message", "商品数量超过商品库存量！");
 			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 			return result;
 		}
@@ -286,6 +290,7 @@ public class CartController extends AppBaseController {
 		result.put("version", 1);
 		
 		if(StringUtils.isBlank(sid)) {
+			result.put("message", "购物车中不存在该商品！");
 			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
@@ -295,6 +300,7 @@ public class CartController extends AppBaseController {
 		Cart cart = cartService.getAppCurrent();
 		
 		if (cart == null || cart.isEmpty()) {
+			result.put("message", "购物车为空！");
 			result.put("flag", Constants.CART_CART_EMPTY);
 			return result;
 		}
@@ -303,6 +309,7 @@ public class CartController extends AppBaseController {
 		Set<CartItem> cartItems = cart.getCartItems();
 		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
+			result.put("message", "购物车中不存在该商品！");
 			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
