@@ -4,15 +4,11 @@
  * */
 package cn.bmwm.modules.shop.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -41,10 +37,6 @@ public class SpecificationValue extends OrderEntity {
 	/** 规格 */
 	private Specification specification;
 	
-	/**
-	 * 商品规格值
-	 */
-	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
 
 	/**
 	 * 获取名称
@@ -108,20 +100,4 @@ public class SpecificationValue extends OrderEntity {
 		this.specification = specification;
 	}
 
-	/**
-	 * @return the productSpecificationValues
-	 */
-	@OneToMany(mappedBy = "specificationValue", fetch = FetchType.LAZY)
-	public Set<ProductSpecificationValue> getProductSpecificationValues() {
-		return productSpecificationValues;
-	}
-
-	/**
-	 * @param productSpecificationValues the productSpecificationValues to set
-	 */
-	public void setProductSpecificationValues(
-			Set<ProductSpecificationValue> productSpecificationValues) {
-		this.productSpecificationValues = productSpecificationValues;
-	}
-	
 }

@@ -33,7 +33,6 @@ import cn.bmwm.modules.shop.entity.Product.OrderType;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
-import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
@@ -248,13 +247,13 @@ public class ProductController extends BaseController {
 						}
 						
 						SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
-						
+						/*
 						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
 						productSpecificationValue.setSpecification(specification);
 						productSpecificationValue.setSpecificationValue(specificationValue);
 						productSpecificationValue.setProduct(product);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
-						
+						*/
 						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
 						//product.getProductSpecificationValues().add(productSpecificationValue);
 						

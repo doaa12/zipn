@@ -8,7 +8,6 @@ import java.util.Iterator;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.entity.Specification;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Specification.Type;
+import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.service.SpecificationService;
 
 /**
@@ -70,7 +69,7 @@ public class SpecificationController extends BaseController {
 			return ERROR_VIEW;
 		}
 		
-		specification.setProductSpecificationValues(null);
+		//specification.setProductSpecificationValues(null);
 		specificationService.save(specification);
 		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
@@ -131,10 +130,12 @@ public class SpecificationController extends BaseController {
 		
 		if (ids != null) {
 			for (Long id : ids) {
+				/*
 				Specification specification = specificationService.find(id);
 				if (specification != null && specification.getProductSpecificationValues() != null && !specification.getProductSpecificationValues().isEmpty()) {
 					return Message.error("admin.specification.deleteExistProductNotAllowed", specification.getName());
 				}
+				*/
 			}
 			specificationService.delete(ids);
 		}

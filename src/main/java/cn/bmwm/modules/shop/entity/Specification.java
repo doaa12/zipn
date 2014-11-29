@@ -5,9 +5,7 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,11 +63,6 @@ public class Specification extends OrderEntity {
 	 * 店铺
 	 */
 	private Shop shop;
-	
-	/**
-	 * 商品规格
-	 */
-	private Set<ProductSpecificationValue> productSpecificationValues = new HashSet<ProductSpecificationValue>();
 
 
 	/**
@@ -171,20 +164,4 @@ public class Specification extends OrderEntity {
 		this.shop = shop;
 	}
 
-	/**
-	 * @return the productSpecificationValues
-	 */
-	@OneToMany(mappedBy = "specification", fetch = FetchType.LAZY)
-	public Set<ProductSpecificationValue> getProductSpecificationValues() {
-		return productSpecificationValues;
-	}
-
-	/**
-	 * @param productSpecificationValues the productSpecificationValues to set
-	 */
-	public void setProductSpecificationValues(
-			Set<ProductSpecificationValue> productSpecificationValues) {
-		this.productSpecificationValues = productSpecificationValues;
-	}
-	
 }
