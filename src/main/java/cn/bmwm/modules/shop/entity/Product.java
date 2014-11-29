@@ -2118,7 +2118,7 @@ public class Product extends BaseEntity {
 	 */
 	@Transient
 	public Integer getAvailableStock() {
-		Integer availableStock = null;
+		Integer availableStock = -1;
 		if (getStock() != null && getAllocatedStock() != null) {
 			availableStock = getStock() - getAllocatedStock();
 			if (availableStock < 0) {
