@@ -7,7 +7,9 @@ package cn.bmwm.modules.shop.dao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +29,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -35,6 +38,7 @@ import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
+import cn.bmwm.modules.shop.dao.GoodsDao;
 import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.SnDao;
 import cn.bmwm.modules.shop.entity.Attribute;
@@ -51,6 +55,7 @@ import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.ShopCategory;
 import cn.bmwm.modules.shop.entity.Sn.Type;
+import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
@@ -66,8 +71,8 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 
 	private static final Pattern pattern = Pattern.compile("\\d*");
 
-	//@Resource(name = "goodsDaoImpl")
-	//private GoodsDao goodsDao;
+	@Resource(name = "goodsDaoImpl")
+	private GoodsDao goodsDao;
 	
 	@Resource(name = "snDaoImpl")
 	private SnDao snDao;
@@ -862,7 +867,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		return super.merge(product);
 	}
 	
-	/*
 	@Override
 	public void remove(Product product) {
 		
@@ -879,7 +883,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		super.remove(product);
 		
 	}
-	*/
+	
 
 	/**
 	 * 设置值
@@ -903,7 +907,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		
 		StringBuffer fullName = new StringBuffer(product.getName());
 		
-		/*
 		if (product.getSpecificationValues() != null && !product.getSpecificationValues().isEmpty()) {
 			
 			List<SpecificationValue> specificationValues = new ArrayList<SpecificationValue>(product.getSpecificationValues());
@@ -929,7 +932,6 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 			fullName.append(Product.FULL_NAME_SPECIFICATION_SUFFIX);
 			
 		}
-		*/
 		
 		product.setFullName(fullName.toString());
 		

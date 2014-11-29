@@ -418,26 +418,6 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					${message("Product.memberPrice")}:
-				</th>
-				<td>
-					<label>
-						<input type="checkbox" id="isMemberPrice" name="isMemberPrice" value="true"[#if product.memberPrice?has_content] checked="checked"[/#if] />${message("admin.product.isMemberPrice")}
-					</label>
-				</td>
-			</tr>
-			<tr id="memberPriceTr"[#if !product.memberPrice?has_content] class="hidden"[/#if]>
-				<th>
-					&nbsp;
-				</th>
-				<td>
-					[#list memberRanks as memberRank]
-						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" value="${product.memberPrice.get(memberRank)}" maxlength="16" style="width: 60px; margin-right: 6px;"[#if !product.memberPrice?has_content] disabled="disabled"[/#if] />
-					[/#list]
-				</td>
-			</tr>
-			<tr>
-				<th>
 					${message("Product.cost")}:
 				</th>
 				<td>
@@ -500,41 +480,6 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					${message("Product.point")}:
-				</th>
-				<td>
-					<input type="text" name="point" class="text" value="${product.point}" maxlength="9" title="${message("admin.product.pointTitle")}" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.brand")}:
-				</th>
-				<td>
-					<select name="brandId">
-						<option value="">${message("admin.common.choose")}</option>
-						[#list brands as brand]
-							<option value="${brand.id}"[#if brand == product.brand] selected="selected"[/#if]>
-								${brand.name}
-							</option>
-						[/#list]
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.tags")}:
-				</th>
-				<td>
-					[#list tags as tag]
-						<label>
-							<input type="checkbox" name="tagIds" value="${tag.id}"[#if product.tags?seq_contains(tag)] checked="checked"[/#if] />${tag.name}
-						</label>
-					[/#list]
-				</td>
-			</tr>
-			<tr>
-				<th>
 					${message("admin.common.setting")}:
 				</th>
 				<td>
@@ -546,10 +491,6 @@ $().ready(function() {
 						<input type="checkbox" name="isList" value="true"[#if product.isList] checked="checked"[/#if] />${message("Product.isList")}
 						<input type="hidden" name="_isList" value="false" />
 					</label>
-					<label>
-						<input type="checkbox" name="isGift" value="true"[#if product.isGift] checked="checked"[/#if] />${message("Product.isGift")}
-						<input type="hidden" name="_isGift" value="false" />
-					</label>
 				</td>
 			</tr>
 			<tr>
@@ -558,38 +499,6 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="text" name="memo" class="text" value="${product.memo}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.keyword")}:
-				</th>
-				<td>
-					<input type="text" name="keyword" class="text" value="${product.keyword}" maxlength="200" title="${message("admin.product.keywordTitle")}" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoTitle")}:
-				</th>
-				<td>
-					<input type="text" name="seoTitle" class="text" value="${product.seoTitle}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoKeywords")}:
-				</th>
-				<td>
-					<input type="text" name="seoKeywords" class="text" value="${product.seoKeywords}" maxlength="200" />
-				</td>
-			</tr>
-			<tr>
-				<th>
-					${message("Product.seoDescription")}:
-				</th>
-				<td>
-					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" />
 				</td>
 			</tr>
 		</table>

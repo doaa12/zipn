@@ -478,6 +478,7 @@ public class ProductController extends BaseController {
 		product.setCity(city);
 		product.setRegion(shop.getRegion());
 		product.setShop(shop);
+		product.setIsGift(false);
 		
 		Product pProduct = productService.find(product.getId());
 		
@@ -547,7 +548,7 @@ public class ProductController extends BaseController {
 		}
 		
 		BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "reviews", "consultations", "favoriteMembers",
-				"productSpecifications", "cartItems", "orderItems", "giftItems", "isGift", "productNotifies"});
+				"productSpecificationList", "cartItems", "promotions", "goods", "cartItems", "orderItems", "giftItems", "productNotifies"});
 		
 		Goods goods = pProduct.getGoods();
 		List<Product> products = new ArrayList<Product>();
@@ -568,12 +569,10 @@ public class ProductController extends BaseController {
 							//TODO：设置规格商品库存，价格
 							if (j == 0) {
 								
-								BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers",
-										"specifications", "specificationValues", "promotions", "cartItems", "orderItems", "giftItems", "productNotifies"});
-								
 								//pProduct.setSpecifications(new HashSet<Specification>());
 								//pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-								pProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+								//pProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+								pProduct.getProductSpecificationList().clear();
 								pProduct.setCity(city);
 								pProduct.setRegion(shop.getRegion());
 								pProduct.setShopCategory(shopCategory);
@@ -593,12 +592,17 @@ public class ProductController extends BaseController {
 									
 									//specificationProduct.setSpecifications(new HashSet<Specification>());
 									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-									specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+									//specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+									
+									specificationProduct.getProductSpecificationList().clear();
 									specificationProduct.setCity(city);
 									specificationProduct.setRegion(shop.getRegion());
 									specificationProduct.setShop(shop);
 									specificationProduct.setShopCategory(shopCategory);
 									specificationProduct.setTreePath(shopCategory.getTreePath());
+									specificationProduct.setIsList(false);
+									specificationProduct.setIsTop(false);
+									specificationProduct.setIsGift(false);
 									products.add(specificationProduct);
 									
 								} else {
@@ -613,6 +617,7 @@ public class ProductController extends BaseController {
 									specificationProduct.setFullName(null);
 									specificationProduct.setAllocatedStock(0);
 									specificationProduct.setIsList(false);
+									specificationProduct.setIsGift(false);
 									specificationProduct.setScore(0F);
 									specificationProduct.setTotalScore(0L);
 									specificationProduct.setScoreCount(0L);
@@ -633,7 +638,7 @@ public class ProductController extends BaseController {
 									//specificationProduct.setSpecifications(new HashSet<Specification>());
 									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
 									//specificationProduct.setPromotions(null);
-									specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+									//specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
 									specificationProduct.setCartItems(null);
 									specificationProduct.setOrderItems(null);
 									specificationProduct.setGiftItems(null);
@@ -674,13 +679,13 @@ public class ProductController extends BaseController {
 			
 		} else {
 			
-			product.setProductSpecificationList(null);
-			product.setShop(shop);
-			product.setCity(shop.getCity());
-			product.setRegion(shop.getRegion());
-			//product.setSpecificationValues(null);
-			BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers", "promotions", "cartItems",
-					"orderItems", "giftItems", "productNotifies" });
+			if(pProduct.getProductSpecificationList() != null && pProduct.getProductSpecificationList().size() > 0 ) {
+				pProduct.getProductSpecificationList().clear();
+			}
+			
+			pProduct.setShop(shop);
+			pProduct.setCity(shop.getCity());
+			pProduct.setRegion(shop.getRegion());
 			
 			products.add(pProduct);
 			

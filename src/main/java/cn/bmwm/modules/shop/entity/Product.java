@@ -2180,6 +2180,7 @@ public class Product extends BaseEntity {
 	 * @return the productSpecifications
 	 */
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy("orders asc")
 	public List<ProductSpecification> getProductSpecificationList() {
 		return productSpecificationList;
 	}
@@ -2258,6 +2259,34 @@ public class Product extends BaseEntity {
 				orderItem.setProduct(null);
 			}
 		}
+	}
+	
+	/**
+	 * 获取商品规格
+	 * @return
+	 */
+	@Transient
+	public Set<Specification> getSpecifications() {
+		Set<Specification> specifications = new HashSet<Specification>();
+		if(productSpecificationList == null || productSpecificationList.size() == 0) return specifications;
+		for(ProductSpecification productSpecification : productSpecificationList) {
+			specifications.add(productSpecification.getSpecification());
+		}
+		return specifications;
+	}
+	
+	/**
+	 * 获取商品规格值
+	 * @return
+	 */
+	@Transient
+	public Set<SpecificationValue> getSpecificationValues() {
+		Set<SpecificationValue> values = new HashSet<SpecificationValue>();
+		if(productSpecificationList == null || productSpecificationList.size() == 0) return values;
+		for(ProductSpecification productSpecification : productSpecificationList) {
+			values.add(productSpecification.getSpecificationValue());
+		}
+		return values;
 	}
 
 	/**
