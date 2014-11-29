@@ -104,6 +104,7 @@ public class ProductController extends AppBaseController {
 		detail.setStoreName(shop.getName());
 		detail.setPhone(shop.getTelephone());
 		detail.setStoreImageUrl(shop.getImage());
+		detail.setStock(product.getAvailableStock());
 		detail.setCollectFlag(productFavoriteService.isUserCollectProduct(memberService.getAppCurrent(), product) ? 1 : 0);
 		
 		List<ProductImage> images = product.getProductImages();
@@ -157,8 +158,12 @@ public class ProductController extends AppBaseController {
 				
 				if(specList != null && specList.size() > 0) {
 					for(ProductSpecification specification : specList) {
-						builder.append(specification.getSpecification().getName()).append(":").append(specification.getSpecificationValue().getName());
+						builder.append(specification.getSpecification().getName()).append("：").append(specification.getSpecificationValue().getName()).append("，");
 					}
+				}
+				
+				if(builder.length() > 0) {
+					builder.delete(builder.length() - 1, builder.length());
 				}
 				
 				map.put("specification", builder.toString());
@@ -310,7 +315,5 @@ public class ProductController extends AppBaseController {
 		return result;
 		
 	}
-	
-	
 	
 }

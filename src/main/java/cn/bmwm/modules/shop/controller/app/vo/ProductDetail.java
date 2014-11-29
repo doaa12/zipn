@@ -89,6 +89,11 @@ public class ProductDetail implements Serializable {
 	private Integer collectFlag;
 	
 	/**
+	 * 库存
+	 */
+	private Integer stock;
+	
+	/**
 	 * 商品评价
 	 */
 	private List<Evaluate> evaluate;
@@ -221,6 +226,14 @@ public class ProductDetail implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 
 	public List<Evaluate> getEvaluate() {
