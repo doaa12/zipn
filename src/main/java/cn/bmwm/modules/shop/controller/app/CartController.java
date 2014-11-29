@@ -169,8 +169,6 @@ public class CartController extends AppBaseController {
 			cartItem.setCart(cart);
 			cartItemService.save(cartItem);
 			
-			cart.getCartItems().add(cartItem);
-			
 		}
 		
 		/*
@@ -180,7 +178,7 @@ public class CartController extends AppBaseController {
 		}
 		*/
 		
-		return list();
+		return list	();
 		
 	}
 
@@ -189,7 +187,15 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> list() {
+	public Map<String,Object> itemList() {
+		return list();
+	}
+	
+	/**
+	 * 获取当前购物车中的商品列表
+	 * @return
+	 */
+	private Map<String,Object> list() {
 		
 		Cart cart = cartService.getAppCurrent();
 		List<CartShop> items = getCartShops(cart);
@@ -314,7 +320,6 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 		
-		cartItems.remove(cartItem);
 		cartItemService.delete(cartItem);
 		
 		return list();
