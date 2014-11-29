@@ -112,6 +112,10 @@ public class CartServiceImpl extends BaseServiceImpl<Cart, Long> implements Cart
 		
 		if(member == null) throw new IllegalUserStatusException();
 		
+		member = memberDao.find(member.getId());
+		
+		if(member == null) throw new IllegalUserStatusException();
+		
 		Cart cart = member.getCart();
 		
 		if (cart != null) {
