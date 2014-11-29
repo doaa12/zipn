@@ -30,6 +30,7 @@ import cn.bmwm.common.utils.FileInfo.FileType;
 import cn.bmwm.common.utils.Message;
 import cn.bmwm.modules.shop.controller.admin.BaseController;
 import cn.bmwm.modules.shop.entity.Attribute;
+import cn.bmwm.modules.shop.entity.Goods;
 import cn.bmwm.modules.shop.entity.Parameter;
 import cn.bmwm.modules.shop.entity.ParameterGroup;
 import cn.bmwm.modules.shop.entity.Product;
@@ -43,9 +44,9 @@ import cn.bmwm.modules.shop.entity.Specification;
 import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.service.FileService;
+import cn.bmwm.modules.shop.service.GoodsService;
 import cn.bmwm.modules.shop.service.ImageService;
 import cn.bmwm.modules.shop.service.ProductService;
-import cn.bmwm.modules.shop.service.ProductSpecificationService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.ShopCategoryService;
 import cn.bmwm.modules.shop.service.ShopService;
@@ -83,9 +84,6 @@ public class ProductController extends BaseController {
 	@Resource(name = "specificationValueServiceImpl")
 	private SpecificationValueService specificationValueService;
 	
-	@Resource(name = "productSpecificationServiceImpl")
-	private ProductSpecificationService productSpecificationService;
-	
 	@Resource(name = "fileServiceImpl")
 	private FileService fileService;
 	
@@ -94,6 +92,9 @@ public class ProductController extends BaseController {
 	
 	@Resource(name = "shopServiceImpl")
 	private ShopService shopService;
+	
+	@Resource(name = "goodsServiceImpl")
+	private GoodsService goodsService;
 	
 	
 	/**
@@ -306,7 +307,8 @@ public class ProductController extends BaseController {
 			}
 		}
 		
-		List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+		Goods goods = new Goods();
+		List<Product> products = new ArrayList<Product>();
 		
 		if (specificationIds != null && specificationIds.length > 0) {
 			
@@ -319,42 +321,104 @@ public class ProductController extends BaseController {
 					
 					for (int j = 0; j < specificationValueIds.length; j++) {
 						
-						if(i == 0) {
+						if (i == 0) {
 							
-							//TODO:设置库存
-							ProductSpecification productSpecification = new ProductSpecification();
-							productSpecification.setProduct(product);
-							productSpecifications.add(productSpecification);
-							
+							//TODO:设置库存和价格
+							if (j == 0) {
+								product.setGoods(goods);
+								product.setProductSpecificationList(new ArrayList<ProductSpecification>());
+								//product.setSpecificationValues(new HashSet<SpecificationValue>());
+								product.setCity(city);
+								product.setRegion(shop.getRegion());
+								product.setShop(shop);
+								product.setTreePath(shopCategory.getTreePath());
+								product.setShopCategory(shopCategory);
+								product.setIsTop(false);
+								products.add(product);
+							} else {
+								Product specificationProduct = new Product();
+								BeanUtils.copyProperties(product, specificationProduct);
+								specificationProduct.setId(null);
+								specificationProduct.setCreateDate(null);
+								specificationProduct.setModifyDate(null);
+								specificationProduct.setSn(null);
+								specificationProduct.setFullName(null);
+								specificationProduct.setAllocatedStock(0);
+								specificationProduct.setIsList(false);
+								specificationProduct.setScore(0F);
+								specificationProduct.setTotalScore(0L);
+								specificationProduct.setScoreCount(0L);
+								specificationProduct.setHits(0L);
+								specificationProduct.setWeekHits(0L);
+								specificationProduct.setMonthHits(0L);
+								specificationProduct.setSales(0L);
+								specificationProduct.setWeekSales(0L);
+								specificationProduct.setMonthSales(0L);
+								specificationProduct.setWeekHitsDate(new Date());
+								specificationProduct.setMonthHitsDate(new Date());
+								specificationProduct.setWeekSalesDate(new Date());
+								specificationProduct.setMonthSalesDate(new Date());
+								specificationProduct.setGoods(goods);
+								specificationProduct.setReviews(null);
+								specificationProduct.setConsultations(null);
+								specificationProduct.setFavoriteMembers(null);
+								specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+								//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+								//specificationProduct.setPromotions(null);
+								specificationProduct.setCartItems(null);
+								specificationProduct.setOrderItems(null);
+								specificationProduct.setGiftItems(null);
+								specificationProduct.setProductNotifies(null);
+								specificationProduct.setCity(city);
+								specificationProduct.setRegion(shop.getRegion());
+								specificationProduct.setShop(shop);
+								specificationProduct.setTreePath(shopCategory.getTreePath());
+								specificationProduct.setShopCategory(shopCategory);
+								specificationProduct.setIsTop(false);
+								products.add(specificationProduct);
+							}
 						}
 						
 						SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
-						/*
-						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
-						productSpecificationValue.setSpecification(specification);
-						productSpecificationValue.setSpecificationValue(specificationValue);
-						productSpecificationValue.setProduct(product);
-						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
-						*/
-						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
-						//product.getProductSpecificationValues().add(productSpecificationValue);
+						
+						Product specificationProduct = products.get(j);
+						
+						ProductSpecification productSpecification = new ProductSpecification();
+						productSpecification.setProduct(specificationProduct);
+						productSpecification.setSpecification(specification);
+						productSpecification.setSpecificationValue(specificationValue);
+						
+						specificationProduct.getProductSpecificationList().add(productSpecification);
+						
+						//specificationProduct.getSpecifications().add(specification);
+						//specificationProduct.getSpecificationValues().add(specificationValue);
 						
 					}
 				}
 			}
-			/*
-			for(ProductSpecification productSpecification : productSpecifications) {
-				productSpecification.prepareOrders();
+			
+			for(Product p : products) {
+				p.prepareOrders();
 			}
-			*/
-			product.getProductSpecificationList().addAll(productSpecifications);
 			
 		} else {
+			product.setShop(shop);
+			product.setGoods(goods);
+			//product.setSpecifications(null);
+			//product.setSpecificationValues(null);
 			product.setProductSpecificationList(null);
-			//product.setProductSpecificationValues(null);
+			product.setCity(city);
+			product.setRegion(shop.getRegion());
+			product.setTreePath(shopCategory.getTreePath());
+			product.setShopCategory(shopCategory);
+			product.setIsTop(false);
+			products.add(product);
 		}
 		
-		productService.save(product);
+		goods.getProducts().clear();
+		goods.getProducts().addAll(products);
+		
+		goodsService.save(goods);
 		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
@@ -386,11 +450,13 @@ public class ProductController extends BaseController {
 	 * 更新
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] productSpecificationIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String update(Product product, Long shopCategoryId, Long brandId, Long[] tagIds, Long[] specificationIds, Long[] specificationProductIds, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		
 		Principal principal = (Principal)SecurityUtils.getSubject().getPrincipal();
 		Shop shop = shopService.find(principal.getShopId());
 		ShopCategory shopCategory = shopCategoryService.find(shopCategoryId);
+		
+		String city = shop.getCity();
 		
 		for (Iterator<ProductImage> iterator = product.getProductImages().iterator(); iterator.hasNext();) {
 			ProductImage productImage = iterator.next();
@@ -409,7 +475,7 @@ public class ProductController extends BaseController {
 		//product.setBrand(brandService.find(brandId));
 		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
 		product.setShopCategory(shopCategory);
-		product.setCity(shop.getCity());
+		product.setCity(city);
 		product.setRegion(shop.getRegion());
 		product.setShop(shop);
 		
@@ -483,7 +549,8 @@ public class ProductController extends BaseController {
 		BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "reviews", "consultations", "favoriteMembers",
 				"productSpecifications", "cartItems", "orderItems", "giftItems", "isGift", "productNotifies"});
 		
-		List<ProductSpecification> productSpecifications = new ArrayList<ProductSpecification>();
+		Goods goods = pProduct.getGoods();
+		List<Product> products = new ArrayList<Product>();
 		
 		if (specificationIds != null && specificationIds.length > 0) {
 			
@@ -496,51 +563,133 @@ public class ProductController extends BaseController {
 					
 					for (int j = 0; j < specificationValueIds.length; j++) {
 						
-						if(i == 0) {
+						if (i == 0) {
 							
-							if(productSpecificationIds != null && j < productSpecificationIds.length) {
-								ProductSpecification productSpecification = productSpecificationService.find(productSpecificationIds[j]);
-								//productSpecification.setProductSpecificationValues(new ArrayList<ProductSpecificationValue>());
-								//productSpecification.getProductSpecificationValues().clear();
-								productSpecifications.add(productSpecification);
-							}else {
-								//TODO:设置库存
-								ProductSpecification productSpecification = new ProductSpecification();
-								productSpecification.setProduct(pProduct);
-								productSpecifications.add(productSpecification);
+							//TODO：设置规格商品库存，价格
+							if (j == 0) {
+								
+								BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers",
+										"specifications", "specificationValues", "promotions", "cartItems", "orderItems", "giftItems", "productNotifies"});
+								
+								//pProduct.setSpecifications(new HashSet<Specification>());
+								//pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+								pProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+								pProduct.setCity(city);
+								pProduct.setRegion(shop.getRegion());
+								pProduct.setShopCategory(shopCategory);
+								pProduct.setTreePath(shopCategory.getTreePath());
+								pProduct.setShop(shop);
+								products.add(pProduct);
+								
+							} else {
+								
+								if (specificationProductIds != null && j < specificationProductIds.length) {
+									
+									Product specificationProduct = productService.find(specificationProductIds[j]);
+									
+									if (specificationProduct == null || (specificationProduct.getGoods() != null && !specificationProduct.getGoods().equals(goods))) {
+										return ERROR_VIEW;
+									}
+									
+									//specificationProduct.setSpecifications(new HashSet<Specification>());
+									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+									specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+									specificationProduct.setCity(city);
+									specificationProduct.setRegion(shop.getRegion());
+									specificationProduct.setShop(shop);
+									specificationProduct.setShopCategory(shopCategory);
+									specificationProduct.setTreePath(shopCategory.getTreePath());
+									products.add(specificationProduct);
+									
+								} else {
+									
+									Product specificationProduct = new Product();
+									
+									BeanUtils.copyProperties(product, specificationProduct);
+									specificationProduct.setId(null);
+									specificationProduct.setCreateDate(null);
+									specificationProduct.setModifyDate(null);
+									specificationProduct.setSn(null);
+									specificationProduct.setFullName(null);
+									specificationProduct.setAllocatedStock(0);
+									specificationProduct.setIsList(false);
+									specificationProduct.setScore(0F);
+									specificationProduct.setTotalScore(0L);
+									specificationProduct.setScoreCount(0L);
+									specificationProduct.setHits(0L);
+									specificationProduct.setWeekHits(0L);
+									specificationProduct.setMonthHits(0L);
+									specificationProduct.setSales(0L);
+									specificationProduct.setWeekSales(0L);
+									specificationProduct.setMonthSales(0L);
+									specificationProduct.setWeekHitsDate(new Date());
+									specificationProduct.setMonthHitsDate(new Date());
+									specificationProduct.setWeekSalesDate(new Date());
+									specificationProduct.setMonthSalesDate(new Date());
+									specificationProduct.setGoods(goods);
+									specificationProduct.setReviews(null);
+									specificationProduct.setConsultations(null);
+									specificationProduct.setFavoriteMembers(null);
+									//specificationProduct.setSpecifications(new HashSet<Specification>());
+									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
+									//specificationProduct.setPromotions(null);
+									specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
+									specificationProduct.setCartItems(null);
+									specificationProduct.setOrderItems(null);
+									specificationProduct.setGiftItems(null);
+									specificationProduct.setProductNotifies(null);
+									specificationProduct.setIsTop(false);
+									specificationProduct.setCity(city);
+									specificationProduct.setRegion(shop.getRegion());
+									specificationProduct.setShop(shop);
+									specificationProduct.setShopCategory(shopCategory);
+									specificationProduct.setTreePath(shopCategory.getTreePath());
+									
+									products.add(specificationProduct);
+									
+								}
 							}
-							
 						}
 						
+						Product specificationProduct = products.get(j);
 						SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
-						/*
-						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
-						productSpecificationValue.setSpecification(specification);
-						productSpecificationValue.setSpecificationValue(specificationValue);
-						productSpecificationValue.setProduct(pProduct);
-						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
-						*/
-						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
-						//product.getProductSpecificationValues().add(productSpecificationValue);
+						
+						ProductSpecification productSpecification = new ProductSpecification();
+						productSpecification.setProduct(specificationProduct);
+						productSpecification.setSpecification(specification);
+						productSpecification.setSpecificationValue(specificationValue);
+						
+						specificationProduct.getProductSpecificationList().add(productSpecification);
+						
+						//specificationProduct.getSpecifications().add(specification);
+						//specificationProduct.getSpecificationValues().add(specificationValue);
 						
 					}
 				}
 			}
-			/*
-			for(ProductSpecification productSpecification : productSpecifications) {
-				productSpecification.prepareOrders();
-			}
-			*/
-			pProduct.getProductSpecificationList().clear();
 			
-			pProduct.getProductSpecificationList().addAll(productSpecifications);
+			for(Product p : products) {
+				p.prepareOrders();
+			}
 			
 		} else {
-			pProduct.setProductSpecificationList(null);
-			//product.setProductSpecificationValues(null);
+			
+			product.setProductSpecificationList(null);
+			product.setShop(shop);
+			product.setCity(shop.getCity());
+			product.setRegion(shop.getRegion());
+			//product.setSpecificationValues(null);
+			BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "goods", "reviews", "consultations", "favoriteMembers", "promotions", "cartItems",
+					"orderItems", "giftItems", "productNotifies" });
+			
+			products.add(pProduct);
+			
 		}
 		
-		productService.update(pProduct);
+		goods.getProducts().clear();
+		goods.getProducts().addAll(products);
+		
+		goodsService.update(goods);
 		
 		addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
 		
@@ -568,18 +717,6 @@ public class ProductController extends BaseController {
 		Setting setting = SettingUtils.get();
 		Double defaultMarketPriceScale = setting.getDefaultMarketPriceScale();
 		return setting.setScale(price.multiply(new BigDecimal(defaultMarketPriceScale.toString())));
-	}
-	
-	/**
-	 * 计算默认积分
-	 * 
-	 * @param price
-	 *            价格
-	 */
-	private long calculateDefaultPoint(BigDecimal price) {
-		Setting setting = SettingUtils.get();
-		Double defaultPointScale = setting.getDefaultPointScale();
-		return price.multiply(new BigDecimal(defaultPointScale.toString())).longValue();
 	}
 	
 }

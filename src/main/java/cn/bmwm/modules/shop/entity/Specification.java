@@ -5,7 +5,9 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -58,6 +60,11 @@ public class Specification extends OrderEntity {
 
 	/** 规格值 */
 	private List<SpecificationValue> specificationValues = new ArrayList<SpecificationValue>();
+	
+	/**
+	 * 关联商品规格
+	 */
+	private Set<ProductSpecification> productSpecifications = new HashSet<ProductSpecification>();
 	
 	/**
 	 * 店铺
@@ -149,6 +156,20 @@ public class Specification extends OrderEntity {
 	 */
 	public void setSpecificationValues(List<SpecificationValue> specificationValues) {
 		this.specificationValues = specificationValues;
+	}
+	
+	/**
+	 * 获取商品关联规格
+	 * @return
+	 */
+	@OneToMany(mappedBy = "specification", fetch = FetchType.LAZY)
+	public Set<ProductSpecification> getProductSpecifications() {
+		return productSpecifications;
+	}
+
+	public void setProductSpecifications(
+			Set<ProductSpecification> productSpecifications) {
+		this.productSpecifications = productSpecifications;
 	}
 
 	/**

@@ -2214,6 +2214,15 @@ public class Product extends BaseEntity {
 	*/
 	
 	@Transient
+	public void prepareOrders() {
+		if(productSpecificationList != null && productSpecificationList.size() > 0) {
+			for(int i = 0 ; i < productSpecificationList.size() ; i++ ) {
+				productSpecificationList.get(i).setOrders(i);
+			}
+		}
+	}
+	
+	@Transient
 	public boolean isValid(Promotion promotion) {
 		if (promotion == null || !promotion.hasBegun() || promotion.hasEnded()) {
 			return false;

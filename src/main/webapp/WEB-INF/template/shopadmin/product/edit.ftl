@@ -31,9 +31,9 @@ $().ready(function() {
 
 	var $inputForm = $("#inputForm");
 	var $shopCategoryId = $("#shopCategoryId");
-	//var $isMemberPrice = $("#isMemberPrice");
-	//var $memberPriceTr = $("#memberPriceTr");
-	//var $memberPrice = $("#memberPriceTr input");
+	var $isMemberPrice = $("#isMemberPrice");
+	var $memberPriceTr = $("#memberPriceTr");
+	var $memberPrice = $("#memberPriceTr input");
 	var $browserButton = $("#browserButton");
 	var $productImageTable = $("#productImageTable");
 	var $addProductImage = $("#addProductImage");
@@ -42,8 +42,8 @@ $().ready(function() {
 	var $attributeTable = $("#attributeTable");
 	var $specificationIds = $("#specificationSelect :checkbox");
 	var $specificationProductTable = $("#specificationProductTable");
-	var $addProductSpecification = $("#addProductSpecification");
-	var $deleteProductSpecification = $("a.deleteProductSpecification");
+	var $addSpecificationProduct = $("#addSpecificationProduct");
+	var $deleteSpecificationProduct = $("a.deleteSpecificationProduct");
 	var productImageIndex = ${(product.productImages?size)!"0"};
 	var previousShopCategoryId = "${product.shopCategory.id}";
 	
@@ -52,7 +52,6 @@ $().ready(function() {
 	$browserButton.browser();
 	
 	// 会员价
-	/*
 	$isMemberPrice.click(function() {
 		if ($(this).prop("checked")) {
 			$memberPriceTr.show();
@@ -62,7 +61,6 @@ $().ready(function() {
 			$memberPrice.prop("disabled", true);
 		}
 	});
-	*/
 	
 	// 增加商品图片
 	$addProductImage.click(function() {
@@ -208,7 +206,7 @@ $().ready(function() {
 	});
 	
 	// 增加规格商品
-	$addProductSpecification.click(function() {
+	$addSpecificationProduct.click(function() {
 		if ($specificationIds.filter(":checked").size() == 0) {
 			$.message("warn", "${message("admin.product.specificationRequired")}");
 			return false;
@@ -223,7 +221,7 @@ $().ready(function() {
 	});
 	
 	// 删除规格商品
-	$deleteProductSpecification.live("click", function() {
+	$deleteSpecificationProduct.live("click", function() {
 		var $this = $(this);
 		$.dialog({
 			type: "warn",
@@ -235,7 +233,6 @@ $().ready(function() {
 	});
 	
 	$.validator.addClassRules({
-		/*
 		memberPrice: {
 			min: 0,
 			decimal: {
@@ -243,7 +240,6 @@ $().ready(function() {
 				fraction: ${setting.priceScale}
 			}
 		},
-		*/
 		productImageFile: {
 			required: true,
 			extension: "${setting.uploadImageExtension}"
@@ -258,7 +254,6 @@ $().ready(function() {
 		rules: {
 			shopCategoryId: "required",
 			name: "required",
-			description: "required",
 			sn: {
 				pattern: /^[0-9a-zA-Z_-]+$/,
 				remote: {
@@ -354,17 +349,14 @@ $().ready(function() {
 			</li>
 		</ul>
 		<table class="input tabContent">
-			[#if product.productSpecifications?has_content]
+			[#if product.specifications?has_content]
 				<tr>
 					<th>
 						${message("Product.specifications")}:
 					</th>
 					<td>
-						[#list product.productSpecifications as specification]
-							[#list specification.productSpecificationValues as productSpecificationValue]
-								${productSpecificationValue.specificationValue.name}
-							[/#list]
-							<br/>
+						[#list product.specificationValues as specificationValue]
+							${specificationValue.name}
 						[/#list]
 					</td>
 				</tr>
@@ -422,6 +414,26 @@ $().ready(function() {
 				</th>
 				<td>
 					<input type="text" name="price" class="text" value="${product.price}" maxlength="16" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.memberPrice")}:
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" id="isMemberPrice" name="isMemberPrice" value="true"[#if product.memberPrice?has_content] checked="checked"[/#if] />${message("admin.product.isMemberPrice")}
+					</label>
+				</td>
+			</tr>
+			<tr id="memberPriceTr"[#if !product.memberPrice?has_content] class="hidden"[/#if]>
+				<th>
+					&nbsp;
+				</th>
+				<td>
+					[#list memberRanks as memberRank]
+						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" value="${product.memberPrice.get(memberRank)}" maxlength="16" style="width: 60px; margin-right: 6px;"[#if !product.memberPrice?has_content] disabled="disabled"[/#if] />
+					[/#list]
 				</td>
 			</tr>
 			<tr>
@@ -488,10 +500,37 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
-					<span class="requiredField">*</span>${message("shopadmin.product.description")}:
+					${message("Product.point")}:
 				</th>
 				<td>
-					<textarea id="description" name="description" rows="5" cols="60" maxlength="500" class="text">${product.description}</textarea>
+					<input type="text" name="point" class="text" value="${product.point}" maxlength="9" title="${message("admin.product.pointTitle")}" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.brand")}:
+				</th>
+				<td>
+					<select name="brandId">
+						<option value="">${message("admin.common.choose")}</option>
+						[#list brands as brand]
+							<option value="${brand.id}"[#if brand == product.brand] selected="selected"[/#if]>
+								${brand.name}
+							</option>
+						[/#list]
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.tags")}:
+				</th>
+				<td>
+					[#list tags as tag]
+						<label>
+							<input type="checkbox" name="tagIds" value="${tag.id}"[#if product.tags?seq_contains(tag)] checked="checked"[/#if] />${tag.name}
+						</label>
+					[/#list]
 				</td>
 			</tr>
 			<tr>
@@ -511,6 +550,46 @@ $().ready(function() {
 						<input type="checkbox" name="isGift" value="true"[#if product.isGift] checked="checked"[/#if] />${message("Product.isGift")}
 						<input type="hidden" name="_isGift" value="false" />
 					</label>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.memo")}:
+				</th>
+				<td>
+					<input type="text" name="memo" class="text" value="${product.memo}" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.keyword")}:
+				</th>
+				<td>
+					<input type="text" name="keyword" class="text" value="${product.keyword}" maxlength="200" title="${message("admin.product.keywordTitle")}" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.seoTitle")}:
+				</th>
+				<td>
+					<input type="text" name="seoTitle" class="text" value="${product.seoTitle}" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.seoKeywords")}:
+				</th>
+				<td>
+					<input type="text" name="seoKeywords" class="text" value="${product.seoKeywords}" maxlength="200" />
+				</td>
+			</tr>
+			<tr>
+				<th>
+					${message("Product.seoDescription")}:
+				</th>
+				<td>
+					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" />
 				</td>
 			</tr>
 		</table>
@@ -624,7 +703,7 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<td>
-					<a href="javascript:;" id="addProductSpecification" class="button">${message("admin.product.addSpecificationProduct")}</a>
+					<a href="javascript:;" id="addSpecificationProduct" class="button">${message("admin.product.addSpecificationProduct")}</a>
 				</td>
 			</tr>
 			<tr>
@@ -660,27 +739,47 @@ $().ready(function() {
 								</td>
 							[/#list]
 							<td>
-								<a href="javascript:;" class="deleteProductSpecification">[${message("admin.common.delete")}]</a>
+								<a href="javascript:;" class="deleteSpecificationProduct">[${message("admin.common.delete")}]</a>
 							</td>
 						</tr>
-						[#list product.productSpecifications as productSpecification]
+						[#if product.specifications?has_content]
 							<tr>
 								<td>
-									&nbsp;
-									<input type="hidden" name="productSpecificationIds" value="${productSpecification.id}" />
+									${message("admin.product.currentSpecification")}
+									<input type="hidden" name="specificationProductIds" value="${product.id}" />
 								</td>
 								[#list specifications as specification]
-									<td class="specification_${specification.id}[#if !productSpecification.specifications?seq_contains(specification)] hidden[/#if]">
-										<select name="specification_${specification.id}"[#if !productSpecification.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+									<td class="specification_${specification.id}[#if !product.specifications?seq_contains(specification)] hidden[/#if]">
+										<select name="specification_${specification.id}"[#if !product.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
 											[#list specification.specificationValues as specificationValue]
-												<option value="${specificationValue.id}"[#if productSpecification.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
+												<option value="${specificationValue.id}"[#if product.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
 											[/#list]
 										</select>
 									</td>
 								[/#list]
 								<td>
-									<a href="javascript:;" class="deleteProductSpecification">[${message("admin.common.delete")}]</a>
-									<a href="edit.jhtml?id=${productSpecification.id}">[${message("admin.common.edit")}]</a>
+									-
+								</td>
+							</tr>
+						[/#if]
+						[#list product.siblings as specificationProduct]
+							<tr>
+								<td>
+									&nbsp;
+									<input type="hidden" name="specificationProductIds" value="${specificationProduct.id}" />
+								</td>
+								[#list specifications as specification]
+									<td class="specification_${specification.id}[#if !specificationProduct.specifications?seq_contains(specification)] hidden[/#if]">
+										<select name="specification_${specification.id}"[#if !specificationProduct.specifications?seq_contains(specification)] disabled="disabled"[/#if]>
+											[#list specification.specificationValues as specificationValue]
+												<option value="${specificationValue.id}"[#if specificationProduct.specificationValues?seq_contains(specificationValue)] selected="selected"[/#if]>${specificationValue.name}</option>
+											[/#list]
+										</select>
+									</td>
+								[/#list]
+								<td>
+									<a href="javascript:;" class="deleteSpecificationProduct">[${message("admin.common.delete")}]</a>
+									<a href="edit.jhtml?id=${specificationProduct.id}">[${message("admin.common.edit")}]</a>
 								</td>
 							</tr>
 						[/#list]

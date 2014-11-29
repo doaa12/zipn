@@ -36,6 +36,11 @@ public class ProductSpecification extends BaseEntity {
 	 * 商品规格值
 	 */
 	private SpecificationValue specificationValue;
+	
+	/**
+	 * 排序
+	 */
+	private Integer orders;
 
 
 	/**
@@ -80,6 +85,14 @@ public class ProductSpecification extends BaseEntity {
 
 	public void setSpecificationValue(SpecificationValue specificationValue) {
 		this.specificationValue = specificationValue;
+	}
+
+	public Integer getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Integer orders) {
+		this.orders = orders;
 	}
 	
 }
