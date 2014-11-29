@@ -31,16 +31,12 @@ import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
-import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
-import cn.bmwm.modules.shop.entity.Specification;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.service.CartItemService;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductService;
-import cn.bmwm.modules.shop.service.ProductSpecificationService;
 
 /**
  * Controller - 购物车
@@ -63,10 +59,10 @@ public class CartController extends AppBaseController {
 	
 	@Resource(name = "cartItemServiceImpl")
 	private CartItemService cartItemService;
-	
+	/*
 	@Resource(name = "productSpecificationServiceImpl")
 	private ProductSpecificationService productSpecificationService;
-	
+	*/
 	
 	/**
 	 * 添加
@@ -76,7 +72,6 @@ public class CartController extends AppBaseController {
 	public Map<String,Object> add(HttpServletRequest request) {
 		
 		String sid = request.getParameter("id");
-		String sspecId = request.getParameter("specId");
 		String squantity = request.getParameter("quantity");
 		
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -122,31 +117,6 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 		
-		Set<ProductSpecification> productSpecifications = product.getProductSpecifications();
-		
-		if(productSpecifications != null && productSpecifications.size() > 0) {
-			if(StringUtils.isBlank(sspecId)) {
-				result.put("message", "请选择商品规格！");
-				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
-				return result;
-			}
-		}
-		
-		ProductSpecification productSpecification = null;
-		
-		if(!StringUtils.isBlank(sspecId)) {
-			
-			Long specId = Long.parseLong(sspecId);
-			productSpecification = productSpecificationService.find(specId);
-			
-			if(productSpecification == null) {
-				result.put("message", "商品规格不存在！");
-				result.put("flag", Constants.CART_CART_SPECIFICATION_NOT_EXISTS);
-				return result;
-			}
-			
-		}
-		
 		Cart cart = cartService.getAppCurrent();
 		Member member = memberService.getAppCurrent();
 
@@ -163,9 +133,9 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 
-		if (cart.contains(product, productSpecification)) {
+		if (cart.contains(product)) {
 			
-			CartItem cartItem = cart.getCartItem(product, productSpecification);
+			CartItem cartItem = cart.getCartItem(product);
 			
 			if (CartItem.MAX_QUANTITY != null && cartItem.getQuantity() + quantity > CartItem.MAX_QUANTITY) {
 				result.put("message", "商品数量超过单品最大允许数量！");
@@ -173,11 +143,7 @@ public class CartController extends AppBaseController {
 				return result;
 			}
 			
-			if (productSpecification == null && product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
-				result.put("message", "商品数量超过商品库存！");
-				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
-				return result;
-			} else if(productSpecification != null && productSpecification.getStock() != null && cartItem.getQuantity() + quantity > productSpecification.getAvailableStock()) {
+			if (product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
 				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
@@ -194,11 +160,7 @@ public class CartController extends AppBaseController {
 				return result;
 			}
 			
-			if (productSpecification == null && product.getStock() != null && quantity > product.getAvailableStock()) {
-				result.put("message", "商品数量超过商品库存！");
-				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
-				return result;
-			}else if(productSpecification != null && productSpecification.getStock() != null && quantity > productSpecification.getAvailableStock()) {
+			if (product.getStock() != null && quantity > product.getAvailableStock()) {
 				result.put("message", "商品数量超过商品库存！");
 				result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 				return result;
@@ -208,7 +170,6 @@ public class CartController extends AppBaseController {
 			cartItem.setQuantity(quantity);
 			cartItem.setProduct(product);
 			cartItem.setCart(cart);
-			cartItem.setProductSpecification(productSpecification);
 			cartItemService.save(cartItem);
 			
 			cart.getCartItems().add(cartItem);
@@ -299,12 +260,8 @@ public class CartController extends AppBaseController {
 		}
 		
 		Product product = cartItem.getProduct();
-		ProductSpecification productSpecification = cartItem.getProductSpecification();
 		
-		if (productSpecification == null && product.getStock() != null && quantity > product.getAvailableStock()) {
-			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
-			return result;
-		}else if(productSpecification != null && productSpecification.getStock() != null && quantity > productSpecification.getAvailableStock()) {
+		if (product.getStock() != null && quantity > product.getAvailableStock()) {
 			result.put("flag", Constants.CART_PRODUCT_STOCK_QUANTITY);
 			return result;
 		}
@@ -406,14 +363,12 @@ public class CartController extends AppBaseController {
 			cproduct.setCartItemId(item.getId());
 			
 			//商品规格
-			ProductSpecification productSpecification = item.getProductSpecification();
-			if(productSpecification != null) {
+			List<ProductSpecification> productSpecifications = product.getProductSpecificationList();
+			
+			if(productSpecifications != null && productSpecifications.size() > 0) {
 				List<String> specificationList = new ArrayList<String>();
-				List<ProductSpecificationValue> valueList = productSpecification.getProductSpecificationValues();
-				for(ProductSpecificationValue value : valueList) {
-					Specification specification = value.getSpecification();
-					SpecificationValue specificationValue = value.getSpecificationValue();
-					specificationList.add(specification.getName() + " : " + specificationValue.getName());
+				for(ProductSpecification specification : productSpecifications) {
+					specificationList.add(specification.getSpecification().getName() + " : " + specification.getSpecificationValue().getName());
 				}
 				cproduct.setSpecificationList(specificationList);
 			}

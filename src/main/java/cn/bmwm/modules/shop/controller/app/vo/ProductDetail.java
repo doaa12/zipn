@@ -96,7 +96,7 @@ public class ProductDetail implements Serializable {
 	/**
 	 * 商品规格
 	 */
-	private Map<String,Object> specifications;
+	private List<Map<String,Object>> specifications;
 	
 
 	public Long getCode() {
@@ -239,11 +239,11 @@ public class ProductDetail implements Serializable {
 		this.collectFlag = collectFlag;
 	}
 
-	public Map<String, Object> getSpecifications() {
+	public List<Map<String,Object>> getSpecifications() {
 		return specifications;
 	}
 
-	public void setSpecifications(Map<String, Object> specifications) {
+	public void setSpecifications(List<Map<String,Object>> specifications) {
 		this.specifications = specifications;
 	}
 

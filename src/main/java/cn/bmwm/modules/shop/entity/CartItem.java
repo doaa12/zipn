@@ -41,11 +41,6 @@ public class CartItem extends BaseEntity {
 	/** 商品 */
 	private Product product;
 	
-	/**
-	 * 商品规格
-	 */
-	private ProductSpecification productSpecification;
-
 	/** 购物车 */
 	private Cart cart;
 
@@ -88,21 +83,6 @@ public class CartItem extends BaseEntity {
 	 */
 	public void setProduct(Product product) {
 		this.product = product;
-	}
-
-	/**
-	 * @return the productSpecification
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	public ProductSpecification getProductSpecification() {
-		return productSpecification;
-	}
-
-	/**
-	 * @param productSpecification the productSpecification to set
-	 */
-	public void setProductSpecification(ProductSpecification productSpecification) {
-		this.productSpecification = productSpecification;
 	}
 
 	/**

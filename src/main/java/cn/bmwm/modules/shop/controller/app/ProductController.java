@@ -26,7 +26,6 @@ import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductFavorite;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
-import cn.bmwm.modules.shop.entity.ProductSpecificationValue;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Review;
 import cn.bmwm.modules.shop.entity.Shop;
@@ -138,46 +137,38 @@ public class ProductController extends AppBaseController {
 		
 		detail.setEvaluate(evaluates);
 		
-		//商品规格
-		Map<String,Object> specifications = new HashMap<String,Object>();
+		List<Map<String,Object>> specificationList = new ArrayList<Map<String,Object>>();
 		
-		Set<ProductSpecification> productSpecifications = product.getProductSpecifications();
-
-		List<List<String>> productSpecificationList = new ArrayList<List<String>>();
-		List<Long> productPpecificationIdList = new ArrayList<Long>();
-		List<Double> productSpecificationPriceList = new ArrayList<Double>();
+		Set<Product> specificationProducts = product.getGoods().getProducts();
 		
-		if(productSpecifications != null && productSpecifications.size() > 0) {
+		if(specificationProducts != null && specificationProducts.size() > 1) {
 			
-			int n = 1;
-			
-			for(ProductSpecification productSpecification : productSpecifications) {
+			for(Product specificationProduct : specificationProducts) {
 				
-				List<ProductSpecificationValue> productSpecificationValues = productSpecification.getProductSpecificationValues();
+				Map<String,Object> map = new HashMap<String,Object>();
 				
-				if(n == 1) {
-					for(int k = 0 ; k < productSpecificationValues.size() ; k++ ) {
-						productSpecificationList.add(new ArrayList<String>());
+				map.put("code", specificationProduct.getId());
+				map.put("price", specificationProduct.getPrice().doubleValue());
+				map.put("stock", specificationProduct.getAvailableStock());
+				
+				List<ProductSpecification> specList = specificationProduct.getProductSpecificationList();
+				
+				StringBuilder builder = new StringBuilder();
+				
+				if(specList != null && specList.size() > 0) {
+					for(ProductSpecification specification : specList) {
+						builder.append(specification.getSpecification().getName()).append(":").append(specification.getSpecificationValue().getName());
 					}
 				}
 				
-				for(int i = 0 ; i < productSpecificationValues.size() ; i++ ) {
-					productSpecificationList.get(i).add(productSpecificationValues.get(i).getSpecificationValue().getName());
-				}
+				map.put("specification", builder.toString());
 				
-				productPpecificationIdList.add(productSpecification.getId());
-				productSpecificationPriceList.add(productSpecification.getPrice() == null ? product.getPrice().doubleValue() : productSpecification.getPrice().doubleValue());
-				
-				n++;
+				specificationList.add(map);
 				
 			}
 		}
 		
-		specifications.put("specificationIdList", productPpecificationIdList);
-		specifications.put("specificationPriceList", productSpecificationPriceList);
-		specifications.put("specificationList", productSpecificationList);
-		
-		detail.setSpecifications(specifications);
+		detail.setSpecifications(specificationList);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		

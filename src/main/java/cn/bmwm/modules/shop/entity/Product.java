@@ -304,7 +304,7 @@ public class Product extends BaseEntity {
 	private String attributeValue19;
 	
 	/** 货品 */
-	//private Goods goods;
+	private Goods goods;
 
 	/** 品牌 */
 	//private Brand brand;
@@ -383,8 +383,7 @@ public class Product extends BaseEntity {
 	/**
 	 * 商品规格
 	 */
-	private Set<ProductSpecification> productSpecifications = new HashSet<ProductSpecification>();
-	
+	private List<ProductSpecification> productSpecificationList = new ArrayList<ProductSpecification>();
 	
 	static {
 		try {
@@ -1635,13 +1634,12 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 货品
 	 */
-	/*
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, updatable = false)
 	public Goods getGoods() {
 		return goods;
 	}
-	 */
+	 
 	
 	/**
 	 * 设置货品
@@ -1649,11 +1647,10 @@ public class Product extends BaseEntity {
 	 * @param goods
 	 *            货品
 	 */
-	/*
 	public void setGoods(Goods goods) {
 		this.goods = goods;
 	}
-	*/
+	
 	
 	/**
 	 * 获取品牌
@@ -1981,29 +1978,6 @@ public class Product extends BaseEntity {
 	}
 	
 	/**
-	 * 获取商品规格
-	 * @return
-	 */
-	@Transient
-	public Set<Specification> getSpecifications() {
-		
-		Set<Specification> specifications = new HashSet<Specification>();
-		
-		if(this.productSpecifications == null && this.productSpecifications.size() == 0) return specifications;
-		
-		for(ProductSpecification productSpecification : productSpecifications) {
-			List<ProductSpecificationValue> productSpecificationValueList = productSpecification.getProductSpecificationValues();
-			if(productSpecificationValueList == null || productSpecificationValueList.size() == 0 ) continue;
-			for(ProductSpecificationValue productSpecificationValue : productSpecificationValueList) {
-				specifications.add(productSpecificationValue.getSpecification());
-			}
-		}
-		
-		return specifications;
-		
-	}
-
-	/**
 	 * 设置商品属性值
 	 * 
 	 * @param attribute
@@ -2037,7 +2011,6 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 同货品商品，不包含自身
 	 */
-	/*
 	@Transient
 	public List<Product> getSiblings() {
 		List<Product> siblings = new ArrayList<Product>();
@@ -2050,7 +2023,6 @@ public class Product extends BaseEntity {
 		}
 		return siblings;
 	}
-	*/
 	
 	/**
 	 * 获取访问路径
@@ -2208,16 +2180,16 @@ public class Product extends BaseEntity {
 	 * @return the productSpecifications
 	 */
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	public Set<ProductSpecification> getProductSpecifications() {
-		return productSpecifications;
+	public List<ProductSpecification> getProductSpecificationList() {
+		return productSpecificationList;
 	}
 
 	/**
 	 * @param productSpecifications the productSpecifications to set
 	 */
-	public void setProductSpecifications(
-			Set<ProductSpecification> productSpecifications) {
-		this.productSpecifications = productSpecifications;
+	public void setProductSpecificationList(
+			List<ProductSpecification> productSpecifications) {
+		this.productSpecificationList = productSpecifications;
 	}
 
 	/**

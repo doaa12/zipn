@@ -8,9 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Entity - 货品
@@ -18,9 +20,9 @@ import javax.persistence.Transient;
  *
  * @version 1.0
  */
-//@Entity
-//@Table(name = "xx_goods")
-//@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_goods_sequence")
+@Entity
+@Table(name = "xx_goods")
+@SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_goods_sequence")
 public class Goods extends BaseEntity {
 
 	private static final long serialVersionUID = -6977025562650112419L;
@@ -48,33 +50,5 @@ public class Goods extends BaseEntity {
 		this.products = products;
 	}
 
-	/**
-	 * 获取规格值
-	 * 
-	 * @return 规格值
-	 */
-	@Transient
-	public Set<SpecificationValue> getSpecificationValues() {
-		
-		Set<SpecificationValue> specificationValues = new HashSet<SpecificationValue>();
-		/*
-		if (getProducts() != null) {
-			
-			for (Product product : getProducts()) {
-				
-				Set<ProductSpecificationValue> set = product.getProductSpecificationValues();
-				
-				if(set != null && set.size() > 0) {
-					for(ProductSpecificationValue value : set) {
-						specificationValues.add(value.getSpecificationValue());
-					}
-				}
-				
-			}
-		}
-		*/
-		return specificationValues;
-		
-	}
 
 }

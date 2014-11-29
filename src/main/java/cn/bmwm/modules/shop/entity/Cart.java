@@ -439,39 +439,6 @@ public class Cart extends BaseEntity {
 	}
 	
 	/**
-	 * 获取购物车项
-	 * 
-	 * @param product
-	 *            商品
-	 * @return 购物车项
-	 */
-	@Transient
-	public CartItem getCartItem(Product product, ProductSpecification productSpecification) {
-		
-		if (product != null && getCartItems() != null) {
-			
-			for (CartItem cartItem : getCartItems()) {
-				
-				if (cartItem != null && cartItem.getProduct() != null && cartItem.getProduct().equals(product)) {
-					
-					if(cartItem.getProductSpecification() != null && cartItem.getProductSpecification().equals(productSpecification)) {
-						return cartItem;
-					}
-					
-					if(productSpecification == null && cartItem.getProductSpecification() == null 
-							&& (product.getProductSpecifications() == null || product.getProductSpecifications().size() == 0)) {
-						return cartItem;
-					}
-					
-				}
-			}
-		}
-		
-		return null;
-		
-	}
-
-	/**
 	 * 判断是否包含商品
 	 * 
 	 * @param product
@@ -490,37 +457,6 @@ public class Cart extends BaseEntity {
 		return false;
 	}
 	
-	/**
-	 * 判断是否包含规格商品
-	 * @param product
-	 * @param productSpecification
-	 * @return
-	 */
-	public boolean contains(Product product, ProductSpecification productSpecification) {
-		
-		Set<CartItem> items = this.getCartItems();
-		
-		for(CartItem item : items) {
-			
-			if (item != null && item.getProduct() != null && item.getProduct().equals(product)) {
-				
-				if(item.getProductSpecification() != null && item.getProductSpecification().equals(productSpecification)) {
-					return true;
-				}
-				
-				if(productSpecification == null && item.getProductSpecification() == null 
-						&& (product.getProductSpecifications() == null || product.getProductSpecifications().size() == 0)) {
-					return true;
-				}
-				
-			}
-			
-		}
-		
-		return false;
-		
-	}
-
 	/**
 	 * 获取令牌
 	 * 

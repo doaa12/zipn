@@ -255,17 +255,17 @@ public class ProductController extends BaseController {
 						productSpecificationValue.setProduct(product);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
 						
-						productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
+						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
 						//product.getProductSpecificationValues().add(productSpecificationValue);
 						
 					}
 				}
 			}
 			
-			product.getProductSpecifications().addAll(productSpecifications);
+			//product.getProductSpecifications().addAll(productSpecifications);
 			
 		} else {
-			product.setProductSpecifications(null);
+			//product.setProductSpecifications(null);
 			//product.setProductSpecificationValues(null);
 		}
 		

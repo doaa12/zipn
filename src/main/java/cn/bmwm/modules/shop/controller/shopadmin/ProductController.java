@@ -280,7 +280,9 @@ public class ProductController extends BaseController {
 		for (ProductImage productImage : product.getProductImages()) {
 			imageService.build(productImage);
 		}
+		
 		Collections.sort(product.getProductImages());
+		
 		if (product.getImage() == null && product.getThumbnail() != null) {
 			product.setImage(product.getThumbnail());
 		}
@@ -335,21 +337,21 @@ public class ProductController extends BaseController {
 						productSpecificationValue.setProduct(product);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
 						
-						productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
+						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
 						//product.getProductSpecificationValues().add(productSpecificationValue);
 						
 					}
 				}
 			}
-			
+			/*
 			for(ProductSpecification productSpecification : productSpecifications) {
 				productSpecification.prepareOrders();
 			}
-			
-			product.getProductSpecifications().addAll(productSpecifications);
+			*/
+			product.getProductSpecificationList().addAll(productSpecifications);
 			
 		} else {
-			product.setProductSpecifications(null);
+			product.setProductSpecificationList(null);
 			//product.setProductSpecificationValues(null);
 		}
 		
@@ -500,7 +502,7 @@ public class ProductController extends BaseController {
 							if(productSpecificationIds != null && j < productSpecificationIds.length) {
 								ProductSpecification productSpecification = productSpecificationService.find(productSpecificationIds[j]);
 								//productSpecification.setProductSpecificationValues(new ArrayList<ProductSpecificationValue>());
-								productSpecification.getProductSpecificationValues().clear();
+								//productSpecification.getProductSpecificationValues().clear();
 								productSpecifications.add(productSpecification);
 							}else {
 								//TODO:设置库存
@@ -519,23 +521,23 @@ public class ProductController extends BaseController {
 						productSpecificationValue.setProduct(pProduct);
 						productSpecificationValue.setProductSpecification(productSpecifications.get(j));
 						
-						productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
+						//productSpecifications.get(j).getProductSpecificationValues().add(productSpecificationValue);
 						//product.getProductSpecificationValues().add(productSpecificationValue);
 						
 					}
 				}
 			}
-			
+			/*
 			for(ProductSpecification productSpecification : productSpecifications) {
 				productSpecification.prepareOrders();
 			}
+			*/
+			pProduct.getProductSpecificationList().clear();
 			
-			pProduct.getProductSpecifications().clear();
-			
-			pProduct.getProductSpecifications().addAll(productSpecifications);
+			pProduct.getProductSpecificationList().addAll(productSpecifications);
 			
 		} else {
-			pProduct.setProductSpecifications(null);
+			pProduct.setProductSpecificationList(null);
 			//product.setProductSpecificationValues(null);
 		}
 		
