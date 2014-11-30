@@ -127,7 +127,7 @@ public abstract class BaseDaoImpl<T, ID extends Serializable> implements BaseDao
 		Assert.notNull(entity);
 		entityManager.persist(entity);
 	}
-
+	
 	public T merge(T entity) {
 		Assert.notNull(entity);
 		return entityManager.merge(entity);

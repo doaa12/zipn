@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.persistence.LockModeType;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.persistence.Page;

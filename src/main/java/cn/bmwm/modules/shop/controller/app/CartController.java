@@ -178,7 +178,9 @@ public class CartController extends AppBaseController {
 		}
 		*/
 		
-		return list	();
+		result.put("flag", 1);
+		
+		return result;
 		
 	}
 
