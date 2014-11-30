@@ -35,11 +35,13 @@ import cn.bmwm.modules.shop.entity.Review.Type;
 public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDao {
 
 	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
+		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Review> criteriaQuery = criteriaBuilder.createQuery(Review.class);
 		Root<Review> root = criteriaQuery.from(Review.class);
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
+		
 		if (member != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("member"), member));
 		}
@@ -56,8 +58,11 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		if (isShow != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isShow"), isShow));
 		}
+		
 		criteriaQuery.where(restrictions);
+		
 		return super.findList(criteriaQuery, null, count, filters, orders);
+		
 	}
 
 	public Page<Review> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {

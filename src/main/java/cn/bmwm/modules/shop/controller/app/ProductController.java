@@ -129,7 +129,7 @@ public class ProductController extends AppBaseController {
 			for(Review review : reviewList) {
 				Evaluate evaluate = new Evaluate();
 				evaluate.setId(review.getId());
-				evaluate.setName(review.getUser());
+				evaluate.setName(review.getUsername());
 				evaluate.setScore(review.getScore());
 				evaluate.setDesc(review.getContent());
 				evaluates.add(evaluate);

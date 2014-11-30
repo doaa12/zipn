@@ -71,7 +71,7 @@ public class Review extends BaseEntity {
 	/**
 	 * 评论人用户名
 	 */
-	private String user;
+	private String username;
 
 	/** 商品 */
 	private Product product;
@@ -182,16 +182,12 @@ public class Review extends BaseEntity {
 		this.member = member;
 	}
 	
-	/**
-	 * 评论人用户名
-	 * @return
-	 */
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
