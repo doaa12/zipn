@@ -19,8 +19,8 @@ import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.utils.FreemarkerUtils;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Review;
-import cn.bmwm.modules.shop.entity.Review.Type;
+import cn.bmwm.modules.shop.entity.ProductReview;
+import cn.bmwm.modules.shop.entity.ProductReview.Type;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.ReviewService;
@@ -67,14 +67,14 @@ public class ReviewListDirective extends BaseDirective {
 		Member member = memberService.find(memberId);
 		Product product = productService.find(productId);
 
-		List<Review> reviews;
+		List<ProductReview> reviews;
 		if ((memberId != null && member == null) || (productId != null && product == null)) {
-			reviews = new ArrayList<Review>();
+			reviews = new ArrayList<ProductReview>();
 		} else {
 			boolean useCache = useCache(env, params);
 			String cacheRegion = getCacheRegion(env, params);
 			Integer count = getCount(params);
-			List<Filter> filters = getFilters(params, Review.class);
+			List<Filter> filters = getFilters(params, ProductReview.class);
 			List<Order> orders = getOrders(params);
 			if (useCache) {
 				reviews = reviewService.findList(member, product, type, true, count, filters, orders, cacheRegion);

@@ -313,7 +313,7 @@ public class Product extends BaseEntity {
 	private List<ProductImage> productImages = new ArrayList<ProductImage>();
 
 	/** 评论 */
-	private Set<Review> reviews = new HashSet<Review>();
+	private Set<ProductReview> reviews = new HashSet<ProductReview>();
 
 	/** 咨询 */
 	private Set<Consultation> consultations = new HashSet<Consultation>();
@@ -1704,7 +1704,7 @@ public class Product extends BaseEntity {
 	 * @return 评论
 	 */
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	public Set<Review> getReviews() {
+	public Set<ProductReview> getReviews() {
 		return reviews;
 	}
 
@@ -1714,7 +1714,7 @@ public class Product extends BaseEntity {
 	 * @param reviews
 	 *            评论
 	 */
-	public void setReviews(Set<Review> reviews) {
+	public void setReviews(Set<ProductReview> reviews) {
 		this.reviews = reviews;
 	}
 

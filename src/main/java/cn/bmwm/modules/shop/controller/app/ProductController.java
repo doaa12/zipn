@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.persistence.Order;
+import cn.bmwm.common.utils.DateUtils;
 import cn.bmwm.modules.shop.controller.app.vo.Evaluate;
 import cn.bmwm.modules.shop.controller.app.vo.ProductDetail;
 import cn.bmwm.modules.shop.entity.Member;
@@ -27,7 +28,7 @@ import cn.bmwm.modules.shop.entity.ProductFavorite;
 import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
 import cn.bmwm.modules.shop.entity.Promotion;
-import cn.bmwm.modules.shop.entity.Review;
+import cn.bmwm.modules.shop.entity.ProductReview;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -121,17 +122,23 @@ public class ProductController extends AppBaseController {
 		List<Order> orders = new ArrayList<Order>();
 		orders.add(new Order("createDate", Order.Direction.desc));
 		
-		List<Review> reviewList = reviewService.findList(null, product, null, true, 2, null, orders);
+		List<ProductReview> reviewList = reviewService.findList(null, product, null, true, 2, null, orders);
 		
 		List<Evaluate> evaluates = new ArrayList<Evaluate>();
 		
 		if(reviewList != null && reviewList.size() > 0) {
-			for(Review review : reviewList) {
+			for(ProductReview review : reviewList) {
 				Evaluate evaluate = new Evaluate();
 				evaluate.setId(review.getId());
 				evaluate.setName(review.getUsername());
 				evaluate.setScore(review.getScore());
 				evaluate.setDesc(review.getContent());
+				evaluate.setTime(DateUtils.formatTime(review.getCreateDate()));
+				evaluate.setImage1(review.getImage1());
+				evaluate.setImage2(review.getImage2());
+				evaluate.setImage3(review.getImage3());
+				evaluate.setImage4(review.getImage4());
+				evaluate.setImage5(review.getImage5());
 				evaluates.add(evaluate);
 			}
 		}

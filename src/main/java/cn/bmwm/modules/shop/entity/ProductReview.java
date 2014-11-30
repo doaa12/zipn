@@ -26,9 +26,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @version 1.0
  */
 @Entity
-@Table(name = "xx_review")
+@Table(name = "xx_product_review")
 @SequenceGenerator(name = "sequenceGenerator", sequenceName = "xx_review_sequence")
-public class Review extends BaseEntity {
+public class ProductReview extends BaseEntity {
 
 	private static final long serialVersionUID = 8795901519290584100L;
 
@@ -75,6 +75,31 @@ public class Review extends BaseEntity {
 
 	/** 商品 */
 	private Product product;
+	
+	/**
+	 * 评论图片1
+	 */
+	private String image1;
+	
+	/**
+	 * 评论图片2
+	 */
+	private String image2;
+	
+	/**
+	 * 评论图片3
+	 */
+	private String image3;
+	
+	/**
+	 * 评论图片4
+	 */
+	private String image4;
+	
+	/**
+	 * 评论图片5
+	 */
+	private String image5;
 
 	/**
 	 * 获取评分
@@ -209,6 +234,46 @@ public class Review extends BaseEntity {
 	 */
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+	
+	public String getImage1() {
+		return image1;
+	}
+
+	public void setImage1(String image1) {
+		this.image1 = image1;
+	}
+
+	public String getImage2() {
+		return image2;
+	}
+
+	public void setImage2(String image2) {
+		this.image2 = image2;
+	}
+
+	public String getImage3() {
+		return image3;
+	}
+
+	public void setImage3(String image3) {
+		this.image3 = image3;
+	}
+
+	public String getImage4() {
+		return image4;
+	}
+
+	public void setImage4(String image4) {
+		this.image4 = image4;
+	}
+
+	public String getImage5() {
+		return image5;
+	}
+
+	public void setImage5(String image5) {
+		this.image5 = image5;
 	}
 
 	/**

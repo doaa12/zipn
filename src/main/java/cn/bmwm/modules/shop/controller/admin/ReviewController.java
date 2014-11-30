@@ -17,8 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.common.utils.Message;
-import cn.bmwm.modules.shop.entity.Review;
-import cn.bmwm.modules.shop.entity.Review.Type;
+import cn.bmwm.modules.shop.entity.ProductReview;
+import cn.bmwm.modules.shop.entity.ProductReview.Type;
 import cn.bmwm.modules.shop.service.ReviewService;
 
 /**
@@ -48,7 +48,7 @@ public class ReviewController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Long id, @RequestParam(defaultValue = "false") Boolean isShow, RedirectAttributes redirectAttributes) {
-		Review review = reviewService.find(id);
+		ProductReview review = reviewService.find(id);
 		if (review == null) {
 			return ERROR_VIEW;
 		}

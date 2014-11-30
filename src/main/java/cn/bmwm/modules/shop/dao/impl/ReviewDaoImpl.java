@@ -22,8 +22,8 @@ import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.ReviewDao;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Review;
-import cn.bmwm.modules.shop.entity.Review.Type;
+import cn.bmwm.modules.shop.entity.ProductReview;
+import cn.bmwm.modules.shop.entity.ProductReview.Type;
 
 /**
  * Dao - 评论
@@ -32,13 +32,13 @@ import cn.bmwm.modules.shop.entity.Review.Type;
  * @version 1.0
  */
 @Repository("reviewDaoImpl")
-public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDao {
+public class ReviewDaoImpl extends BaseDaoImpl<ProductReview, Long> implements ReviewDao {
 
-	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
+	public List<ProductReview> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
 		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Review> criteriaQuery = criteriaBuilder.createQuery(Review.class);
-		Root<Review> root = criteriaQuery.from(Review.class);
+		CriteriaQuery<ProductReview> criteriaQuery = criteriaBuilder.createQuery(ProductReview.class);
+		Root<ProductReview> root = criteriaQuery.from(ProductReview.class);
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
 		
@@ -66,10 +66,10 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		
 	}
 
-	public Page<Review> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {
+	public Page<ProductReview> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Review> criteriaQuery = criteriaBuilder.createQuery(Review.class);
-		Root<Review> root = criteriaQuery.from(Review.class);
+		CriteriaQuery<ProductReview> criteriaQuery = criteriaBuilder.createQuery(ProductReview.class);
+		Root<ProductReview> root = criteriaQuery.from(ProductReview.class);
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
 		if (member != null) {
@@ -94,8 +94,8 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 
 	public Long count(Member member, Product product, Type type, Boolean isShow) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Review> criteriaQuery = criteriaBuilder.createQuery(Review.class);
-		Root<Review> root = criteriaQuery.from(Review.class);
+		CriteriaQuery<ProductReview> criteriaQuery = criteriaBuilder.createQuery(ProductReview.class);
+		Root<ProductReview> root = criteriaQuery.from(ProductReview.class);
 		criteriaQuery.select(root);
 		Predicate restrictions = criteriaBuilder.conjunction();
 		if (member != null) {
@@ -122,7 +122,7 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		if (member == null || product == null) {
 			return false;
 		}
-		String jqpl = "select count(*) from Review review where review.member = :member and review.product = :product";
+		String jqpl = "select count(*) from ProductReview review where review.member = :member and review.product = :product";
 		Long count = entityManager.createQuery(jqpl, Long.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setParameter("product", product).getSingleResult();
 		return count > 0;
 	}
@@ -131,7 +131,7 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		if (product == null) {
 			return 0L;
 		}
-		String jpql = "select sum(review.score) from Review review where review.product = :product and review.isShow = :isShow";
+		String jpql = "select sum(review.score) from ProductReview review where review.product = :product and review.isShow = :isShow";
 		Long totalScore = entityManager.createQuery(jpql, Long.class).setFlushMode(FlushModeType.COMMIT).setParameter("product", product).setParameter("isShow", true).getSingleResult();
 		return totalScore != null ? totalScore : 0L;
 	}
@@ -140,7 +140,7 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		if (product == null) {
 			return 0L;
 		}
-		String jpql = "select count(*) from Review review where review.product = :product and review.isShow = :isShow";
+		String jpql = "select count(*) from ProductReview review where review.product = :product and review.isShow = :isShow";
 		return entityManager.createQuery(jpql, Long.class).setFlushMode(FlushModeType.COMMIT).setParameter("product", product).setParameter("isShow", true).getSingleResult();
 	}
 

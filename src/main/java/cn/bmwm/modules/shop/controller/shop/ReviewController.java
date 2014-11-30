@@ -20,7 +20,7 @@ import cn.bmwm.common.utils.Message;
 import cn.bmwm.common.utils.ResourceNotFoundException;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Review;
+import cn.bmwm.modules.shop.entity.ProductReview;
 import cn.bmwm.modules.shop.service.CaptchaService;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductService;
@@ -102,7 +102,7 @@ public class ReviewController extends BaseController {
 		if (!setting.getIsReviewEnabled()) {
 			return Message.error("shop.review.disabled");
 		}
-		if (!isValid(Review.class, "score", score) || !isValid(Review.class, "content", content)) {
+		if (!isValid(ProductReview.class, "score", score) || !isValid(ProductReview.class, "content", content)) {
 			return ERROR_MESSAGE;
 		}
 		Product product = productService.find(id);
@@ -121,7 +121,7 @@ public class ReviewController extends BaseController {
 				return Message.error("shop.review.reviewed");
 			}
 		}
-		Review review = new Review();
+		ProductReview review = new ProductReview();
 		review.setScore(score);
 		review.setContent(content);
 		review.setIp(request.getRemoteAddr());

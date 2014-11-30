@@ -22,8 +22,8 @@ import cn.bmwm.modules.shop.dao.ProductDao;
 import cn.bmwm.modules.shop.dao.ReviewDao;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Review;
-import cn.bmwm.modules.shop.entity.Review.Type;
+import cn.bmwm.modules.shop.entity.ProductReview;
+import cn.bmwm.modules.shop.entity.ProductReview.Type;
 import cn.bmwm.modules.shop.service.ReviewService;
 import cn.bmwm.modules.shop.service.StaticService;
 
@@ -34,7 +34,7 @@ import cn.bmwm.modules.shop.service.StaticService;
  * @version 1.0
  */
 @Service("reviewServiceImpl")
-public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements ReviewService {
+public class ReviewServiceImpl extends BaseServiceImpl<ProductReview, Long> implements ReviewService {
 
 	@Resource(name = "reviewDaoImpl")
 	private ReviewDao reviewDao;
@@ -49,15 +49,15 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 	}
 
 	@Cacheable("review")
-	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
+	public List<ProductReview> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders) {
 		return reviewDao.findList(member, product, type, isShow, count, filters, orders);
 	}
 
-	public List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion) {
+	public List<ProductReview> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion) {
 		return reviewDao.findList(member, product, type, isShow, count, filters, orders);
 	}
 
-	public Page<Review> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {
+	public Page<ProductReview> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable) {
 		return reviewDao.findPage(member, product, type, isShow, pageable);
 	}
 	
@@ -73,7 +73,7 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 	@Override
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
-	public void save(Review review) {
+	public void save(ProductReview review) {
 		super.save(review);
 		Product product = review.getProduct();
 		if (product != null) {
@@ -91,8 +91,8 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 	@Override
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
-	public Review update(Review review) {
-		Review pReview = super.update(review);
+	public ProductReview update(ProductReview review) {
+		ProductReview pReview = super.update(review);
 		Product product = pReview.getProduct();
 		if (product != null) {
 			reviewDao.flush();
@@ -110,7 +110,7 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 	@Override
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
-	public Review update(Review review, String... ignoreProperties) {
+	public ProductReview update(ProductReview review, String... ignoreProperties) {
 		return super.update(review, ignoreProperties);
 	}
 
@@ -131,7 +131,7 @@ public class ReviewServiceImpl extends BaseServiceImpl<Review, Long> implements 
 	@Override
 	@Transactional
 	@CacheEvict(value = { "product", "productCategory", "review", "consultation" }, allEntries = true)
-	public void delete(Review review) {
+	public void delete(ProductReview review) {
 		if (review != null) {
 			super.delete(review);
 			Product product = review.getProduct();

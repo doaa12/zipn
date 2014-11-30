@@ -203,7 +203,7 @@ public class Member extends BaseEntity {
 	private Set<Receiver> receivers = new HashSet<Receiver>();
 
 	/** 商品评论 */
-	private Set<Review> reviews = new HashSet<Review>();
+	private Set<ProductReview> reviews = new HashSet<ProductReview>();
 	
 	/**
 	 * 店铺评论
@@ -1052,7 +1052,7 @@ public class Member extends BaseEntity {
 	 */
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@OrderBy("createDate desc")
-	public Set<Review> getReviews() {
+	public Set<ProductReview> getReviews() {
 		return reviews;
 	}
 
@@ -1062,7 +1062,7 @@ public class Member extends BaseEntity {
 	 * @param reviews
 	 *            评论
 	 */
-	public void setReviews(Set<Review> reviews) {
+	public void setReviews(Set<ProductReview> reviews) {
 		this.reviews = reviews;
 	}
 	

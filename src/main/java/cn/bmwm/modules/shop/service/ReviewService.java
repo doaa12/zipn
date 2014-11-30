@@ -12,8 +12,8 @@ import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.entity.Product;
-import cn.bmwm.modules.shop.entity.Review;
-import cn.bmwm.modules.shop.entity.Review.Type;
+import cn.bmwm.modules.shop.entity.ProductReview;
+import cn.bmwm.modules.shop.entity.ProductReview.Type;
 
 
 /**
@@ -22,7 +22,7 @@ import cn.bmwm.modules.shop.entity.Review.Type;
  *
  * @version 1.0
  */
-public interface ReviewService extends BaseService<Review, Long> {
+public interface ReviewService extends BaseService<ProductReview, Long> {
 
 	/**
 	 * 查找评论
@@ -43,7 +43,7 @@ public interface ReviewService extends BaseService<Review, Long> {
 	 *            排序
 	 * @return 评论
 	 */
-	List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders);
+	List<ProductReview> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders);
 
 	/**
 	 * 查找评论(缓存)
@@ -66,7 +66,7 @@ public interface ReviewService extends BaseService<Review, Long> {
 	 *            缓存区域
 	 * @return 评论(缓存)
 	 */
-	List<Review> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion);
+	List<ProductReview> findList(Member member, Product product, Type type, Boolean isShow, Integer count, List<Filter> filters, List<Order> orders, String cacheRegion);
 
 	/**
 	 * 查找评论分页
@@ -83,7 +83,7 @@ public interface ReviewService extends BaseService<Review, Long> {
 	 *            分页信息
 	 * @return 评论分页
 	 */
-	Page<Review> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable);
+	Page<ProductReview> findPage(Member member, Product product, Type type, Boolean isShow, Pageable pageable);
 
 	/**
 	 * 查找评论数量
