@@ -55,6 +55,7 @@ public class ReviewDaoImpl extends BaseDaoImpl<Review, Long> implements ReviewDa
 		} else if (type == Type.negative) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.le(root.<Number> get("score"), 2));
 		}
+		
 		if (isShow != null) {
 			restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("isShow"), isShow));
 		}
