@@ -480,6 +480,14 @@ $().ready(function() {
 			</tr>
 			<tr>
 				<th>
+					<span class="requiredField">*</span>${message("shopadmin.product.description")}:
+				</th>
+				<td>
+					<textarea id="description" name="description" rows="5" cols="60" maxlength="500" class="text">${product.description}</textarea>
+				</td>
+			</tr>
+			<tr>
+				<th>
 					${message("admin.common.setting")}:
 				</th>
 				<td>
