@@ -217,10 +217,12 @@ public class ProductController extends BaseController {
 		product.setIsTop(false);
 		product.setIsGift(false);
 		//product.setBrand(brandService.find(brandId));
-		product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+		//product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+		
 		if (!isValid(product)) {
 			return ERROR_VIEW;
 		}
+		
 		if (StringUtils.isNotEmpty(product.getSn()) && productService.snExists(product.getSn())) {
 			return ERROR_VIEW;
 		}
@@ -327,7 +329,6 @@ public class ProductController extends BaseController {
 							if (j == 0) {
 								product.setGoods(goods);
 								product.setProductSpecificationList(new ArrayList<ProductSpecification>());
-								//product.setSpecificationValues(new HashSet<SpecificationValue>());
 								product.setCity(city);
 								product.setRegion(shop.getRegion());
 								product.setShop(shop);
@@ -338,43 +339,8 @@ public class ProductController extends BaseController {
 							} else {
 								Product specificationProduct = new Product();
 								BeanUtils.copyProperties(product, specificationProduct);
-								specificationProduct.setId(null);
-								specificationProduct.setCreateDate(null);
-								specificationProduct.setModifyDate(null);
-								specificationProduct.setSn(null);
-								specificationProduct.setFullName(null);
-								specificationProduct.setAllocatedStock(0);
-								specificationProduct.setIsList(false);
-								specificationProduct.setScore(0F);
-								specificationProduct.setTotalScore(0L);
-								specificationProduct.setScoreCount(0L);
-								specificationProduct.setHits(0L);
-								specificationProduct.setWeekHits(0L);
-								specificationProduct.setMonthHits(0L);
-								specificationProduct.setSales(0L);
-								specificationProduct.setWeekSales(0L);
-								specificationProduct.setMonthSales(0L);
-								specificationProduct.setWeekHitsDate(new Date());
-								specificationProduct.setMonthHitsDate(new Date());
-								specificationProduct.setWeekSalesDate(new Date());
-								specificationProduct.setMonthSalesDate(new Date());
-								specificationProduct.setGoods(goods);
-								specificationProduct.setReviews(null);
-								specificationProduct.setConsultations(null);
-								specificationProduct.setFavoriteMembers(null);
 								specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
-								//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-								//specificationProduct.setPromotions(null);
-								specificationProduct.setCartItems(null);
-								specificationProduct.setOrderItems(null);
-								specificationProduct.setGiftItems(null);
-								specificationProduct.setProductNotifies(null);
-								specificationProduct.setCity(city);
-								specificationProduct.setRegion(shop.getRegion());
-								specificationProduct.setShop(shop);
-								specificationProduct.setTreePath(shopCategory.getTreePath());
-								specificationProduct.setShopCategory(shopCategory);
-								specificationProduct.setIsTop(false);
+								specificationProduct.setIsList(false);
 								products.add(specificationProduct);
 							}
 						}
@@ -390,9 +356,6 @@ public class ProductController extends BaseController {
 						
 						specificationProduct.getProductSpecificationList().add(productSpecification);
 						
-						//specificationProduct.getSpecifications().add(specification);
-						//specificationProduct.getSpecificationValues().add(specificationValue);
-						
 					}
 				}
 			}
@@ -404,8 +367,6 @@ public class ProductController extends BaseController {
 		} else {
 			product.setShop(shop);
 			product.setGoods(goods);
-			//product.setSpecifications(null);
-			//product.setSpecificationValues(null);
 			product.setProductSpecificationList(null);
 			product.setCity(city);
 			product.setRegion(shop.getRegion());
@@ -548,7 +509,7 @@ public class ProductController extends BaseController {
 		}
 		
 		BeanUtils.copyProperties(product, pProduct, new String[] { "id", "createDate", "modifyDate", "fullName", "allocatedStock", "score", "totalScore", "scoreCount", "hits", "weekHits", "monthHits", "sales", "weekSales", "monthSales", "weekHitsDate", "monthHitsDate", "weekSalesDate", "monthSalesDate", "reviews", "consultations", "favoriteMembers",
-				"productSpecificationList", "cartItems", "promotions", "goods", "cartItems", "orderItems", "giftItems", "productNotifies"});
+				"productSpecificationList", "cartItems", "promotions", "goods", "cartItems", "orderItems", "giftItems"});
 		
 		Goods goods = pProduct.getGoods();
 		List<Product> products = new ArrayList<Product>();
@@ -569,15 +530,7 @@ public class ProductController extends BaseController {
 							//TODO：设置规格商品库存，价格
 							if (j == 0) {
 								
-								//pProduct.setSpecifications(new HashSet<Specification>());
-								//pProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-								//pProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
 								pProduct.getProductSpecificationList().clear();
-								pProduct.setCity(city);
-								pProduct.setRegion(shop.getRegion());
-								pProduct.setShopCategory(shopCategory);
-								pProduct.setTreePath(shopCategory.getTreePath());
-								pProduct.setShop(shop);
 								products.add(pProduct);
 								
 							} else {
@@ -590,19 +543,7 @@ public class ProductController extends BaseController {
 										return ERROR_VIEW;
 									}
 									
-									//specificationProduct.setSpecifications(new HashSet<Specification>());
-									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-									//specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
-									
 									specificationProduct.getProductSpecificationList().clear();
-									specificationProduct.setCity(city);
-									specificationProduct.setRegion(shop.getRegion());
-									specificationProduct.setShop(shop);
-									specificationProduct.setShopCategory(shopCategory);
-									specificationProduct.setTreePath(shopCategory.getTreePath());
-									specificationProduct.setIsList(false);
-									specificationProduct.setIsTop(false);
-									specificationProduct.setIsGift(false);
 									products.add(specificationProduct);
 									
 								} else {
@@ -635,14 +576,9 @@ public class ProductController extends BaseController {
 									specificationProduct.setReviews(null);
 									specificationProduct.setConsultations(null);
 									specificationProduct.setFavoriteMembers(null);
-									//specificationProduct.setSpecifications(new HashSet<Specification>());
-									//specificationProduct.setSpecificationValues(new HashSet<SpecificationValue>());
-									//specificationProduct.setPromotions(null);
-									//specificationProduct.setProductSpecificationList(new ArrayList<ProductSpecification>());
 									specificationProduct.setCartItems(null);
 									specificationProduct.setOrderItems(null);
 									specificationProduct.setGiftItems(null);
-									specificationProduct.setProductNotifies(null);
 									specificationProduct.setIsTop(false);
 									specificationProduct.setCity(city);
 									specificationProduct.setRegion(shop.getRegion());
@@ -665,9 +601,6 @@ public class ProductController extends BaseController {
 						productSpecification.setSpecificationValue(specificationValue);
 						
 						specificationProduct.getProductSpecificationList().add(productSpecification);
-						
-						//specificationProduct.getSpecifications().add(specification);
-						//specificationProduct.getSpecificationValues().add(specificationValue);
 						
 					}
 				}
