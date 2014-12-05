@@ -375,6 +375,7 @@ public class CartController extends AppBaseController {
 			cproduct.setDiscountPrice(caculatePrice(item));
 			cproduct.setQuantity(item.getQuantity());
 			cproduct.setCartItemId(item.getId());
+			cproduct.setImageUrl(product.getImage());
 			
 			//商品规格
 			List<ProductSpecification> productSpecifications = product.getProductSpecificationList();

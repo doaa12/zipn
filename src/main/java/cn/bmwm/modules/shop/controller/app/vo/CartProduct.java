@@ -40,6 +40,11 @@ public class CartProduct {
 	private BigDecimal discountPrice;
 	
 	/**
+	 * 商品图片地址
+	 */
+	private String imageUrl;
+	
+	/**
 	 * 商品数量
 	 */
 	private int quantity;
@@ -118,6 +123,14 @@ public class CartProduct {
 	 */
 	public void setDiscountPrice(BigDecimal discountPrice) {
 		this.discountPrice = discountPrice;
+	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	/**
