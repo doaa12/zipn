@@ -66,6 +66,16 @@ public interface ProductDao extends BaseDao<Product, Long> {
 	 * @return 商品
 	 */
 	List<Product> search(String keyword, Boolean isGift, Integer count);
+	
+	/**
+	 * 通过ID、编号、全称查找店铺商品
+	 * @param shop
+	 * @param keyword
+	 * @param isGift
+	 * @param count
+	 * @return
+	 */
+	List<Product> search(Shop shop, String keyword, Boolean isGift, Integer count);
 
 	/**
 	 * 查找商品

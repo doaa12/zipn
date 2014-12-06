@@ -69,5 +69,12 @@ public interface PromotionService extends BaseService<Promotion, Long> {
 	 * @return
 	 */
 	Long findShopPromotionCount(Shop shop);
+	
+	/**
+	 * 批量删除店铺促销
+	 * @param shop
+	 * @param ids
+	 */
+	void delete(Shop shop, Long ... ids);
 
 }

@@ -93,7 +93,7 @@ $().ready(function() {
 								[#break /]
 							[/@shiro.hasPermission]
 						[/#list]
-						[#list ["admin:promotion", "admin:coupon", "admin:seo", "admin:sitemap"] as permission]
+						[#list ["admin:promotion", "admin:coupon", "admin:seo", "admin:sitemap","shopadmin:promotion"] as permission]
 							[@shiro.hasPermission name = permission]
 								<li>
 									<a href="#marketing">${message("admin.main.marketingNav")}</a>
@@ -332,6 +332,11 @@ $().ready(function() {
 					[@shiro.hasPermission name="admin:sitemap"]
 						<dd>
 							<a href="../sitemap/build.jhtml" target="iframe">${message("admin.main.sitemap")}</a>
+						</dd>
+					[/@shiro.hasPermission]
+					[@shiro.hasPermission name="shopadmin:promotion"]
+						<dd>
+							<a href="/shopadmin/promotion/list.jhtml" target="iframe">${message("admin.main.promotion")}</a>
 						</dd>
 					[/@shiro.hasPermission]
 				</dl>

@@ -35,7 +35,6 @@ import cn.bmwm.modules.shop.entity.ProductImage;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
 import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Specification;
-import cn.bmwm.modules.shop.entity.SpecificationValue;
 import cn.bmwm.modules.shop.entity.Tag;
 import cn.bmwm.modules.shop.entity.Tag.Type;
 import cn.bmwm.modules.shop.service.BrandService;
@@ -46,7 +45,6 @@ import cn.bmwm.modules.shop.service.ProductCategoryService;
 import cn.bmwm.modules.shop.service.ProductService;
 import cn.bmwm.modules.shop.service.PromotionService;
 import cn.bmwm.modules.shop.service.SpecificationService;
-import cn.bmwm.modules.shop.service.SpecificationValueService;
 import cn.bmwm.modules.shop.service.TagService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
@@ -79,8 +77,8 @@ public class ProductController extends BaseController {
 	private ImageService imageService;
 	@Resource(name = "specificationServiceImpl")
 	private SpecificationService specificationService;
-	@Resource(name = "specificationValueServiceImpl")
-	private SpecificationValueService specificationValueService;
+	//@Resource(name = "specificationValueServiceImpl")
+	//private SpecificationValueService specificationValueService;
 	@Resource(name = "fileServiceImpl")
 	private FileService fileService;
 
@@ -246,7 +244,7 @@ public class ProductController extends BaseController {
 							
 						}
 						
-						SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
+						//SpecificationValue specificationValue = specificationValueService.find(Long.valueOf(specificationValueIds[j]));
 						/*
 						ProductSpecificationValue productSpecificationValue = new ProductSpecificationValue();
 						productSpecificationValue.setSpecification(specification);

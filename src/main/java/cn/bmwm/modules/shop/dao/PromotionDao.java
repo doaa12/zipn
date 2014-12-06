@@ -51,4 +51,12 @@ public interface PromotionDao extends BaseDao<Promotion, Long> {
 	 */
 	Long findShopPromotionCount(Shop shop);
 	
+	/**
+	 * 查询店铺促销
+	 * @param shop
+	 * @param id
+	 * @return
+	 */
+	Promotion find(Shop shop, Long id);
+	
 }

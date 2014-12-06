@@ -240,6 +240,9 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:promotion" />${message("admin.role.promotion")}
 						</label>
 						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:promotion" />${message("shopadmin.role.promotion")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="admin:coupon" />${message("admin.role.coupon")}
 						</label>
 						<label>

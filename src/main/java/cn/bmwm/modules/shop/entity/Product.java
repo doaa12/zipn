@@ -325,7 +325,7 @@ public class Product extends BaseEntity {
 	private Set<Member> favoriteMembers = new HashSet<Member>();
 
 	/** 促销 */
-	//private Set<Promotion> promotions = new HashSet<Promotion>();
+	private Set<Promotion> promotions = new HashSet<Promotion>();
 
 	/** 购物车项 */
 	private Set<CartItem> cartItems = new HashSet<CartItem>();
@@ -1785,12 +1785,11 @@ public class Product extends BaseEntity {
 	 * 
 	 * @return 促销
 	 */
-	/*
 	@ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
 	public Set<Promotion> getPromotions() {
 		return promotions;
 	}
-	*/
+	
 	
 	/**
 	 * 设置促销
@@ -1798,11 +1797,10 @@ public class Product extends BaseEntity {
 	 * @param promotions
 	 *            促销
 	 */
-	/*
 	public void setPromotions(Set<Promotion> promotions) {
 		this.promotions = promotions;
 	}
-	*/
+	
 	/**
 	 * 获取购物车项
 	 * 
@@ -2075,11 +2073,9 @@ public class Product extends BaseEntity {
 		
 		Set<Promotion> allPromotions = new HashSet<Promotion>();
 		
-		/*
 		if (getPromotions() != null) {
 			allPromotions.addAll(getPromotions());
 		}
-		*/
 		
 		if (getShop() != null && getShop().getPromotions() != null) {
 			allPromotions.addAll(getShop().getPromotions());

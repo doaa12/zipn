@@ -241,6 +241,9 @@ $().ready(function() {
 							<input type="checkbox" name="authorities" value="admin:promotion"[#if role.authorities?seq_contains("admin:promotion")] checked="checked"[/#if] />${message("admin.role.promotion")}
 						</label>
 						<label>
+							<input type="checkbox" name="authorities" value="shopadmin:promotion"[#if role.authorities?seq_contains("shopadmin:promotion")] checked="checked"[/#if] />${message("shopadmin.role.promotion")}
+						</label>
+						<label>
 							<input type="checkbox" name="authorities" value="admin:coupon"[#if role.authorities?seq_contains("admin:coupon")] checked="checked"[/#if] />${message("admin.role.coupon")}
 						</label>
 						<label>

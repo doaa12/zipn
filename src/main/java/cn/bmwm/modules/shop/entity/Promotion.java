@@ -8,12 +8,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -91,12 +95,12 @@ public class Promotion extends OrderEntity {
 
 	/** 介绍 */
 	private String introduction;
-
+	
 	/** 允许参加会员等级 */
 	//private Set<MemberRank> memberRanks = new HashSet<MemberRank>();
 
 	/** 允许参与商品 */
-	//private Set<Product> products = new HashSet<Product>();
+	private Set<Product> products = new HashSet<Product>();
 
 	/** 允许参与品牌 */
 	//private Set<Brand> brands = new HashSet<Brand>();
@@ -116,6 +120,12 @@ public class Promotion extends OrderEntity {
 	 * 店铺
 	 */
 	private Shop shop;
+	
+	/**
+	 * 促销类型，1：单品促销，2：店铺促销
+	 */
+	private Integer type;
+	
 
 	/**
 	 * 获取名称
@@ -361,7 +371,7 @@ public class Promotion extends OrderEntity {
 	public Boolean getIsCouponAllowed() {
 		return isCouponAllowed;
 	}
-
+	
 	/**
 	 * 设置是否允许使用优惠券
 	 * 
@@ -371,7 +381,7 @@ public class Promotion extends OrderEntity {
 	public void setIsCouponAllowed(Boolean isCouponAllowed) {
 		this.isCouponAllowed = isCouponAllowed;
 	}
-
+	
 	/**
 	 * 获取介绍
 	 * 
@@ -447,13 +457,11 @@ public class Promotion extends OrderEntity {
 	 * 
 	 * @return 允许参与商品
 	 */
-	/*
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "xx_promotion_product")
 	public Set<Product> getProducts() {
 		return products;
 	}
-	*/
 
 	/**
 	 * 设置允许参与商品
@@ -461,11 +469,17 @@ public class Promotion extends OrderEntity {
 	 * @param products
 	 *            允许参与商品
 	 */
-	/*
 	public void setProducts(Set<Product> products) {
 		this.products = products;
 	}
-	*/
+	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
 	/**
 	 * 获取允许参与品牌

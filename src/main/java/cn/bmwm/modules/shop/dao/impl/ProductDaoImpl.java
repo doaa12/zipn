@@ -361,6 +361,29 @@ public class ProductDaoImpl extends BaseDaoImpl<Product, Long> implements Produc
 		cq.orderBy(cb.desc(root.get("isTop")));
 		return super.findList(cq, null, count, null, null);
 	}
+	
+	public List<Product> search(Shop shop, String keyword, Boolean isGift, Integer count) {
+		if (StringUtils.isEmpty(keyword)) {
+			return Collections.<Product> emptyList();
+		}
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		cq.select(root);
+		Predicate restrictions = cb.conjunction();
+		restrictions = cb.and(restrictions, cb.equal(root.get("shop"), shop));
+		if (pattern.matcher(keyword).matches()) {
+			restrictions = cb.and(restrictions, cb.or(cb.equal(root.get("id"), Long.valueOf(keyword)), cb.like(root.<String> get("sn"), "%" + keyword + "%"), cb.like(root.<String> get("fullName"), "%" + keyword + "%")));
+		} else {
+			restrictions = cb.and(restrictions, cb.or(cb.like(root.<String> get("sn"), "%" + keyword + "%"), cb.like(root.<String> get("fullName"), "%" + keyword + "%")));
+		}
+		if (isGift != null) {
+			restrictions = cb.and(restrictions, cb.equal(root.get("isGift"), isGift));
+		}
+		cq.where(restrictions);
+		cq.orderBy(cb.desc(root.get("isTop")));
+		return super.findList(cq, null, count, null, null);
+	}
 
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();

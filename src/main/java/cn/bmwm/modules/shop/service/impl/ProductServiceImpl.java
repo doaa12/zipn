@@ -97,6 +97,18 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
 	public List<Product> search(String keyword, Boolean isGift, Integer count) {
 		return productDao.search(keyword, isGift, count);
 	}
+	
+	/**
+	 * 通过ID、编号、全称查找店铺商品
+	 * @param shop
+	 * @param keyword
+	 * @param isGift
+	 * @param count
+	 * @return
+	 */
+	public List<Product> search(Shop shop, String keyword, Boolean isGift, Integer count) {
+		return productDao.search(shop, keyword, isGift, count);
+	}
 
 	public List<Product> findList(ProductCategory productCategory, Brand brand, Promotion promotion, List<Tag> tags, Map<Attribute, String> attributeValue, BigDecimal startPrice, BigDecimal endPrice, Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert, OrderType orderType, Integer count, List<Filter> filters, List<Order> orders) {
 		return productDao.findList(productCategory, brand, promotion, tags, attributeValue, startPrice, endPrice, isMarketable, isList, isTop, isGift, isOutOfStock, isStockAlert, orderType, count, filters, orders);

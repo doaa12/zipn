@@ -100,6 +100,16 @@ public class PromotionServiceImpl extends BaseServiceImpl<Promotion, Long> imple
 	public void delete(Long... ids) {
 		super.delete(ids);
 	}
+	
+	@Transactional
+	@CacheEvict(value = { "promotion", "product" }, allEntries = true)
+	public void delete(Shop shop, Long ... ids) {
+		if(ids != null) {
+			for(Long id : ids) {
+				delete(promotionDao.find(shop, id));
+			}
+		}
+	}
 
 	@Override
 	@Transactional
