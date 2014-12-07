@@ -83,20 +83,6 @@ public class RegisterController {
 	@ResponseBody
 	public Map<String,Object> register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
-		/*
-		Object ocode = session.getAttribute("code");
-		
-		if(ocode == null) {
-			throw new BusinessException(" Parameter 'code' dose not exist ! ");
-		}
-		
-		String scode = (String)ocode;
-		
-		if(!scode.equals(code)) {
-			throw new BusinessException(" Parameter 'code' is invalid ! ");
-		}
-		*/
-		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
@@ -178,9 +164,6 @@ public class RegisterController {
 		memberService.save(member);
 		
 		result.put("flag", 1);
-		
-		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), member.getUsername()));
-		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
 		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put("username", member.getUsername());
