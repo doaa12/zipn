@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -46,31 +44,27 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/change_pasword", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> changePassword(HttpServletRequest request, HttpServletResponse response) {
-		
-		String oldenPassword = request.getParameter("oldpassword");
-		String newenPassword = request.getParameter("newpassword");
+	public Map<String,Object> changePassword(HttpSession session, String oldpassword, String newpassword) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(oldenPassword)) {
+		if(StringUtils.isBlank(oldpassword)) {
 			result.put("message", "旧密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
-		if(StringUtils.isBlank(newenPassword)) {
+		if(StringUtils.isBlank(newpassword)) {
 			result.put("message", "新密码为空！");
 			result.put("flag", Constants.USER_PASSWORD_BLANK);
 			return result;
 		}
 		
-		HttpSession session = request.getSession();
 		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
 		
-		String newPassword = rsaService.decrypt(newenPassword);
-		String oldPassword = rsaService.decrypt(oldenPassword);
+		String newPassword = rsaService.decrypt(newpassword);
+		String oldPassword = rsaService.decrypt(oldpassword);
 		
 		if (!DigestUtils.md5Hex(oldPassword).equals(member.getPassword())) {
 			result.put("message", "旧密码错误！");
@@ -93,12 +87,11 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/get_userinfo", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getUserInfo(HttpServletRequest request) {
+	public Map<String,Object> getUserInfo(HttpSession session) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
-		HttpSession session = request.getSession();
 		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
 		
 		result.put("address", member.getAddress());
@@ -119,21 +112,14 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/modify_userinfo", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> modifyUserInfo(HttpServletRequest request) {
-		
-		String address = request.getParameter("address");
-		String description = request.getParameter("description");
-		
-		String ssex = request.getParameter("sex");
+	public Map<String,Object> modifyUserInfo(HttpSession session, String address, String description, Integer sex) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
 		
-		HttpSession session = request.getSession();
 		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
 		
-		if(StringUtils.isNotBlank(ssex)) {
-			int sex = Integer.parseInt(ssex);
+		if(sex != null) {
 			member.setGender(sex == 1 ? Gender.male : Gender.female);
 		}
 		
@@ -154,11 +140,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/reset_password", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> resetPassword(HttpServletRequest request) {
-		
-		String phone = request.getParameter("phone");
-		String code = request.getParameter("code");
-		String enpassword = request.getParameter("enpassword");
+	public Map<String,Object> resetPassword(HttpSession session, String phone, String code, String enpassword) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("version", 1);
@@ -181,7 +163,6 @@ public class UserController {
 			return result;
 		}
 		
-		HttpSession session = request.getSession();
 		Object ocode = session.getAttribute(Constants.VALIDATION_CODE);
 		
 		if(ocode == null) {
@@ -215,15 +196,6 @@ public class UserController {
 		
 		return result;
 		
-	}
-	
-	/**
-	 * 用户查看购物车商品
-	 * @return
-	 */
-	public Map<String,Object> getUserCartProductList(HttpServletRequest request) {
-		Map<String,Object> result = new HashMap<String,Object>();
-		return result;
 	}
 	
 }
