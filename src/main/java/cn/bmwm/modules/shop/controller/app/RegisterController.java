@@ -2,8 +2,6 @@ package cn.bmwm.modules.shop.controller.app;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
@@ -49,27 +48,19 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> check(String phone) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Result check(String phone) {
 		
 		if (StringUtils.isEmpty(phone)) {
 			throw new BusinessException(" Parameter 'phone' can not be empty ! ");
 		}
 		
-		result.put("version", 1);
-		
 		if (memberService.usernameDisabled(phone)) {
-			result.put("message", "手机号码已禁用！");
-			result.put("flag", 2);
+			return new Result(Constants.FAILED, 1, "手机号码已禁用！");
 		}else if(memberService.usernameExists(phone)){
-			result.put("message", "手机号码已注册！");
-			result.put("flag", 3);
-		}else {
-			result.put("flag", 1);
+			return new Result(3, 1, "手机号码已注册！");
 		}
 		
-		return result;
+		return new Result(Constants.SUCCESS, 1);
 		
 	}
 	
@@ -81,65 +72,46 @@ public class RegisterController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("version", 1);
+	public Result register(String phone, String code, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		if(StringUtils.isBlank(phone)) {
-			result.put("message", "手机号码为空！");
-			result.put("flag", Constants.USER_USERNAME_BLANK);
-			return result;
+			return new Result(Constants.USER_USERNAME_BLANK, 1, "手机号码为空！");
 		}
 		
 		String enpassword = request.getParameter("enpassword");
 		
 		if(StringUtils.isBlank(enpassword)) {
-			result.put("message", "密码为空！");
-			result.put("flag", Constants.USER_PASSWORD_BLANK);
-			return result;
+			return new Result(Constants.USER_PASSWORD_BLANK, 1, "密码为空！");
 		}
 		
 		if(StringUtils.isBlank(code)) {
-			result.put("message", "验证码为空！");
-			result.put("flag", Constants.USER_CODE_EMPTY);
-			return result;
+			return new Result(Constants.USER_CODE_EMPTY, 1, "验证码为空！");
 		}
 		
 		Object ocode = session.getAttribute(Constants.VALIDATION_CODE);
 		
 		if(ocode == null) {
-			result.put("message", "验证码错误！");
-			result.put("flag", Constants.USER_CODE_ERROR);
-			return result;
+			return new Result(Constants.USER_CODE_ERROR, 1, "验证码错误！");
 		}
 		
 		String scode = (String)ocode;
 		
 		if(!code.equals(scode)) {
-			result.put("message", "验证码错误！");
-			result.put("flag", Constants.USER_CODE_ERROR);
-			return result;
+			return new Result(Constants.USER_CODE_ERROR, 1, "验证码错误！");
 		}
 		
 		String password = rsaService.decrypt(enpassword);
 		
 		if(StringUtils.isBlank(password)) {
-			result.put("message", "密码为空！");
-			result.put("flag", Constants.USER_PASSWORD_BLANK);
-			return result;
+			return new Result(Constants.USER_PASSWORD_BLANK, 1, "密码为空！");
 		}
 		
 		if (memberService.usernameExists(phone)) {
-			result.put("message", "该手机号码已注册！");
-			result.put("flag", Constants.USER_USERNAME_EXISTS);
-			return result;
+			return new Result(Constants.USER_USERNAME_EXISTS, 1, "该手机号码已注册！");
 		}
 		
 		if(memberService.usernameDisabled(phone)) {
-			result.put("message", "改手机号码已被禁用！");
-			result.put("flag", Constants.USER_USERNAME_DISABLED);
-			return result;
+			return new Result(Constants.USER_USERNAME_DISABLED, 1, "该手机号码已被禁用！");
 		}
 		
 		Setting setting = SettingUtils.get();
@@ -163,8 +135,7 @@ public class RegisterController {
 		member.setFavoriteProducts(null);
 		memberService.save(member);
 		
-		result.put("flag", 1);
-		
+		Result result = new Result(Constants.SUCCESS, 1);
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put("username", member.getUsername());
 		

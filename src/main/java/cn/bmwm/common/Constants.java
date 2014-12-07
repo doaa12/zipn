@@ -20,6 +20,16 @@ public class Constants {
 	 */
 	public static final String VALIDATION_CODE = "validation-code";
 	
+	/**
+	 * 处理完成
+	 */
+	public static final int SUCCESS = 1;
+	
+	/**
+	 * 处理失败
+	 */
+	public static final int FAILED = 2;
+	
 	//----------------------- 用户 -----------------------
 	
 	/**

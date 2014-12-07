@@ -3,10 +3,8 @@ package cn.bmwm.modules.shop.controller.app;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
@@ -78,13 +78,11 @@ public class IndexController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> index(String city) {
+	public Result index(String city) {
 		
 		if(city == null || city.trim().equals("")) {
 			throw new BusinessException(" Parameter 'city' can not be empty ! ");
 		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
 		
 		Member member = memberService.getAppCurrent();
 		
@@ -187,10 +185,8 @@ public class IndexController extends AppBaseController {
 		if(shops.size() > 0) itemCategoryList.addAll(shops);
 		
 		if(products.size() > 0) itemCategoryList.addAll(products);
-		
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", itemCategoryList);
+
+		Result result = new Result(Constants.SUCCESS, 1, "", itemCategoryList);
 		result.put("categories", categories);
 		
 		return result;

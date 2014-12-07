@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.common.utils.HttpClientUtils;
 import cn.bmwm.modules.shop.entity.SmsAccessToken;
 import cn.bmwm.modules.shop.service.RSAService;
@@ -50,6 +51,11 @@ public class CommonController {
 	
 	@Resource(name = "rsaServiceImpl")
 	private RSAService rsaService;
+	
+	/**
+	 * 处理完成
+	 */
+	public static final int SUCCESS = 1;
 	
 	/**
 	 * 手机号码为空
@@ -97,14 +103,10 @@ public class CommonController {
 	 */
 	@RequestMapping(value = "/send_code", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> sendValidationCode(HttpServletRequest request, HttpSession session, String enphone) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Result sendValidationCode(HttpServletRequest request, HttpSession session, String enphone) {
 		
 		if(StringUtils.isBlank(enphone)) {
-			result.put("flag", SMS_PHONE_EMPTY);
-			result.put("message", "手机号码为空！");
-			return result;
+			return new Result(SMS_PHONE_EMPTY, 1, "手机号码为空！");
 		}
 		
 		String phone = "";
@@ -113,15 +115,11 @@ public class CommonController {
 			phone = rsaService.decrypt(enphone);
 		}catch(Exception e) {
 			log.error("解码异常！enphone=" + enphone, e);
-			result.put("flag", SMS_INVALID_REQUEST);
-			result.put("message", "非法的请求！");
-			return result;
+			return new Result(SMS_INVALID_REQUEST, 1, "非法的请求！");
 		}
 		
 		if(StringUtils.isBlank(phone)) {
-			result.put("flag", SMS_PHONE_EMPTY);
-			result.put("message", "手机号码为空！");
-			return result;
+			return new Result(SMS_PHONE_EMPTY, 1, "手机号码为空！");
 		}
 		
 		String key = phone + "_" + getFormatDate();
@@ -129,9 +127,7 @@ public class CommonController {
 		Integer times = history.get(key);
 		
 		if(times != null && times >= threshold) {
-			result.put("flag", SMS_SEND_TIMES);
-			result.put("message", "今日发送短信次数超过上限！");
-			return result;
+			return new Result(SMS_SEND_TIMES, 1, "今日发送短信次数超过上限！");
 		}
 		
 		if(token == null) {
@@ -143,9 +139,7 @@ public class CommonController {
 		}
 		
 		if(token == null) {
-			result.put("flag", SMS_TOKEN_INVALID);
-			result.put("message", "Token失效！");
-			return result;
+			return new Result(SMS_TOKEN_INVALID, 1, "Token失效！");
 		}
 		
 		if(token.getExpireDate().before(new Date())) {
@@ -157,9 +151,7 @@ public class CommonController {
 		}
 		
 		if(token == null) {
-			result.put("flag", SMS_TOKEN_INVALID);
-			result.put("message", "Token失效！");
-			return result;
+			return new Result(SMS_TOKEN_INVALID, 1, "Token失效！");
 		}
 		
 		String code = getValidationCode();
@@ -186,33 +178,24 @@ public class CommonController {
 			log.error("解析JSON异常！text=" + text, e);
 			history.put(key, times == null ? 1 : times + 1);
 			session.setAttribute(Constants.VALIDATION_CODE, code);
-			result.put("version", 1);
-			result.put("flag", 1);
-			return result;
+			return new Result(SUCCESS, 1);
 		}
 		
 		if(object == null) {
-			result.put("flag", SMS_SEND_ERROR);
-			result.put("message", "发送短信失败！");
-			return result;
+			return new Result(SMS_SEND_ERROR, 1, "发送短信失败！");
 		}
 		
 		Integer res_code = object.getInteger("res_code");
 		
 		if(res_code == null || res_code != 0) {
-			result.put("flag", SMS_SEND_ERROR);
-			result.put("message", "发送短信失败！");
-			return result;
+			return new Result(SMS_SEND_ERROR, 1, "发送短信失败！");
 		}
 		
 		history.put(key, times == null ? 1 : times + 1);
 		
 		session.setAttribute(Constants.VALIDATION_CODE, code);
 		
-		result.put("version", 1);
-		result.put("flag", 1);
-		
-		return result;
+		return new Result(SUCCESS, 1);
 		
 	}
 	

@@ -5,15 +5,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.bmwm.common.utils.Message;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.entity.Cart;
-import cn.bmwm.modules.shop.entity.Order;
 import cn.bmwm.modules.shop.entity.PaymentMethod;
 import cn.bmwm.modules.shop.entity.Receiver;
 import cn.bmwm.modules.shop.entity.ShippingMethod;
@@ -31,6 +29,36 @@ import cn.bmwm.modules.shop.service.ShippingMethodService;
 @Controller
 @RequestMapping(value = "/app/order")
 public class OrderController {
+	
+	/**
+	 * 处理完成
+	 */
+	public static final int SUCCESS = 1;
+	
+	/**
+	 * 购物车为空
+	 */
+	public static final int ORDER_CART_EMPTY = 101;
+	
+	/**
+	 * 库存不足
+	 */
+	public static final int ORDER_LOW_STOCK = 102;
+	
+	/**
+	 * 收货地址错误
+	 */
+	public static final int ORDER_RECEIVE_ADDRESS_ERROR = 103;
+	
+	/**
+	 * 支付方式错误
+	 */
+	public static final int ORDER_PAYMENT_METHOD_ERROR = 104;
+	
+	/**
+	 * 送货方式错误
+	 */
+	public static final int ORDER_SHIPING_METHOD_ERROR = 105;
 	
 	@Resource(name = "cartServiceImpl")
 	private CartService cartService;
@@ -53,39 +81,41 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> create(Long receiverId, Long paymentMethodId, Long shippingMethodId, String memo) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("version", 1);
+	public Result create(Long receiverId, Long paymentMethodId, Long shippingMethodId, String memo) {
 		
 		Cart cart = cartService.getCurrent();
 		
 		if (cart == null || cart.isEmpty()) {
-			return Message.warn("shop.order.cartNotEmpty");
+			return new Result(ORDER_CART_EMPTY, 1, "购物车为空！");
 		}
-		if (!StringUtils.equals(cart.getToken(), cartToken)) {
-			return Message.warn("shop.order.cartHasChanged");
-		}
+		
 		if (cart.getIsLowStock()) {
-			return Message.warn("shop.order.cartLowStock");
+			return new Result(ORDER_LOW_STOCK, 1, "库存不足！");
 		}
+		
 		Receiver receiver = receiverService.find(receiverId);
 		if (receiver == null) {
-			return Message.error("shop.order.receiverNotExsit");
+			return new Result(ORDER_RECEIVE_ADDRESS_ERROR, 1, "收货地址不存在！");
 		}
+		
 		PaymentMethod paymentMethod = paymentMethodService.find(paymentMethodId);
 		if (paymentMethod == null) {
-			return Message.error("shop.order.paymentMethodNotExsit");
+			return new Result(ORDER_PAYMENT_METHOD_ERROR, 1, "付款方式不存在！");
 		}
+		
 		ShippingMethod shippingMethod = shippingMethodService.find(shippingMethodId);
 		if (shippingMethod == null) {
-			return Message.error("shop.order.shippingMethodNotExsit");
+			return new Result(ORDER_SHIPING_METHOD_ERROR, 1, "送货方式不存在！");
 		}
+		
 		if (!paymentMethod.getShippingMethods().contains(shippingMethod)) {
-			return Message.error("shop.order.deliveryUnsupported");
+			return new Result(ORDER_SHIPING_METHOD_ERROR, 1, "付款方式不支持该送货方式！");
 		}
-		Order order = orderService.create(cart, receiver, paymentMethod, shippingMethod, couponCode, isInvoice, invoiceTitle, useBalance, memo, null);
-		return Message.success(order.getSn());
+		
+		//Order order = orderService.create(cart, receiver, paymentMethod, shippingMethod, couponCode, isInvoice, invoiceTitle, useBalance, memo, null);
+		
+		return new Result(SUCCESS, 1);
+		
 	}
 	
 }

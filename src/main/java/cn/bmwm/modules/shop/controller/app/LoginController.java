@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.entity.Member;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.RSAService;
@@ -54,43 +55,30 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/app/user/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> login(HttpServletRequest request, HttpSession session, String phone, String enpassword) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("version", 1);
-		
+	public Result login(HttpServletRequest request, HttpSession session, String phone, String enpassword) {
+
 		if(StringUtils.isBlank(phone)) {
-			result.put("flag", Constants.USER_USERNAME_BLANK);
-			return result;
+			return new Result(Constants.USER_USERNAME_BLANK, 1, "手机号码为空！");
 		}
 		
 		if(StringUtils.isBlank(enpassword)) {
-			result.put("message", "密码为空！");
-			result.put("flag", Constants.USER_PASSWORD_BLANK);
-			return result;
+			return new Result(Constants.USER_PASSWORD_BLANK, 1, "密码为空！");
 		}
 		
 		String password = rsaService.decrypt(enpassword);
 		
 		if(StringUtils.isBlank(password)) {
-			result.put("message", "密码为空！");
-			result.put("flag", Constants.USER_PASSWORD_BLANK);
-			return result;
+			return new Result(Constants.USER_PASSWORD_BLANK, 1, "密码为空！");
 		}
 		
 		Member member = memberService.findByUsername(phone);
 		
 		if (member == null) {
-			result.put("message", "手机号码未注册！");
-			result.put("flag", Constants.USER_USER_NOT_EXISTS);
-			return result;
+			return new Result(Constants.USER_USER_NOT_EXISTS, 1, "手机号码未注册！");
 		}
 		
 		if (!member.getIsEnabled()) {
-			result.put("message", "手机号码已禁用！");
-			result.put("flag", Constants.USER_USER_DISABLED);
-			return result;
+			return new Result(Constants.USER_USER_DISABLED, 1, "手机号码已禁用！");
 		}
 		
 		Setting setting = SettingUtils.get();
@@ -101,9 +89,7 @@ public class LoginController {
 				
 				int loginFailureLockTime = setting.getAccountLockTime();
 				if (loginFailureLockTime == 0) {
-					result.put("message", "手机号码已锁定！");
-					result.put("flag", Constants.USER_USER_LOCKED);
-					return result;
+					return new Result(Constants.USER_USER_LOCKED, 1, "手机号码已锁定！");
 				}
 				
 				Date lockedDate = member.getLockedDate();
@@ -115,9 +101,7 @@ public class LoginController {
 					member.setLockedDate(null);
 					memberService.update(member);
 				} else {
-					result.put("message", "手机号码已锁定！");
-					result.put("flag", Constants.USER_USER_LOCKED);
-					return result;
+					return new Result(Constants.USER_USER_LOCKED, 1, "手机号码已锁定！");
 				}
 				
 			} else {
@@ -140,10 +124,7 @@ public class LoginController {
 			member.setLoginFailureCount(loginFailureCount);
 			memberService.update(member);
 			
-			result.put("message", "密码错误！");
-			result.put("flag", Constants.USER_PASSWORD_ERROR);
-			
-			return result;
+			return new Result(Constants.USER_PASSWORD_ERROR, 1, "密码错误！");
 			
 		}
 		
@@ -166,9 +147,9 @@ public class LoginController {
 			session.setAttribute(entry.getKey(), entry.getValue());
 		}
 
+		Result result = new Result(Constants.SUCCESS, 1);
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put("username", member.getUsername());
-		result.put("flag", 1);
 		
 		return result;
 		

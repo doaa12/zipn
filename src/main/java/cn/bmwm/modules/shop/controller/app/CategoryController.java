@@ -4,10 +4,8 @@
 package cn.bmwm.modules.shop.controller.app;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.controller.app.vo.AdvertiseCategory;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
@@ -61,7 +61,7 @@ public class CategoryController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city) {
+	public Result list(Long catId, String city) {
 		
 		if(city == null || city.trim().equals("")) {
 			throw new BusinessException(" Parameter 'city' can not be empty ! ");
@@ -72,8 +72,6 @@ public class CategoryController extends AppBaseController {
 		if(category == null) {
 			throw new BusinessException(" Invalid Parameter 'catId' ! ");
 		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
 		
 		List<ProductCategory> children = category.getChildren();
 		
@@ -117,11 +115,7 @@ public class CategoryController extends AppBaseController {
 		
 		if(products.size() > 0) itemCategoryList.addAll(products);
 		
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", itemCategoryList);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", itemCategoryList);
 
 	}
 	

@@ -1,8 +1,6 @@
 package cn.bmwm.modules.shop.controller.app;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.controller.app.vo.ItemShop;
 import cn.bmwm.modules.shop.entity.Product;
@@ -44,7 +44,7 @@ public class SearchController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> search(String city, String keyword, Integer order, Integer page, Integer size, Double x, Double y) {
+	public Result search(String city, String keyword, Integer order, Integer page, Integer size, Double x, Double y) {
 		
 		if(city == null || city.trim().equals("")) {
 			throw new BusinessException(" Parameter 'city' can not be empty ! ");
@@ -67,23 +67,16 @@ public class SearchController extends AppBaseController {
 		}else if(order == 3) {
 			orderType = OrderType.priceAsc;
 		}
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("flag", 1);
-		result.put("version", 1);
-		
+
 		if(order == 4) {
 			List<Shop> shops = searchService.search(city, keyword, page, size);
 			List<ItemShop> itemList = getShopItems(shops, x, y);
-			result.put("data", itemList);
+			return new Result(Constants.SUCCESS, 1, "", itemList);
 		}else {
 			List<Product> products = searchService.search(city, keyword, orderType, page, size);
 			List<ItemProduct> itemList = getProductItems(products);
-			result.put("data", itemList);
+			return new Result(Constants.SUCCESS, 1, "", itemList);
 		}
-		
-		return result;
 		
 	}
 	

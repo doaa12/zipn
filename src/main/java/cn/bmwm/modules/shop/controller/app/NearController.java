@@ -1,8 +1,6 @@
 package cn.bmwm.modules.shop.controller.app;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -43,7 +43,7 @@ public class NearController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(String city, Integer catId, Integer order, Integer page, Integer size, Double x, Double y) {
+	public Result list(String city, Integer catId, Integer order, Integer page, Integer size, Double x, Double y) {
 		
 		if(city == null || city.trim().equals("")) {
 			throw new BusinessException(" Parameter 'city' can not be empty ! ");
@@ -69,11 +69,8 @@ public class NearController extends AppBaseController {
 		}
 		
 		ItemPage<Shop> itemPage = shopService.findList(city, catId, page, size, order, decimalx, decimaly);
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getShopItems(itemPage.getList(), x, y));
+
+		Result result = new Result(Constants.SUCCESS, 1, "", getShopItems(itemPage.getList(), x, y));
 		result.put("categories", productCategoryService.findRoots());
 		
 		return result;

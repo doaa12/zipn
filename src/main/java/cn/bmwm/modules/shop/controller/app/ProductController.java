@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.common.persistence.Order;
 import cn.bmwm.common.utils.DateUtils;
 import cn.bmwm.modules.shop.controller.app.vo.Evaluate;
@@ -26,9 +28,9 @@ import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
 import cn.bmwm.modules.shop.entity.ProductFavorite;
 import cn.bmwm.modules.shop.entity.ProductImage;
+import cn.bmwm.modules.shop.entity.ProductReview;
 import cn.bmwm.modules.shop.entity.ProductSpecification;
 import cn.bmwm.modules.shop.entity.Promotion;
-import cn.bmwm.modules.shop.entity.ProductReview;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.MemberService;
 import cn.bmwm.modules.shop.service.ProductCategoryService;
@@ -68,7 +70,7 @@ public class ProductController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> index(Long id) {
+	public Result index(Long id) {
 		
 		if(id == null) {
 			throw new BusinessException(" Parameter 'id' can not be null ! ");
@@ -182,13 +184,7 @@ public class ProductController extends AppBaseController {
 		
 		detail.setSpecifications(specificationList);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", detail);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", detail);
 		
 	}
 	
@@ -201,7 +197,7 @@ public class ProductController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city) {
+	public Result list(Long catId, String city) {
 		
 		if(catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null ! ");
@@ -219,13 +215,7 @@ public class ProductController extends AppBaseController {
 		
 		List<Product> productList = productService.findRecommendList(city, category);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getProductItems(productList));
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", getProductItems(productList));
 		
 	}
 	
@@ -236,11 +226,7 @@ public class ProductController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/collect", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> collect(Long pid) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("version", 1);
+	public Result collect(Long pid) {
 		
 		if(pid == null) {
 			throw new BusinessException(" Parameter 'pid' can not be null ! ");
@@ -259,9 +245,7 @@ public class ProductController extends AppBaseController {
 		
 		productFavoriteService.save(favorite);
 		
-		result.put("flag", 1);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1);
 		
 	}
 	
@@ -272,11 +256,7 @@ public class ProductController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/cancal_collect", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> cancalCollect(Long pid) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("version", 1);
+	public Result cancalCollect(Long pid) {
 		
 		if(pid == null) {
 			throw new BusinessException(" Parameter 'pid' can not be null ! ");
@@ -295,9 +275,7 @@ public class ProductController extends AppBaseController {
 			productFavoriteService.delete(favorite);
 		}
 		
-		result.put("flag", 1);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1);
 		
 	}
 	
@@ -307,19 +285,13 @@ public class ProductController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/collect_list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> collectList() {
+	public Result collectList() {
 		
 		Member member = memberService.getAppCurrent();
 		
 		List<Product> productList = productFavoriteService.findFavoriteProductList(member);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getProductItems(productList));
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", getProductItems(productList));
 		
 	}
 	

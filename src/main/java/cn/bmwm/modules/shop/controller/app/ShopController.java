@@ -4,9 +4,7 @@
 package cn.bmwm.modules.shop.controller.app;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.bmwm.common.Constants;
+import cn.bmwm.common.Result;
 import cn.bmwm.modules.shop.controller.app.vo.Item;
 import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemPage;
@@ -78,7 +78,7 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> index(Long id) {
+	public Result index(Long id) {
 		
 		if(id == null) {
 			throw new BusinessException(" Parameter 'id' can not be null ! ");
@@ -90,10 +90,7 @@ public class ShopController extends AppBaseController {
 			throw new BusinessException(" Invalid parameter 'id' ! ");
 		}
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getShopDetail(shop));
+		Result result = new Result(Constants.SUCCESS, 1, "", getShopDetail(shop));
 		result.put("categories", shopCategoryService.findAllShopCategories(shop));
 		
 		return result;
@@ -108,7 +105,7 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> list(Long catId, String city) {
+	public Result list(Long catId, String city) {
 		
 		if(catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null ! ");
@@ -126,12 +123,7 @@ public class ShopController extends AppBaseController {
 		
 		List<Shop> shopList = shopService.findRecommendList(city, category);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getShopItems(shopList, null, null));
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", getShopItems(shopList, null, null));
 		
 	}
 	
@@ -149,7 +141,7 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/productlist", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> productList(Long shopId, Integer type, Long catId, Integer page, Integer size, Integer order, Double x, Double y) {
+	public Result productList(Long shopId, Integer type, Long catId, Integer page, Integer size, Integer order, Double x, Double y) {
 		
 		if(type == 3 && catId == null) {
 			throw new BusinessException(" Parameter 'catId' can not be null !");
@@ -182,12 +174,7 @@ public class ShopController extends AppBaseController {
 		
 		ItemPage<Product> itemPage = productService.findShopProductList(shop, type, category, page, size, order, x, y);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getProductItems(itemPage.getList()));
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", getProductItems(itemPage.getList()));
 		
 	}
 	
@@ -197,11 +184,7 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/collect", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> collect(Long shopId) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("version", 1);
+	public Result collect(Long shopId) {
 		
 		if(shopId == null) {
 			throw new BusinessException(" Parameter 'shopId' can not be null !");
@@ -220,9 +203,7 @@ public class ShopController extends AppBaseController {
 		
 		shopFavoriteService.collectShop(favorite, shop);
 		
-		result.put("flag", 1);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1);
 		
 	}
 	
@@ -232,11 +213,7 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/cancal_collect", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> cancalCollect(Long shopId) {
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
-		result.put("version", 1);
+	public Result cancalCollect(Long shopId) {
 		
 		if(shopId == null) {
 			throw new BusinessException(" Parameter 'shopId' can not be null !");
@@ -255,9 +232,7 @@ public class ShopController extends AppBaseController {
 			shopFavoriteService.delete(favorite);
 		}
 		
-		result.put("flag", 1);
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1);
 		
 	}
 	
@@ -267,18 +242,13 @@ public class ShopController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/collect_list", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> collectList() {
+	public Result collectList() {
 		
 		Member member = memberService.getAppCurrent();
 		
 		List<Shop> shopList = shopFavoriteService.findFavoriteShopList(member);
 		
-		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("flag", 1);
-		result.put("version", 1);
-		result.put("data", getShopItems(shopList, null, null));
-		
-		return result;
+		return new Result(Constants.SUCCESS, 1, "", getShopItems(shopList, null, null));
 		
 	}
 	
@@ -320,7 +290,6 @@ public class ShopController extends AppBaseController {
 		ShopReview shopReview = shopReviewService.findLatestReview(shop);
 		detail.setEvaluate(shopReview == null ? "" : shopReview.getContent());
 		
-		//TODO:添加店铺活动
 		List<ShopActivity> shopActivities = shop.getShopActivities();
 		List<cn.bmwm.modules.shop.controller.app.vo.ShopActivity> activityList = new ArrayList<cn.bmwm.modules.shop.controller.app.vo.ShopActivity>();
 		
