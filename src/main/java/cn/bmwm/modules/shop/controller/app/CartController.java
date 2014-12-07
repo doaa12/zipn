@@ -13,11 +13,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,22 +64,23 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(HttpServletRequest request) {
-		
-		String sid = request.getParameter("id");
-		String squantity = request.getParameter("quantity");
+	public Map<String,Object> add(Long id, Integer quantity) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(squantity)) {
+		if(id == null) {
+			result.put("message", "商品不存在！");
+			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
+			return result;
+		}
+		
+		if(quantity == null) {
 			result.put("message", "商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
-		
-		int quantity = Integer.parseInt(squantity);
 		
 		if(quantity < 1) {
 			result.put("message", "商品数量错误！");
@@ -89,13 +88,6 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 		
-		if(StringUtils.isBlank(sid)) {
-			result.put("message", "商品不存在！");
-			result.put("flag", Constants.CART_PRODUCT_NOT_EXISTS);
-			return result;
-		}
-		
-		long id = Long.parseLong(sid);
 		Product product = productService.find(id);
 		
 		if (product == null) {
@@ -171,13 +163,6 @@ public class CartController extends AppBaseController {
 			
 		}
 		
-		/*
-		if (member == null) {
-			WebUtils.addCookie(request, response, Cart.ID_COOKIE_NAME, cart.getId().toString(), Cart.TIMEOUT);
-			WebUtils.addCookie(request, response, Cart.KEY_COOKIE_NAME, cart.getKey(), Cart.TIMEOUT);
-		}
-		*/
-		
 		result.put("flag", 1);
 		
 		return result;
@@ -216,36 +201,29 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> update(HttpServletRequest request) {
-		
-		String sid = request.getParameter("cartItemId");
-		String squantity = request.getParameter("quantity");
+	public Map<String, Object> update(Long cartItemId, Integer quantity) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(squantity)) {
+		if(cartItemId == null) {
+			result.put("message", "购物车商品不存在！");
+			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
+			return result;
+		}
+		
+		if(quantity == null) {
 			result.put("message", "购物车商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
-		
-		int quantity = Integer.parseInt(squantity);
 		
 		if(quantity < 1) {
 			result.put("message", "购物车商品数量错误！");
 			result.put("flag", Constants.CART_QUANTITY_ERROR);
 			return result;
 		}
-		
-		if(StringUtils.isBlank(sid)) {
-			result.put("message", "购物车商品不存在！");
-			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
-			return result;
-		}
-		
-		long id = Long.parseLong(sid);
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -255,7 +233,7 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 		
-		CartItem cartItem = cartItemService.find(id);
+		CartItem cartItem = cartItemService.find(cartItemId);
 		Set<CartItem> cartItems = cart.getCartItems();
 		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
@@ -290,20 +268,16 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> delete(HttpServletRequest request) {
-		
-		String sid = request.getParameter("cartItemId");
+	public Map<String, Object> delete(Long cartItemId) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("version", 1);
 		
-		if(StringUtils.isBlank(sid)) {
+		if(cartItemId == null) {
 			result.put("message", "购物车中不存在该商品！");
 			result.put("flag", Constants.CART_CART_ITEM_NOT_EXISTS);
 			return result;
 		}
-		
-		long id = Long.parseLong(sid);
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -313,7 +287,7 @@ public class CartController extends AppBaseController {
 			return result;
 		}
 		
-		CartItem cartItem = cartItemService.find(id);
+		CartItem cartItem = cartItemService.find(cartItemId);
 		Set<CartItem> cartItems = cart.getCartItems();
 		
 		if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
