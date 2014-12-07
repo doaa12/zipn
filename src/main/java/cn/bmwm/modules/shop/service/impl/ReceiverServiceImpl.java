@@ -8,9 +8,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
@@ -36,12 +34,10 @@ public class ReceiverServiceImpl extends BaseServiceImpl<Receiver, Long> impleme
 		super.setBaseDao(receiverDao);
 	}
 
-	@Transactional(readOnly = true)
 	public Receiver findDefault(Member member) {
 		return receiverDao.findDefault(member);
 	}
 
-	@Transactional(readOnly = true)
 	public Page<Receiver> findPage(Member member, Pageable pageable) {
 		return receiverDao.findPage(member, pageable);
 	}
@@ -55,6 +51,15 @@ public class ReceiverServiceImpl extends BaseServiceImpl<Receiver, Long> impleme
 	 */
 	public List<Receiver> findList(Member member, int offset, int size) {
 		return receiverDao.findList(member, offset, size);
+	}
+	
+	/**
+	 * 查询收货地址数量
+	 * @param member
+	 * @return
+	 */
+	public long count(Member member) {
+		return receiverDao.count(member);
 	}
 
 }

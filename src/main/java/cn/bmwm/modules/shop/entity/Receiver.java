@@ -135,7 +135,6 @@ public class Receiver extends BaseEntity {
 	@JsonProperty
 	@NotEmpty
 	@Length(max = 200)
-	@Column(nullable = false)
 	public String getZipCode() {
 		return zipCode;
 	}

@@ -55,7 +55,7 @@ public class RegisterController {
 		}
 		
 		if (memberService.usernameDisabled(phone)) {
-			return new Result(Constants.FAILED, 1, "手机号码已禁用！");
+			return new Result(2, 1, "手机号码已禁用！");
 		}else if(memberService.usernameExists(phone)){
 			return new Result(3, 1, "手机号码已注册！");
 		}

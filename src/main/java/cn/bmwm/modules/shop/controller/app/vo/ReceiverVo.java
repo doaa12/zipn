@@ -1,5 +1,7 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 收货地址VO
  * @author zby
@@ -30,7 +32,7 @@ public class ReceiverVo {
 	/**
 	 * 邮编
 	 */
-	private String zipCode;
+	private String zipCode = "";
 
 	/**
 	 * 电话
@@ -79,7 +81,9 @@ public class ReceiverVo {
 	}
 
 	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
+		if(StringUtils.isNotBlank(zipCode)) {
+			this.zipCode = zipCode;
+		}
 	}
 
 	public String getPhone() {

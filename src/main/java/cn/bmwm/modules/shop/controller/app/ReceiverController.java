@@ -76,6 +76,11 @@ public class ReceiverController extends BaseController {
 	 * 非法的操作
 	 */
 	public static final int RECEIVE_INVALID_REQUEST = 108;
+	
+	/**
+	 * 收货人为空
+	 */
+	public static final int RECEIVE_CONSIGNEE_EMPTY = 109;
 
 	/**
 	 * 每页记录数
@@ -93,26 +98,6 @@ public class ReceiverController extends BaseController {
 
 	
 	/**
-	 * 列表
-	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	@ResponseBody
-	public Result list(Integer page) {
-		
-		Member member = memberService.getAppCurrent();
-		int offset = 0;
-		
-		if(page != null) {
-			offset = (page - 1) * PAGE_SIZE;
-		}
-		
-		List<Receiver> list = receiverService.findList(member, offset, PAGE_SIZE);
-		
-		return new Result(Constants.SUCCESS, 1, "", getReceiverList(list));
-		
-	}
-
-	/**
 	 * 保存
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -125,6 +110,10 @@ public class ReceiverController extends BaseController {
 		
 		if(StringUtils.isBlank(receiver.getPhone())) {
 			return new Result(RECEIVE_PHONE_EMPTY, 1, "手机号码为空！");
+		}
+		
+		if(StringUtils.isBlank(receiver.getConsignee())) {
+			return new Result(RECEIVE_CONSIGNEE_EMPTY, 1, "收货人为空！");
 		}
 		
 		if(areaId == null) {
@@ -140,8 +129,14 @@ public class ReceiverController extends BaseController {
 		receiver.setArea(area);
 		
 		Member member = memberService.getAppCurrent();
-		if (Receiver.MAX_RECEIVER_COUNT != null && member.getReceivers().size() >= Receiver.MAX_RECEIVER_COUNT) {
+		long count = receiverService.count(member);
+		
+		if (Receiver.MAX_RECEIVER_COUNT != null && count >= Receiver.MAX_RECEIVER_COUNT) {
 			return new Result(RECEIVE_MAX_NUMBER, 1, "收货地址数量已达到上限！");
+		}
+		
+		if(receiver.getIsDefault() == null) {
+			receiver.setIsDefault(false);
 		}
 		
 		receiver.setMember(member);
@@ -164,6 +159,10 @@ public class ReceiverController extends BaseController {
 		
 		if(StringUtils.isBlank(receiver.getPhone())) {
 			return new Result(RECEIVE_PHONE_EMPTY, 1, "手机号码为空！");
+		}
+		
+		if(StringUtils.isBlank(receiver.getConsignee())) {
+			return new Result(RECEIVE_CONSIGNEE_EMPTY, 1, "收货人为空！");
 		}
 		
 		if(areaId == null) {
@@ -190,11 +189,15 @@ public class ReceiverController extends BaseController {
 		
 		Member member = memberService.getAppCurrent();
 		
-		if (!member.equals(receiver.getMember())) {
+		if (!member.equals(preceiver.getMember())) {
 			return new Result(RECEIVE_INVALID_REQUEST, 1, "非法的操作！");
 		}
 		
-		receiverService.update(receiver, "member");
+		if(receiver.getIsDefault() == null) {
+			receiverService.update(receiver, "member", "isDefault");
+		}else {
+			receiverService.update(receiver, "member");
+		}
 		
 		return new Result(Constants.SUCCESS, 1);
 		
@@ -230,20 +233,47 @@ public class ReceiverController extends BaseController {
 	}
 	
 	/**
+	 * 列表
+	 */
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public Result list(Integer page) {
+		
+		Member member = memberService.getAppCurrent();
+		int offset = 0;
+		
+		if(page != null) {
+			if(page < 1) page = 1;
+			offset = (page - 1) * PAGE_SIZE;
+		}
+		
+		List<Receiver> list = receiverService.findList(member, offset, PAGE_SIZE);
+		
+		return new Result(Constants.SUCCESS, 1, "", getReceiverList(list));
+		
+	}
+	
+	/**
 	 * 转换数据类型
 	 * @param receiveList
 	 * @return
 	 */
 	private List<ReceiverVo> getReceiverList(List<Receiver> receiveList) {
+		
 		List<ReceiverVo> list = new ArrayList<ReceiverVo>();
+		
 		if(receiveList == null || receiveList.size() == 0) {
 			return list;
 		}
+		
 		for(Receiver receiver : receiveList) {
 			ReceiverVo vo = new ReceiverVo();
 			BeanUtils.copyProperties(receiver, vo);
+			list.add(vo);
 		}
+		
 		return list;
+		
 	}
 
 }

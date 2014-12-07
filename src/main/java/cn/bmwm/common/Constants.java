@@ -28,7 +28,8 @@ public class Constants {
 	/**
 	 * 处理失败
 	 */
-	public static final int FAILED = 2;
+	public static final int FAILED = 0;
+	
 	
 	//----------------------- 用户 -----------------------
 	

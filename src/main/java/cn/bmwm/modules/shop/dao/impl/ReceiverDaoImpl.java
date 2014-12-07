@@ -69,6 +69,16 @@ public class ReceiverDaoImpl extends BaseDaoImpl<Receiver, Long> implements Rece
 		String jpql = "select receiver from Receiver receiver where receiver.member = :member";
 		return entityManager.createQuery(jpql, Receiver.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setFirstResult(offset).setMaxResults(size).getResultList();
 	}
+	
+	/**
+	 * 查询收货地址数量
+	 * @param member
+	 * @return
+	 */
+	public long count(Member member) {
+		String jpql = "select count(*) from Receiver receiver where receiver.member = :member";
+		return entityManager.createQuery(jpql, Long.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).getSingleResult();
+	}
 
 	/**
 	 * 保存并处理默认
@@ -104,5 +114,5 @@ public class ReceiverDaoImpl extends BaseDaoImpl<Receiver, Long> implements Rece
 		}
 		return super.merge(receiver);
 	}
-
+	
 }

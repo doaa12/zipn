@@ -47,5 +47,12 @@ public interface ReceiverDao extends BaseDao<Receiver, Long> {
 	 * @return
 	 */
 	List<Receiver> findList(Member member, int offset, int size);
+	
+	/**
+	 * 查询收货地址数量
+	 * @param member
+	 * @return
+	 */
+	long count(Member member);
 
 }
