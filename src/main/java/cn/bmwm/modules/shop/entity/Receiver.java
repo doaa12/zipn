@@ -35,7 +35,7 @@ public class Receiver extends BaseEntity {
 
 	/** 收货地址最大保存数 */
 	public static final Integer MAX_RECEIVER_COUNT = 8;
-
+	
 	/** 收货人 */
 	private String consignee;
 

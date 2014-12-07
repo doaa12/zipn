@@ -4,6 +4,8 @@
  * */
 package cn.bmwm.modules.shop.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 
@@ -42,6 +44,17 @@ public class ReceiverServiceImpl extends BaseServiceImpl<Receiver, Long> impleme
 	@Transactional(readOnly = true)
 	public Page<Receiver> findPage(Member member, Pageable pageable) {
 		return receiverDao.findPage(member, pageable);
+	}
+	
+	/**
+	 * 查询收货地址
+	 * @param member
+	 * @param offset
+	 * @param size
+	 * @return
+	 */
+	public List<Receiver> findList(Member member, int offset, int size) {
+		return receiverDao.findList(member, offset, size);
 	}
 
 }

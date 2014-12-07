@@ -4,12 +4,13 @@
  * */
 package cn.bmwm.modules.shop.dao.impl;
 
+import java.util.List;
+
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
 
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -55,6 +56,18 @@ public class ReceiverDaoImpl extends BaseDaoImpl<Receiver, Long> implements Rece
 			criteriaQuery.where(criteriaBuilder.equal(root.get("member"), member));
 		}
 		return super.findPage(criteriaQuery, pageable);
+	}
+	
+	/**
+	 * 查询收货地址
+	 * @param member
+	 * @param offset
+	 * @param size
+	 * @return
+	 */
+	public List<Receiver> findList(Member member, int offset, int size) {
+		String jpql = "select receiver from Receiver receiver where receiver.member = :member";
+		return entityManager.createQuery(jpql, Receiver.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setFirstResult(offset).setMaxResults(size).getResultList();
 	}
 
 	/**
