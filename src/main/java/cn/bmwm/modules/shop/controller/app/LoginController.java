@@ -54,12 +54,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/app/user/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> login(HttpServletRequest request) {
-		
-		String phone = request.getParameter("phone");
-		String enpassword = request.getParameter("enpassword");
-		
-		HttpSession session = request.getSession();
+	public Map<String,Object> login(HttpServletRequest request, HttpSession session, String phone, String enpassword) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -157,17 +152,6 @@ public class LoginController {
 		member.setLoginFailureCount(0);
 		memberService.update(member);
 		
-		/*
-		Cart cart = cartService.getCurrent();
-		if (cart != null) {
-			if (cart.getMember() == null) {
-				cartService.merge(member, cart);
-				WebUtils.removeCookie(request, response, Cart.ID_COOKIE_NAME);
-				WebUtils.removeCookie(request, response, Cart.KEY_COOKIE_NAME);
-			}
-		}
-		*/
-		
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		Enumeration<?> keys = session.getAttributeNames();
 		while (keys.hasMoreElements()) {
@@ -182,9 +166,6 @@ public class LoginController {
 			session.setAttribute(entry.getKey(), entry.getValue());
 		}
 
-		//session.setAttribute(Member.PRINCIPAL_ATTRIBUTE_NAME, new Principal(member.getId(), phone));
-		//WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, member.getUsername());
-		
 		result.put(Constants.USER_LOGIN_MARK, DigestUtils.md5Hex(member.getId().toString() + DigestUtils.md5Hex(password)) + "@" + member.getId().toString());
 		result.put("username", member.getUsername());
 		result.put("flag", 1);
