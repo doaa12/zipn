@@ -25,5 +25,12 @@ public interface AreaDao extends BaseDao<Area, Long> {
 	 * @return 顶级地区
 	 */
 	List<Area> findRoots(Integer count);
+	
+	/**
+	 * 查询下一级区域
+	 * @param parent
+	 * @return
+	 */
+	List<Area> findChildren(Area parent);
 
 }

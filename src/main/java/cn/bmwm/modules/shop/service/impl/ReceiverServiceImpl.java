@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
@@ -60,6 +61,15 @@ public class ReceiverServiceImpl extends BaseServiceImpl<Receiver, Long> impleme
 	 */
 	public long count(Member member) {
 		return receiverDao.count(member);
+	}
+	
+	@Transactional
+	public void saveReceiver(Receiver receiver) {
+		if(receiver.getIsDefault() != null && receiver.getIsDefault() == true) {
+			
+		}else{
+			receiverDao.persist(receiver);
+		}
 	}
 
 }

@@ -66,6 +66,7 @@ public class ReceiverDaoImpl extends BaseDaoImpl<Receiver, Long> implements Rece
 	 * @return
 	 */
 	public List<Receiver> findList(Member member, int offset, int size) {
+		Assert.notNull(member);
 		String jpql = "select receiver from Receiver receiver where receiver.member = :member";
 		return entityManager.createQuery(jpql, Receiver.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).setFirstResult(offset).setMaxResults(size).getResultList();
 	}
@@ -76,6 +77,7 @@ public class ReceiverDaoImpl extends BaseDaoImpl<Receiver, Long> implements Rece
 	 * @return
 	 */
 	public long count(Member member) {
+		Assert.notNull(member);
 		String jpql = "select count(*) from Receiver receiver where receiver.member = :member";
 		return entityManager.createQuery(jpql, Long.class).setFlushMode(FlushModeType.COMMIT).setParameter("member", member).getSingleResult();
 	}

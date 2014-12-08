@@ -4,6 +4,7 @@
 package cn.bmwm.modules.shop.controller.app;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.bmwm.common.Constants;
 import cn.bmwm.common.Result;
 import cn.bmwm.common.utils.HttpClientUtils;
+import cn.bmwm.modules.shop.controller.app.vo.AreaVo;
+import cn.bmwm.modules.shop.entity.Area;
 import cn.bmwm.modules.shop.entity.SmsAccessToken;
+import cn.bmwm.modules.shop.service.AreaService;
 import cn.bmwm.modules.shop.service.RSAService;
 import cn.bmwm.modules.shop.service.SmsAccessTokenService;
 import cn.bmwm.modules.sys.model.Setting;
@@ -51,6 +55,9 @@ public class CommonController {
 	
 	@Resource(name = "rsaServiceImpl")
 	private RSAService rsaService;
+	
+	@Resource(name = "areaServiceImpl")
+	private AreaService areaService;
 	
 	/**
 	 * 处理完成
@@ -249,6 +256,29 @@ public class CommonController {
 	}
 	
 	/**
+	 * 获取下级行政区域
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/children", method = RequestMethod.GET)
+	@ResponseBody
+	public Result children(Long id) {
+		
+		List<Area> list = null;
+		
+		if(id == null) {
+			list = areaService.findRoots();
+		}else{
+			list = areaService.findChildren(areaService.find(id));
+		}
+		
+		List<AreaVo> areaList = this.getAreaList(list);
+		
+		return new Result(Constants.SUCCESS, 1, "", areaList);
+		
+	}
+	
+	/**
 	 * 从数据库查询Access Token
 	 * @return
 	 */
@@ -292,6 +322,28 @@ public class CommonController {
 	public String getFormatDate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(new Date());
+	}
+	
+	/**
+	 * 转换数据结构
+	 * @param list
+	 * @return
+	 */
+	public List<AreaVo> getAreaList(List<Area> list) {
+		
+		List<AreaVo> areaList = new ArrayList<AreaVo>();
+		
+		if(list == null || list.size() == 0) return areaList;
+		
+		for(Area area : list) {
+			AreaVo vo = new AreaVo();
+			vo.setId(area.getId());
+			vo.setName(area.getName());
+			areaList.add(vo);
+		}
+		
+		return areaList;
+		
 	}
 	
 	public static void main(String[] args) {

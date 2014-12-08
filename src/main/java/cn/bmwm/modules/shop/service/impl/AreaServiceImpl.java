@@ -34,14 +34,21 @@ public class AreaServiceImpl extends BaseServiceImpl<Area, Long> implements Area
 		super.setBaseDao(areaDao);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Area> findRoots() {
 		return areaDao.findRoots(null);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Area> findRoots(Integer count) {
 		return areaDao.findRoots(count);
+	}
+	
+	/**
+	 * 查询下一级区域
+	 * @param parent
+	 * @return
+	 */
+	public List<Area> findChildren(Area parent) {
+		return areaDao.findChildren(parent);
 	}
 	
 	@Override
