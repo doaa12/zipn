@@ -260,7 +260,7 @@ public class CommonController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/children", method = RequestMethod.GET)
+	@RequestMapping(value = "/area", method = RequestMethod.GET)
 	@ResponseBody
 	public Result children(Long id) {
 		

@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +33,13 @@ public class AreaServiceImpl extends BaseServiceImpl<Area, Long> implements Area
 	public void setBaseDao(AreaDao areaDao) {
 		super.setBaseDao(areaDao);
 	}
-
+	
+	@Cacheable(value = "area", key = "'findRoots'")
 	public List<Area> findRoots() {
 		return areaDao.findRoots(null);
 	}
-
+	
+	@Cacheable(value = "area", key = "'count' + #count + 'findRoots'")
 	public List<Area> findRoots(Integer count) {
 		return areaDao.findRoots(count);
 	}
@@ -47,6 +49,7 @@ public class AreaServiceImpl extends BaseServiceImpl<Area, Long> implements Area
 	 * @param parent
 	 * @return
 	 */
+	@Cacheable(value = "area", key = "'parent' + #parent + 'findChildren'")
 	public List<Area> findChildren(Area parent) {
 		return areaDao.findChildren(parent);
 	}
