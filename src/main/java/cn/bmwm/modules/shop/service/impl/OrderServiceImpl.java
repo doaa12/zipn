@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.persistence.LockModeType;
@@ -22,10 +23,8 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.CartDao;
-import cn.bmwm.modules.shop.dao.CouponCodeDao;
 import cn.bmwm.modules.shop.dao.DepositDao;
 import cn.bmwm.modules.shop.dao.MemberDao;
-import cn.bmwm.modules.shop.dao.MemberRankDao;
 import cn.bmwm.modules.shop.dao.OrderDao;
 import cn.bmwm.modules.shop.dao.OrderItemDao;
 import cn.bmwm.modules.shop.dao.OrderLogDao;
@@ -83,14 +82,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 	private OrderLogDao orderLogDao;
 	@Resource(name = "cartDaoImpl")
 	private CartDao cartDao;
-	@Resource(name = "couponCodeDaoImpl")
-	private CouponCodeDao couponCodeDao;
 	@Resource(name = "snDaoImpl")
 	private SnDao snDao;
 	@Resource(name = "memberDaoImpl")
 	private MemberDao memberDao;
-	@Resource(name = "memberRankDaoImpl")
-	private MemberRankDao memberRankDao;
 	@Resource(name = "productDaoImpl")
 	private ProductDao productDao;
 	@Resource(name = "depositDaoImpl")
@@ -160,7 +155,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		orderDao.releaseStock();
 	}
 
-	@Transactional(readOnly = true)
 	public Order build(Cart cart, Receiver receiver, PaymentMethod paymentMethod, ShippingMethod shippingMethod, CouponCode couponCode, boolean isInvoice, String invoiceTitle, boolean useBalance, String memo) {
 		Assert.notNull(cart);
 		Assert.notNull(cart.getMember());
@@ -306,6 +300,112 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
 		return order;
 	}
+	
+	public Order build(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo) {
+		
+		Order order = new Order();
+		order.setShippingStatus(ShippingStatus.unshipped);
+		order.setFee(new BigDecimal(0));
+		//order.setPromotionDiscount(cart.getDiscount());
+		//order.setCouponDiscount(new BigDecimal(0));
+		order.setOffsetAmount(new BigDecimal(0));
+		//order.setPoint(cart.getEffectivePoint());
+		order.setMemo(memo);
+		order.setMember(cart.getMember());
+
+		if (receiver != null) {
+			order.setConsignee(receiver.getConsignee());
+			order.setAreaName(receiver.getAreaName());
+			order.setAddress(receiver.getAddress());
+			order.setZipCode(receiver.getZipCode());
+			order.setPhone(receiver.getPhone());
+			order.setArea(receiver.getArea());
+		}
+
+		if (!cart.getPromotions().isEmpty()) {
+			StringBuffer promotionName = new StringBuffer();
+			for (Promotion promotion : cart.getPromotions()) {
+				if (promotion != null && promotion.getName() != null) {
+					promotionName.append(" " + promotion.getName());
+				}
+			}
+			if (promotionName.length() > 0) {
+				promotionName.deleteCharAt(0);
+			}
+			order.setPromotion(promotionName.toString());
+		}
+
+		if (shippingMethod != null) {
+			
+			int weight = 0;
+			boolean free = false;
+			
+			for(CartItem item : cart.getCartItems()) {
+				if(free) break;
+				Set<Promotion> promotions = item.getProduct().getValidPromotions();
+				if(promotions != null && promotions.size() > 0) {
+					for(Promotion promotion : promotions) {
+						//店铺促销免运费，整个包裹都不计算运费
+						if(promotion.getType() == 2 && promotion.getIsFreeShipping()) {
+							free = true;
+							break;
+						//单个商品促销免运费，只这一件商品不计算运费
+						}else if(promotion.getType() == 1 && promotion.getIsFreeShipping()) {
+							break;
+						}else {
+							weight += item.getProduct().getWeight();
+						}
+					}
+				}
+				
+			}
+			
+			if(free) {
+				order.setFreight(BigDecimal.valueOf(0));
+			}else {
+				BigDecimal freight = shippingMethod.calculateFreight(weight);
+				order.setFreight(freight);
+			}
+			
+			order.setShippingMethod(shippingMethod);
+			
+		} else {
+			order.setFreight(new BigDecimal(0));
+		}
+
+		List<OrderItem> orderItems = order.getOrderItems();
+		for (CartItem cartItem : cart.getCartItems()) {
+			if (cartItem != null && cartItem.getProduct() != null) {
+				Product product = cartItem.getProduct();
+				OrderItem orderItem = new OrderItem();
+				orderItem.setSn(product.getSn());
+				orderItem.setName(product.getName());
+				orderItem.setFullName(product.getFullName());
+				orderItem.setPrice(cartItem.getUnitPrice());
+				orderItem.setWeight(product.getWeight());
+				orderItem.setThumbnail(product.getThumbnail());
+				orderItem.setIsGift(false);
+				orderItem.setQuantity(cartItem.getQuantity());
+				orderItem.setShippedQuantity(0);
+				orderItem.setReturnQuantity(0);
+				orderItem.setProduct(product);
+				orderItem.setOrder(order);
+				orderItems.add(orderItem);
+			}
+		}
+		
+		order.setOrderItems(orderItems);
+		
+		order.setAmountPaid(new BigDecimal(0));
+
+		order.setOrderStatus(OrderStatus.unconfirmed);
+		order.setPaymentStatus(PaymentStatus.unpaid);
+
+		order.setExpire(DateUtils.addMinutes(new Date(), 24 * 60));
+
+		return order;
+		
+	}
 
 	public Order create(Cart cart, Receiver receiver, PaymentMethod paymentMethod, ShippingMethod shippingMethod, CouponCode couponCode, boolean isInvoice, String invoiceTitle, boolean useBalance, String memo, Admin operator) {
 		Assert.notNull(cart);
@@ -387,6 +487,66 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
 		cartDao.remove(cart);
 		return order;
+	}
+	
+	public Order create(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo) {
+		
+		Order order = build(cart, receiver, shippingMethod, memo);
+
+		order.setSn(snDao.generate(Sn.Type.order));
+		
+		order.setLockExpire(DateUtils.addSeconds(new Date(), 20));
+		//order.setOperator(operator);
+		
+		/*
+		if (order.getCouponCode() != null) {
+			couponCode.setIsUsed(true);
+			couponCode.setUsedDate(new Date());
+			couponCodeDao.merge(couponCode);
+		}
+		*/
+		/*
+		for (Promotion promotion : cart.getPromotions()) {
+			for (Coupon coupon : promotion.getCoupons()) {
+				order.getCoupons().add(coupon);
+			}
+		}
+		*/
+
+		Setting setting = SettingUtils.get();
+		if (setting.getStockAllocationTime() == StockAllocationTime.order) {
+			order.setIsAllocatedStock(true);
+		} else {
+			order.setIsAllocatedStock(false);
+		}
+
+		orderDao.persist(order);
+
+		OrderLog orderLog = new OrderLog();
+		orderLog.setType(Type.create);
+		orderLog.setOperator(null);
+		orderLog.setOrder(order);
+		orderLogDao.persist(orderLog);
+
+		if (setting.getStockAllocationTime() == StockAllocationTime.order) {
+			for (OrderItem orderItem : order.getOrderItems()) {
+				if (orderItem != null) {
+					Product product = orderItem.getProduct();
+					productDao.lock(product, LockModeType.PESSIMISTIC_WRITE);
+					if (product != null && product.getStock() != null) {
+						product.setAllocatedStock(product.getAllocatedStock() + (orderItem.getQuantity() - orderItem.getShippedQuantity()));
+						productDao.merge(product);
+						orderDao.flush();
+						//staticService.build(product);
+					}
+				}
+			}
+		}
+
+		cartDao.remove(cart);
+		
+		return order;
+		
 	}
 
 	public void update(Order order, Admin operator) {

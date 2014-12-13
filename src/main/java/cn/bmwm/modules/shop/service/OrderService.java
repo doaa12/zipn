@@ -199,7 +199,17 @@ public interface OrderService extends BaseService<Order, Long> {
 	 * @return 订单
 	 */
 	Order create(Cart cart, Receiver receiver, PaymentMethod paymentMethod, ShippingMethod shippingMethod, CouponCode couponCode, boolean isInvoice, String invoiceTitle, boolean useBalance, String memo, Admin operator);
-
+	
+	/**
+	 * 创建订单
+	 * @param items
+	 * @param receiver
+	 * @param shippingMethod
+	 * @param memo
+	 * @return
+	 */
+	Order create(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo);
+	
 	/**
 	 * 更新订单
 	 * 

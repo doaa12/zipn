@@ -435,6 +435,11 @@ public class Setting implements Serializable {
 	 */
 	private String sendSmsTemplateId;
 	
+	/**
+	 * 积分计算百分比
+	 */
+	private double pointPercent;
+	
 
 	/**
 	 * 获取网站名称
@@ -2216,6 +2221,14 @@ public class Setting implements Serializable {
 
 	public void setSendSmsTemplateId(String sendSmsTemplateId) {
 		this.sendSmsTemplateId = sendSmsTemplateId;
+	}
+
+	public double getPointPercent() {
+		return pointPercent;
+	}
+
+	public void setPointPercent(String pointPercent) {
+		this.pointPercent = Double.parseDouble(pointPercent);
 	}
 
 	/**

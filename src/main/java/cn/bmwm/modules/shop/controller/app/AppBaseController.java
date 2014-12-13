@@ -1,7 +1,9 @@
 package cn.bmwm.modules.shop.controller.app;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -13,8 +15,10 @@ import cn.bmwm.modules.shop.controller.app.vo.ItemCategory;
 import cn.bmwm.modules.shop.controller.app.vo.ItemProduct;
 import cn.bmwm.modules.shop.controller.app.vo.ItemShop;
 import cn.bmwm.modules.shop.entity.AppAdvertise;
+import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.ProductCategory;
+import cn.bmwm.modules.shop.entity.Promotion;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.LBSService;
 
@@ -218,6 +222,28 @@ public class AppBaseController extends BaseController {
 		category.setDataList(itemList);
 		
 		return category;
+		
+	}
+	
+	/**
+	 * 计算价格
+	 * @param product
+	 * @return
+	 */
+	public BigDecimal caculatePrice(CartItem item) {
+		
+		Product product = item.getProduct();
+		BigDecimal currentPrice = product.getPrice();
+		
+		Set<Promotion> productPromotions = product.getValidPromotions();
+		
+		if(productPromotions != null && productPromotions.size() > 0) {
+			for(Promotion promotion : productPromotions) {
+				currentPrice = promotion.calculatePrice(item.getQuantity(), currentPrice);
+			}
+		}
+		
+		return currentPrice;
 		
 	}
 	

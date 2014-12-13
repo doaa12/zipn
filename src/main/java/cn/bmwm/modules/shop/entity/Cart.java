@@ -107,6 +107,19 @@ public class Cart extends BaseEntity {
 	public Set<CartItem> getCartItems() {
 		return cartItems;
 	}
+	
+	/**
+	 * 获取选中的购物车项
+	 * @return
+	 */
+	@Transient
+	public Set<CartItem> getSelectedCartItems() {
+		Set<CartItem> items = new HashSet<CartItem>();
+		for(CartItem item : cartItems) {
+			if(item.getIsSelected()) items.add(item);
+		}
+		return items;
+	}
 
 	/**
 	 * 设置购物车项
@@ -480,8 +493,8 @@ public class Cart extends BaseEntity {
 	 */
 	@Transient
 	public boolean getIsLowStock() {
-		if (getCartItems() != null) {
-			for (CartItem cartItem : getCartItems()) {
+		if (getSelectedCartItems() != null) {
+			for (CartItem cartItem : getSelectedCartItems()) {
 				if (cartItem != null && cartItem.getIsLowStock()) {
 					return true;
 				}

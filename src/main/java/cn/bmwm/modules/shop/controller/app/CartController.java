@@ -342,28 +342,6 @@ public class CartController extends AppBaseController {
 	}
 	
 	/**
-	 * 计算价格
-	 * @param product
-	 * @return
-	 */
-	public BigDecimal caculatePrice(CartItem item) {
-		
-		Product product = item.getProduct();
-		BigDecimal currentPrice = product.getPrice();
-		
-		Set<Promotion> productPromotions = product.getValidPromotions();
-		
-		if(productPromotions != null && productPromotions.size() > 0) {
-			for(Promotion promotion : productPromotions) {
-				currentPrice = promotion.calculatePrice(item.getQuantity(), currentPrice);
-			}
-		}
-		
-		return currentPrice;
-		
-	}
-	
-	/**
 	 * 获取店铺活动
 	 * @param item
 	 * @return

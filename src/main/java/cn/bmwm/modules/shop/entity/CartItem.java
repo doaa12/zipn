@@ -43,6 +43,11 @@ public class CartItem extends BaseEntity {
 	
 	/** 购物车 */
 	private Cart cart;
+	
+	/**
+	 * 是否选中
+	 */
+	private Boolean isSelected;
 
 	/**
 	 * 获取数量
@@ -105,7 +110,7 @@ public class CartItem extends BaseEntity {
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
-
+	
 	/**
 	 * 获取赠送积分
 	 * 
@@ -121,6 +126,14 @@ public class CartItem extends BaseEntity {
 		}
 	}
 	*/
+
+	public Boolean getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(Boolean isSelected) {
+		this.isSelected = isSelected;
+	}
 
 	/**
 	 * 获取商品重量
@@ -163,6 +176,7 @@ public class CartItem extends BaseEntity {
 		} else {
 			return new BigDecimal(0);
 		}
+		
 	}
 	
 	/*
