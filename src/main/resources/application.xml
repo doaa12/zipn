@@ -82,13 +82,13 @@
 	<setting name="lbsAk" value="GM7ryBPN4LjNKRq5xNGTxBXC"/>
 	<setting name="lbsURL" value="http://api.map.baidu.com/geocoder/v2/?address={address}&amp;output=json&amp;ak={ak}"/>
 	<setting name="keepLoginDays" value="30"/>
+	<setting name="pointPercent" value="0.1"/>
 	<setting name="sendSmsUrl" value="http://api.189.cn/v2/emp/templateSms/sendSms"/>
 	<setting name="sendSmsAppId" value="175870130000037424"/>
 	<setting name="sendSmsAppSecret" value="fd75058de1fe7d53432dcf7b42f3a211"/>
 	<setting name="sendSmsTemplateId" value="91003145"/>
 	<setting name="rsaPublicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQAB"/>
 	<setting name="rsaPrivateKey" value="MIICXgIBAAKBgQC9fSJ1l962Qdq7rMqCx2Wr7CxMe2H07nOogxt379kyAUZeESWudbSIXnMQU22nRJGHwitkETPeTkpswY1jGk9TBECbBmyzTJRbKSq08rDEI3yxXd6RqtniK47I24y80Gnx8ptYUeAdypNdcLJ/vKTCLQnoA07TfMeZl7XqnAaJ9QIDAQABAoGBAJU5ZZjL2AUaCYLAyd6B3wysehplFDiKTKUJUul6Bka+AEd2I4GnilvWXbEesn0Gn8EU5YzxizJn326UYp8ICizN85EI/jiKDk+gyt6BttDgX3Xf3v0nu15JmjTSD5Fo0m6hphuLEq7/fNDetQ1UgBeKi8jo6aLu9ySn1WTRTwWhAkEA+MbXeZSaVptzxW/B83h9c56/Pscg6FlQ9WsS0w0+7/FKluvAkQU2we5NwK6zJzRC38rlBMHconkNcU3pkUHtbQJBAML9mwhZ9l388Wng4NRyUnx/ZgT6FL1mioKq7vhFdc9FKjACAVmLE/FCKI4pd3MLHu/mGmXiJ/r6qu2WTdyk4akCQQCufkoE7UaUGNVLVugjbhAQWPirf+CFGKDAgyng/xl2EzjOQu3+yjluLUg8Lk1a4j1F23pnq9Kl42KaZpu9VxDBAkEAoccTp5wsQdKo4TWIk/q94Tk6BYsPRg0bgkobtrS6h9tUozwmroorY5GGYFybFEH3ywZYhItcrGjpA/Iea6AI8QJAbNRVCO2ImdT/fngoFKK40PLZSooFu0njRYcNUWGr7GkUxeS7gC3GNYWcZG+f8zbXaXsjyD0pSNeaHFDRmJCcTA=="/>
-	<setting name="pointPercent" value="0.1"/>
 	<logConfig operation="系统设置" urlPattern="/admin/setting/update.jhtml"/>  
 	<logConfig operation="添加管理员" urlPattern="/admin/admin/save.jhtml"/>  
 	<logConfig operation="编辑管理员" urlPattern="/admin/admin/update.jhtml"/>  

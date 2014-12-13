@@ -131,4 +131,9 @@ public class Constants {
 	 */
 	public static final int CART_CART_ITEM_NOT_EXISTS = 129;
 	
+	/**
+	 * 购物车商品是否选择为空
+	 */
+	public static final int CART_ITEM_ISSELECTED_EMPTY = 130;
+	
 }

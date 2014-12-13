@@ -6,6 +6,7 @@ package cn.bmwm.modules.shop.dao.impl;
 
 
 import javax.persistence.FlushModeType;
+import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +30,11 @@ public class ShippingMethodDaoImpl extends BaseDaoImpl<ShippingMethod, Long> imp
 	 */
 	public ShippingMethod findByShop(Shop shop) {
 		String jpql = "select shippingMethod from ShippingMethod shippingMethod where shippingMethod.shop = :shop ";
-		return entityManager.createQuery(jpql, ShippingMethod.class).setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).getSingleResult();
+		try{
+			return entityManager.createQuery(jpql, ShippingMethod.class).setFlushMode(FlushModeType.COMMIT).setParameter("shop", shop).getSingleResult();
+		}catch(NoResultException e) {
+			return null;
+		}
 	}
 	
 }

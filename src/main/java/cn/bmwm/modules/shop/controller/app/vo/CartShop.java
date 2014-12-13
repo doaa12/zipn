@@ -31,7 +31,7 @@ public class CartShop {
 	/**
 	 * 商品
 	 */
-	private List<CartProduct> productList;
+	private List<CartItemVo> productList;
 
 	/**
 	 * @return the shopName
@@ -78,14 +78,14 @@ public class CartShop {
 	/**
 	 * @return the productList
 	 */
-	public List<CartProduct> getProductList() {
+	public List<CartItemVo> getProductList() {
 		return productList;
 	}
 
 	/**
 	 * @param productList the productList to set
 	 */
-	public void setProductList(List<CartProduct> productList) {
+	public void setProductList(List<CartItemVo> productList) {
 		this.productList = productList;
 	}
 	

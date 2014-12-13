@@ -438,7 +438,7 @@ public class Setting implements Serializable {
 	/**
 	 * 积分计算百分比
 	 */
-	private double pointPercent;
+	private Double pointPercent;
 	
 
 	/**
@@ -2223,12 +2223,12 @@ public class Setting implements Serializable {
 		this.sendSmsTemplateId = sendSmsTemplateId;
 	}
 
-	public double getPointPercent() {
+	public Double getPointPercent() {
 		return pointPercent;
 	}
 
-	public void setPointPercent(String pointPercent) {
-		this.pointPercent = Double.parseDouble(pointPercent);
+	public void setPointPercent(Double pointPercent) {
+		this.pointPercent = pointPercent;
 	}
 
 	/**

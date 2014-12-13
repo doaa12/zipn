@@ -1092,6 +1092,7 @@ public class Order extends BaseEntity {
 		this.returns = returns;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY)
 	public Shop getShop() {
 		return shop;
 	}

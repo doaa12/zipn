@@ -12,7 +12,7 @@ import java.util.List;
  * @author zhoupuyue
  * @date 2014-10-21
  */
-public class CartProduct {
+public class CartItemVo {
 	
 	/**
 	 * 商品ID
@@ -48,6 +48,11 @@ public class CartProduct {
 	 * 商品数量
 	 */
 	private int quantity;
+	
+	/**
+	 * 该商品是否被选中
+	 */
+	private Boolean isSelected;
 	
 	/**
 	 * 商品规格
@@ -145,6 +150,14 @@ public class CartProduct {
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public Boolean getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(Boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 
 	/**

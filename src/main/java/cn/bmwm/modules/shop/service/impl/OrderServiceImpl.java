@@ -419,6 +419,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		}
 		
 		order.setAmountPaid(new BigDecimal(0));
+		order.setShop(shop);
 
 		order.setOrderStatus(OrderStatus.unconfirmed);
 		order.setPaymentStatus(PaymentStatus.unpaid);

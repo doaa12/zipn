@@ -48,7 +48,7 @@ public class PrepareOrderVo {
 	/**
 	 * 购物车信息
 	 */
-	private List<CartProduct> cartItemList;
+	private List<CartItemVo> cartItemList;
 
 	
 
@@ -108,11 +108,11 @@ public class PrepareOrderVo {
 		this.receiverPhone = receiverPhone;
 	}
 
-	public List<CartProduct> getCartItemList() {
+	public List<CartItemVo> getCartItemList() {
 		return cartItemList;
 	}
 
-	public void setCartItemList(List<CartProduct> cartItemList) {
+	public void setCartItemList(List<CartItemVo> cartItemList) {
 		this.cartItemList = cartItemList;
 	}
 	

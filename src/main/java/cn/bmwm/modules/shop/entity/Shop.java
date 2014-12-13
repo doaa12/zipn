@@ -140,6 +140,11 @@ public class Shop extends BaseEntity {
 	private List<ShopActivity> shopActivities = new ArrayList<ShopActivity>();
 	
 	/**
+	 * 店铺订单
+	 */
+	private Set<Order> orders = new HashSet<Order>();
+	
+	/**
 	 * 店铺所在商品分类
 	 */
 	private ProductCategory productCategory;
@@ -525,6 +530,19 @@ public class Shop extends BaseEntity {
 
 	public void setShopActivities(List<ShopActivity> shopActivities) {
 		this.shopActivities = shopActivities;
+	}
+	
+	/**
+	 * 获取店铺订单
+	 * @return
+	 */
+	@OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 
 	public String getLogo() {

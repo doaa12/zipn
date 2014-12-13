@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
 import cn.bmwm.common.Result;
-import cn.bmwm.modules.shop.controller.app.vo.CartProduct;
+import cn.bmwm.modules.shop.controller.app.vo.CartItemVo;
 import cn.bmwm.modules.shop.controller.app.vo.PrepareOrderVo;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
@@ -90,7 +90,7 @@ public class OrderController extends AppBaseController {
 	@ResponseBody
 	public Result prepare(HttpSession session) {
 		
-		List<CartProduct> cartProductList = new ArrayList<CartProduct>();
+		List<CartItemVo> cartItemList = new ArrayList<CartItemVo>();
 		
 		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
 		
@@ -127,20 +127,21 @@ public class OrderController extends AppBaseController {
 				shop = pshop;
 			}else {
 				if(!shop.equals(pshop)) {
-					return new Result(ORDER_MULTIPLE_SHOP, 1, "订单中包含多个店铺的商品！");
+					return new Result(ORDER_MULTIPLE_SHOP, 1, "购物车中包含多个店铺的商品！");
 				}
 			}
 			
-			CartProduct cp = new CartProduct();
-			cp.setId(product.getId());
-			cp.setName(product.getName());
-			cp.setPrice(product.getPrice());
-			cp.setDiscountPrice(item.getSubtotal());
-			cp.setQuantity(item.getQuantity());
-			cp.setCartItemId(item.getId());
-			cp.setImageUrl(product.getImage());
+			CartItemVo cartItem = new CartItemVo();
+			cartItem.setId(product.getId());
+			cartItem.setName(product.getName());
+			cartItem.setPrice(product.getPrice());
+			cartItem.setDiscountPrice(item.getSubtotal());
+			cartItem.setQuantity(item.getQuantity());
+			cartItem.setCartItemId(item.getId());
+			cartItem.setIsSelected(item.getIsSelected());
+			cartItem.setImageUrl(product.getImage());
 			
-			cartProductList.add(cp);
+			cartItemList.add(cartItem);
 			
 		}
 		
@@ -158,7 +159,7 @@ public class OrderController extends AppBaseController {
 		prepareOrderVo.setTotalPrice(order.getTotalAmount());
 		prepareOrderVo.setFreight(order.getFreight());
 		prepareOrderVo.setPoints((int)(setting.getPointPercent() * cart.getPrice().doubleValue()));
-		prepareOrderVo.setCartItemList(cartProductList);
+		prepareOrderVo.setCartItemList(cartItemList);
 		
 		return new Result(Constants.SUCCESS, 1, "", prepareOrderVo);
 		

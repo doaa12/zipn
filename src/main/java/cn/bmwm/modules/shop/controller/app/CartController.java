@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.bmwm.common.Constants;
 import cn.bmwm.common.Result;
-import cn.bmwm.modules.shop.controller.app.vo.CartProduct;
+import cn.bmwm.modules.shop.controller.app.vo.CartItemVo;
 import cn.bmwm.modules.shop.controller.app.vo.CartShop;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
@@ -134,6 +134,7 @@ public class CartController extends AppBaseController {
 			
 			CartItem cartItem = new CartItem();
 			cartItem.setQuantity(quantity);
+			cartItem.setIsSelected(true);
 			cartItem.setProduct(product);
 			cartItem.setCart(cart);
 			cartItemService.save(cartItem);
@@ -171,7 +172,7 @@ public class CartController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public Result update(Long cartItemId, Integer quantity) {
+	public Result update(Long cartItemId, Integer quantity, Boolean isSelected) {
 		
 		if(cartItemId == null) {
 			return new Result(Constants.CART_CART_ITEM_NOT_EXISTS, 1, "购物车商品不存在！");
@@ -183,6 +184,10 @@ public class CartController extends AppBaseController {
 		
 		if(quantity < 1) {
 			return new Result(Constants.CART_QUANTITY_ERROR, 1, "购物车商品数量错误！");
+		}
+		
+		if(isSelected == null) {
+			return new Result(Constants.CART_ITEM_ISSELECTED_EMPTY, 1, "参数'isSelected'为空！");
 		}
 		
 		Cart cart = cartService.getAppCurrent();
@@ -209,6 +214,7 @@ public class CartController extends AppBaseController {
 		}
 		
 		cartItem.setQuantity(quantity);
+		cartItem.setIsSelected(isSelected);
 		cartItemService.update(cartItem);
 		
 		return list();
@@ -281,14 +287,15 @@ public class CartController extends AppBaseController {
 			Product product = item.getProduct();
 			Shop shop = product.getShop();
 			
-			CartProduct cproduct = new CartProduct();
-			cproduct.setId(product.getId());
-			cproduct.setName(product.getName());
-			cproduct.setPrice(product.getPrice());
-			cproduct.setDiscountPrice(caculatePrice(item));
-			cproduct.setQuantity(item.getQuantity());
-			cproduct.setCartItemId(item.getId());
-			cproduct.setImageUrl(product.getImage());
+			CartItemVo cartItem = new CartItemVo();
+			cartItem.setId(product.getId());
+			cartItem.setName(product.getName());
+			cartItem.setPrice(product.getPrice());
+			cartItem.setDiscountPrice(item.getSubtotal());
+			cartItem.setQuantity(item.getQuantity());
+			cartItem.setIsSelected(item.getIsSelected());
+			cartItem.setCartItemId(item.getId());
+			cartItem.setImageUrl(product.getImage());
 			
 			//商品规格
 			List<ProductSpecification> productSpecifications = product.getProductSpecificationList();
@@ -298,7 +305,7 @@ public class CartController extends AppBaseController {
 				for(ProductSpecification specification : productSpecifications) {
 					specificationList.add(specification.getSpecification().getName() + " : " + specification.getSpecificationValue().getName());
 				}
-				cproduct.setSpecificationList(specificationList);
+				cartItem.setSpecificationList(specificationList);
 			}
 			
 			if(shopMap.get(shop.getId()) == null) {
@@ -308,15 +315,15 @@ public class CartController extends AppBaseController {
 				
 				cshop.setShopActivity(getShopActivity(item));
 				
-				List<CartProduct> productList = new ArrayList<CartProduct>();
-				productList.add(cproduct);
+				List<CartItemVo> productList = new ArrayList<CartItemVo>();
+				productList.add(cartItem);
 				cshop.setProductList(productList);
 				
 				shopMap.put(shop.getId(), cshop);
 				
 			}else {
 				CartShop cshop = shopMap.get(shop.getId());
-				cshop.getProductList().add(cproduct);
+				cshop.getProductList().add(cartItem);
 			}
 			
 		}
@@ -326,10 +333,10 @@ public class CartController extends AppBaseController {
 		//按商铺计算总价
 		for(CartShop shop : list) {
 			
-			List<CartProduct> productList = shop.getProductList();
+			List<CartItemVo> productList = shop.getProductList();
 			BigDecimal totalPrice = new BigDecimal(0);
 			
-			for(CartProduct product : productList) {
+			for(CartItemVo product : productList) {
 				totalPrice = totalPrice.add(product.getDiscountPrice());
 			}
 			
