@@ -63,14 +63,14 @@ public class OrderController extends AppBaseController {
 	public static final int ORDER_RECEIVE_ADDRESS_ERROR = 103;
 	
 	/**
-	 * 订单不属于该用户
-	 */
-	public static final int ORDER_CART_OWNER_ERROR = 104;
-	
-	/**
 	 * 订单中包含多个店铺的商品
 	 */
-	public static final int ORDER_MULTIPLE_SHOP = 105;
+	public static final int ORDER_MULTIPLE_SHOP = 104;
+	
+	/**
+	 * 收货地址不属于该用户
+	 */
+	public static final int ORDER_RECEIVE_ERROR = 105;
 	
 	
 	@Resource(name = "cartServiceImpl")
@@ -109,11 +109,6 @@ public class OrderController extends AppBaseController {
 		}
 		
 		for(CartItem item : selectedCartItems) {
-			
-			if(!member.equals(item.getCart().getMember())) {
-				log.warn("购物车项不属于该用户！cartItemId = " + item + ",memberId = " + member.getId());
-				return new Result(ORDER_CART_OWNER_ERROR, 1, "订单项不属于该用户！");
-			}
 			
 			if(item.getIsLowStock()) {
 				log.warn("商品库存不足！");
@@ -158,7 +153,7 @@ public class OrderController extends AppBaseController {
 		prepareOrderVo.setReceiverUserName(receiver == null ? "" : receiver.getConsignee());
 		prepareOrderVo.setTotalPrice(order.getTotalAmount());
 		prepareOrderVo.setFreight(order.getFreight());
-		prepareOrderVo.setPoints((int)(setting.getPointPercent() * cart.getPrice().doubleValue()));
+		prepareOrderVo.setPoints((long)(setting.getPointPercent() * cart.getPrice().doubleValue()));
 		prepareOrderVo.setCartItemList(cartItemList);
 		
 		return new Result(Constants.SUCCESS, 1, "", prepareOrderVo);
@@ -174,7 +169,7 @@ public class OrderController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public Result create(Long receiverId, String memo) {
+	public Result create(HttpSession session, Long receiverId, String memo) {
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -195,6 +190,12 @@ public class OrderController extends AppBaseController {
 		Receiver receiver = receiverService.find(receiverId);
 		if (receiver == null) {
 			return new Result(ORDER_RECEIVE_ADDRESS_ERROR, 1, "收货地址不存在！");
+		}
+		
+		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
+		
+		if(!member.equals(receiver.getMember())) {
+			return new Result(ORDER_RECEIVE_ERROR, 1, "收货地址不属于该用户！");
 		}
 		
 		orderService.create(cart, receiver, memo);

@@ -23,7 +23,7 @@ public class PrepareOrderVo {
 	/**
 	 * 积分
 	 */
-	private int points;
+	private long points;
 	
 	/**
 	 * 店铺名称
@@ -68,11 +68,11 @@ public class PrepareOrderVo {
 		this.freight = freight;
 	}
 
-	public int getPoints() {
+	public long getPoints() {
 		return points;
 	}
 
-	public void setPoints(int points) {
+	public void setPoints(long points) {
 		this.points = points;
 	}
 

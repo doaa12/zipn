@@ -333,11 +333,11 @@ public class CartController extends AppBaseController {
 		//按商铺计算总价
 		for(CartShop shop : list) {
 			
-			List<CartItemVo> productList = shop.getProductList();
+			List<CartItemVo> cartItemList = shop.getProductList();
 			BigDecimal totalPrice = new BigDecimal(0);
 			
-			for(CartItemVo product : productList) {
-				totalPrice = totalPrice.add(product.getDiscountPrice());
+			for(CartItemVo item : cartItemList) {
+				totalPrice = totalPrice.add(item.getDiscountPrice());
 			}
 			
 			shop.setTotalPrice(totalPrice);

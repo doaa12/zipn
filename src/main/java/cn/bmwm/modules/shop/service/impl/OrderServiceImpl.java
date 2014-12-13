@@ -319,15 +319,20 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		
 		Order order = new Order();
 		
+		Setting setting = SettingUtils.get();
+		
 		order.setTotalAmount(cart.getPrice());
 		order.setShippingStatus(ShippingStatus.unshipped);
 		order.setFee(new BigDecimal(0));
 		order.setPromotionDiscount(new BigDecimal(0));
 		order.setCouponDiscount(new BigDecimal(0));
 		order.setOffsetAmount(new BigDecimal(0));
-		//order.setPoint(cart.getEffectivePoint());
 		order.setMemo(memo);
 		order.setMember(cart.getMember());
+		order.setIsInvoice(false);
+		order.setPoint((long)(setting.getPointPercent() * cart.getPrice().doubleValue()));
+		order.setPaymentMethodName("在线支付");
+		order.setTax(new BigDecimal(0));
 
 		if (receiver != null) {
 			order.setConsignee(receiver.getConsignee());

@@ -553,7 +553,6 @@ public class Order extends BaseEntity {
 	 */
 	@NotEmpty
 	@Length(max = 200)
-	@Column(nullable = false)
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -776,7 +775,6 @@ public class Order extends BaseEntity {
 	 * 
 	 * @return 配送方式名称
 	 */
-	@Column(nullable = false)
 	public String getShippingMethodName() {
 		return shippingMethodName;
 	}
