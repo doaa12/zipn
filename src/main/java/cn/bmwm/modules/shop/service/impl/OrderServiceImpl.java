@@ -23,6 +23,7 @@ import cn.bmwm.common.persistence.Filter;
 import cn.bmwm.common.persistence.Page;
 import cn.bmwm.common.persistence.Pageable;
 import cn.bmwm.modules.shop.dao.CartDao;
+import cn.bmwm.modules.shop.dao.CartItemDao;
 import cn.bmwm.modules.shop.dao.DepositDao;
 import cn.bmwm.modules.shop.dao.MemberDao;
 import cn.bmwm.modules.shop.dao.OrderDao;
@@ -58,8 +59,10 @@ import cn.bmwm.modules.shop.entity.ReturnsItem;
 import cn.bmwm.modules.shop.entity.Shipping;
 import cn.bmwm.modules.shop.entity.ShippingItem;
 import cn.bmwm.modules.shop.entity.ShippingMethod;
+import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.entity.Sn;
 import cn.bmwm.modules.shop.service.OrderService;
+import cn.bmwm.modules.shop.service.ShippingMethodService;
 import cn.bmwm.modules.shop.service.StaticService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.model.Setting.StockAllocationTime;
@@ -82,6 +85,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 	private OrderLogDao orderLogDao;
 	@Resource(name = "cartDaoImpl")
 	private CartDao cartDao;
+	@Resource(name = "cartItemDaoImpl")
+	private CartItemDao cartItemDao;
 	@Resource(name = "snDaoImpl")
 	private SnDao snDao;
 	@Resource(name = "memberDaoImpl")
@@ -98,6 +103,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 	private ShippingDao shippingDao;
 	@Resource(name = "returnsDaoImpl")
 	private ReturnsDao returnsDao;
+	@Resource(name = "shippingMethodServiceImpl")
+	private ShippingMethodService shippingMethodService;
 	@Resource(name = "staticServiceImpl")
 	private StaticService staticService;
 
@@ -301,13 +308,22 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		return order;
 	}
 	
-	public Order build(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo) {
+	/**
+	 * 生成订单
+	 * @param cart
+	 * @param receiver
+	 * @param memo
+	 * @return
+	 */
+	public Order build(Cart cart, Receiver receiver, String memo) {
 		
 		Order order = new Order();
+		
+		order.setTotalAmount(cart.getPrice());
 		order.setShippingStatus(ShippingStatus.unshipped);
 		order.setFee(new BigDecimal(0));
-		//order.setPromotionDiscount(cart.getDiscount());
-		//order.setCouponDiscount(new BigDecimal(0));
+		order.setPromotionDiscount(new BigDecimal(0));
+		order.setCouponDiscount(new BigDecimal(0));
 		order.setOffsetAmount(new BigDecimal(0));
 		//order.setPoint(cart.getEffectivePoint());
 		order.setMemo(memo);
@@ -334,7 +350,36 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 			}
 			order.setPromotion(promotionName.toString());
 		}
-
+		
+		Shop shop = null;
+		
+		List<OrderItem> orderItems = order.getOrderItems();
+		
+		for (CartItem cartItem : cart.getCartItems()) {
+			if (cartItem != null && cartItem.getProduct() != null) {
+				Product product = cartItem.getProduct();
+				if(shop == null) {
+					shop = product.getShop();
+				}
+				OrderItem orderItem = new OrderItem();
+				orderItem.setSn(product.getSn());
+				orderItem.setName(product.getName());
+				orderItem.setFullName(product.getFullName());
+				orderItem.setPrice(cartItem.getUnitPrice());
+				orderItem.setWeight(product.getWeight());
+				orderItem.setThumbnail(product.getThumbnail());
+				orderItem.setIsGift(false);
+				orderItem.setQuantity(cartItem.getQuantity());
+				orderItem.setShippedQuantity(0);
+				orderItem.setReturnQuantity(0);
+				orderItem.setProduct(product);
+				orderItem.setOrder(order);
+				orderItems.add(orderItem);
+			}
+		}
+		
+		ShippingMethod shippingMethod = shippingMethodService.findByShop(shop);
+		
 		if (shippingMethod != null) {
 			
 			int weight = 0;
@@ -345,7 +390,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				Set<Promotion> promotions = item.getProduct().getValidPromotions();
 				if(promotions != null && promotions.size() > 0) {
 					for(Promotion promotion : promotions) {
-						//店铺促销免运费，整个包裹都不计算运费
+						//如果店铺促销免运费，整个包裹都不计算运费
 						if(promotion.getType() == 2 && promotion.getIsFreeShipping()) {
 							free = true;
 							break;
@@ -353,7 +398,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 						}else if(promotion.getType() == 1 && promotion.getIsFreeShipping()) {
 							break;
 						}else {
-							weight += item.getProduct().getWeight();
+							weight += item.getWeight();
 						}
 					}
 				}
@@ -372,29 +417,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		} else {
 			order.setFreight(new BigDecimal(0));
 		}
-
-		List<OrderItem> orderItems = order.getOrderItems();
-		for (CartItem cartItem : cart.getCartItems()) {
-			if (cartItem != null && cartItem.getProduct() != null) {
-				Product product = cartItem.getProduct();
-				OrderItem orderItem = new OrderItem();
-				orderItem.setSn(product.getSn());
-				orderItem.setName(product.getName());
-				orderItem.setFullName(product.getFullName());
-				orderItem.setPrice(cartItem.getUnitPrice());
-				orderItem.setWeight(product.getWeight());
-				orderItem.setThumbnail(product.getThumbnail());
-				orderItem.setIsGift(false);
-				orderItem.setQuantity(cartItem.getQuantity());
-				orderItem.setShippedQuantity(0);
-				orderItem.setReturnQuantity(0);
-				orderItem.setProduct(product);
-				orderItem.setOrder(order);
-				orderItems.add(orderItem);
-			}
-		}
-		
-		order.setOrderItems(orderItems);
 		
 		order.setAmountPaid(new BigDecimal(0));
 
@@ -489,31 +511,24 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 		return order;
 	}
 	
-	public Order create(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo) {
+	/**
+	 * 创建订单
+	 * @param cart
+	 * @param receiver
+	 * @param memo
+	 * @return
+	 */
+	@Transactional
+	public Order create(Cart cart, Receiver receiver, String memo) {
 		
-		Order order = build(cart, receiver, shippingMethod, memo);
+		Order order = build(cart, receiver, memo);
 
 		order.setSn(snDao.generate(Sn.Type.order));
 		
 		order.setLockExpire(DateUtils.addSeconds(new Date(), 20));
-		//order.setOperator(operator);
-		
-		/*
-		if (order.getCouponCode() != null) {
-			couponCode.setIsUsed(true);
-			couponCode.setUsedDate(new Date());
-			couponCodeDao.merge(couponCode);
-		}
-		*/
-		/*
-		for (Promotion promotion : cart.getPromotions()) {
-			for (Coupon coupon : promotion.getCoupons()) {
-				order.getCoupons().add(coupon);
-			}
-		}
-		*/
 
 		Setting setting = SettingUtils.get();
+		
 		if (setting.getStockAllocationTime() == StockAllocationTime.order) {
 			order.setIsAllocatedStock(true);
 		} else {
@@ -542,8 +557,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				}
 			}
 		}
-
-		cartDao.remove(cart);
+		
+		for(CartItem cartItem : cart.getSelectedCartItems()) {
+			cartItemDao.remove(cartItem);
+		}
 		
 		return order;
 		

@@ -1,5 +1,6 @@
 package cn.bmwm.modules.shop.controller.app.vo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,7 +13,12 @@ public class PrepareOrderVo {
 	/**
 	 * 总价
 	 */
-	private double totalPrice;
+	private BigDecimal totalPrice;
+	
+	/**
+	 * 运费
+	 */
+	private BigDecimal freight;
 	
 	/**
 	 * 积分
@@ -44,12 +50,22 @@ public class PrepareOrderVo {
 	 */
 	private List<CartProduct> cartItemList;
 
-	public double getTotalPrice() {
+	
+
+	public BigDecimal getTotalPrice() {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(double totalPrice) {
+	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public BigDecimal getFreight() {
+		return freight;
+	}
+
+	public void setFreight(BigDecimal freight) {
+		this.freight = freight;
 	}
 
 	public int getPoints() {

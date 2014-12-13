@@ -5,6 +5,7 @@
 package cn.bmwm.modules.shop.entity;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -156,38 +157,35 @@ public class CartItem extends BaseEntity {
 	 */
 	@Transient
 	public BigDecimal getUnitPrice() {
+		
 		if (getProduct() != null && getProduct().getPrice() != null) {
+			
 			Setting setting = SettingUtils.get();
-			/*
-			if (getCart() != null && getCart().getMember() != null) {
-				//MemberRank memberRank = getCart().getMember().getMemberRank();
-				Map<MemberRank, BigDecimal> memberPrice = getProduct().getMemberPrice();
-				if (memberPrice != null && !memberPrice.isEmpty()) {
-					if (memberPrice.containsKey(memberRank)) {
-						return setting.setScale(memberPrice.get(memberRank));
-					}
-				}
-				if (memberRank.getScale() != null) {
-					return setting.setScale(getProduct().getPrice().multiply(new BigDecimal(memberRank.getScale())));
+			
+			Set<Promotion> promotions = getProduct().getValidPromotions();
+			
+			BigDecimal price = getProduct().getPrice();
+			
+			if(promotions == null || promotions.size() == 0) {
+				return setting.setScale(price);
+			}
+			
+			for(Promotion promotion : promotions) {
+				//单品促销，如果一个商品同时参与单品促销和店铺促销，按单品促销计算价格
+				if(promotion.getType() == 1) {
+					return promotion.calculatePrice(1, price);
+				}else {
+					price = promotion.calculatePrice(1, price);
 				}
 			}
-			*/
-			return setting.setScale(getProduct().getPrice());
+			
+			return setting.setScale(price);
+			
 		} else {
 			return new BigDecimal(0);
 		}
 		
 	}
-	
-	/*
-	public BigDecimal getUnitPrice() {
-		if(getProduct() != null && getProduct().getPrice() != null) {
-			getProduct()
-		}else {
-			return new BigDecimal(0);
-		}
-	}
-	*/
 	
 	/**
 	 * 获取小计

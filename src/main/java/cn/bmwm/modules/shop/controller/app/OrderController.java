@@ -1,6 +1,5 @@
 package cn.bmwm.modules.shop.controller.app;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,14 +21,13 @@ import cn.bmwm.modules.shop.controller.app.vo.PrepareOrderVo;
 import cn.bmwm.modules.shop.entity.Cart;
 import cn.bmwm.modules.shop.entity.CartItem;
 import cn.bmwm.modules.shop.entity.Member;
+import cn.bmwm.modules.shop.entity.Order;
 import cn.bmwm.modules.shop.entity.Product;
 import cn.bmwm.modules.shop.entity.Receiver;
-import cn.bmwm.modules.shop.entity.ShippingMethod;
 import cn.bmwm.modules.shop.entity.Shop;
 import cn.bmwm.modules.shop.service.CartService;
 import cn.bmwm.modules.shop.service.OrderService;
 import cn.bmwm.modules.shop.service.ReceiverService;
-import cn.bmwm.modules.shop.service.ShippingMethodService;
 import cn.bmwm.modules.sys.model.Setting;
 import cn.bmwm.modules.sys.utils.SettingUtils;
 
@@ -65,33 +63,21 @@ public class OrderController extends AppBaseController {
 	public static final int ORDER_RECEIVE_ADDRESS_ERROR = 103;
 	
 	/**
-	 * 送货方式错误
+	 * 订单不属于该用户
 	 */
-	public static final int ORDER_SHIPING_METHOD_ERROR = 104;
-	
-	/**
-	 * 购物车商品数量错误
-	 */
-	public static final int ORDER_CART_QUANTITY_ERROR = 106;
-	
-	/**
-	 * 订单项不属于该用户
-	 */
-	public static final int ORDER_CART_OWNER_ERROR = 107;
+	public static final int ORDER_CART_OWNER_ERROR = 104;
 	
 	/**
 	 * 订单中包含多个店铺的商品
 	 */
-	public static final int ORDER_MULTIPLE_SHOP = 108;
+	public static final int ORDER_MULTIPLE_SHOP = 105;
+	
 	
 	@Resource(name = "cartServiceImpl")
 	private CartService cartService;
 	
 	@Resource(name = "receiverServiceImpl")
 	private ReceiverService receiverService;
-	
-	@Resource(name = "shippingMethodServiceImpl")
-	private ShippingMethodService shippingMethodService;
 	
 	@Resource(name = "orderServiceImpl")
 	private OrderService orderService;
@@ -109,8 +95,6 @@ public class OrderController extends AppBaseController {
 		Member member = (Member)session.getAttribute(Constants.USER_LOGIN_MARK);
 		
 		Shop shop = null;
-		
-		BigDecimal totalPrice = new BigDecimal(0);
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -133,7 +117,7 @@ public class OrderController extends AppBaseController {
 			
 			if(item.getIsLowStock()) {
 				log.warn("商品库存不足！");
-				return new Result(ORDER_CART_QUANTITY_ERROR, 1, "商品库存不足！");
+				return new Result(ORDER_LOW_STOCK, 1, "商品库存不足！");
 			}
 			
 			Product product = item.getProduct();
@@ -147,15 +131,11 @@ public class OrderController extends AppBaseController {
 				}
 			}
 			
-			BigDecimal discountPrice = caculatePrice(item);
-
-			totalPrice.add(discountPrice);
-			
 			CartProduct cp = new CartProduct();
 			cp.setId(product.getId());
 			cp.setName(product.getName());
 			cp.setPrice(product.getPrice());
-			cp.setDiscountPrice(discountPrice);
+			cp.setDiscountPrice(item.getSubtotal());
 			cp.setQuantity(item.getQuantity());
 			cp.setCartItemId(item.getId());
 			cp.setImageUrl(product.getImage());
@@ -166,6 +146,8 @@ public class OrderController extends AppBaseController {
 		
 		Receiver receiver = receiverService.findDefault(member);
 		
+		Order order = orderService.build(cart, receiver, "");
+		
 		Setting setting = SettingUtils.get();
 		
 		PrepareOrderVo prepareOrderVo = new PrepareOrderVo();
@@ -173,8 +155,9 @@ public class OrderController extends AppBaseController {
 		prepareOrderVo.setReceiverAddress(receiver == null ? "" : receiver.getAddress());
 		prepareOrderVo.setReceiverPhone(receiver == null ? "" : receiver.getPhone());
 		prepareOrderVo.setReceiverUserName(receiver == null ? "" : receiver.getConsignee());
-		prepareOrderVo.setTotalPrice(totalPrice.doubleValue());
-		prepareOrderVo.setPoints((int)(setting.getPointPercent() * totalPrice.doubleValue()));
+		prepareOrderVo.setTotalPrice(order.getTotalAmount());
+		prepareOrderVo.setFreight(order.getFreight());
+		prepareOrderVo.setPoints((int)(setting.getPointPercent() * cart.getPrice().doubleValue()));
 		prepareOrderVo.setCartItemList(cartProductList);
 		
 		return new Result(Constants.SUCCESS, 1, "", prepareOrderVo);
@@ -182,7 +165,7 @@ public class OrderController extends AppBaseController {
 	}
 
 	/**
-	 * 创建
+	 * 创建订单
 	 * @param receiverId
 	 * @param shippingMethodId
 	 * @param memo
@@ -190,7 +173,7 @@ public class OrderController extends AppBaseController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public Result create(Long receiverId, Long shippingMethodId, String memo) {
+	public Result create(Long receiverId, String memo) {
 		
 		Cart cart = cartService.getAppCurrent();
 		
@@ -213,12 +196,7 @@ public class OrderController extends AppBaseController {
 			return new Result(ORDER_RECEIVE_ADDRESS_ERROR, 1, "收货地址不存在！");
 		}
 		
-		ShippingMethod shippingMethod = shippingMethodService.find(shippingMethodId);
-		if (shippingMethod == null) {
-			return new Result(ORDER_SHIPING_METHOD_ERROR, 1, "送货方式不存在！");
-		}
-		
-		orderService.create(cart, receiver, shippingMethod, memo);
+		orderService.create(cart, receiver, memo);
 		
 		return new Result(SUCCESS, 1);
 		

@@ -123,6 +123,11 @@ public class Order extends BaseEntity {
 
 	/** 配送状态 */
 	private ShippingStatus shippingStatus;
+	
+	/**
+	 * 商品总金额(不包含运费，只包含所有商品的价格)
+	 */
+	private BigDecimal totalAmount;
 
 	/** 支付手续费 */
 	private BigDecimal fee;
@@ -204,6 +209,11 @@ public class Order extends BaseEntity {
 
 	/** 会员 */
 	private Member member;
+	
+	/**
+	 * 店铺
+	 */
+	private Shop shop;
 
 	/** 优惠码 */
 	//private CouponCode couponCode;
@@ -330,6 +340,19 @@ public class Order extends BaseEntity {
 	 */
 	public void setFee(BigDecimal fee) {
 		this.fee = fee;
+	}
+	
+	/**
+	 * 商品总金额
+	 * @return
+	 */
+	@Column(nullable = false, precision = 21, scale = 6)
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 	/**
@@ -1067,6 +1090,14 @@ public class Order extends BaseEntity {
 	 */
 	public void setReturns(Set<Returns> returns) {
 		this.returns = returns;
+	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**

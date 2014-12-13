@@ -69,6 +69,11 @@ public class ShippingMethod extends OrderEntity {
 
 	/** 支付方式 */
 	private Set<PaymentMethod> paymentMethods = new HashSet<PaymentMethod>();
+	
+	/**
+	 * 所属店铺
+	 */
+	private Shop shop;
 
 	/** 订单 */
 	private Set<Order> orders = new HashSet<Order>();
@@ -283,6 +288,18 @@ public class ShippingMethod extends OrderEntity {
 	 */
 	public void setOrders(Set<Order> orders) {
 		this.orders = orders;
+	}
+	
+	/**
+	 * 店铺
+	 * @return
+	 */
+	public Shop getShop() {
+		return shop;
+	}
+
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 
 	/**

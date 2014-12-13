@@ -229,8 +229,8 @@ public class Cart extends BaseEntity {
 	@Transient
 	public BigDecimal getPrice() {
 		BigDecimal price = new BigDecimal(0);
-		if (getCartItems() != null) {
-			for (CartItem cartItem : getCartItems()) {
+		if (getSelectedCartItems() != null) {
+			for (CartItem cartItem : getSelectedCartItems()) {
 				if (cartItem != null && cartItem.getSubtotal() != null) {
 					price = price.add(cartItem.getSubtotal());
 				}

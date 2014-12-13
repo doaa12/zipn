@@ -172,7 +172,16 @@ public interface OrderService extends BaseService<Order, Long> {
 	 * @return 订单
 	 */
 	Order build(Cart cart, Receiver receiver, PaymentMethod paymentMethod, ShippingMethod shippingMethod, CouponCode couponCode, boolean isInvoice, String invoiceTitle, boolean useBalance, String memo);
-
+	
+	/**
+	 * 生成订单
+	 * @param cart
+	 * @param receiver
+	 * @param memo
+	 * @return
+	 */
+	Order build(Cart cart, Receiver receiver, String memo);
+	
 	/**
 	 * 创建订单
 	 * 
@@ -202,13 +211,12 @@ public interface OrderService extends BaseService<Order, Long> {
 	
 	/**
 	 * 创建订单
-	 * @param items
+	 * @param cart
 	 * @param receiver
-	 * @param shippingMethod
 	 * @param memo
 	 * @return
 	 */
-	Order create(Cart cart, Receiver receiver, ShippingMethod shippingMethod, String memo);
+	Order create(Cart cart, Receiver receiver, String memo);
 	
 	/**
 	 * 更新订单
