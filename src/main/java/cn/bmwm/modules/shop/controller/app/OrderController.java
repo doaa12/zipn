@@ -38,7 +38,7 @@ import cn.bmwm.modules.sys.utils.SettingUtils;
  */
 @Controller
 @RequestMapping(value = "/app/order")
-public class OrderController extends AppBaseController {
+public class OrderController {
 	
 	public static final Log log = LogFactory.getLog(OrderController.class);
 	
