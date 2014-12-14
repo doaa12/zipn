@@ -73,19 +73,14 @@ public class PreOrderController {
 	public static final int ORDER_CONTACT_PHONE_EMPTY = 105;
 	
 	/**
-	 * 预约订单，人数为空
-	 */
-	public static final int ORDER_PERSONS_EMPTY = 106;
-	
-	/**
 	 * 预约订单，预约时间为空
 	 */
-	public static final int ORDER_TIME_EMPTY = 107;
+	public static final int ORDER_TIME_EMPTY = 106;
 	
 	/**
 	 * 预约订单，预约时间格式错误
 	 */
-	public static final int ORDER_TIME_FORMAT_ERROR = 108;
+	public static final int ORDER_TIME_FORMAT_ERROR = 107;
 	
 	@Resource(name = "cartServiceImpl")
 	private CartService cartService;
@@ -184,10 +179,6 @@ public class PreOrderController {
 		
 		if(StringUtils.isBlank(contactPhone)) {
 			return new Result(ORDER_CONTACT_PHONE_EMPTY, 1, "联系电话为空！");
-		}
-		
-		if(persons == null) {
-			return new Result(ORDER_PERSONS_EMPTY, 1, "预约人数为空！");
 		}
 		
 		if(StringUtils.isBlank(time)) {

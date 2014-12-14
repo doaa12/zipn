@@ -372,7 +372,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				orderItem.setFullName(product.getFullName());
 				orderItem.setPrice(cartItem.getUnitPrice());
 				orderItem.setWeight(cartItem.getWeight());
-				orderItem.setThumbnail(product.getThumbnail());
+				orderItem.setThumbnail(product.getImage());
 				orderItem.setIsGift(false);
 				orderItem.setQuantity(cartItem.getQuantity());
 				orderItem.setShippedQuantity(0);

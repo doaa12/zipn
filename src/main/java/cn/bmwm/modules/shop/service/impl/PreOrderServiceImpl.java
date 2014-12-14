@@ -113,7 +113,7 @@ public class PreOrderServiceImpl extends BaseServiceImpl<PreOrder,Long> implemen
 				preOrderItem.setFullName(product.getFullName());
 				preOrderItem.setPrice(cartItem.getUnitPrice());
 				preOrderItem.setWeight(cartItem.getWeight());
-				preOrderItem.setThumbnail(product.getThumbnail());
+				preOrderItem.setThumbnail(product.getImage());
 				preOrderItem.setIsGift(false);
 				preOrderItem.setQuantity(cartItem.getQuantity());
 				preOrderItem.setProduct(product);
