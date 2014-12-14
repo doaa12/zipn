@@ -76,6 +76,11 @@ public class Refunds extends BaseEntity {
 
 	/** 订单 */
 	private Order order;
+	
+	/**
+	 * 预约订单
+	 */
+	private PreOrder preOrder;
 
 	/**
 	 * 获取编号
@@ -286,5 +291,15 @@ public class Refunds extends BaseEntity {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "preOrder", nullable = false, updatable = false)
+	public PreOrder getPreOrder() {
+		return preOrder;
+	}
 
+	public void setPreOrder(PreOrder preOrder) {
+		this.preOrder = preOrder;
+	}
+	
 }

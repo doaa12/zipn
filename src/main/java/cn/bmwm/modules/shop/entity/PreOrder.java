@@ -7,11 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -105,6 +108,9 @@ public class PreOrder extends BaseEntity {
 	
 	/** 促销 */
 	private String promotion;
+	
+	/** 锁定到期时间 */
+	private Date lockExpire;
 	
 	/** 到期时间 */
 	private Date expire;
@@ -292,6 +298,18 @@ public class PreOrder extends BaseEntity {
 	}
 	
 	/**
+	 * 获取锁定到期时间
+	 * @return
+	 */
+	public Date getLockExpire() {
+		return lockExpire;
+	}
+
+	public void setLockExpire(Date lockExpire) {
+		this.lockExpire = lockExpire;
+	}
+
+	/**
 	 * 获取订单过期时间
 	 * @return
 	 */
@@ -334,7 +352,7 @@ public class PreOrder extends BaseEntity {
 	 * @return
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	public Member getMember() {
 		return member;
 	}
@@ -348,7 +366,7 @@ public class PreOrder extends BaseEntity {
 	 * @return
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@Column(nullable = false)
+	@JoinColumn(nullable = false)
 	public Shop getShop() {
 		return shop;
 	}
@@ -361,7 +379,8 @@ public class PreOrder extends BaseEntity {
 	 * 获取预约单项
 	 * @return
 	 */
-	@OneToMany(mappedBy = "preOrder", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "preOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderBy("isGift asc")
 	public List<PreOrderItem> getPreOrderItems() {
 		return preOrderItems;
 	}

@@ -156,7 +156,7 @@ public class OrderController {
 		prepareOrderVo.setPoints((long)(setting.getPointPercent() * cart.getPrice().doubleValue()));
 		prepareOrderVo.setCartItemList(cartItemList);
 		
-		return new Result(Constants.SUCCESS, 1, "", prepareOrderVo);
+		return new Result(SUCCESS, 1, "", prepareOrderVo);
 		
 	}
 

@@ -61,7 +61,8 @@
 	<setting name="currencySign" value="￥"/>  
 	<setting name="currencyUnit" value="元"/>  
 	<setting name="stockAlertCount" value="5"/>  
-	<setting name="stockAllocationTime" value="order"/>  
+	<setting name="stockAllocationTime" value="payment"/>
+	<setting name="orderExpireTime" value="1440"/>
 	<setting name="defaultPointScale" value="1"/>  
 	<setting name="isDevelopmentEnabled" value="true"/>  
 	<setting name="isReviewEnabled" value="true"/>  

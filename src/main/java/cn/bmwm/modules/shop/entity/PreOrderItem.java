@@ -43,6 +43,11 @@ public class PreOrderItem extends BaseEntity {
 	/** 数量 */
 	private Integer quantity;
 	
+	/**
+	 * 重量
+	 */
+	private Integer weight;
+	
 	/** 商品 */
 	private Product product;
 
@@ -141,11 +146,24 @@ public class PreOrderItem extends BaseEntity {
 	}
 	
 	/**
+	 * 获取商品重量
+	 * @return
+	 */
+	@Column(nullable = false)
+	public Integer getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Integer weight) {
+		this.weight = weight;
+	}
+
+	/**
 	 * 获取商品
 	 * @return
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@Column(nullable = false)
+	@JoinColumn(name = "product", nullable = false, updatable = false)
 	public Product getProduct() {
 		return product;
 	}

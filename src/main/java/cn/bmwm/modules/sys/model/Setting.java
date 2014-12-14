@@ -440,6 +440,11 @@ public class Setting implements Serializable {
 	 */
 	private Double pointPercent;
 	
+	/**
+	 * 订单过期时间，单位分钟
+	 */
+	private Integer orderExpireTime;
+	
 
 	/**
 	 * 获取网站名称
@@ -2229,6 +2234,14 @@ public class Setting implements Serializable {
 
 	public void setPointPercent(Double pointPercent) {
 		this.pointPercent = pointPercent;
+	}
+
+	public Integer getOrderExpireTime() {
+		return orderExpireTime;
+	}
+
+	public void setOrderExpireTime(Integer orderExpireTime) {
+		this.orderExpireTime = orderExpireTime;
 	}
 
 	/**

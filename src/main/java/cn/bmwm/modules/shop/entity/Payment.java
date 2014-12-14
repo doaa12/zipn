@@ -134,7 +134,12 @@ public class Payment extends BaseEntity {
 
 	/** 订单 */
 	private Order order;
-
+	
+	/**
+	 * 预约订单
+	 */
+	private PreOrder preOrder;
+	
 	/**
 	 * 获取编号
 	 * 
@@ -501,6 +506,20 @@ public class Payment extends BaseEntity {
 		this.order = order;
 	}
 	
+	/**
+	 * 获取预约订单
+	 * @return
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "preOrder", updatable = false)
+	public PreOrder getPreOrder() {
+		return preOrder;
+	}
+
+	public void setPreOrder(PreOrder preOrder) {
+		this.preOrder = preOrder;
+	}
+
 	/**
 	 * 获取有效金额
 	 * 

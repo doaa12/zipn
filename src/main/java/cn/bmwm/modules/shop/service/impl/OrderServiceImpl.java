@@ -371,7 +371,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 				orderItem.setName(product.getName());
 				orderItem.setFullName(product.getFullName());
 				orderItem.setPrice(cartItem.getUnitPrice());
-				orderItem.setWeight(product.getWeight());
+				orderItem.setWeight(cartItem.getWeight());
 				orderItem.setThumbnail(product.getThumbnail());
 				orderItem.setIsGift(false);
 				orderItem.setQuantity(cartItem.getQuantity());
@@ -428,8 +428,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
 		order.setOrderStatus(OrderStatus.unconfirmed);
 		order.setPaymentStatus(PaymentStatus.unpaid);
-
-		order.setExpire(DateUtils.addMinutes(new Date(), 24 * 60));
+		
+		order.setExpire(DateUtils.addMinutes(new Date(), setting.getOrderExpireTime()));
 
 		return order;
 		
@@ -558,7 +558,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 						product.setAllocatedStock(product.getAllocatedStock() + (orderItem.getQuantity() - orderItem.getShippedQuantity()));
 						productDao.merge(product);
 						orderDao.flush();
-						//staticService.build(product);
 					}
 				}
 			}
@@ -764,6 +763,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 	}
 
 	public void payment(Order order, Payment payment, Admin operator) {
+		
 		Assert.notNull(order);
 		Assert.notNull(payment);
 
